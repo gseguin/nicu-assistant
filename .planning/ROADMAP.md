@@ -29,7 +29,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Active tab is visually distinct and screen-reader-announced when the user navigates between routes
   4. The dark/light theme toggle persists across page reloads
   5. The design token file defines Clinical Blue, BMF Amber, and slate neutrals; Plus Jakarta Sans is loaded; all interactive elements meet 48px touch target and WCAG 2.1 AA contrast in both themes
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — SvelteKit scaffold + dependency installation + build config
+- [ ] 01-02-PLAN.md — Unified design token system (app.html FOUC script + app.css OKLCH tokens)
+- [ ] 01-03-PLAN.md — Responsive nav shell (theme module, registry, NavShell, layout, placeholder routes)
+
 **UI hint**: yes
 
 ### Phase 2: Shared Components
