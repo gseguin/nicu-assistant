@@ -400,38 +400,57 @@
 
     <!-- Results -->
     <section
-      class="anim-results flex flex-col gap-[0.875rem] rounded-lg bg-[var(--color-surface-alt)] px-4 py-4"
       aria-label={MODE_CONFIG.meal.resultLabel}
       aria-live="polite"
       aria-atomic="true"
+      class="space-y-3"
     >
       {#if mealValidationMessage !== null}
-        <p class="result-placeholder text-sm font-normal text-[var(--color-text-tertiary)] pt-1">{mealResultPlaceholder}</p>
+        <!-- Empty state — guides the eye toward action -->
+        <div class="w-full opacity-30 pointer-events-none select-none" aria-hidden="true">
+          <div class="bg-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg">
+            <span class="text-white font-bold uppercase tracking-[0.2em] text-xs opacity-90">Capsules Needed</span>
+            <div class="flex items-baseline gap-2 mt-4">
+              <span class="text-display font-black leading-none text-white num">--</span>
+              <span class="text-white font-bold text-xl opacity-90">capsules</span>
+            </div>
+          </div>
+        </div>
+        {#if mealResultPlaceholder}
+          <p class="result-placeholder text-sm text-center text-[var(--color-text-tertiary)]">{mealResultPlaceholder}</p>
+        {/if}
       {:else}
-        <div class="result-block flex flex-col gap-[0.1875rem]">
-          <span class="text-[0.6875rem] font-semibold tracking-[0.08em] uppercase text-[var(--color-text-tertiary)]">
-            Capsules needed
-          </span>
+        <!-- Hero result card -->
+        <div class="bg-[var(--color-accent)] border border-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg text-white">
+          <span class="font-bold uppercase tracking-[0.2em] text-xs opacity-90">Capsules Needed</span>
           {#key mealResultKey}
-            <span
-              class="capsule-number text-[clamp(3.5rem,18vw,5rem)] font-bold leading-none text-[var(--color-text-primary)] tracking-[-0.02em] num"
-              aria-label={`${mealCapsulesNeeded} capsules needed`}
-            >
-              {mealCapsulesNeeded}
-            </span>
+            <div class="result-block mt-4">
+              <div class="flex items-baseline gap-2">
+                <span
+                  class="capsule-number text-display font-black leading-none num"
+                  aria-label={`${mealCapsulesNeeded} capsules needed`}
+                >
+                  {mealCapsulesNeeded}
+                </span>
+                <span class="font-bold text-xl opacity-90">capsules</span>
+              </div>
+            </div>
           {/key}
         </div>
-        <div class="result-meta flex flex-col gap-[0.125rem] pt-[0.125rem]">
-          <div class="flex items-baseline gap-[0.3125rem]">
-            <span class="text-xs font-medium text-[var(--color-text-tertiary)] tracking-[0.01em]">Total lipase</span>
-            <span class="text-base font-semibold text-[var(--color-text-secondary)] num">
-              {mealTotalLipase?.toLocaleString()}
+        <!-- Secondary info card -->
+        <div class="px-6 py-4 rounded-2xl shadow-sm bg-[var(--color-surface-card)] border border-[var(--color-border)]">
+          <div class="result-meta flex flex-col gap-1">
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-xs font-medium text-[var(--color-text-tertiary)]">Total lipase</span>
+              <span class="text-base font-semibold text-[var(--color-text-primary)] num">
+                {mealTotalLipase?.toLocaleString()}
+              </span>
+              <span class="text-xs font-normal text-[var(--color-text-tertiary)]">units</span>
+            </div>
+            <span class="text-2xs text-[var(--color-text-tertiary)] num">
+              {mealFatGrams}g x {mealLipaseRate.toLocaleString()} units/g
             </span>
-            <span class="text-xs font-normal text-[var(--color-text-tertiary)]">units</span>
           </div>
-          <span class="text-[0.6875rem] font-normal text-[var(--color-text-tertiary)] num">
-            {mealFatGrams}g x {mealLipaseRate.toLocaleString()} units/g
-          </span>
         </div>
       {/if}
     </section>
@@ -507,43 +526,60 @@
 
     <!-- Results -->
     <section
-      class="anim-results flex flex-col gap-[0.875rem] rounded-lg bg-[var(--color-surface-alt)] px-4 py-4"
       aria-label={MODE_CONFIG['tube-feed'].resultLabel}
       aria-live="polite"
       aria-atomic="true"
+      class="space-y-3"
     >
       {#if tubeFeedValidationMessage !== null}
-        <p class="result-placeholder text-sm font-normal text-[var(--color-text-tertiary)] pt-1">
-          {tubeFeedResultPlaceholder}
-        </p>
+        <!-- Empty state -->
+        <div class="w-full opacity-30 pointer-events-none select-none" aria-hidden="true">
+          <div class="bg-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg">
+            <span class="text-white font-bold uppercase tracking-[0.2em] text-xs opacity-90">Capsules Needed</span>
+            <div class="flex items-baseline gap-2 mt-4">
+              <span class="text-display font-black leading-none text-white num">--</span>
+              <span class="text-white font-bold text-xl opacity-90">capsules</span>
+            </div>
+          </div>
+        </div>
+        {#if tubeFeedResultPlaceholder}
+          <p class="result-placeholder text-sm text-center text-[var(--color-text-tertiary)]">{tubeFeedResultPlaceholder}</p>
+        {/if}
       {:else}
-        <div class="result-block flex flex-col gap-[0.1875rem]">
-          <span class="text-[0.6875rem] font-semibold tracking-[0.08em] uppercase text-[var(--color-text-tertiary)]">
-            Tube-feed capsules needed
-          </span>
+        <!-- Hero result card -->
+        <div class="bg-[var(--color-accent)] border border-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg text-white">
+          <span class="font-bold uppercase tracking-[0.2em] text-xs opacity-90">Capsules Needed</span>
           {#key tubeFeedResultKey}
-            <span
-              class="capsule-number text-[clamp(3.5rem,18vw,5rem)] font-bold leading-none text-[var(--color-text-primary)] tracking-[-0.02em] num"
-              aria-label={`${tubeFeedCapsulesNeeded} tube-feed capsules needed`}
-            >
-              {tubeFeedCapsulesNeeded}
-            </span>
+            <div class="result-block mt-4">
+              <div class="flex items-baseline gap-2">
+                <span
+                  class="capsule-number text-display font-black leading-none num"
+                  aria-label={`${tubeFeedCapsulesNeeded} tube-feed capsules needed`}
+                >
+                  {tubeFeedCapsulesNeeded}
+                </span>
+                <span class="font-bold text-xl opacity-90">capsules</span>
+              </div>
+            </div>
           {/key}
         </div>
-        <div class="result-meta flex flex-col gap-[0.125rem] pt-[0.125rem]">
-          <div class="flex items-baseline gap-[0.3125rem]">
-            <span class="text-xs font-medium text-[var(--color-text-tertiary)] tracking-[0.01em]">Total lipase</span>
-            <span class="text-base font-semibold text-[var(--color-text-secondary)] num">
-              {tubeFeedTotalLipase?.toLocaleString()}
+        <!-- Secondary info card -->
+        <div class="px-6 py-4 rounded-2xl shadow-sm bg-[var(--color-surface-card)] border border-[var(--color-border)]">
+          <div class="result-meta flex flex-col gap-1">
+            <div class="flex items-baseline gap-1.5">
+              <span class="text-xs font-medium text-[var(--color-text-tertiary)]">Total lipase</span>
+              <span class="text-base font-semibold text-[var(--color-text-primary)] num">
+                {tubeFeedTotalLipase?.toLocaleString()}
+              </span>
+              <span class="text-xs font-normal text-[var(--color-text-tertiary)]">units</span>
+            </div>
+            <span class="text-2xs text-[var(--color-text-tertiary)] num">
+              {tubeFeedFatGrams}g x {tubeFeedLipaseRate.toLocaleString()} units/g
             </span>
-            <span class="text-xs font-normal text-[var(--color-text-tertiary)]">units</span>
+            <span class="text-2xs text-[var(--color-text-tertiary)] num">
+              Using {tubeFeedStrength.toLocaleString()} units/capsule
+            </span>
           </div>
-          <span class="text-[0.6875rem] font-normal text-[var(--color-text-tertiary)] num">
-            {tubeFeedFatGrams}g x {tubeFeedLipaseRate.toLocaleString()} units/g
-          </span>
-          <span class="text-[0.6875rem] font-normal text-[var(--color-text-tertiary)] num">
-            Using {tubeFeedStrength.toLocaleString()} units/capsule
-          </span>
         </div>
       {/if}
     </section>
