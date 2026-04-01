@@ -46,7 +46,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **FORM-02**: BMF mode: brand + target kcal/oz + volume + baseline EBM produce EBM mL and powder grams
 - [x] **FORM-03**: Dispensing measures (scoops, packets, tbsp, tsp) displayed when available
 - [x] **FORM-04**: All 40+ formula brands from formula-config.json with manufacturer grouping
-- [ ] **FORM-05**: Feature parity with standalone formula-calculator app
+- [x] **FORM-05**: Feature parity with standalone formula-calculator app
 
 ### Cross-Calculator
 
@@ -117,7 +117,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-02 | Phase 3 | Complete |
 | FORM-03 | Phase 3 | Complete |
 | FORM-04 | Phase 3 | Complete |
-| FORM-05 | Phase 3 | Pending |
+| FORM-05 | Phase 3 | Complete |
 | CC-01 | Phase 3 | Complete |
 | CC-02 | Phase 3 | Complete |
 | CC-03 | Phase 3 | Complete |
