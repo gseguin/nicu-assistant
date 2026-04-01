@@ -46,13 +46,13 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **FORM-02**: BMF mode: brand + target kcal/oz + volume + baseline EBM produce EBM mL and powder grams
 - [x] **FORM-03**: Dispensing measures (scoops, packets, tbsp, tsp) displayed when available
 - [x] **FORM-04**: All 40+ formula brands from formula-config.json with manufacturer grouping
-- [ ] **FORM-05**: Feature parity with standalone formula-calculator app
+- [x] **FORM-05**: Feature parity with standalone formula-calculator app
 
 ### Cross-Calculator
 
 - [x] **CC-01**: Calculator state preserved when switching between PERT and formula via nav
 - [x] **CC-02**: Each calculator's state isolated — no cross-contamination of inputs/results
-- [ ] **CC-03**: Input validation on all numeric fields (prevent empty/invalid submissions)
+- [x] **CC-03**: Input validation on all numeric fields (prevent empty/invalid submissions)
 
 ### PWA & Offline
 
@@ -117,10 +117,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-02 | Phase 3 | Complete |
 | FORM-03 | Phase 3 | Complete |
 | FORM-04 | Phase 3 | Complete |
-| FORM-05 | Phase 3 | Pending |
+| FORM-05 | Phase 3 | Complete |
 | CC-01 | Phase 3 | Complete |
 | CC-02 | Phase 3 | Complete |
-| CC-03 | Phase 3 | Pending |
+| CC-03 | Phase 3 | Complete |
 | PWA-01 | Phase 4 | Pending |
 | PWA-02 | Phase 4 | Pending |
 | PWA-03 | Phase 4 | Pending |

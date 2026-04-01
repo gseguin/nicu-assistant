@@ -74,7 +74,7 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md — Copy PERT + formula business logic into src/lib/pert/ and src/lib/formula/; create pertState and formulaState sessionStorage singletons
 - [ ] 03-02-PLAN.md — Port PERT DosingCalculator.svelte (meal + tube-feed modes, shared components, state wiring); wire /pert route
-- [ ] 03-03-PLAN.md — Port formula FormulaCalculator + ModifiedFormulaCalculator + BreastMilkFortifierCalculator (dark mode tokens, shared components, state wiring); wire /formula route
+- [x] 03-03-PLAN.md — Port formula FormulaCalculator + ModifiedFormulaCalculator + BreastMilkFortifierCalculator (dark mode tokens, shared components, state wiring); wire /formula route
 - [ ] 03-04-PLAN.md — Unit tests for PERT and formula calculation functions; visual checkpoint
 
 **UI hint**: yes
@@ -99,5 +99,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-04-01 |
 | 2. Shared Components | 5/5 | Complete   | 2026-04-01 |
-| 3. Calculators | 0/4 | Not started | - |
+| 3. Calculators | 2/4 | In Progress|  |
 | 4. PWA & Offline | 0/? | Not started | - |
