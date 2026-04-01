@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: Foundation** - SvelteKit scaffold, design system tokens, theme system, and responsive navigation shell
 - [x] **Phase 2: Shared Components** - Unified SelectPicker, NumericInput, ResultsDisplay, DisclaimerModal, and AboutSheet (completed 2026-04-01)
 - [x] **Phase 3: Calculators** - PERT and formula calculators ported into the unified shell with cross-calculator state behavior (completed 2026-04-01)
-- [ ] **Phase 4: PWA & Offline** - Service worker, manifest, offline validation, update notifications, and install prompt
+- [x] **Phase 4: PWA & Offline** - Service worker, manifest, offline validation, update notifications, and install prompt (completed 2026-04-01)
 
 ## Phase Details
 
@@ -92,7 +92,7 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md — Install @vite-pwa/sveltekit; SvelteKitPWA plugin config (Workbox precaching, manifest, icons); pwa.svelte.ts singleton; placeholder icons
-- [ ] 04-02-PLAN.md — UpdateBanner.svelte + +layout.svelte wiring (SW registration, idle detection, auto-reload)
+- [x] 04-02-PLAN.md — UpdateBanner.svelte + +layout.svelte wiring (SW registration, idle detection, auto-reload)
 
 ## Progress
 
@@ -104,4 +104,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 3/3 | Complete | 2026-04-01 |
 | 2. Shared Components | 5/5 | Complete   | 2026-04-01 |
 | 3. Calculators | 4/4 | Complete   | 2026-04-01 |
-| 4. PWA & Offline | 1/2 | In Progress|  |
+| 4. PWA & Offline | 2/2 | Complete   | 2026-04-01 |
