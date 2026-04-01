@@ -8,4 +8,5 @@ export { default as SelectPicker } from './components/SelectPicker.svelte';
 export { default as DisclaimerModal } from './components/DisclaimerModal.svelte';
 export { default as NumericInput } from './components/NumericInput.svelte';
 export { default as ResultsDisplay } from './components/ResultsDisplay.svelte';
-// export { default as AboutSheet } from './components/AboutSheet.svelte';
+export { default as AboutSheet } from './components/AboutSheet.svelte';
+export { aboutContent } from './about-content.js';
