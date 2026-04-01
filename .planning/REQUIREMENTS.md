@@ -17,11 +17,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Navigation & Shell
 
-- [ ] **NAV-01**: Bottom tab bar on mobile (<768px) with icon + always-visible text label per calculator
-- [ ] **NAV-02**: Top horizontal nav bar on desktop (>=768px) with same items
-- [ ] **NAV-03**: Static calculator registry (TypeScript manifest) enabling new calculator addition with one entry + one route
-- [ ] **NAV-04**: iOS safe-area-inset handling for bottom nav in standalone PWA mode
-- [ ] **NAV-05**: Active tab state visually indicated with accessible aria-selected
+- [x] **NAV-01**: Bottom tab bar on mobile (<768px) with icon + always-visible text label per calculator
+- [x] **NAV-02**: Top horizontal nav bar on desktop (>=768px) with same items
+- [x] **NAV-03**: Static calculator registry (TypeScript manifest) enabling new calculator addition with one entry + one route
+- [x] **NAV-04**: iOS safe-area-inset handling for bottom nav in standalone PWA mode
+- [x] **NAV-05**: Active tab state visually indicated with accessible aria-selected
 
 ### Shared Components
 
@@ -97,11 +97,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DS-03 | Phase 1 | Complete |
 | DS-04 | Phase 1 | Complete |
 | DS-05 | Phase 1 | Complete |
-| NAV-01 | Phase 1 | Pending |
-| NAV-02 | Phase 1 | Pending |
-| NAV-03 | Phase 1 | Pending |
-| NAV-04 | Phase 1 | Pending |
-| NAV-05 | Phase 1 | Pending |
+| NAV-01 | Phase 1 | Complete |
+| NAV-02 | Phase 1 | Complete |
+| NAV-03 | Phase 1 | Complete |
+| NAV-04 | Phase 1 | Complete |
+| NAV-05 | Phase 1 | Complete |
 | SC-01 | Phase 2 | Pending |
 | SC-02 | Phase 2 | Pending |
 | SC-03 | Phase 2 | Pending |
