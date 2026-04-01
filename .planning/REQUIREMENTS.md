@@ -34,24 +34,24 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### PERT Calculator
 
-- [ ] **PERT-01**: Meal mode: fat grams + lipase rate + brand/strength inputs produce capsule count
-- [ ] **PERT-02**: Tube-feed mode with independent state from meal mode
-- [ ] **PERT-03**: Tab switching between meal and tube-feed preserves both states
-- [ ] **PERT-04**: All FDA medication brands and strengths from clinical-config.json
+- [x] **PERT-01**: Meal mode: fat grams + lipase rate + brand/strength inputs produce capsule count
+- [x] **PERT-02**: Tube-feed mode with independent state from meal mode
+- [x] **PERT-03**: Tab switching between meal and tube-feed preserves both states
+- [x] **PERT-04**: All FDA medication brands and strengths from clinical-config.json
 - [ ] **PERT-05**: Feature parity with standalone pert-calculator app
 
 ### Formula Calculator
 
-- [ ] **FORM-01**: Modified formula mode: brand + target kcal/oz + volume produce water mL and powder grams
-- [ ] **FORM-02**: BMF mode: brand + target kcal/oz + volume + baseline EBM produce EBM mL and powder grams
-- [ ] **FORM-03**: Dispensing measures (scoops, packets, tbsp, tsp) displayed when available
-- [ ] **FORM-04**: All 40+ formula brands from formula-config.json with manufacturer grouping
+- [x] **FORM-01**: Modified formula mode: brand + target kcal/oz + volume produce water mL and powder grams
+- [x] **FORM-02**: BMF mode: brand + target kcal/oz + volume + baseline EBM produce EBM mL and powder grams
+- [x] **FORM-03**: Dispensing measures (scoops, packets, tbsp, tsp) displayed when available
+- [x] **FORM-04**: All 40+ formula brands from formula-config.json with manufacturer grouping
 - [ ] **FORM-05**: Feature parity with standalone formula-calculator app
 
 ### Cross-Calculator
 
-- [ ] **CC-01**: Calculator state preserved when switching between PERT and formula via nav
-- [ ] **CC-02**: Each calculator's state isolated — no cross-contamination of inputs/results
+- [x] **CC-01**: Calculator state preserved when switching between PERT and formula via nav
+- [x] **CC-02**: Each calculator's state isolated — no cross-contamination of inputs/results
 - [ ] **CC-03**: Input validation on all numeric fields (prevent empty/invalid submissions)
 
 ### PWA & Offline
@@ -108,18 +108,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SC-04 | Phase 2 | Complete |
 | SC-05 | Phase 2 | Complete |
 | SC-06 | Phase 2 | Complete |
-| PERT-01 | Phase 3 | Pending |
-| PERT-02 | Phase 3 | Pending |
-| PERT-03 | Phase 3 | Pending |
-| PERT-04 | Phase 3 | Pending |
+| PERT-01 | Phase 3 | Complete |
+| PERT-02 | Phase 3 | Complete |
+| PERT-03 | Phase 3 | Complete |
+| PERT-04 | Phase 3 | Complete |
 | PERT-05 | Phase 3 | Pending |
-| FORM-01 | Phase 3 | Pending |
-| FORM-02 | Phase 3 | Pending |
-| FORM-03 | Phase 3 | Pending |
-| FORM-04 | Phase 3 | Pending |
+| FORM-01 | Phase 3 | Complete |
+| FORM-02 | Phase 3 | Complete |
+| FORM-03 | Phase 3 | Complete |
+| FORM-04 | Phase 3 | Complete |
 | FORM-05 | Phase 3 | Pending |
-| CC-01 | Phase 3 | Pending |
-| CC-02 | Phase 3 | Pending |
+| CC-01 | Phase 3 | Complete |
+| CC-02 | Phase 3 | Complete |
 | CC-03 | Phase 3 | Pending |
 | PWA-01 | Phase 4 | Pending |
 | PWA-02 | Phase 4 | Pending |
