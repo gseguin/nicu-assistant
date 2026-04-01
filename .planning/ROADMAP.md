@@ -88,7 +88,11 @@ Plans:
   2. The app is installable (Add to Home Screen / browser install prompt available) and launches in standalone mode without browser chrome
   3. When a new service worker is detected, a visible update banner appears; the app does not silently reload during an active calculation session
   4. The web app manifest includes correct icons (192px, 512px, 180px apple-touch), standalone display mode, and correct start URL
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Install @vite-pwa/sveltekit; SvelteKitPWA plugin config (Workbox precaching, manifest, icons); pwa.svelte.ts singleton; placeholder icons
+- [ ] 04-02-PLAN.md — UpdateBanner.svelte + +layout.svelte wiring (SW registration, idle detection, auto-reload)
 
 ## Progress
 
@@ -100,4 +104,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | 1. Foundation | 3/3 | Complete | 2026-04-01 |
 | 2. Shared Components | 5/5 | Complete   | 2026-04-01 |
 | 3. Calculators | 4/4 | Complete   | 2026-04-01 |
-| 4. PWA & Offline | 0/? | Not started | - |
+| 4. PWA & Offline | 0/2 | Not started | - |
