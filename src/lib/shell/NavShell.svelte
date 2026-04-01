@@ -2,7 +2,15 @@
   import { page } from '$app/state';
   import { CALCULATOR_REGISTRY } from './registry.js';
   import { theme } from '$lib/shared/theme.svelte.js';
-  import { Sun, Moon } from '@lucide/svelte';
+  import { Sun, Moon, Info } from '@lucide/svelte';
+  import AboutSheet from '$lib/shared/components/AboutSheet.svelte';
+  import type { CalculatorId } from '$lib/shared/types.js';
+
+  let aboutOpen = $state(false);
+
+  const activeCalculatorId = $derived<CalculatorId>(
+    page.url.pathname.startsWith('/formula') ? 'formula' : 'pert'
+  );
 </script>
 
 <!-- NAV-01: Mobile bottom tab bar — fixed, hidden on md+ -->
@@ -30,6 +38,16 @@
       <span>{calc.label}</span>
     </a>
   {/each}
+  <!-- About/info button — mobile -->
+  <button
+    type="button"
+    class="icon-btn min-h-[48px] min-w-[48px] flex flex-col items-center justify-center gap-1 text-ui font-medium"
+    aria-label="About this calculator"
+    onclick={() => aboutOpen = true}
+  >
+    <Info size={22} aria-hidden="true" />
+    <span class="text-2xs">About</span>
+  </button>
   <!-- Theme toggle — mobile -->
   <button
     type="button"
@@ -71,8 +89,17 @@
       <span>{calc.label}</span>
     </a>
   {/each}
-  <!-- Spacer pushes theme toggle to the right -->
+  <!-- Spacer pushes action buttons to the right -->
   <div class="flex-1"></div>
+  <!-- About/info button — desktop -->
+  <button
+    type="button"
+    class="icon-btn min-h-[48px] min-w-[48px]"
+    aria-label="About this calculator"
+    onclick={() => aboutOpen = true}
+  >
+    <Info size={20} aria-hidden="true" />
+  </button>
   <!-- Theme toggle — desktop -->
   <button
     type="button"
@@ -87,3 +114,5 @@
     {/if}
   </button>
 </nav>
+
+<AboutSheet calculatorId={activeCalculatorId} bind:open={aboutOpen} />
