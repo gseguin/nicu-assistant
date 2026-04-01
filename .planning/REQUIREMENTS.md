@@ -56,10 +56,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### PWA & Offline
 
-- [ ] **PWA-01**: Service worker with precaching of all app assets via Workbox
-- [ ] **PWA-02**: Web app manifest with icons (192px, 512px, 180px apple-touch), standalone display, portrait orientation
+- [x] **PWA-01**: Service worker with precaching of all app assets via Workbox
+- [x] **PWA-02**: Web app manifest with icons (192px, 512px, 180px apple-touch), standalone display, portrait orientation
 - [ ] **PWA-03**: Active update prompt when new service worker detected (clinical safety: prevent stale formulas)
-- [ ] **PWA-04**: App works fully offline after first load
+- [x] **PWA-04**: App works fully offline after first load
 
 ## v2 Requirements
 
@@ -121,10 +121,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CC-01 | Phase 3 | Complete |
 | CC-02 | Phase 3 | Complete |
 | CC-03 | Phase 3 | Complete |
-| PWA-01 | Phase 4 | Pending |
-| PWA-02 | Phase 4 | Pending |
+| PWA-01 | Phase 4 | Complete |
+| PWA-02 | Phase 4 | Complete |
 | PWA-03 | Phase 4 | Pending |
-| PWA-04 | Phase 4 | Pending |
+| PWA-04 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 33 total
