@@ -1,5 +1,17 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { setCalculatorContext } from '$lib/shared/context.js';
+  import { formulaState } from '$lib/formula/state.svelte.js';
+  import FormulaCalculator from '$lib/formula/FormulaCalculator.svelte';
   import { Milk } from '@lucide/svelte';
+
+  onMount(() => {
+    setCalculatorContext({
+      id: 'formula',
+      accentColor: 'var(--color-accent)'
+    });
+    formulaState.init();
+  });
 </script>
 
 <svelte:head>
@@ -12,28 +24,5 @@
     <h1 class="text-title font-bold text-[var(--color-text-primary)]">Formula Recipe</h1>
   </header>
 
-  <!-- Skeleton: Formula brand selector -->
-  <div class="card space-y-3" aria-hidden="true">
-    <div class="h-3 bg-[var(--color-surface-alt)] rounded w-1/3 animate-pulse"></div>
-    <div class="h-12 bg-[var(--color-surface-alt)] rounded animate-pulse"></div>
-  </div>
-
-  <!-- Skeleton: Target kcal/oz input -->
-  <div class="card space-y-3" aria-hidden="true">
-    <div class="h-3 bg-[var(--color-surface-alt)] rounded w-1/2 animate-pulse"></div>
-    <div class="h-12 bg-[var(--color-surface-alt)] rounded animate-pulse"></div>
-  </div>
-
-  <!-- Skeleton: Volume input -->
-  <div class="card space-y-3" aria-hidden="true">
-    <div class="h-3 bg-[var(--color-surface-alt)] rounded w-2/5 animate-pulse"></div>
-    <div class="h-12 bg-[var(--color-surface-alt)] rounded animate-pulse"></div>
-  </div>
-
-  <!-- Coming soon notice -->
-  <div class="card p-6 text-center">
-    <p class="text-[var(--color-text-secondary)] text-sm">
-      Formula calculator coming in Phase 3
-    </p>
-  </div>
+  <FormulaCalculator />
 </div>
