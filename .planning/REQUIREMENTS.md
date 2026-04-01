@@ -92,45 +92,45 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DS-01 | Pending | Pending |
-| DS-02 | Pending | Pending |
-| DS-03 | Pending | Pending |
-| DS-04 | Pending | Pending |
-| DS-05 | Pending | Pending |
-| NAV-01 | Pending | Pending |
-| NAV-02 | Pending | Pending |
-| NAV-03 | Pending | Pending |
-| NAV-04 | Pending | Pending |
-| NAV-05 | Pending | Pending |
-| SC-01 | Pending | Pending |
-| SC-02 | Pending | Pending |
-| SC-03 | Pending | Pending |
-| SC-04 | Pending | Pending |
-| SC-05 | Pending | Pending |
-| SC-06 | Pending | Pending |
-| PERT-01 | Pending | Pending |
-| PERT-02 | Pending | Pending |
-| PERT-03 | Pending | Pending |
-| PERT-04 | Pending | Pending |
-| PERT-05 | Pending | Pending |
-| FORM-01 | Pending | Pending |
-| FORM-02 | Pending | Pending |
-| FORM-03 | Pending | Pending |
-| FORM-04 | Pending | Pending |
-| FORM-05 | Pending | Pending |
-| CC-01 | Pending | Pending |
-| CC-02 | Pending | Pending |
-| CC-03 | Pending | Pending |
-| PWA-01 | Pending | Pending |
-| PWA-02 | Pending | Pending |
-| PWA-03 | Pending | Pending |
-| PWA-04 | Pending | Pending |
+| DS-01 | Phase 1 | Pending |
+| DS-02 | Phase 1 | Pending |
+| DS-03 | Phase 1 | Pending |
+| DS-04 | Phase 1 | Pending |
+| DS-05 | Phase 1 | Pending |
+| NAV-01 | Phase 1 | Pending |
+| NAV-02 | Phase 1 | Pending |
+| NAV-03 | Phase 1 | Pending |
+| NAV-04 | Phase 1 | Pending |
+| NAV-05 | Phase 1 | Pending |
+| SC-01 | Phase 2 | Pending |
+| SC-02 | Phase 2 | Pending |
+| SC-03 | Phase 2 | Pending |
+| SC-04 | Phase 2 | Pending |
+| SC-05 | Phase 2 | Pending |
+| SC-06 | Phase 2 | Pending |
+| PERT-01 | Phase 3 | Pending |
+| PERT-02 | Phase 3 | Pending |
+| PERT-03 | Phase 3 | Pending |
+| PERT-04 | Phase 3 | Pending |
+| PERT-05 | Phase 3 | Pending |
+| FORM-01 | Phase 3 | Pending |
+| FORM-02 | Phase 3 | Pending |
+| FORM-03 | Phase 3 | Pending |
+| FORM-04 | Phase 3 | Pending |
+| FORM-05 | Phase 3 | Pending |
+| CC-01 | Phase 3 | Pending |
+| CC-02 | Phase 3 | Pending |
+| CC-03 | Phase 3 | Pending |
+| PWA-01 | Phase 4 | Pending |
+| PWA-02 | Phase 4 | Pending |
+| PWA-03 | Phase 4 | Pending |
+| PWA-04 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 33 total
-- Mapped to phases: 0
-- Unmapped: 33
+- Mapped to phases: 33
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-31*
-*Last updated: 2026-03-31 after initial definition*
+*Last updated: 2026-03-31 after roadmap creation*
