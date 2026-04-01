@@ -303,96 +303,32 @@
     getModeState(mode).fatGramsRaw = control.value ?? '';
   }
 
-  // ── PERT tooltip ───────────────────────────────────────────────────────────
 
-  let pertTooltipOpen = $state(false);
-  let pertTooltipTrigger = $state<HTMLButtonElement | null>(null);
-
-  function togglePertTooltip() {
-    pertTooltipOpen = !pertTooltipOpen;
-  }
-
-  // Close tooltip on outside click / escape
-  function handleDocumentClick(event: MouseEvent) {
-    if (!pertTooltipOpen) return;
-    const target = event.target;
-    if (target instanceof Node && pertTooltipTrigger?.contains(target)) return;
-    pertTooltipOpen = false;
-  }
-
-  function handleDocumentKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-      pertTooltipOpen = false;
-    }
-  }
 </script>
 
-<svelte:document onclick={handleDocumentClick} onkeydown={handleDocumentKeyDown} />
-
 <div class="flex flex-col gap-6">
-  <!-- Header -->
-  <header class="anim-header flex items-baseline gap-2" aria-label="PERT Dosing Calculator">
-    <div class="relative">
+  <!-- Mode tabs — compact style matching Formula calculator -->
+  <div
+    class="flex p-1 bg-[var(--color-surface-alt)] rounded-2xl shadow-inner border border-[var(--color-border)]"
+    role="tablist"
+    aria-label="Calculator mode"
+  >
+    {#each MODE_ORDER as mode}
       <button
-        bind:this={pertTooltipTrigger}
-        id="pert-acronym-trigger"
+        id={`calculator-tab-${mode}`}
         type="button"
-        class="pert-tooltip-trigger"
-        aria-label="PERT: Pancreatic Enzyme Replacement Therapy"
-        aria-expanded={pertTooltipOpen ? 'true' : 'false'}
-        onclick={togglePertTooltip}
+        role="tab"
+        class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all font-semibold text-ui outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-light)] {pertState.current.activeMode === mode ? 'bg-[var(--color-surface-card)] text-[var(--color-accent)] shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-surface)]'}"
+        aria-selected={pertState.current.activeMode === mode ? 'true' : 'false'}
+        aria-controls={`calculator-panel-${mode}`}
+        tabindex={pertState.current.activeMode === mode ? 0 : -1}
+        onclick={() => activateMode(mode)}
+        onkeydown={(event) => handleModeTabKeydown(event, mode)}
       >
-        <span aria-hidden="true">PERT</span>
+        <span>{getModeConfig(mode).label}</span>
       </button>
-      {#if pertTooltipOpen}
-        <div
-          role="tooltip"
-          class="pert-tooltip absolute top-full left-0 mt-1.5 z-50 w-max px-2.5 py-1.5 text-xs font-medium"
-        >
-          Pancreatic Enzyme Replacement Therapy
-        </div>
-      {/if}
-    </div>
-    <span class="text-[0.6875rem] font-medium tracking-[0.06em] uppercase text-[var(--color-text-tertiary)]">
-      Dosing Calculator
-    </span>
-  </header>
-
-  <!-- Mode tabs -->
-  <section class="anim-inputs" aria-label="Calculator mode switch">
-    <div
-      role="tablist"
-      aria-label="Calculator mode"
-      class="tab-shell grid grid-cols-2 gap-2 rounded-[1.25rem] border border-[var(--color-border)] bg-[var(--color-surface-alt)] p-2"
-    >
-      {#each MODE_ORDER as mode}
-        <button
-          id={`calculator-tab-${mode}`}
-          type="button"
-          role="tab"
-          class="tab-trigger rounded-[0.95rem] px-4 py-3.5 text-left transition"
-          class:is-active={pertState.current.activeMode === mode}
-          aria-selected={pertState.current.activeMode === mode ? 'true' : 'false'}
-          aria-controls={`calculator-panel-${mode}`}
-          tabindex={pertState.current.activeMode === mode ? 0 : -1}
-          onclick={() => activateMode(mode)}
-          onkeydown={(event) => handleModeTabKeydown(event, mode)}
-        >
-          <span class="block text-xs font-semibold uppercase tracking-[0.08em] text-[var(--color-text-tertiary)]">
-            {getModeConfig(mode).label}
-          </span>
-          <span class="mt-1 block text-sm font-medium text-[var(--color-text-primary)]">
-            {getModeConfig(mode).panelHeading}
-          </span>
-          <span class="mt-1 block text-[0.6875rem] leading-5 text-[var(--color-text-secondary)]">
-            {mode === 'meal'
-              ? 'Standard meal dosing workflow.'
-              : 'Tube-feed dosing with independent inputs.'}
-          </span>
-        </button>
-      {/each}
-    </div>
-  </section>
+    {/each}
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════════════════════ -->
   <!-- MEAL MODE PANEL                                                        -->
@@ -404,14 +340,7 @@
     aria-label={MODE_CONFIG.meal.panelLabel}
     hidden={pertState.current.activeMode !== 'meal'}
   >
-    <div class="mb-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-card)] px-4 py-3">
-      <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-tertiary)]">
-        {MODE_CONFIG.meal.panelHeading}
-      </p>
-      <p class="mt-1 text-sm text-[var(--color-text-secondary)]">{MODE_CONFIG.meal.panelBody}</p>
-    </div>
-
-    <section class="flex flex-col gap-4 mb-6" aria-label="Meal calculator inputs">
+    <section class="card flex flex-col gap-4" aria-label="Meal calculator inputs">
       <!-- Fat grams — raw string input for validation compatibility -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div onclick={() => keepFatFieldVisible('meal')} onkeydown={() => {}}>
@@ -442,19 +371,15 @@
         {#if mealValidationMessage !== null && pertState.current.meal.fatGramsRaw !== ''}
           <p class="mt-1.5 text-sm text-[var(--color-error)]">{mealValidationMessage}</p>
         {/if}
-        <p class="mt-1.5 text-[0.6875rem] font-normal text-[var(--color-text-tertiary)]">{MODE_CONFIG.meal.fatHint}</p>
       </div>
 
       <!-- Lipase rate -->
-      <div>
-        <SelectPicker
-          label="Lipase rate (units/g fat)"
-          bind:value={pertState.current.meal.lipaseRateStr}
-          options={getLipaseRateOptions('meal')}
-          class="w-full"
-        />
-        <p class="mt-1.5 text-[0.6875rem] font-normal text-[var(--color-text-tertiary)]">{MODE_CONFIG.meal.rateHint}</p>
-      </div>
+      <SelectPicker
+        label="Lipase rate (units/g fat)"
+        bind:value={pertState.current.meal.lipaseRateStr}
+        options={getLipaseRateOptions('meal')}
+        class="w-full"
+      />
 
       <!-- Brand & strength -->
       <div class="grid grid-cols-2 gap-3">
@@ -522,14 +447,7 @@
     aria-label={MODE_CONFIG['tube-feed'].panelLabel}
     hidden={pertState.current.activeMode !== 'tube-feed'}
   >
-    <div class="mb-4 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-card)] px-4 py-3">
-      <p class="text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-text-tertiary)]">
-        {MODE_CONFIG['tube-feed'].panelHeading}
-      </p>
-      <p class="mt-1 text-sm text-[var(--color-text-secondary)]">{MODE_CONFIG['tube-feed'].panelBody}</p>
-    </div>
-
-    <section class="flex flex-col gap-4 mb-6" aria-label="Tube feed calculator inputs">
+    <section class="card flex flex-col gap-4" aria-label="Tube feed calculator inputs">
       <!-- Fat grams — raw string input -->
       <!-- svelte-ignore a11y_no_static_element_interactions -->
       <div onclick={() => keepFatFieldVisible('tube-feed')} onkeydown={() => {}}>
@@ -560,21 +478,15 @@
         {#if tubeFeedValidationMessage !== null && pertState.current.tubeFeed.fatGramsRaw !== ''}
           <p class="mt-1.5 text-sm text-[var(--color-error)]">{tubeFeedValidationMessage}</p>
         {/if}
-        <p class="mt-1.5 text-[0.6875rem] font-normal text-[var(--color-text-tertiary)]">{MODE_CONFIG['tube-feed'].fatHint}</p>
       </div>
 
       <!-- Lipase rate -->
-      <div>
-        <SelectPicker
-          label="Lipase rate (units/g fat)"
-          bind:value={pertState.current.tubeFeed.lipaseRateStr}
-          options={getLipaseRateOptions('tube-feed')}
-          class="w-full"
-        />
-        <p class="mt-1.5 text-[0.6875rem] font-normal text-[var(--color-text-tertiary)]">
-          {MODE_CONFIG['tube-feed'].rateHint}
-        </p>
-      </div>
+      <SelectPicker
+        label="Lipase rate (units/g fat)"
+        bind:value={pertState.current.tubeFeed.lipaseRateStr}
+        options={getLipaseRateOptions('tube-feed')}
+        class="w-full"
+      />
 
       <!-- Brand & strength -->
       <div class="grid grid-cols-2 gap-3">
@@ -644,21 +556,6 @@
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .anim-header,
-  .anim-inputs,
-  .anim-results {
-    animation: slide-up 420ms var(--ease-out-expo) both;
-  }
-
-  .anim-header { animation-delay: 0ms; }
-  .anim-inputs { animation-delay: 40ms; }
-  .anim-results { animation-delay: 80ms; }
-
-  @keyframes slide-up {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
   .capsule-number {
     animation: number-pop 280ms var(--ease-out-quart) both;
   }
@@ -666,80 +563,6 @@
   @keyframes number-pop {
     from { opacity: 0; transform: translateY(6px) scale(0.96); }
     to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  .tab-shell {
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.08),
-      0 12px 28px rgba(15, 23, 42, 0.08);
-  }
-
-  .tab-trigger {
-    width: 100%;
-    min-height: 5.25rem;
-    border: 1px solid transparent;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .tab-trigger:hover {
-    border-color: color-mix(in srgb, var(--color-accent) 22%, var(--color-border) 78%);
-    background: color-mix(in srgb, var(--color-surface-card) 86%, transparent 14%);
-  }
-
-  .tab-trigger:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 0.125rem;
-  }
-
-  .tab-trigger.is-active {
-    border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-border) 72%);
-    background: color-mix(in srgb, var(--color-surface-card) 88%, var(--color-accent) 12%);
-    box-shadow:
-      0 12px 24px rgba(37, 99, 235, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
-
-  .pert-tooltip-trigger {
-    display: inline-flex;
-    align-items: center;
-    appearance: none;
-    background: transparent;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    color: var(--color-accent);
-    font: inherit;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    line-height: inherit;
-    cursor: pointer;
-  }
-
-  .pert-tooltip-trigger:focus-visible {
-    outline: 2px solid var(--color-accent-light);
-    outline-offset: 0.125rem;
-    border-radius: 0.1875rem;
-  }
-
-  .pert-tooltip {
-    border: 1px solid color-mix(in srgb, var(--color-border) 78%, white 22%);
-    border-radius: 0.5rem;
-    background: color-mix(in srgb, var(--color-surface-card) 82%, white 18%);
-    color: var(--color-text-primary);
-    box-shadow:
-      0 10px 24px rgba(15, 23, 42, 0.18),
-      0 2px 6px rgba(15, 23, 42, 0.1);
-  }
-
-  :global(.dark) .pert-tooltip {
-    border-color: color-mix(in srgb, var(--color-accent) 24%, var(--color-border) 76%);
-    background: color-mix(in srgb, var(--color-surface-card) 68%, black 32%);
-    box-shadow:
-      0 14px 32px rgba(2, 6, 23, 0.55),
-      0 0 0 1px rgba(148, 163, 184, 0.08);
   }
 
   .result-block {
@@ -767,9 +590,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .anim-header,
-    .anim-inputs,
-    .anim-results,
     .capsule-number,
     .result-block,
     .result-meta,
