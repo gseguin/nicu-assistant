@@ -38,7 +38,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **PERT-02**: Tube-feed mode with independent state from meal mode
 - [x] **PERT-03**: Tab switching between meal and tube-feed preserves both states
 - [x] **PERT-04**: All FDA medication brands and strengths from clinical-config.json
-- [ ] **PERT-05**: Feature parity with standalone pert-calculator app
+- [x] **PERT-05**: Feature parity with standalone pert-calculator app
 
 ### Formula Calculator
 
@@ -52,7 +52,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **CC-01**: Calculator state preserved when switching between PERT and formula via nav
 - [x] **CC-02**: Each calculator's state isolated — no cross-contamination of inputs/results
-- [ ] **CC-03**: Input validation on all numeric fields (prevent empty/invalid submissions)
+- [x] **CC-03**: Input validation on all numeric fields (prevent empty/invalid submissions)
 
 ### PWA & Offline
 
@@ -112,7 +112,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PERT-02 | Phase 3 | Complete |
 | PERT-03 | Phase 3 | Complete |
 | PERT-04 | Phase 3 | Complete |
-| PERT-05 | Phase 3 | Pending |
+| PERT-05 | Phase 3 | Complete |
 | FORM-01 | Phase 3 | Complete |
 | FORM-02 | Phase 3 | Complete |
 | FORM-03 | Phase 3 | Complete |
@@ -120,7 +120,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-05 | Phase 3 | Pending |
 | CC-01 | Phase 3 | Complete |
 | CC-02 | Phase 3 | Complete |
-| CC-03 | Phase 3 | Pending |
+| CC-03 | Phase 3 | Complete |
 | PWA-01 | Phase 4 | Pending |
 | PWA-02 | Phase 4 | Pending |
 | PWA-03 | Phase 4 | Pending |
