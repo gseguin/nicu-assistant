@@ -9,11 +9,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Design System
 
-- [ ] **DS-01**: Unified color tokens (Clinical Blue, BMF Amber, slate neutrals) defined as CSS custom properties in app.css
-- [ ] **DS-02**: Dark/light theme toggle using Tailwind CSS 4 `@custom-variant` with class-based switching
-- [ ] **DS-03**: FOUC prevention via inline `<script>` in app.html that reads persisted theme preference
-- [ ] **DS-04**: Plus Jakarta Sans loaded from Google Fonts with tabular numerics for clinical output
-- [ ] **DS-05**: Touch targets minimum 48px, WCAG 2.1 AA contrast ratios in both themes
+- [x] **DS-01**: Unified color tokens (Clinical Blue, BMF Amber, slate neutrals) defined as CSS custom properties in app.css
+- [x] **DS-02**: Dark/light theme toggle using Tailwind CSS 4 `@custom-variant` with class-based switching
+- [x] **DS-03**: FOUC prevention via inline `<script>` in app.html that reads persisted theme preference
+- [x] **DS-04**: Plus Jakarta Sans loaded from Google Fonts with tabular numerics for clinical output
+- [x] **DS-05**: Touch targets minimum 48px, WCAG 2.1 AA contrast ratios in both themes
 
 ### Navigation & Shell
 
@@ -92,11 +92,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DS-01 | Phase 1 | Pending |
-| DS-02 | Phase 1 | Pending |
-| DS-03 | Phase 1 | Pending |
-| DS-04 | Phase 1 | Pending |
-| DS-05 | Phase 1 | Pending |
+| DS-01 | Phase 1 | Complete |
+| DS-02 | Phase 1 | Complete |
+| DS-03 | Phase 1 | Complete |
+| DS-04 | Phase 1 | Complete |
+| DS-05 | Phase 1 | Complete |
 | NAV-01 | Phase 1 | Pending |
 | NAV-02 | Phase 1 | Pending |
 | NAV-03 | Phase 1 | Pending |
