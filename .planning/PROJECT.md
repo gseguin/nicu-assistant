@@ -74,6 +74,7 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 | Single shared disclaimer | Reduces friction vs per-calculator disclaimers; one acceptance covers all tools | -- Pending |
 | Plus Jakarta Sans as shared typeface | Formula calculator already loads it; more polished than system fonts for clinical tool | -- Pending |
 | Plugin-like calculator architecture | Makes it easy to add future calculators (e.g., fluid balance, growth charts) without touching nav or shell code | -- Pending |
+| Delegate to Impeccable skill for UI design | All visual/aesthetic decisions (look & feel, color application, typography, layout) use the Impeccable skill; implementation follows its guidance | -- Pending |
 
 ## Evolution
 
