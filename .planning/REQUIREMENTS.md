@@ -25,7 +25,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Shared Components
 
-- [ ] **SC-01**: Unified SelectPicker using native `<dialog>`, keyboard arrow-key navigation, optional option groups
+- [x] **SC-01**: Unified SelectPicker using native `<dialog>`, keyboard arrow-key navigation, optional option groups
 - [x] **SC-02**: Shared DisclaimerModal with single acceptance persisted in localStorage (new key: nicu_assistant_disclaimer_v1)
 - [ ] **SC-03**: Shared NumericInput with decimal keyboard, wheel scroll support, min/max validation
 - [ ] **SC-04**: Shared ResultsDisplay with large clinical-grade typography and aria-live announcements
@@ -102,7 +102,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NAV-03 | Phase 1 | Complete |
 | NAV-04 | Phase 1 | Complete |
 | NAV-05 | Phase 1 | Complete |
-| SC-01 | Phase 2 | Pending |
+| SC-01 | Phase 2 | Complete |
 | SC-02 | Phase 2 | Complete |
 | SC-03 | Phase 2 | Pending |
 | SC-04 | Phase 2 | Pending |
