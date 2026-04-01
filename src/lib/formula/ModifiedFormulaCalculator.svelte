@@ -146,13 +146,15 @@
       <div class="w-full opacity-30 pointer-events-none select-none" aria-hidden="true">
         <div class="bg-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg">
           <span class="text-white font-bold uppercase tracking-[0.2em] text-xs opacity-90">Required Powder</span>
-          <div class="flex items-baseline gap-2 mt-4">
-            <span class="text-display font-black leading-none text-white num">--</span>
-            <span class="text-white font-bold text-xl opacity-90">grams</span>
+          <div class="flex flex-col gap-2 mt-4">
+            <div class="flex items-baseline gap-2">
+              <span class="text-display font-black leading-none text-white num">--</span>
+              <span class="text-white font-bold text-xl opacity-90">grams</span>
+            </div>
+            <p class="text-sm text-white/80 font-medium">Select a brand and enter values above.</p>
           </div>
         </div>
       </div>
-      <p class="text-sm text-center text-[var(--color-text-tertiary)]">Select a brand and enter values above.</p>
     </div>
   {/if}
 </div>
