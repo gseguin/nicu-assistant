@@ -32,7 +32,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — SvelteKit scaffold + dependency installation + build config
+- [x] 01-01-PLAN.md — SvelteKit scaffold + dependency installation + build config
 - [ ] 01-02-PLAN.md — Unified design token system (app.html FOUC script + app.css OKLCH tokens)
 - [ ] 01-03-PLAN.md — Responsive nav shell (theme module, registry, NavShell, layout, placeholder routes)
 
