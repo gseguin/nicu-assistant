@@ -48,7 +48,15 @@ Plans:
   3. NumericInput accepts decimal values, enforces min/max bounds, and surfaces an inline error rather than silently accepting invalid input
   4. ResultsDisplay announces updated values to screen readers via an aria-live region
   5. All shared components render correctly in both dark and light themes without hardcoded color values
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Install bits-ui + dev deps; foundation files (disclaimer singleton, types, context helpers, barrel index)
+- [ ] 02-02-PLAN.md — SelectPicker.svelte (bits-ui Select, grouped/flat options, keyboard nav, scroll lock)
+- [ ] 02-03-PLAN.md — DisclaimerModal.svelte (bits-ui Dialog, non-dismissable) + wire +layout.svelte
+- [ ] 02-04-PLAN.md — NumericInput.svelte + ResultsDisplay.svelte (ports from formula-calculator with token migration)
+- [ ] 02-05-PLAN.md — AboutSheet.svelte + integration tests + visual checkpoint
+
 **UI hint**: yes
 
 ### Phase 3: Calculators
@@ -82,7 +90,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
-| 2. Shared Components | 0/? | Not started | - |
+| 1. Foundation | 3/3 | Complete | 2026-04-01 |
+| 2. Shared Components | 0/5 | Not started | - |
 | 3. Calculators | 0/? | Not started | - |
 | 4. PWA & Offline | 0/? | Not started | - |
