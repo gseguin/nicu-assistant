@@ -25,7 +25,7 @@
   let volumeMl = $state<number | null>(
     formulaState.current.bmf.volumeMlRaw
       ? parseFloat(formulaState.current.bmf.volumeMlRaw)
-      : null
+      : 120
   );
   let baselineKcalOz = $state<number | null>(
     formulaState.current.bmf.baselineKcalOzRaw
@@ -49,6 +49,13 @@
     formulaState.current.bmf.selectedBrandId
       ? getBrandById(formulaState.current.bmf.selectedBrandId)
       : undefined
+  );
+
+  // Inline guidance when values are entered but no brand is selected
+  const noBrandHint = $derived(
+    !formulaState.current.bmf.selectedBrandId && (targetKcalOz !== null || volumeMl !== null || baselineKcalOz !== null)
+      ? 'Select a formula brand to calculate.'
+      : ''
   );
 
   // BMF guard: target must exceed baseline
@@ -84,6 +91,9 @@
       options={brandOptions}
       placeholder="Select Brand..."
     />
+    {#if noBrandHint}
+      <p class="text-xs text-[var(--color-error)] ml-1 -mt-2" transition:slide={{ duration: 150 }}>{noBrandHint}</p>
+    {/if}
 
     <div class="grid grid-cols-2 gap-4">
       <NumericInput

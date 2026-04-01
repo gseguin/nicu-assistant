@@ -3,7 +3,11 @@
   import { setCalculatorContext } from '$lib/shared/context.js';
   import { pertState } from '$lib/pert/state.svelte.js';
   import DosingCalculator from '$lib/pert/DosingCalculator.svelte';
-  import { FlaskConical } from '@lucide/svelte';
+  import { theme } from '$lib/shared/theme.svelte.js';
+  import AboutSheet from '$lib/shared/components/AboutSheet.svelte';
+  import { FlaskConical, Info, Sun, Moon } from '@lucide/svelte';
+
+  let aboutOpen = $state(false);
 
   onMount(() => {
     setCalculatorContext({
@@ -18,11 +22,26 @@
   <title>PERT Dosing | NICU Assistant</title>
 </svelte:head>
 
-<div class="max-w-xl mx-auto px-4 py-6 space-y-4">
+<div class="max-w-xl lg:max-w-2xl mx-auto px-4 py-6 space-y-4">
   <header class="flex items-center gap-3">
     <FlaskConical size={28} class="text-[var(--color-accent)]" aria-hidden="true" />
     <h1 class="text-title font-bold text-[var(--color-text-primary)]">PERT Dosing</h1>
+    <div class="flex-1"></div>
+    <div class="flex items-center gap-1 md:hidden">
+      <button type="button" class="icon-btn min-h-[48px] min-w-[48px]" aria-label="About this calculator" onclick={() => aboutOpen = true}>
+        <Info size={20} aria-hidden="true" />
+      </button>
+      <button type="button" class="icon-btn min-h-[48px] min-w-[48px]" aria-label={theme.current === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} onclick={() => theme.toggle()}>
+        {#if theme.current === 'dark'}
+          <Sun size={20} aria-hidden="true" />
+        {:else}
+          <Moon size={20} aria-hidden="true" />
+        {/if}
+      </button>
+    </div>
   </header>
 
   <DosingCalculator />
 </div>
+
+<AboutSheet calculatorId="pert" bind:open={aboutOpen} />

@@ -35,24 +35,26 @@ describe('NumericInput', () => {
 		expect(screen.queryByText('Required')).toBeNull();
 	});
 
-	it('clamps value to max on blur', async () => {
-		const { component } = render(NumericInput, {
+	it('shows inline error when value exceeds max', async () => {
+		render(NumericInput, {
 			props: { value: 150, label: 'Weight', max: 100 }
 		});
 		const input = screen.getByLabelText('Weight') as HTMLInputElement;
-		await fireEvent.blur(input);
-		// After blur, value should be clamped to max
-		expect(input.value).toBe('100');
+		// Value stays as entered; inline error is shown instead of clamping
+		expect(input.value).toBe('150');
+		expect(input.getAttribute('aria-invalid')).toBe('true');
+		expect(screen.getByText('Maximum is 100')).toBeTruthy();
 	});
 
-	it('clamps value to min on blur', async () => {
-		const { component } = render(NumericInput, {
+	it('shows inline error when value is below min', async () => {
+		render(NumericInput, {
 			props: { value: -5, label: 'Weight', min: 0 }
 		});
 		const input = screen.getByLabelText('Weight') as HTMLInputElement;
-		await fireEvent.blur(input);
-		// After blur, value should be clamped to min
-		expect(input.value).toBe('0');
+		// Value stays as entered; inline error is shown instead of clamping
+		expect(input.value).toBe('-5');
+		expect(input.getAttribute('aria-invalid')).toBe('true');
+		expect(screen.getByText('Minimum is 0')).toBeTruthy();
 	});
 
 	it('preserves null when input is cleared', async () => {

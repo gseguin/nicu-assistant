@@ -25,7 +25,7 @@
   let volumeMl = $state<number | null>(
     formulaState.current.modified.volumeMlRaw
       ? parseFloat(formulaState.current.modified.volumeMlRaw)
-      : null
+      : 120
   );
 
   // Sync local numeric values back to string state
@@ -41,6 +41,13 @@
     formulaState.current.modified.selectedBrandId
       ? getBrandById(formulaState.current.modified.selectedBrandId)
       : undefined
+  );
+
+  // Inline guidance when values are entered but no brand is selected
+  const noBrandHint = $derived(
+    !formulaState.current.modified.selectedBrandId && (targetKcalOz !== null || volumeMl !== null)
+      ? 'Select a formula brand to calculate.'
+      : ''
   );
 
   // Derived recipe calculation (preserving $derived.by pattern)
@@ -69,6 +76,9 @@
       options={brandOptions}
       placeholder="Select Brand..."
     />
+    {#if noBrandHint}
+      <p class="text-xs text-[var(--color-error)] ml-1 -mt-2" transition:slide={{ duration: 150 }}>{noBrandHint}</p>
+    {/if}
 
     <div class="grid grid-cols-2 gap-4">
       <NumericInput

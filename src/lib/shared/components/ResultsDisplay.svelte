@@ -92,12 +92,18 @@
 
 <style>
   @keyframes pulse-once {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); }
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.02); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
   }
 
   .pulse-container {
-    animation: pulse-once 0.2s ease-out;
+    animation: pulse-once 200ms ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-container {
+      animation: none;
+    }
   }
 </style>
