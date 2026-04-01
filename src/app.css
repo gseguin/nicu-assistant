@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+/* DS-02 / D-06: Class-based dark variant for Tailwind CSS 4 */
+/* Tailwind CSS 4 removes the darkMode config option; use @custom-variant instead. */
+/* Both .dark class AND [data-theme="dark"] attribute activate dark mode. */
+/* The FOUC inline script in app.html sets both on <html> before first paint. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* DS-01: Clinical Blue — OKLCH scale from formula-calculator/src/app.css */
+  --color-clinical-50:  oklch(97.5% 0.018 230);
+  --color-clinical-100: oklch(93% 0.04 225);
+  --color-clinical-200: oklch(86% 0.08 220);
+  --color-clinical-300: oklch(77% 0.13 225);
+  --color-clinical-400: oklch(67% 0.17 210);
+  --color-clinical-500: oklch(59% 0.19 210);
+  --color-clinical-600: oklch(49% 0.17 220);
+  --color-clinical-700: oklch(40% 0.14 225);
+  --color-clinical-800: oklch(30% 0.11 230);
+  --color-clinical-900: oklch(22% 0.08 235);
+
+  /* DS-01: BMF Amber — OKLCH scale from formula-calculator/src/app.css */
+  --color-bmf-50:  oklch(97% 0.02 80);
+  --color-bmf-100: oklch(93% 0.05 78);
+  --color-bmf-200: oklch(86% 0.10 72);
+  --color-bmf-300: oklch(78% 0.15 68);
+  --color-bmf-400: oklch(72% 0.18 65);
+  --color-bmf-500: oklch(72% 0.18 65);
+  --color-bmf-600: oklch(62% 0.16 60);
+  --color-bmf-700: oklch(50% 0.13 55);
+  --color-bmf-800: oklch(38% 0.10 50);
+  --color-bmf-900: oklch(27% 0.07 48);
+
+  /* Semantic aliases — expose CSS vars as Tailwind utilities */
+  /* e.g. bg-surface, text-primary, border-border, bg-surface-card */
+  --color-surface:      var(--color-surface);
+  --color-surface-alt:  var(--color-surface-alt);
+  --color-surface-card: var(--color-surface-card);
+  --color-border:       var(--color-border);
+  --color-text-primary:    var(--color-text-primary);
+  --color-text-secondary:  var(--color-text-secondary);
+  --color-text-tertiary:   var(--color-text-tertiary);
+  --color-accent:       var(--color-accent);
+  --color-accent-light: var(--color-accent-light);
+  --color-error:        var(--color-error);
+  --color-error-light:  var(--color-error-light);
+
+  /* DS-04: Font stack — Plus Jakarta Sans with system fallbacks */
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  /* Custom type scale for clinical UI (fills Tailwind gaps) */
+  --text-2xs:     0.6875rem;   /* 11px — minimum readable labels */
+  --text-ui:      0.8125rem;   /* 13px — nav labels, field labels */
+  --text-title:   1.375rem;    /* 22px — page h1 */
+  --text-display: 2.75rem;     /* 44px — primary clinical result values */
+}
+
+@layer base {
+  /* Light mode — default semantic surface tokens (D-04: follows system preference) */
+  :root {
+    --color-surface:         oklch(97.5% 0.006 225);
+    --color-surface-alt:     oklch(90% 0.008 220);
+    --color-surface-card:    oklch(100% 0 0);
+    --color-border:          oklch(80% 0.01 220);
+    --color-text-primary:    oklch(18% 0.012 230);
+    --color-text-secondary:  oklch(35% 0.01 225);
+    --color-text-tertiary:   oklch(50% 0.008 225);
+    --color-accent:          oklch(49% 0.17 220);   /* clinical-600 — nav shell neutral */
+    --color-accent-light:    oklch(86% 0.08 220);   /* clinical-200 */
+    --color-error:           oklch(50% 0.20 25);
+    --color-error-light:     oklch(90% 0.06 25);
+  }
+
+  /* Dark mode — activated by .dark class OR [data-theme="dark"] */
+  /* D-02: Impeccable skill will refine these values in a later task. */
+  /* These are functional placeholders converted from pert-calculator hex values. */
+  .dark,
+  [data-theme="dark"] {
+    --color-surface:         oklch(15% 0.01 243);
+    --color-surface-alt:     oklch(20% 0.01 243);
+    --color-surface-card:    oklch(22% 0.012 243);
+    --color-border:          oklch(30% 0.01 243);
+    --color-text-primary:    oklch(92% 0.006 225);
+    --color-text-secondary:  oklch(72% 0.008 225);
+    --color-text-tertiary:   oklch(58% 0.006 225);
+    --color-accent:          oklch(68% 0.16 243);   /* lighter blue for dark bg */
+    --color-accent-light:    oklch(25% 0.10 243);
+    --color-error:           oklch(70% 0.18 25);
+    --color-error-light:     oklch(25% 0.10 25);
+  }
+
+  /* DS-04: Apply Plus Jakarta Sans globally */
+  html, body {
+    font-family: var(--font-sans);
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    min-height: 100dvh;
+    min-height: 100svh;  /* fallback */
+    -webkit-text-size-adjust: 100%;
+    font-kerning: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* DS-05: 48px minimum touch targets for all interactive elements */
+  button, select, input {
+    @apply min-h-[48px];
+    font-family: var(--font-sans);
+  }
+}
+
+@layer components {
+  /* Shared card surface — used by placeholder routes and eventually calculator sections */
+  .card {
+    @apply bg-[var(--color-surface-card)] p-4 rounded-xl shadow-sm border border-[var(--color-border)];
+  }
+
+  /* DS-04: Tabular numerics for clinical output values */
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* Icon button — header actions, toggle button */
+  .icon-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    color: var(--color-text-tertiary);
+    transition: color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+    line-height: 0;
+  }
+  .icon-btn:hover {
+    color: var(--color-accent);
+  }
+  .icon-btn:focus-visible {
+    outline: none;
+    color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-light);
+  }
+}
