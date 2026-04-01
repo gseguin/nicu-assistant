@@ -29,7 +29,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **SC-02**: Shared DisclaimerModal with single acceptance persisted in localStorage (new key: nicu_assistant_disclaimer_v1)
 - [x] **SC-03**: Shared NumericInput with decimal keyboard, wheel scroll support, min/max validation
 - [x] **SC-04**: Shared ResultsDisplay with large clinical-grade typography and aria-live announcements
-- [ ] **SC-05**: Shared AboutSheet with per-calculator content via calculatorId prop
+- [x] **SC-05**: Shared AboutSheet with per-calculator content via calculatorId prop
 - [x] **SC-06**: Focus management and ARIA roles/states across all shared components
 
 ### PERT Calculator
@@ -106,7 +106,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SC-02 | Phase 2 | Complete |
 | SC-03 | Phase 2 | Complete |
 | SC-04 | Phase 2 | Complete |
-| SC-05 | Phase 2 | Pending |
+| SC-05 | Phase 2 | Complete |
 | SC-06 | Phase 2 | Complete |
 | PERT-01 | Phase 3 | Pending |
 | PERT-02 | Phase 3 | Pending |
