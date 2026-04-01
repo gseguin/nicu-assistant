@@ -70,25 +70,26 @@
          border-b border-[var(--color-border)] bg-[var(--color-surface)]
          px-4 gap-2 z-10 items-center"
   aria-label="Calculator navigation"
-  role="tablist"
 >
-  {#each CALCULATOR_REGISTRY as calc}
-    {@const isActive = page.url.pathname.startsWith(calc.href)}
-    <a
-      href={calc.href}
-      class="flex items-center gap-2 px-4 py-3 text-ui font-medium
-             min-h-[48px] border-b-2 transition-colors
-             {isActive
-               ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
-               : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
-      aria-label={calc.description}
-      aria-selected={isActive}
-      role="tab"
-    >
-      <calc.icon size={18} aria-hidden="true" />
-      <span>{calc.label}</span>
-    </a>
-  {/each}
+  <div class="flex gap-2" role="tablist">
+    {#each CALCULATOR_REGISTRY as calc}
+      {@const isActive = page.url.pathname.startsWith(calc.href)}
+      <a
+        href={calc.href}
+        class="flex items-center gap-2 px-4 py-3 text-ui font-medium
+               min-h-[48px] border-b-2 transition-colors
+               {isActive
+                 ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                 : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
+        aria-label={calc.description}
+        aria-selected={isActive}
+        role="tab"
+      >
+        <calc.icon size={18} aria-hidden="true" />
+        <span>{calc.label}</span>
+      </a>
+    {/each}
+  </div>
   <!-- Spacer pushes action buttons to the right -->
   <div class="flex-1"></div>
   <!-- About/info button — desktop -->
