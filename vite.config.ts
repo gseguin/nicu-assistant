@@ -57,6 +57,9 @@ export default defineConfig({
 		include: ['src/**/*.{test,spec}.{js,ts}'],
 		setupFiles: ['src/test-setup.ts']
 	},
+	server: {
+		allowedHosts: ['nicu-assistant-dev.heartsmiles.io']
+	},
 	resolve: {
 		conditions: ['browser']
 	}
