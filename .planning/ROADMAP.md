@@ -69,7 +69,14 @@ Plans:
   3. Switching from PERT to formula (or back) via the nav bar does not clear or corrupt the calculator the user left
   4. Entering an invalid or empty value in any numeric field blocks calculation and shows an inline error — no silent zero-substitution
   5. Formula components render correctly in dark mode (BMF Amber and Clinical Blue tokens, no hardcoded OKLCH literals)
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Copy PERT + formula business logic into src/lib/pert/ and src/lib/formula/; create pertState and formulaState sessionStorage singletons
+- [ ] 03-02-PLAN.md — Port PERT DosingCalculator.svelte (meal + tube-feed modes, shared components, state wiring); wire /pert route
+- [ ] 03-03-PLAN.md — Port formula FormulaCalculator + ModifiedFormulaCalculator + BreastMilkFortifierCalculator (dark mode tokens, shared components, state wiring); wire /formula route
+- [ ] 03-04-PLAN.md — Unit tests for PERT and formula calculation functions; visual checkpoint
+
 **UI hint**: yes
 
 ### Phase 4: PWA & Offline
@@ -92,5 +99,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-04-01 |
 | 2. Shared Components | 5/5 | Complete   | 2026-04-01 |
-| 3. Calculators | 0/? | Not started | - |
+| 3. Calculators | 0/4 | Not started | - |
 | 4. PWA & Offline | 0/? | Not started | - |
