@@ -52,8 +52,8 @@
       panelHeading: 'Tube feed mode',
       panelBody: 'Calculate PERT capsule dosing for tube feeds with independent inputs.',
       fatLabel: 'Tube-feed fat',
-      fatHint: 'Direct gram entry for tube-feed dosing.',
-      rateHint: 'Shared dosing helpers remain the source of truth for tube-feed results.',
+      fatHint: 'Total fat in the tube-feed volume.',
+      rateHint: 'From prescriber order.',
       resultLabel: 'Tube-feed dosing results'
     }
   };
@@ -125,24 +125,27 @@
 
   function getTotalLipase(fatRaw: string, lipaseRateStr: string): number | null {
     if (getValidationMessage(fatRaw) !== null) return null;
-    return calculateTotalLipase(parseFatGrams(fatRaw), parseLipaseRate(lipaseRateStr));
+    if (!lipaseRateStr) return null;
+    const rate = parseLipaseRate(lipaseRateStr);
+    if (isNaN(rate)) return null;
+    return calculateTotalLipase(parseFatGrams(fatRaw), rate);
   }
 
   function getCapsulesNeeded(fatRaw: string, lipaseRateStr: string, strengthStr: string): number | null {
     if (getValidationMessage(fatRaw) !== null) return null;
-    return calculateCapsules(parseFatGrams(fatRaw), parseLipaseRate(lipaseRateStr), parseStrength(strengthStr));
+    if (!lipaseRateStr || !strengthStr) return null;
+    const rate = parseLipaseRate(lipaseRateStr);
+    const strength = parseStrength(strengthStr);
+    if (isNaN(rate) || isNaN(strength)) return null;
+    return calculateCapsules(parseFatGrams(fatRaw), rate, strength);
   }
 
-  function getResultPlaceholder(fatRaw: string, mode: CalculatorMode): string {
+  function getResultPlaceholder(fatRaw: string, _mode: CalculatorMode): string {
     const msg = getValidationMessage(fatRaw);
     if (msg === null) return '';
-    if (fatRaw.trim() === '') return 'Enter fat grams above.';
-    if (parseFatGrams(fatRaw) === 0) {
-      return mode === 'meal'
-        ? 'Enter more than 0 g to calculate dosing.'
-        : 'Enter more than 0 g to calculate tube-feed dosing.';
-    }
-    return mode === 'meal' ? 'Fix fat grams to see dosing.' : 'Fix fat grams to see tube-feed dosing.';
+    if (fatRaw.trim() === '') return 'Enter fat grams to calculate.';
+    if (parseFatGrams(fatRaw) === 0) return 'Fat content must be greater than 0 g.';
+    return 'Enter a valid fat content to calculate.';
   }
 
   // ── Derived state for meal mode ────────────────────────────────────────────
@@ -163,6 +166,30 @@
   let tubeFeedTotalLipase = $derived(getTotalLipase(pertState.current.tubeFeed.fatGramsRaw, pertState.current.tubeFeed.lipaseRateStr));
   let tubeFeedCapsulesNeeded = $derived(getCapsulesNeeded(pertState.current.tubeFeed.fatGramsRaw, pertState.current.tubeFeed.lipaseRateStr, pertState.current.tubeFeed.selectedStrengthStr));
   let tubeFeedStrength = $derived(parseStrength(pertState.current.tubeFeed.selectedStrengthStr));
+
+  // ── "Has values" check for clear button visibility ─────────────────────────
+
+  let mealHasValues = $derived(
+    pertState.current.meal.fatGramsRaw !== '' ||
+    pertState.current.meal.lipaseRateStr !== '' ||
+    pertState.current.meal.selectedBrand !== '' ||
+    pertState.current.meal.selectedStrengthStr !== ''
+  );
+  let tubeFeedHasValues = $derived(
+    pertState.current.tubeFeed.fatGramsRaw !== '' ||
+    pertState.current.tubeFeed.lipaseRateStr !== '' ||
+    pertState.current.tubeFeed.selectedBrand !== '' ||
+    pertState.current.tubeFeed.selectedStrengthStr !== ''
+  );
+
+  function clearMode(mode: CalculatorMode) {
+    const defaults = { fatGramsRaw: '', lipaseRateStr: '', selectedBrand: '', selectedStrengthStr: '' };
+    if (mode === 'meal') {
+      Object.assign(pertState.current.meal, defaults);
+    } else {
+      Object.assign(pertState.current.tubeFeed, defaults);
+    }
+  }
 
   // ── Result key tracking for animation ──────────────────────────────────────
 
@@ -339,6 +366,7 @@
     aria-labelledby="calculator-tab-meal"
     aria-label={MODE_CONFIG.meal.panelLabel}
     hidden={pertState.current.activeMode !== 'meal'}
+    class="space-y-6"
   >
     <section class="card flex flex-col gap-4" aria-label="Meal calculator inputs">
       <!-- Fat grams — raw string input for validation compatibility -->
@@ -355,6 +383,7 @@
             id="fat-grams-meal"
             type="number"
             min="0"
+            max="200"
             step="1"
             inputmode="decimal"
             autocomplete="off"
@@ -382,7 +411,7 @@
       />
 
       <!-- Brand & strength -->
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-2 gap-4">
         <SelectPicker
           label="Brand"
           bind:value={pertState.current.meal.selectedBrand}
@@ -406,25 +435,16 @@
       class="space-y-3"
     >
       {#if mealValidationMessage !== null}
-        <!-- Empty state — guidance inside the card -->
-        <div class="w-full opacity-30 pointer-events-none select-none" aria-hidden="true">
-          <div class="bg-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg">
-            <span class="text-white font-bold uppercase tracking-[0.2em] text-xs opacity-90">Capsules Needed</span>
-            <div class="flex flex-col gap-2 mt-4">
-              <div class="flex items-baseline gap-2">
-                <span class="text-display font-black leading-none text-white num">--</span>
-                <span class="text-white font-bold text-xl opacity-90">capsules</span>
-              </div>
-              {#if mealResultPlaceholder}
-                <p class="result-placeholder text-sm text-white/80 font-medium">{mealResultPlaceholder}</p>
-              {/if}
-            </div>
-          </div>
+        <!-- Empty state — subtle prompt, no card shape until there's a result -->
+        <div class="rounded-2xl border border-dashed border-[var(--color-border)] px-6 py-8 text-center" aria-hidden="true">
+          <p class="text-sm font-medium text-[var(--color-text-tertiary)]">
+            {mealResultPlaceholder || 'Enter fat grams to calculate.'}
+          </p>
         </div>
       {:else}
-        <!-- Hero result card -->
-        <div class="bg-[var(--color-accent)] border border-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg text-white">
-          <span class="font-bold uppercase tracking-[0.2em] text-xs opacity-90">Capsules Needed</span>
+        <!-- Unified result card — primary + secondary in one block -->
+        <div class="bg-[var(--color-accent-result)] border border-[var(--color-accent-result)] px-6 py-5 rounded-3xl flex flex-col justify-between shadow-lg text-white">
+          <span class="font-bold uppercase tracking-[0.2em] text-xs text-white/90">Capsules Needed</span>
           {#key mealResultKey}
             <div class="result-block mt-4">
               <div class="flex items-baseline gap-2">
@@ -434,28 +454,38 @@
                 >
                   {mealCapsulesNeeded}
                 </span>
-                <span class="font-bold text-xl opacity-90">capsules</span>
+                <span class="font-bold text-xl text-white/90">capsules</span>
               </div>
             </div>
           {/key}
-        </div>
-        <!-- Secondary info card -->
-        <div class="px-6 py-4 rounded-2xl shadow-sm bg-[var(--color-surface-card)] border border-[var(--color-border)]">
-          <div class="result-meta flex flex-col gap-1">
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-xs font-medium text-[var(--color-text-tertiary)]">Total lipase</span>
-              <span class="text-base font-semibold text-[var(--color-text-primary)] num">
-                {mealTotalLipase?.toLocaleString()}
+          <!-- Tertiary: total lipase info -->
+          {#if mealTotalLipase}
+            <div class="mt-4 pt-3 border-t border-white/25">
+              <div class="flex items-baseline gap-1.5 text-ui">
+                <span class="text-white/80">Total lipase</span>
+                <span class="font-semibold text-white/90 num">{mealTotalLipase.toLocaleString()}</span>
+                <span class="text-white/80">units</span>
+              </div>
+              <span class="text-2xs text-white/75 num">
+                {mealFatGrams}g x {mealLipaseRate.toLocaleString()} units/g
               </span>
-              <span class="text-xs font-normal text-[var(--color-text-tertiary)]">units</span>
             </div>
-            <span class="text-2xs text-[var(--color-text-tertiary)] num">
-              {mealFatGrams}g x {mealLipaseRate.toLocaleString()} units/g
-            </span>
-          </div>
+          {/if}
         </div>
       {/if}
     </section>
+
+    {#if mealHasValues}
+      <div class="flex justify-center">
+        <button
+          type="button"
+          class="text-2xs font-medium text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors px-3 py-1.5 rounded-lg min-h-[36px]"
+          onclick={() => clearMode('meal')}
+        >
+          Clear
+        </button>
+      </div>
+    {/if}
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════════════════ -->
@@ -467,6 +497,7 @@
     aria-labelledby="calculator-tab-tube-feed"
     aria-label={MODE_CONFIG['tube-feed'].panelLabel}
     hidden={pertState.current.activeMode !== 'tube-feed'}
+    class="space-y-6"
   >
     <section class="card flex flex-col gap-4" aria-label="Tube feed calculator inputs">
       <!-- Fat grams — raw string input -->
@@ -483,6 +514,7 @@
             id="fat-grams-tube-feed"
             type="number"
             min="0"
+            max="200"
             step="1"
             inputmode="decimal"
             autocomplete="off"
@@ -510,7 +542,7 @@
       />
 
       <!-- Brand & strength -->
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-2 gap-4">
         <SelectPicker
           label="Medication"
           bind:value={pertState.current.tubeFeed.selectedBrand}
@@ -534,25 +566,16 @@
       class="space-y-3"
     >
       {#if tubeFeedValidationMessage !== null}
-        <!-- Empty state — guidance inside the card -->
-        <div class="w-full opacity-30 pointer-events-none select-none" aria-hidden="true">
-          <div class="bg-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg">
-            <span class="text-white font-bold uppercase tracking-[0.2em] text-xs opacity-90">Capsules Needed</span>
-            <div class="flex flex-col gap-2 mt-4">
-              <div class="flex items-baseline gap-2">
-                <span class="text-display font-black leading-none text-white num">--</span>
-                <span class="text-white font-bold text-xl opacity-90">capsules</span>
-              </div>
-              {#if tubeFeedResultPlaceholder}
-                <p class="result-placeholder text-sm text-white/80 font-medium">{tubeFeedResultPlaceholder}</p>
-              {/if}
-            </div>
-          </div>
+        <!-- Empty state — subtle prompt, no card shape until there's a result -->
+        <div class="rounded-2xl border border-dashed border-[var(--color-border)] px-6 py-8 text-center" aria-hidden="true">
+          <p class="text-sm font-medium text-[var(--color-text-tertiary)]">
+            {tubeFeedResultPlaceholder || 'Enter fat grams to calculate.'}
+          </p>
         </div>
       {:else}
-        <!-- Hero result card -->
-        <div class="bg-[var(--color-accent)] border border-[var(--color-accent)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg text-white">
-          <span class="font-bold uppercase tracking-[0.2em] text-xs opacity-90">Capsules Needed</span>
+        <!-- Unified result card — primary + secondary in one block -->
+        <div class="bg-[var(--color-accent-result)] border border-[var(--color-accent-result)] px-6 py-5 rounded-3xl flex flex-col justify-between shadow-lg text-white">
+          <span class="font-bold uppercase tracking-[0.2em] text-xs text-white/90">Capsules Needed</span>
           {#key tubeFeedResultKey}
             <div class="result-block mt-4">
               <div class="flex items-baseline gap-2">
@@ -562,31 +585,41 @@
                 >
                   {tubeFeedCapsulesNeeded}
                 </span>
-                <span class="font-bold text-xl opacity-90">capsules</span>
+                <span class="font-bold text-xl text-white/90">capsules</span>
               </div>
             </div>
           {/key}
-        </div>
-        <!-- Secondary info card -->
-        <div class="px-6 py-4 rounded-2xl shadow-sm bg-[var(--color-surface-card)] border border-[var(--color-border)]">
-          <div class="result-meta flex flex-col gap-1">
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-xs font-medium text-[var(--color-text-tertiary)]">Total lipase</span>
-              <span class="text-base font-semibold text-[var(--color-text-primary)] num">
-                {tubeFeedTotalLipase?.toLocaleString()}
+          <!-- Tertiary: total lipase info -->
+          {#if tubeFeedTotalLipase}
+            <div class="mt-4 pt-3 border-t border-white/25">
+              <div class="flex items-baseline gap-1.5 text-ui">
+                <span class="text-white/80">Total lipase</span>
+                <span class="font-semibold text-white/90 num">{tubeFeedTotalLipase.toLocaleString()}</span>
+                <span class="text-white/80">units</span>
+              </div>
+              <span class="text-2xs text-white/75 num">
+                {tubeFeedFatGrams}g x {tubeFeedLipaseRate.toLocaleString()} units/g
               </span>
-              <span class="text-xs font-normal text-[var(--color-text-tertiary)]">units</span>
+              <span class="block text-2xs text-white/75 num">
+                Using {tubeFeedStrength.toLocaleString()} units/capsule
+              </span>
             </div>
-            <span class="text-2xs text-[var(--color-text-tertiary)] num">
-              {tubeFeedFatGrams}g x {tubeFeedLipaseRate.toLocaleString()} units/g
-            </span>
-            <span class="text-2xs text-[var(--color-text-tertiary)] num">
-              Using {tubeFeedStrength.toLocaleString()} units/capsule
-            </span>
-          </div>
+          {/if}
         </div>
       {/if}
     </section>
+
+    {#if tubeFeedHasValues}
+      <div class="flex justify-center">
+        <button
+          type="button"
+          class="text-2xs font-medium text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors px-3 py-1.5 rounded-lg min-h-[36px]"
+          onclick={() => clearMode('tube-feed')}
+        >
+          Clear
+        </button>
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -609,14 +642,6 @@
     animation: fade-in 240ms var(--ease-out-quart) both;
   }
 
-  .result-meta {
-    animation: fade-in 240ms var(--ease-out-quart) 60ms both;
-  }
-
-  .result-placeholder {
-    animation: fade-in 200ms var(--ease-out-quart) both;
-  }
-
   @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -631,9 +656,7 @@
 
   @media (prefers-reduced-motion: reduce) {
     .capsule-number,
-    .result-block,
-    .result-meta,
-    .result-placeholder {
+    .result-block {
       animation: none !important;
       transition: none !important;
     }

@@ -14,10 +14,12 @@
     "body2": "Always consult your doctor or care team before making any changes to medication dosing.",
     "acknowledge": "Understood"
   },
+  "maxFatGrams": 200,
   "validationMessages": {
     "emptyFatGrams": "Enter fat grams to calculate",
     "invalidFatGrams": "Enter a valid fat amount (e.g. 30 or 25.5)",
-    "zeroFatGrams": "Enter a fat amount greater than zero"
+    "zeroFatGrams": "Enter a fat amount greater than zero",
+    "maxFatGrams": "Maximum is 200 g"
   },
   "formulas": {
     "totalLipase": {

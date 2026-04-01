@@ -83,6 +83,7 @@ export function validateFatGrams(raw: string): string | null {
   const n = parseFloat(raw);
   if (isNaN(n) || n < 0) return CLINICAL_CONFIG.validationMessages.invalidFatGrams;
   if (n === 0) return CLINICAL_CONFIG.validationMessages.zeroFatGrams;
+  if (n > CLINICAL_CONFIG.maxFatGrams) return CLINICAL_CONFIG.validationMessages.maxFatGrams;
   return null;
 }
 

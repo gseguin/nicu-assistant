@@ -125,7 +125,7 @@
     {#if suffix}
       <span
         id="{id}-suffix"
-        class="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] font-semibold text-2xs tracking-wider pointer-events-none select-none"
+        class="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] font-semibold text-xs pointer-events-none select-none"
       >
         {suffix}
       </span>

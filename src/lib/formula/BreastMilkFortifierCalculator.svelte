@@ -80,6 +80,23 @@
       return { recipe: null, calcError: e instanceof Error ? e.message : 'Calculation failed' };
     }
   });
+
+  const hasValues = $derived(
+    formulaState.current.bmf.selectedBrandId !== '' ||
+    targetKcalOz !== null ||
+    (volumeMl !== null && volumeMl !== 120) ||
+    (baselineKcalOz !== null && baselineKcalOz !== 20)
+  );
+
+  function clearForm() {
+    formulaState.current.bmf.selectedBrandId = '';
+    formulaState.current.bmf.targetKcalOzRaw = '';
+    formulaState.current.bmf.volumeMlRaw = '';
+    formulaState.current.bmf.baselineKcalOzRaw = '20';
+    targetKcalOz = null;
+    volumeMl = 120;
+    baselineKcalOz = 20;
+  }
 </script>
 
 <div class="space-y-6">
@@ -92,7 +109,7 @@
       placeholder="Select Brand..."
     />
     {#if noBrandHint}
-      <p class="text-xs text-[var(--color-error)] ml-1 -mt-2" transition:slide={{ duration: 150 }}>{noBrandHint}</p>
+      <p class="text-xs text-[var(--color-text-secondary)] ml-1 -mt-2" transition:slide={{ duration: 150 }}>{noBrandHint}</p>
     {/if}
 
     <div class="grid grid-cols-2 gap-4">
@@ -103,6 +120,7 @@
         min={20}
         max={30}
         step={0.5}
+        placeholder="24"
       />
       <NumericInput
         bind:value={volumeMl}
@@ -144,61 +162,35 @@
         primaryLabel="Required Powder"
         secondaryValue={String(recipe.mL_ebm)}
         secondaryUnit="mL"
-        secondaryLabel="Breast Milk"
+        secondaryLabel="breast milk"
         accentVariant="bmf"
+        dispensingMeasures={[
+          ...(recipe.scoops !== null ? [{ label: 'Scoops', value: recipe.scoops }] : []),
+          ...(recipe.packets !== null ? [{ label: 'Packets', value: recipe.packets }] : []),
+          ...(recipe.tbsp !== null ? [{ label: 'Tbsp', value: recipe.tbsp }] : []),
+          ...(recipe.tsp !== null ? [{ label: 'Tsp', value: recipe.tsp }] : []),
+        ]}
       />
     </div>
-
-    <!-- Dispensing Measures -->
-    {#if recipe.scoops !== null || recipe.packets !== null || recipe.tbsp !== null || recipe.tsp !== null}
-      <div class="card" transition:slide={{ duration: 200 }}>
-        <h3 class="text-xs font-bold uppercase tracking-[0.15em] text-[var(--color-text-secondary)] mb-3">Dispensing Measures</h3>
-        <div class="grid grid-cols-2 gap-3 text-sm">
-          {#if recipe.scoops !== null}
-            <div class="flex justify-between px-2 py-1.5 rounded-lg bg-[var(--color-surface-alt)]">
-              <span class="text-[var(--color-text-secondary)]">Scoops</span>
-              <span class="font-semibold num text-[var(--color-text-primary)]">{recipe.scoops}</span>
-            </div>
-          {/if}
-          {#if recipe.packets !== null}
-            <div class="flex justify-between px-2 py-1.5 rounded-lg bg-[var(--color-surface-alt)]">
-              <span class="text-[var(--color-text-secondary)]">Packets</span>
-              <span class="font-semibold num text-[var(--color-text-primary)]">{recipe.packets}</span>
-            </div>
-          {/if}
-          {#if recipe.tbsp !== null}
-            <div class="flex justify-between px-2 py-1.5 rounded-lg bg-[var(--color-surface-alt)]">
-              <span class="text-[var(--color-text-secondary)]">Tablespoons</span>
-              <span class="font-semibold num text-[var(--color-text-primary)]">{recipe.tbsp}</span>
-            </div>
-          {/if}
-          {#if recipe.tsp !== null}
-            <div class="flex justify-between px-2 py-1.5 rounded-lg bg-[var(--color-surface-alt)]">
-              <span class="text-[var(--color-text-secondary)]">Teaspoons</span>
-              <span class="font-semibold num text-[var(--color-text-primary)]">{recipe.tsp}</span>
-            </div>
-          {/if}
-        </div>
-      </div>
-    {/if}
   {:else if guardViolation}
     <div class="p-4 bg-[var(--color-bmf-50)] rounded-xl border border-[var(--color-bmf-200)] text-[var(--color-bmf-800)] text-sm font-medium" transition:fade>
       Target must be higher than baseline — increase target kcal/oz or lower the baseline.
     </div>
   {:else}
-    <div class="space-y-3" transition:fade>
-      <div class="w-full opacity-30 pointer-events-none select-none" aria-hidden="true">
-        <div class="bg-[var(--color-bmf-600)] px-6 py-5 rounded-3xl min-h-[148px] flex flex-col justify-between shadow-lg">
-          <span class="text-white font-bold uppercase tracking-[0.2em] text-xs opacity-90">Required Powder</span>
-          <div class="flex flex-col gap-2 mt-4">
-            <div class="flex items-baseline gap-2">
-              <span class="text-display font-black leading-none text-white num">--</span>
-              <span class="text-white font-bold text-xl opacity-90">grams</span>
-            </div>
-            <p class="text-sm text-white/80 font-medium">Select a brand and enter values above.</p>
-          </div>
-        </div>
-      </div>
+    <div class="rounded-2xl border border-dashed border-[var(--color-border)] px-6 py-8 text-center" transition:fade aria-hidden="true">
+      <p class="text-sm font-medium text-[var(--color-text-tertiary)]">Select a brand to calculate.</p>
+    </div>
+  {/if}
+
+  {#if hasValues}
+    <div class="flex justify-center">
+      <button
+        type="button"
+        class="text-2xs font-medium text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors px-3 py-1.5 rounded-lg min-h-[36px]"
+        onclick={clearForm}
+      >
+        Clear
+      </button>
     </div>
   {/if}
 </div>

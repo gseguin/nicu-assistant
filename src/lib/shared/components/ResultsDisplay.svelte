@@ -1,7 +1,14 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition';
+  import { fly } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
   import { untrack } from 'svelte';
   import { getCalculatorContext } from '../context.js';
+
+  /** A single dispensing measure (e.g. Scoops: 0.5) */
+  export type DispensingMeasure = {
+    label: string;
+    value: string | number;
+  };
 
   let {
     primaryValue,
@@ -10,6 +17,7 @@
     secondaryValue,
     secondaryUnit,
     secondaryLabel,
+    dispensingMeasures,
     isVisible = true,
     accentVariant,
   }: {
@@ -19,6 +27,7 @@
     secondaryValue?: string;
     secondaryUnit?: string;
     secondaryLabel?: string;
+    dispensingMeasures?: DispensingMeasure[];
     isVisible?: boolean;
     accentVariant?: 'clinical' | 'bmf';
   } = $props();
@@ -30,11 +39,12 @@
     accentVariant ?? (ctx.id === 'formula' ? 'clinical' : 'clinical')
   );
 
-  // Card background class based on variant
+  // Card background class based on variant — uses dedicated result tokens
+  // that are dark enough for 4.5:1 contrast with white text (WCAG 1.4.3)
   const cardBgClass = $derived(
     resolvedVariant === 'bmf'
-      ? 'bg-[var(--color-bmf-600)] border border-[var(--color-bmf-700)]'
-      : 'bg-[var(--color-accent)] border border-[var(--color-accent)]'
+      ? 'bg-[var(--color-bmf-result)] border border-[var(--color-bmf-result)]'
+      : 'bg-[var(--color-accent-result)] border border-[var(--color-accent-result)]'
   );
 
   // Effect to trigger pulse animation on value change
@@ -50,43 +60,50 @@
 {#if isVisible}
   <!-- aria-live announces updated values to screen readers -->
   <div
-    class="w-full space-y-3"
+    class="w-full"
     aria-live="polite"
     aria-atomic="true"
     aria-label="Result: {primaryValue} {primaryUnit}"
-    transition:fade={{ duration: 300 }}
+    transition:fly={{ y: 12, duration: 300, easing: cubicOut }}
   >
-    <!-- Primary Result Card -->
-    <div class="px-6 py-5 rounded-3xl shadow-lg text-white flex flex-col justify-between min-h-[148px] {cardBgClass}">
-      <div class="flex items-center justify-between mb-auto">
-        <span class="font-bold uppercase tracking-[0.2em] text-xs text-white opacity-90">{primaryLabel}</span>
-      </div>
+    <!-- Unified Result Card -->
+    <div class="px-6 py-5 rounded-3xl shadow-lg text-white flex flex-col gap-1 min-h-[148px] {cardBgClass}">
+      <!-- Label — xs, recedes -->
+      <span class="font-bold uppercase tracking-[0.2em] text-xs text-white/90">{primaryLabel}</span>
+
+      <!-- Primary value — hero display size -->
       {#key pulseTrigger}
-        <div class="pulse-container mt-4">
+        <div class="pulse-container mt-3">
           <div class="flex items-baseline gap-2">
             <span class="text-display font-black leading-none num">{primaryValue}</span>
-            <span class="font-bold text-xl text-white opacity-90">{primaryUnit}</span>
+            <span class="font-bold text-xl text-white/90">{primaryUnit}</span>
           </div>
         </div>
       {/key}
-    </div>
 
-    <!-- Optional Secondary Result Card -->
-    {#if secondaryValue !== undefined}
-      <div class="px-6 py-4 rounded-2xl shadow-sm flex flex-col justify-between min-h-[120px] bg-[var(--color-surface-card)] border border-[var(--color-border)]">
-        <div class="flex items-center justify-between mb-auto">
-          <span class="font-bold uppercase tracking-[0.2em] text-xs text-[var(--color-text-secondary)] opacity-90">{secondaryLabel ?? ''}</span>
+      <!-- Secondary value — title size, slightly receded -->
+      {#if secondaryValue !== undefined}
+        <div class="flex items-baseline gap-1.5 mt-1">
+          <span class="text-title font-bold leading-tight num text-white">{secondaryValue}</span>
+          <span class="font-semibold text-base text-white/85">{secondaryUnit ?? ''}</span>
+          {#if secondaryLabel}
+            <span class="font-medium text-sm text-white/80">{secondaryLabel}</span>
+          {/if}
         </div>
-        {#key pulseTrigger}
-          <div class="pulse-container mt-3">
-            <div class="flex items-baseline gap-2">
-              <span class="text-title font-black leading-none num text-[var(--color-text-primary)]">{secondaryValue}</span>
-              <span class="font-bold text-lg text-[var(--color-text-secondary)]">{secondaryUnit ?? ''}</span>
-            </div>
-          </div>
-        {/key}
-      </div>
-    {/if}
+      {/if}
+
+      <!-- Tertiary — dispensing measures, small inline text -->
+      {#if dispensingMeasures && dispensingMeasures.length > 0}
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 mt-3 pt-3 border-t border-white/25">
+          {#each dispensingMeasures as measure, i}
+            <span class="text-ui text-white/80">
+              <span class="font-medium">{measure.label}</span>
+              <span class="font-semibold num text-white/90">{measure.value}</span>
+            </span>
+          {/each}
+        </div>
+      {/if}
+    </div>
   </div>
 {/if}
 

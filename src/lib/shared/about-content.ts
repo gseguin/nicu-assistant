@@ -28,7 +28,7 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Calculates powder (grams and scoops) and water (mL) quantities to prepare infant formula at a target calorie concentration.',
     notes: [
       'Supports standard modified formula and human milk fortifier (BMF) modes.',
-      'Displacement factors sourced from Displacement.xlsx reference table.',
+      'Displacement factors sourced from manufacturer reference data.',
       "Results must be verified against your institution's feeding protocol.",
     ],
     sourceLabel: 'Caloric density and displacement data from manufacturer specifications.',

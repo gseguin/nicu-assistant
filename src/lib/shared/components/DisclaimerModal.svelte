@@ -42,7 +42,7 @@
       <div class="mt-5 w-full">
         <button
           type="button"
-          class="min-h-[3.25rem] w-full rounded-[0.625rem] bg-[var(--color-accent)] px-4 py-3 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-light)]"
+          class="min-h-[3.25rem] w-full rounded-[0.625rem] bg-[var(--color-accent-result)] px-4 py-3 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-light)]"
           onclick={() => disclaimer.acknowledge()}
         >
           I Understand — Continue

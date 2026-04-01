@@ -42,6 +42,8 @@
   --color-text-tertiary:   var(--color-text-tertiary);
   --color-accent:       var(--color-accent);
   --color-accent-light: var(--color-accent-light);
+  --color-accent-result: var(--color-accent-result);
+  --color-bmf-result:    var(--color-bmf-result);
   --color-error:        var(--color-error);
   --color-error-light:  var(--color-error-light);
 
@@ -61,12 +63,14 @@
     --color-surface:         oklch(97.5% 0.006 225);
     --color-surface-alt:     oklch(90% 0.008 220);
     --color-surface-card:    oklch(100% 0 0);
-    --color-border:          oklch(80% 0.01 220);
+    --color-border:          oklch(63% 0.01 220);    /* WCAG fix: was 80%, now 3:1+ on surface & card */
     --color-text-primary:    oklch(18% 0.012 230);
     --color-text-secondary:  oklch(35% 0.01 225);
     --color-text-tertiary:   oklch(50% 0.008 225);
-    --color-accent:          oklch(49% 0.17 220);   /* clinical-600 — nav shell neutral */
-    --color-accent-light:    oklch(86% 0.08 220);   /* clinical-200 */
+    --color-accent:          oklch(49% 0.17 220);    /* clinical-600 — UI text accent */
+    --color-accent-light:    oklch(86% 0.08 220);    /* clinical-200 */
+    --color-accent-result:   oklch(42% 0.14 220);    /* darker clinical — result card bg, 4.5:1 w/ white */
+    --color-bmf-result:      oklch(44% 0.13 55);     /* darker amber — result card bg, 4.5:1 w/ white */
     --color-error:           oklch(50% 0.20 25);
     --color-error-light:     oklch(90% 0.06 25);
   }
@@ -79,12 +83,14 @@
     --color-surface:         oklch(16% 0.012 240);
     --color-surface-alt:     oklch(20% 0.014 238);
     --color-surface-card:    oklch(23% 0.014 236);
-    --color-border:          oklch(30% 0.016 235);
+    --color-border:          oklch(53% 0.016 235);   /* WCAG fix: was 30%, now 3:1+ on surface & card */
     --color-text-primary:    oklch(93% 0.006 230);
     --color-text-secondary:  oklch(70% 0.010 228);
-    --color-text-tertiary:   oklch(55% 0.008 228);
-    --color-accent:          oklch(72% 0.14 220);    /* clinical blue — lighter, warmer for dark bg */
+    --color-text-tertiary:   oklch(62% 0.008 228);   /* WCAG fix: was 55%, now 4.5:1+ on surface */
+    --color-accent:          oklch(72% 0.14 220);     /* clinical blue — vibrant UI text on dark bg */
     --color-accent-light:    oklch(28% 0.08 225);
+    --color-accent-result:   oklch(44% 0.14 220);    /* darker clinical — result card bg, 4.5:1 w/ white */
+    --color-bmf-result:      oklch(44% 0.13 55);     /* darker amber — same as light (both need dark bg for white text) */
     --color-error:           oklch(72% 0.16 25);
     --color-error-light:     oklch(25% 0.08 25);
   }
@@ -100,6 +106,15 @@
     font-kerning: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Smooth theme transition — calm, not flashy */
+  html:not(.no-transition) * {
+    transition: background-color 200ms ease-out, color 200ms ease-out, border-color 200ms ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html * { transition: none !important; }
   }
 
   /* DS-05: 48px minimum touch targets for all interactive elements */

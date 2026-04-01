@@ -15,53 +15,53 @@
 
 <!-- NAV-01: Mobile bottom tab bar — fixed, hidden on md+ -->
 <nav
-  class="fixed bottom-0 left-0 right-0 flex md:hidden
+  class="fixed bottom-0 left-0 right-0 flex items-center md:hidden
          border-t border-[var(--color-border)] bg-[var(--color-surface)]
          pb-[env(safe-area-inset-bottom,0px)]"
   aria-label="Calculator navigation"
-  role="tablist"
 >
-  {#each CALCULATOR_REGISTRY as calc}
-    {@const isActive = page.url.pathname.startsWith(calc.href)}
-    <a
-      href={calc.href}
-      class="flex flex-col items-center justify-center flex-1 gap-1
-             min-h-[48px] py-2 text-ui font-medium
-             {isActive
-               ? 'text-[var(--color-accent)]'
-               : 'text-[var(--color-text-secondary)]'}"
-      aria-label={calc.description}
-      aria-selected={isActive}
-      role="tab"
+  <div class="flex flex-1" role="tablist">
+    {#each CALCULATOR_REGISTRY as calc}
+      {@const isActive = page.url.pathname.startsWith(calc.href)}
+      <a
+        href={calc.href}
+        class="flex flex-col items-center justify-center flex-1 gap-1
+               min-h-[48px] py-2 text-ui font-medium
+               {isActive
+                 ? 'text-[var(--color-accent)]'
+                 : 'text-[var(--color-text-secondary)]'}"
+        aria-label={calc.description}
+        aria-selected={isActive}
+        role="tab"
+      >
+        <calc.icon size={22} aria-hidden="true" />
+        <span>{calc.label}</span>
+      </a>
+    {/each}
+  </div>
+  <!-- Action buttons — consistent with desktop top-right placement -->
+  <div class="flex items-center pr-2 gap-0.5">
+    <button
+      type="button"
+      class="icon-btn min-h-[48px] min-w-[48px]"
+      aria-label="About this calculator"
+      onclick={() => aboutOpen = true}
     >
-      <calc.icon size={22} aria-hidden="true" />
-      <span>{calc.label}</span>
-    </a>
-  {/each}
-  <!-- About/info button — mobile -->
-  <button
-    type="button"
-    class="icon-btn min-h-[48px] min-w-[48px] flex flex-col items-center justify-center gap-1 text-ui font-medium"
-    aria-label="About this calculator"
-    onclick={() => aboutOpen = true}
-  >
-    <Info size={22} aria-hidden="true" />
-    <span class="text-2xs">About</span>
-  </button>
-  <!-- Theme toggle — mobile -->
-  <button
-    type="button"
-    class="icon-btn min-h-[48px] min-w-[48px] flex flex-col items-center justify-center gap-1 text-ui font-medium"
-    aria-label={theme.current === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-    onclick={() => theme.toggle()}
-  >
-    {#if theme.current === 'dark'}
-      <Sun size={22} aria-hidden="true" />
-    {:else}
-      <Moon size={22} aria-hidden="true" />
-    {/if}
-    <span class="text-2xs">Theme</span>
-  </button>
+      <Info size={20} aria-hidden="true" />
+    </button>
+    <button
+      type="button"
+      class="icon-btn min-h-[48px] min-w-[48px]"
+      aria-label={theme.current === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      onclick={() => theme.toggle()}
+    >
+      {#if theme.current === 'dark'}
+        <Sun size={20} aria-hidden="true" />
+      {:else}
+        <Moon size={20} aria-hidden="true" />
+      {/if}
+    </button>
+  </div>
 </nav>
 
 <!-- NAV-02: Desktop top nav bar — sticky, hidden on mobile -->

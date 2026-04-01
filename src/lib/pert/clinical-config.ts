@@ -17,6 +17,7 @@ export interface ValidationMessages {
   emptyFatGrams: string;
   invalidFatGrams: string;
   zeroFatGrams: string;
+  maxFatGrams: string;
 }
 
 type FormulaInput = 'fatGrams' | 'lipaseUnitsPerGram' | 'capsuleStrength';
@@ -52,6 +53,7 @@ export interface FormulaDefinition {
 export interface ClinicalConfig {
   medications: Medication[];
   lipaseRates: number[];
+  maxFatGrams: number;
   disclaimer: Disclaimer;
   validationMessages: ValidationMessages;
   formulas: {
@@ -163,6 +165,11 @@ export function parseClinicalConfig(value: unknown): ClinicalConfig {
   assertString(validationMessages.emptyFatGrams, 'validationMessages.emptyFatGrams');
   assertString(validationMessages.invalidFatGrams, 'validationMessages.invalidFatGrams');
   assertString(validationMessages.zeroFatGrams, 'validationMessages.zeroFatGrams');
+  assertString(validationMessages.maxFatGrams, 'validationMessages.maxFatGrams');
+
+  if (typeof config.maxFatGrams !== 'number' || config.maxFatGrams <= 0) {
+    throw new Error('maxFatGrams must be a positive number');
+  }
 
   if (typeof config.formulas !== 'object' || config.formulas === null) {
     throw new Error('formulas must be an object');
@@ -175,6 +182,7 @@ export function parseClinicalConfig(value: unknown): ClinicalConfig {
   return {
     medications,
     lipaseRates: config.lipaseRates,
+    maxFatGrams: config.maxFatGrams as number,
     disclaimer: {
       eyebrow: disclaimer.eyebrow,
       headline: disclaimer.headline,
@@ -185,7 +193,8 @@ export function parseClinicalConfig(value: unknown): ClinicalConfig {
     validationMessages: {
       emptyFatGrams: validationMessages.emptyFatGrams,
       invalidFatGrams: validationMessages.invalidFatGrams,
-      zeroFatGrams: validationMessages.zeroFatGrams
+      zeroFatGrams: validationMessages.zeroFatGrams,
+      maxFatGrams: validationMessages.maxFatGrams
     },
     formulas: {
       totalLipase: formulas.totalLipase,
