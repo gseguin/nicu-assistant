@@ -1,0 +1,38 @@
+{
+  "medications": [
+    { "brand": "Creon", "strengths": [3000, 6000, 12000, 24000, 36000] },
+    { "brand": "Zenpep", "strengths": [3000, 5000, 10000, 15000, 20000, 25000, 40000] },
+    { "brand": "Pancreaze", "strengths": [4200, 10500, 16800, 21000] },
+    { "brand": "Pertzye", "strengths": [8000, 16000] },
+    { "brand": "Viokace", "strengths": [10440, 20880] }
+  ],
+  "lipaseRates": [500, 1000, 2000, 4000],
+  "disclaimer": {
+    "eyebrow": "Important Notice",
+    "headline": "For Informational Use Only",
+    "body1": "This tool provides general dosing estimates based on published guidelines. It is not a substitute for the advice, diagnosis, or treatment plan of your physician or qualified healthcare provider.",
+    "body2": "Always consult your doctor or care team before making any changes to medication dosing.",
+    "acknowledge": "Understood"
+  },
+  "validationMessages": {
+    "emptyFatGrams": "Enter fat grams to calculate",
+    "invalidFatGrams": "Enter a valid fat amount (e.g. 30 or 25.5)",
+    "zeroFatGrams": "Enter a fat amount greater than zero"
+  },
+  "formulas": {
+    "totalLipase": {
+      "result": "totalLipase",
+      "steps": [
+        { "op": "multiply", "left": "fatGrams", "right": "lipaseUnitsPerGram", "out": "totalLipase" }
+      ]
+    },
+    "capsulesNeeded": {
+      "result": "capsulesNeeded",
+      "steps": [
+        { "op": "multiply", "left": "fatGrams", "right": "lipaseUnitsPerGram", "out": "totalLipase" },
+        { "op": "divide", "left": "totalLipase", "right": "capsuleStrength", "out": "capsulesRaw" },
+        { "op": "round", "input": "capsulesRaw", "out": "capsulesNeeded" }
+      ]
+    }
+  }
+}
