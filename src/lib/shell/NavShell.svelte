@@ -1,6 +1,8 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { CALCULATOR_REGISTRY } from './registry.js';
+  import { theme } from '$lib/shared/theme.svelte.js';
+  import { Sun, Moon } from '@lucide/svelte';
 </script>
 
 <!-- NAV-01: Mobile bottom tab bar — fixed, hidden on md+ -->
@@ -28,13 +30,27 @@
       <span>{calc.label}</span>
     </a>
   {/each}
+  <!-- Theme toggle — mobile -->
+  <button
+    type="button"
+    class="icon-btn min-h-[48px] min-w-[48px] flex flex-col items-center justify-center gap-1 text-ui font-medium"
+    aria-label={theme.current === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+    onclick={() => theme.toggle()}
+  >
+    {#if theme.current === 'dark'}
+      <Sun size={22} aria-hidden="true" />
+    {:else}
+      <Moon size={22} aria-hidden="true" />
+    {/if}
+    <span class="text-2xs">Theme</span>
+  </button>
 </nav>
 
 <!-- NAV-02: Desktop top nav bar — sticky, hidden on mobile -->
 <nav
   class="hidden md:flex sticky top-0 left-0 right-0
          border-b border-[var(--color-border)] bg-[var(--color-surface)]
-         px-4 gap-2 z-10"
+         px-4 gap-2 z-10 items-center"
   aria-label="Calculator navigation"
   role="tablist"
 >
@@ -55,4 +71,19 @@
       <span>{calc.label}</span>
     </a>
   {/each}
+  <!-- Spacer pushes theme toggle to the right -->
+  <div class="flex-1"></div>
+  <!-- Theme toggle — desktop -->
+  <button
+    type="button"
+    class="icon-btn min-h-[48px] min-w-[48px]"
+    aria-label={theme.current === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+    onclick={() => theme.toggle()}
+  >
+    {#if theme.current === 'dark'}
+      <Sun size={20} aria-hidden="true" />
+    {:else}
+      <Moon size={20} aria-hidden="true" />
+    {/if}
+  </button>
 </nav>
