@@ -58,7 +58,10 @@ export default defineConfig({
 		setupFiles: ['src/test-setup.ts']
 	},
 	server: {
-		allowedHosts: ['nicu-assistant-dev.heartsmiles.io']
+		allowedHosts: ['nicu-assistant-dev.heartsmiles.io'],
+		watch: {
+			ignored: ['**/.planning/**']
+		}
 	},
 	resolve: {
 		conditions: ['browser']
