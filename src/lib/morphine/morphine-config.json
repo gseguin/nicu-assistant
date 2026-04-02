@@ -1,0 +1,18 @@
+{
+  "defaults": {
+    "weightKg": 3.1,
+    "maxDoseMgKgDose": 0.04,
+    "decreasePct": 10
+  },
+  "stepCount": 10,
+  "modes": {
+    "linear": {
+      "label": "Linear",
+      "description": "Fixed mg reduction each step"
+    },
+    "compounding": {
+      "label": "Compounding",
+      "description": "Percentage of current dose each step"
+    }
+  }
+}
