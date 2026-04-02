@@ -1,16 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Morphine Wean Calculator
-status: executing
-stopped_at: Completed 06-02-PLAN.md
-last_updated: "2026-04-02T20:55:49.314Z"
+milestone: v1.2
+milestone_name: UI Polish
+status: defining_requirements
+stopped_at: null
+last_updated: "2026-04-02T00:00:00.000Z"
 last_activity: 2026-04-02
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 18
-  completed_plans: 18
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
   percent: 0
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-02)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase 05 — morphine-wean-calculator
+**Current focus:** Milestone v1.2 — UI Polish
 
 ## Current Position
 
-Phase: 06
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-04-02
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-02 — Milestone v1.2 started
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -36,53 +36,27 @@ Progress: [░░░░░░░░░░] 0%
 
 **Velocity:**
 
-- Total plans completed: 14 (v1.0)
-- Average duration: ~10 min
-- Total execution time: ~1.9 hours (v1.0)
-
-**By Phase (v1.0):**
-
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 1. Foundation | 3 | ~91min | ~30min |
-| 2. Shared Components | 3 | ~7min | ~2min |
-| 3. Calculators | 3 | ~11min | ~4min |
-| 4. PWA & Offline | 2 | ~4min | ~2min |
-
-**Recent Trend:**
-
-- Last 5 plans: 3min, 2min, 2min, 2min, 2min
-- Trend: Stable (fast)
-
-*Updated after each plan completion*
-| Phase 05 P01 | 3min | 2 tasks | 17 files |
-| Phase 05 P02 | 2min | 3 tasks | 2 files |
-| Phase 06 P02 | 3min | 1 tasks | 3 files |
+- Total plans completed: 18 (v1.0 + v1.1)
+- Average duration: ~5 min
+- Total execution time: ~2.5 hours
 
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- [v1.1]: Both linear and compounding weaning modes selected for morphine calculator
-- [v1.1]: PERT calculator to be removed and replaced by morphine wean calculator
-- [v1.1]: Shared components (NumericInput, ResultsDisplay, SelectPicker) reused for morphine wean inputs
-- [Phase 05]: Syringe icon for morphine wean nav entry; idle detection compares against config defaults
-- [Phase 05]: Used stacked card list instead of HTML table for mobile schedule display
-- [Phase 06]: Excluded color-contrast from dark mode axe scan due to pre-existing theme contrast issues
+- [v1.2]: Move info and theme buttons from bottom nav to top title bar
+- [v1.2]: Calculator tabs should fill full bottom nav width on mobile
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
-- [Pre-Phase 5]: Disclaimer text must cover morphine wean and formula in one statement — requires clinical stakeholder review
+None.
 
 ## Session Continuity
 
-Last session: 2026-04-02T20:48:28.059Z
-Stopped at: Completed 06-02-PLAN.md
+Last session: 2026-04-02
+Stopped at: Milestone v1.2 initialization
 Resume file: None

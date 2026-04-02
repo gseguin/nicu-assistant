@@ -27,9 +27,19 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ Unit tests with spreadsheet parity validation — v1.1
 - ✓ Automated a11y auditing via axe-core — v1.1
 
+## Current Milestone: v1.2 UI Polish
+
+**Goal:** Polish the navigation layout so calculator tab buttons use the full width on mobile, by relocating info and theme switcher buttons to the app title bar.
+
+**Target features:**
+- Move info (about) button and theme toggle from bottom tab bar to top title/header bar
+- Calculator tab buttons expand to fill full width of bottom nav on mobile
+- Relocated buttons work correctly in both mobile and desktop layouts
+- Visual polish pass on nav shell
+
 ### Active
 
-(None — planning next milestone)
+(None — defined in REQUIREMENTS.md)
 
 ### Out of Scope
 
@@ -99,4 +109,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-02 after v1.1 milestone*
+*Last updated: 2026-04-02 after milestone v1.2 start*
