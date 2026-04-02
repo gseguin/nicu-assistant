@@ -2,45 +2,38 @@
 
 ## What This Is
 
-A PWA that unifies clinical calculators into a single tool for NICU staff. Currently includes the infant formula recipe calculator and (as of v1.1) a morphine weaning schedule calculator. Built with a shared component library, responsive navigation, and a plugin-like architecture that makes adding new calculators straightforward.
+A PWA that unifies clinical calculators into a single tool for NICU staff. Currently includes an infant formula recipe calculator and a morphine weaning schedule calculator. Built with a shared component library, responsive navigation, and a plugin-like architecture that makes adding new calculators straightforward.
 
 ## Core Value
 
 Clinicians can switch between NICU calculation tools instantly from a single app without losing context, using the same trusted interfaces they already know.
 
-## Current Milestone: v1.1 Morphine Wean Calculator
-
-**Goal:** Replace the PERT dosing calculator with a morphine weaning schedule calculator that generates step-by-step dose reduction plans.
-
-**Target features:**
-- Morphine wean calculator with 3 inputs: dosing weight (kg), max morphine dose (mg/kg/dose), % decrease per step
-- Two weaning modes: Linear (fixed mg reduction each step) and Compounding (% of current dose each step)
-- Step-by-step weaning schedule table: step number, dose (mg), dose (mg/kg/dose), reduction amount (mg)
-- Remove PERT calculator (routes, nav registration, business logic)
-- Reuse existing shared components and design system
-
 ## Requirements
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Responsive navigation: bottom tab bar on mobile, top nav bar on desktop — v1.0
+- ✓ Formula recipe calculator (modified + BMF modes) — v1.0
+- ✓ Shared component library: SelectPicker, NumericInput, DisclaimerModal, AboutSheet, ResultsDisplay — v1.0
+- ✓ Single shared medical disclaimer shown on first load — v1.0
+- ✓ Dark/light theme toggle — v1.0
+- ✓ PWA: offline-capable with service worker, installable, standalone display — v1.0
+- ✓ Plugin-like calculator registration — v1.0
+- ✓ Design system unification: shared color tokens, typography, spacing — v1.0
+- ✓ Accessible: WCAG 2.1 AA, keyboard nav, screen reader support, 48px touch targets — v1.0
+- ✓ Morphine wean calculator with linear and compounding modes — v1.1
+- ✓ PERT calculator replaced by morphine wean calculator — v1.1
+- ✓ Clinical data stored in JSON config for maintainability — v1.1
+- ✓ Unit tests with spreadsheet parity validation — v1.1
+- ✓ Automated a11y auditing via axe-core — v1.1
 
 ### Active
 
-- [ ] Responsive navigation: bottom tab bar on mobile, top nav bar on desktop
-- [ ] PERT dosing calculator (meal + tube-feed modes) ported from pert-calculator
-- [ ] Formula recipe calculator (modified + BMF modes) ported from formula-calculator
-- [ ] Shared component library: SelectPicker, NumericInput, DisclaimerModal, AboutSheet, ResultsDisplay
-- [ ] Single shared medical disclaimer shown on first load (covers all calculators)
-- [ ] Dark/light theme toggle (both modes supported)
-- [ ] PWA: offline-capable with service worker, installable, standalone display
-- [ ] Plugin-like calculator registration — adding a new calculator requires minimal boilerplate
-- [ ] Design system unification: shared color tokens, typography, spacing across calculators
-- [ ] Accessible: WCAG 2.1 AA, keyboard nav, screen reader support, 48px touch targets
+(None — planning next milestone)
 
 ### Out of Scope
 
-- Native app builds (Capacitor/iOS/Android) — deferred, PWA-only for now
+- Native app builds (Capacitor/iOS/Android) — deferred, PWA-only
 - User accounts or authentication — anonymous clinical tool
 - Backend/API — all data embedded at build time, no server calls
 - Analytics or telemetry — clinical privacy concerns
@@ -48,44 +41,45 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ## Context
 
-**Existing codebases:**
-- `pert-calculator/`: SvelteKit 2, Svelte 5 (runes), Tailwind CSS 4, @vite-pwa/sveltekit, adapter-static. Dark-mode-first. Clinical Blue palette. System font stack. Components: DosingCalculator, SelectPicker, DisclaimerModal, AboutSheet. Business logic in `dosing.ts` + `medications.ts` + `clinical-config.json`.
-- `formula-calculator/`: Same stack. Light-mode-only. Clinical Blue + BMF Amber dual palette. Plus Jakarta Sans (Google Fonts). Components: FormulaCalculator, ModifiedFormulaCalculator, BreastMilkFortifierCalculator, BrandSelector, SelectPicker, NumericInput, ResultsDisplay, DisclaimerModal, AboutSheet. Business logic in `formula.ts` + `formula-config.ts` + `formula-config.json`.
+**Shipped v1.1** with ~589 LOC in morphine calculator module, 137 total tests passing.
+Tech stack: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS 4 + Vite 8 + pnpm.
 
-**Shared patterns across both apps:**
-- Svelte 5 runes ($state, $derived, $effect) for reactivity
-- Pure calculation functions (no side effects) in separate .ts files
-- JSON-embedded clinical data loaded at build time
-- Native HTML `<dialog>` elements for modals/pickers
-- Tailwind CSS 4 with @theme custom properties for design tokens
-- Accessibility: ARIA roles, live regions, focus management, keyboard nav
+**Current calculators:**
+- Morphine Wean: linear/compounding modes, config-driven defaults from `morphine-config.json`
+- Formula: modified/BMF modes, 40+ brands with manufacturer grouping
 
-**Key differences to reconcile:**
-- Color palettes: PERT uses Clinical Blue only; Formula uses Clinical Blue + BMF Amber
-- Theme: PERT supports dark/light; Formula is light-only. Unified app will support both.
-- Typography: PERT uses system fonts; Formula loads Plus Jakarta Sans. Unified app will use Plus Jakarta Sans.
-- Component overlap: SelectPicker and DisclaimerModal exist in both — need to merge into shared versions
+**Architecture:**
+- Calculator registry in `src/lib/shell/registry.ts` — add new calculators with one entry + one route
+- Shared components in `src/lib/shared/components/` — NumericInput, SelectPicker, ResultsDisplay, DisclaimerModal, AboutSheet
+- State singletons per calculator: `$state` rune + sessionStorage backup
+- PWA with Workbox precaching and non-blocking update banner
 
-**Users:** NICU clinicians (dietitians, nurses, GI physicians) at point of care. Mobile-first, one-handed use at bedside. Also used on desktop workstations.
+**Users:** NICU clinicians (dietitians, nurses, GI physicians) at point of care. Primarily mobile, one-handed bedside use. Also desktop workstations.
+
+**Known issues:**
+- Dark mode color-contrast violations in some areas (pre-existing theme issue, deferred)
 
 ## Constraints
 
-- **Tech stack**: SvelteKit 2 + Svelte 5 + Tailwind CSS 4 + Vite + pnpm — must match existing apps
-- **No native**: PWA only, no Capacitor for v1
+- **Tech stack**: SvelteKit 2 + Svelte 5 + Tailwind CSS 4 + Vite 8 + pnpm
+- **No native**: PWA only, no Capacitor
 - **Offline-first**: All clinical data embedded at build time, service worker for caching
 - **Accessibility**: WCAG 2.1 AA minimum, 48px touch targets, always-visible nav labels
-- **Code reuse**: Port business logic from existing apps, don't rewrite calculation functions
+- **Clinical data in JSON**: Store calculation parameters in .json files for easier maintainability
 
 ## Key Decisions
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Responsive nav (bottom mobile / top desktop) | Research shows this is the standard PWA pattern; bottom bar is in thumb zone for one-handed bedside use | -- Pending |
-| Both dark and light theme | PERT users expect dark mode; NICU environment benefits from light mode option | -- Pending |
-| Single shared disclaimer | Reduces friction vs per-calculator disclaimers; one acceptance covers all tools | -- Pending |
-| Plus Jakarta Sans as shared typeface | Formula calculator already loads it; more polished than system fonts for clinical tool | -- Pending |
-| Plugin-like calculator architecture | Makes it easy to add future calculators (e.g., fluid balance, growth charts) without touching nav or shell code | -- Pending |
-| Delegate to Impeccable skill for UI design | All visual/aesthetic decisions (look & feel, color application, typography, layout) use the Impeccable skill; implementation follows its guidance | -- Pending |
+| Responsive nav (bottom mobile / top desktop) | Standard PWA pattern; thumb zone for bedside use | ✓ Good |
+| Both dark and light theme | NICU environment needs both | ✓ Good |
+| Single shared disclaimer | One acceptance covers all tools | ✓ Good |
+| Plus Jakarta Sans typeface | Polished, already in formula-calculator | ✓ Good |
+| Plugin-like calculator architecture | Easy to add/swap calculators | ✓ Good — proved by PERT→morphine swap |
+| bits-ui for headless components | Accessible primitives for Svelte 5 | ✓ Good |
+| JSON config for clinical data | Easier maintainability/updates | ✓ Good — D-08 from v1.1 |
+| Co-located test files | Svelte community standard, `.test.ts` next to source | ✓ Good |
+| Syringe icon for morphine wean | Lucide @lucide/svelte, clear clinical association | ✓ Good |
 
 ## Evolution
 
@@ -105,4 +99,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-02 after milestone v1.1 start*
+*Last updated: 2026-04-02 after v1.1 milestone*
