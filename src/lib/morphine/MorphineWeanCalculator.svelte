@@ -186,11 +186,32 @@
     >
       {#if morphineState.current.activeMode === mode}
         {#if schedule.length > 0}
+          <!-- Summary: start → end dose -->
+          {@const first = schedule[0]}
+          {@const last = schedule[schedule.length - 1]}
+          {@const totalReduction = first.doseMg - last.doseMg}
+          <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-accent-light)]">
+            <div class="flex flex-col">
+              <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Start</span>
+              <span class="text-base font-bold num text-[var(--color-text-primary)]">{first.doseMg.toFixed(4)} mg</span>
+            </div>
+            <div class="text-[var(--color-text-tertiary)] text-lg">→</div>
+            <div class="flex flex-col items-end">
+              <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Step {last.step}</span>
+              <span class="text-base font-bold num text-[var(--color-text-primary)]">{last.doseMg.toFixed(4)} mg</span>
+            </div>
+            <div class="flex flex-col items-end pl-3 border-l border-[var(--color-border)]">
+              <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Total reduction</span>
+              <span class="text-sm font-semibold num text-[var(--color-text-primary)]">{(totalReduction / first.doseMg * 100).toFixed(1)}%</span>
+            </div>
+          </div>
+
           <section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true">
             <div class="space-y-2" bind:this={scheduleContainer}>
               {#each schedule as step, i}
                 {@const isActive = activeStepIndex === i}
                 {@const isFirst = step.step === 1}
+                {@const reductionPct = i > 0 && schedule[i - 1].doseMg > 0 ? (step.reductionMg / schedule[i - 1].doseMg * 100) : 0}
                 <div
                   data-step-index={i}
                   class="card px-4 py-3 flex flex-col gap-1 transition-all duration-200 {isActive ? 'ring-2 ring-[var(--color-accent)] border-[var(--color-accent)] shadow-md' : ''} {isFirst ? 'border-l-4 border-l-[var(--color-accent)]' : ''}"
@@ -200,7 +221,7 @@
                       {isFirst ? 'Step 1 — Starting dose' : `Step ${step.step}`}
                     </span>
                     {#if step.reductionMg > 0}
-                      <span class="text-xs font-medium text-[var(--color-text-tertiary)]">-{step.reductionMg.toFixed(4)} mg</span>
+                      <span class="text-xs font-medium text-[var(--color-text-tertiary)]">-{step.reductionMg.toFixed(4)} mg ({reductionPct.toFixed(1)}%)</span>
                     {/if}
                   </div>
                   <div class="flex items-baseline gap-2">
