@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Morphine Wean Calculator
 status: planning
-stopped_at: Phase 5 context gathered
-last_updated: "2026-04-02T20:04:51.930Z"
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-04-02T20:22:38.689Z"
 last_activity: 2026-04-02 — Roadmap created for v1.1
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 14
-  completed_plans: 14
+  total_plans: 16
+  completed_plans: 15
   percent: 0
 ---
 
@@ -55,6 +55,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: Stable (fast)
 
 *Updated after each plan completion*
+| Phase 05 P01 | 3min | 2 tasks | 17 files |
 
 ## Accumulated Context
 
@@ -66,6 +67,7 @@ Recent decisions affecting current work:
 - [v1.1]: Both linear and compounding weaning modes selected for morphine calculator
 - [v1.1]: PERT calculator to be removed and replaced by morphine wean calculator
 - [v1.1]: Shared components (NumericInput, ResultsDisplay, SelectPicker) reused for morphine wean inputs
+- [Phase 05]: Syringe icon for morphine wean nav entry; idle detection compares against config defaults
 
 ### Pending Todos
 
@@ -77,6 +79,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02T20:04:51.928Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-morphine-wean-calculator/05-CONTEXT.md
+Last session: 2026-04-02T20:22:38.687Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: None
