@@ -70,12 +70,12 @@
         }
       });
 
-      // Apply scale: peak on the closest card, smooth linear falloff to neighbors
+      // Apply scale: peak on closest card, visible falloff across 3 cards total
       cards.forEach((card, i) => {
         const indexDist = Math.abs(i - bestIdx);
-        // 0 → full scale, 1 → partial, 2+ → none
-        const t = Math.max(0, 1 - indexDist / 1.8);
-        const eased = t * t; // quadratic for snappy single-card focus
+        // 0 → full (1.06), 1 → medium (1.04), 2+ → none
+        const t = Math.max(0, 1 - indexDist / 2);
+        const eased = t; // linear falloff for even 3-card spread
         const scale = 1 + (MAX_SCALE - 1) * eased;
         const shadowBoost = MAX_SHADOW_BOOST * eased;
 
