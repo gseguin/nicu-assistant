@@ -11,40 +11,89 @@
     compounding: { id: 'compounding', label: 'Compounding' },
   };
 
-  // Scroll-driven accent: track which step card is most visible in viewport
+  // Dock-style magnification: scale cards based on distance from viewport center
   let activeStepIndex = $state(-1);
   let scheduleContainer: HTMLElement | undefined = $state();
 
   onMount(() => {
-    if (!scheduleContainer || typeof IntersectionObserver === 'undefined') return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let bestEntry: IntersectionObserverEntry | null = null;
-        for (const entry of entries) {
-          if (entry.isIntersecting && (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio)) {
-            bestEntry = entry;
-          }
-        }
-        if (bestEntry) {
-          const idx = Number((bestEntry.target as HTMLElement).dataset.stepIndex);
-          if (!isNaN(idx)) activeStepIndex = idx;
-        }
-      },
-      { threshold: [0.3, 0.6, 1.0], rootMargin: '-20% 0px -40% 0px' }
-    );
+    if (!scheduleContainer) return;
 
-    const observe = () => {
-      const cards = scheduleContainer?.querySelectorAll('[data-step-index]');
-      cards?.forEach((card) => observer.observe(card));
-    };
+    const prefersReducedMotion = typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false;
+    const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
-    // Observe initially and re-observe when schedule changes
-    observe();
-    const mutObserver = new MutationObserver(observe);
+    // Magnification parameters
+    const MAX_SCALE = 1.06;         // peak scale at center
+    const INFLUENCE_PX = 200;       // distance in px over which magnification fades
+    const MAX_SHADOW_BOOST = 4;     // extra px of shadow blur at center
+
+    let rafId: number | null = null;
+
+    function updateMagnification() {
+      const cards = scheduleContainer?.querySelectorAll<HTMLElement>('[data-step-index]');
+      if (!cards?.length) return;
+
+      const viewportCenter = window.innerHeight / 2;
+      let closestIdx = -1;
+      let closestDist = Infinity;
+
+      cards.forEach((card, i) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(cardCenter - viewportCenter);
+
+        if (distance < closestDist) {
+          closestDist = distance;
+          closestIdx = i;
+        }
+
+        if (prefersReducedMotion || !isMobile()) {
+          // No scale animation — just track active index
+          card.style.transform = '';
+          card.style.boxShadow = '';
+          card.style.zIndex = '';
+          return;
+        }
+
+        // Map distance to scale: 1.0 at INFLUENCE_PX+ → MAX_SCALE at 0
+        const t = Math.max(0, 1 - distance / INFLUENCE_PX);
+        // Smooth easing: cubic ease-out for natural falloff
+        const eased = 1 - Math.pow(1 - t, 3);
+        const scale = 1 + (MAX_SCALE - 1) * eased;
+        const shadowBoost = MAX_SHADOW_BOOST * eased;
+
+        card.style.transform = `scale(${scale})`;
+        card.style.boxShadow = shadowBoost > 0.5
+          ? `0 ${1 + shadowBoost}px ${4 + shadowBoost * 2}px rgba(0,0,0,${0.04 + 0.06 * eased})`
+          : '';
+        card.style.zIndex = eased > 0.1 ? '1' : '';
+      });
+
+      if (closestIdx !== activeStepIndex) {
+        activeStepIndex = closestIdx;
+      }
+    }
+
+    function onScroll() {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        updateMagnification();
+        rafId = null;
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // Initial pass
+    updateMagnification();
+
+    // Re-run when cards change (mode switch)
+    const mutObserver = new MutationObserver(() => updateMagnification());
     mutObserver.observe(scheduleContainer, { childList: true, subtree: true });
 
     return () => {
-      observer.disconnect();
+      window.removeEventListener('scroll', onScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
       mutObserver.disconnect();
     };
   });
@@ -214,7 +263,7 @@
                 {@const reductionPct = i > 0 && schedule[i - 1].doseMg > 0 ? (step.reductionMg / schedule[i - 1].doseMg * 100) : 0}
                 <div
                   data-step-index={i}
-                  class="card px-4 py-3 flex flex-col gap-1 transition-all duration-200 {isActive ? 'ring-2 ring-[var(--color-accent)] border-[var(--color-accent)] shadow-md' : ''} {isFirst ? 'border-l-4 border-l-[var(--color-accent)]' : ''}"
+                  class="card px-4 py-3 flex flex-col gap-1 will-change-transform origin-center {isFirst ? 'border-l-4 border-l-[var(--color-accent)]' : ''}"
                 >
                   <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold text-[var(--color-text-secondary)]">
