@@ -34,14 +34,40 @@
       const cards = scheduleContainer?.querySelectorAll<HTMLElement>('[data-step-index]');
       if (!cards?.length) return;
 
-      const viewportCenter = window.innerHeight / 2;
+      // Adaptive focal point: shifts toward edges when schedule is at scroll extremes
+      // so the first/last cards can be magnified when scrolled all the way up/down
+      const containerRect = scheduleContainer!.getBoundingClientRect();
+      const viewportH = window.innerHeight;
+      const viewportCenter = viewportH / 2;
+
+      // How far the container extends beyond the viewport on each side
+      const overflowTop = Math.max(0, -containerRect.top);        // px scrolled past top
+      const overflowBottom = Math.max(0, containerRect.bottom - viewportH); // px remaining below
+      const totalOverflow = overflowTop + overflowBottom;
+
+      let focalPoint: number;
+      if (totalOverflow <= 0) {
+        // Entire schedule fits in viewport — center normally
+        focalPoint = viewportCenter;
+      } else {
+        // Lerp focal point: when scrolled to top (overflowTop=0), focal shifts up;
+        // when scrolled to bottom (overflowBottom=0), focal shifts down
+        const scrollRatio = totalOverflow > 0 ? overflowTop / totalOverflow : 0.5;
+        // Map 0→1 scroll ratio to a focal point range within the viewport
+        const focalTop = containerRect.top + 80;     // near first visible card
+        const focalBottom = viewportH - 120;          // near last visible card (above nav)
+        focalPoint = focalTop + (focalBottom - focalTop) * scrollRatio;
+        // Clamp to reasonable viewport range
+        focalPoint = Math.max(viewportH * 0.15, Math.min(viewportH * 0.75, focalPoint));
+      }
+
       let closestIdx = -1;
       let closestDist = Infinity;
 
       cards.forEach((card, i) => {
         const rect = card.getBoundingClientRect();
         const cardCenter = rect.top + rect.height / 2;
-        const distance = Math.abs(cardCenter - viewportCenter);
+        const distance = Math.abs(cardCenter - focalPoint);
 
         if (distance < closestDist) {
           closestDist = distance;
