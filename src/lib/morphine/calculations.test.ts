@@ -91,3 +91,57 @@ describe('calculateCompoundingSchedule', () => {
     }
   });
 });
+
+describe('Linear mode — Sheet1 spreadsheet parity', () => {
+  const steps = calculateLinearSchedule(3.1, 0.04, 0.10);
+
+  const expected: { step: number; doseMg: number; doseMgKgDose: number; reductionMg: number }[] = [
+    { step: 1, doseMg: 0.124, doseMgKgDose: 0.04, reductionMg: 0 },
+    { step: 2, doseMg: 0.1116, doseMgKgDose: 0.036, reductionMg: 0.0124 },
+    { step: 3, doseMg: 0.0992, doseMgKgDose: 0.032, reductionMg: 0.0124 },
+    { step: 4, doseMg: 0.0868, doseMgKgDose: 0.028, reductionMg: 0.0124 },
+    { step: 5, doseMg: 0.0744, doseMgKgDose: 0.024, reductionMg: 0.0124 },
+    { step: 6, doseMg: 0.062, doseMgKgDose: 0.02, reductionMg: 0.0124 },
+    { step: 7, doseMg: 0.0496, doseMgKgDose: 0.016, reductionMg: 0.0124 },
+    { step: 8, doseMg: 0.0372, doseMgKgDose: 0.012, reductionMg: 0.0124 },
+    { step: 9, doseMg: 0.0248, doseMgKgDose: 0.008, reductionMg: 0.0124 },
+    { step: 10, doseMg: 0.0124, doseMgKgDose: 0.004, reductionMg: 0.0124 },
+  ];
+
+  for (const row of expected) {
+    it(`step ${row.step} matches Sheet1 row`, () => {
+      const s = steps[row.step - 1];
+      expect(s.step).toBe(row.step);
+      expect(s.doseMg).toBeCloseTo(row.doseMg, 4);
+      expect(s.doseMgKgDose).toBeCloseTo(row.doseMgKgDose, 4);
+      expect(s.reductionMg).toBeCloseTo(row.reductionMg, 4);
+    });
+  }
+});
+
+describe('Compounding mode — Sheet2 spreadsheet parity', () => {
+  const steps = calculateCompoundingSchedule(3.1, 0.08, 0.10);
+
+  const expected: { step: number; doseMg: number; doseMgKgDose: number; reductionMg: number }[] = [
+    { step: 1, doseMg: 0.248, doseMgKgDose: 0.08, reductionMg: 0 },
+    { step: 2, doseMg: 0.2232, doseMgKgDose: 0.072, reductionMg: 0.0248 },
+    { step: 3, doseMg: 0.2009, doseMgKgDose: 0.0648, reductionMg: 0.0223 },
+    { step: 4, doseMg: 0.1808, doseMgKgDose: 0.0583, reductionMg: 0.0201 },
+    { step: 5, doseMg: 0.1627, doseMgKgDose: 0.0525, reductionMg: 0.0181 },
+    { step: 6, doseMg: 0.1464, doseMgKgDose: 0.0472, reductionMg: 0.0163 },
+    { step: 7, doseMg: 0.1318, doseMgKgDose: 0.0425, reductionMg: 0.0146 },
+    { step: 8, doseMg: 0.1186, doseMgKgDose: 0.0383, reductionMg: 0.0132 },
+    { step: 9, doseMg: 0.1068, doseMgKgDose: 0.0344, reductionMg: 0.0119 },
+    { step: 10, doseMg: 0.0961, doseMgKgDose: 0.031, reductionMg: 0.0107 },
+  ];
+
+  for (const row of expected) {
+    it(`step ${row.step} matches Sheet2 row`, () => {
+      const s = steps[row.step - 1];
+      expect(s.step).toBe(row.step);
+      expect(s.doseMg).toBeCloseTo(row.doseMg, 4);
+      expect(s.doseMgKgDose).toBeCloseTo(row.doseMgKgDose, 4);
+      expect(s.reductionMg).toBeCloseTo(row.reductionMg, 4);
+    });
+  }
+});
