@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Morphine Wean Calculator
-status: ready_to_plan
-stopped_at: null
-last_updated: "2026-04-02T00:00:00.000Z"
-last_activity: 2026-04-02
+status: planning
+stopped_at: Phase 5 context gathered
+last_updated: "2026-04-02T20:04:51.930Z"
+last_activity: 2026-04-02 — Roadmap created for v1.1
 progress:
-  total_phases: 2
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_phases: 6
+  completed_phases: 4
+  total_plans: 14
+  completed_plans: 14
   percent: 0
 ---
 
@@ -77,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-02
-Stopped at: Roadmap created for v1.1 milestone
-Resume file: None
+Last session: 2026-04-02T20:04:51.928Z
+Stopped at: Phase 5 context gathered
+Resume file: .planning/phases/05-morphine-wean-calculator/05-CONTEXT.md
