@@ -82,7 +82,7 @@ Requirements for morphine wean calculator milestone. Each maps to roadmap phases
 ### Quality
 
 - [ ] **QA-01**: Unit tests cover both linear and compounding calculation functions with known spreadsheet values
-- [ ] **QA-02**: Morphine wean calculator meets existing accessibility standards (WCAG 2.1 AA, 48px touch targets, keyboard nav)
+- [x] **QA-02**: Morphine wean calculator meets existing accessibility standards (WCAG 2.1 AA, 48px touch targets, keyboard nav)
 
 ## v2 Requirements
 
@@ -157,7 +157,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INT-02 | Phase 5 | Complete |
 | INT-03 | Phase 5 | Complete |
 | QA-01 | Phase 6 | Pending |
-| QA-02 | Phase 6 | Pending |
+| QA-02 | Phase 6 | Complete |
 
 **Coverage:**
 - v1 requirements: 33 total, 33 mapped, 0 unmapped
