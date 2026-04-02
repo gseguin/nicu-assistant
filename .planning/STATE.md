@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Morphine Wean Calculator
-status: defining_requirements
+status: ready_to_plan
 stopped_at: null
 last_updated: "2026-04-02T00:00:00.000Z"
 last_activity: 2026-04-02
 progress:
-  total_phases: 0
+  total_phases: 2
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-02)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Milestone v1.1 — Morphine Wean Calculator
+**Current focus:** Phase 5 — Morphine Wean Calculator
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-04-02 — Milestone v1.1 started
+Phase: 5 of 6 (Morphine Wean Calculator)
+Plan: — (not yet planned)
+Status: Ready to plan
+Last activity: 2026-04-02 — Roadmap created for v1.1
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -36,33 +36,25 @@ Progress: [░░░░░░░░░░] 0%
 
 **Velocity:**
 
-- Total plans completed: 0
-- Average duration: --
-- Total execution time: 0 hours
+- Total plans completed: 14 (v1.0)
+- Average duration: ~10 min
+- Total execution time: ~1.9 hours (v1.0)
 
-**By Phase:**
+**By Phase (v1.0):**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 1. Foundation | 3 | ~91min | ~30min |
+| 2. Shared Components | 3 | ~7min | ~2min |
+| 3. Calculators | 3 | ~11min | ~4min |
+| 4. PWA & Offline | 2 | ~4min | ~2min |
 
 **Recent Trend:**
 
-- Last 5 plans: --
-- Trend: --
+- Last 5 plans: 3min, 2min, 2min, 2min, 2min
+- Trend: Stable (fast)
 
 *Updated after each plan completion*
-| Phase 01 P01 | 34min | 2 tasks | 18 files |
-| Phase 01 P02 | 3min | 2 tasks | 3 files |
-| Phase 01-foundation P03 | 54min | 3 tasks | 9 files |
-| Phase 02 P01 | 1min | 2 tasks | 5 files |
-| Phase 02 P04 | 3min | 2 tasks | 5 files |
-| Phase 02 P05 | 3min | 3 tasks | 7 files |
-| Phase 03 P01 | 6min | 3 tasks | 12 files |
-| Phase 03 P03 | 3min | 2 tasks | 4 files |
-| Phase 03 P04 | 2min | 2 tasks | 2 files |
-| Phase 04 P01 | 2min | 2 tasks | 9 files |
-| Phase 04 P02 | 2min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -71,22 +63,9 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- Roadmap: Compressed research's 6 phases into 4 coarse phases; Phase 1 absorbs scaffold + design system + nav shell; Phase 3 absorbs both calculators together
-- [Phase 01]: Upgraded vite-plugin-svelte to v7.0.0 for Vite 8 compatibility (scaffold default v6 only supports Vite 6-7)
-- [Phase 01]: Used @custom-variant dark with .dark class selector for Tailwind CSS 4 dark mode
-- [Phase 01]: FOUC prevention uses localStorage key nicu_assistant_theme with system preference fallback
-- [Phase 01-foundation]: Used $app/state (Svelte 5 rune-based) instead of $app/stores for page state access in NavShell
-- [Phase 02]: Used Symbol key for Svelte context to avoid string collisions
-- [Phase 02]: Used resolve.conditions browser in vite.config.ts for Svelte 5 + Vitest jsdom compatibility
-- [Phase 02]: Placed test files in src/lib/**/__tests__/ to match vitest include pattern
-- [Phase 02]: Added @testing-library/jest-dom with setupFiles for DOM assertion matchers
-- [Phase 03]: Import path strategy: $lib/pert/ and $lib/formula/ prefixes for all calculator-internal imports
-- [Phase 03]: State singletons follow theme.svelte.ts pattern: $state rune + sessionStorage init/persist/reset
-- [Phase 03]: Used local $state with $effect sync for NumericInput binding to string-based formulaState
-- [Phase 03]: Adapted test assertions to actual function signatures; used real brand config data instead of mocks
-- [Phase 04]: registerType:'prompt' chosen over 'autoUpdate' to give app control over SW activation during clinical use
-- [Phase 04]: Installed workbox-window as explicit dev dependency required by virtual:pwa-register
 - [v1.1]: Both linear and compounding weaning modes selected for morphine calculator
+- [v1.1]: PERT calculator to be removed and replaced by morphine wean calculator
+- [v1.1]: Shared components (NumericInput, ResultsDisplay, SelectPicker) reused for morphine wean inputs
 
 ### Pending Todos
 
@@ -94,11 +73,10 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Pre-Phase 2]: Disclaimer text must cover morphine wean and formula in one statement — requires clinical stakeholder review
-- [Pre-Phase 4]: Stale-update strategy (prompt vs. forced reload) requires stakeholder input before Phase 4 planning
+- [Pre-Phase 5]: Disclaimer text must cover morphine wean and formula in one statement — requires clinical stakeholder review
 
 ## Session Continuity
 
 Last session: 2026-04-02
-Stopped at: Milestone v1.1 initialization
+Stopped at: Roadmap created for v1.1 milestone
 Resume file: None

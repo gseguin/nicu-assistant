@@ -1,8 +1,9 @@
 # Roadmap: NICU Assistant
 
-## Overview
+## Milestones
 
-Build a unified NICU clinical PWA by layering bottom-up: establish the design system foundation first, then assemble the shared component library, then wire up both calculators into the shell, and finally seal the app with PWA/offline infrastructure. Each phase is a hard prerequisite for the next — nothing can be styled before tokens exist, no calculator can be ported before shared components are settled, and the precache manifest cannot be finalized until all routes exist.
+- v1.0 MVP - Phases 1-4 (shipped 2026-04-01)
+- v1.1 Morphine Wean Calculator - Phases 5-6 (in progress)
 
 ## Phases
 
@@ -12,12 +13,25 @@ Build a unified NICU clinical PWA by layering bottom-up: establish the design sy
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - SvelteKit scaffold, design system tokens, theme system, and responsive navigation shell
-- [x] **Phase 2: Shared Components** - Unified SelectPicker, NumericInput, ResultsDisplay, DisclaimerModal, and AboutSheet (completed 2026-04-01)
-- [x] **Phase 3: Calculators** - PERT and formula calculators ported into the unified shell with cross-calculator state behavior (completed 2026-04-01)
-- [x] **Phase 4: PWA & Offline** - Service worker, manifest, offline validation, update notifications, and install prompt (completed 2026-04-01)
+<details>
+<summary>v1.0 MVP (Phases 1-4) - SHIPPED 2026-04-01</summary>
+
+- [x] **Phase 1: Foundation** - SvelteKit scaffold, design system tokens, theme system, and responsive navigation shell
+- [x] **Phase 2: Shared Components** - Unified SelectPicker, NumericInput, ResultsDisplay, DisclaimerModal, and AboutSheet
+- [x] **Phase 3: Calculators** - PERT and formula calculators ported into the unified shell with cross-calculator state behavior
+- [x] **Phase 4: PWA & Offline** - Service worker, manifest, offline validation, update notifications, and install prompt
+
+</details>
+
+### v1.1 Morphine Wean Calculator (In Progress)
+
+- [ ] **Phase 5: Morphine Wean Calculator** - Remove PERT calculator and build morphine wean calculator with linear and compounding modes
+- [ ] **Phase 6: Quality & Accessibility** - Unit tests for both calculation modes and accessibility validation
 
 ## Phase Details
+
+<details>
+<summary>v1.0 MVP (Phases 1-4) - SHIPPED 2026-04-01</summary>
 
 ### Phase 1: Foundation
 **Goal**: Clinicians can open the app, see a responsive nav shell, toggle dark/light theme without a flash, and navigate between placeholder calculator routes
@@ -35,8 +49,6 @@ Plans:
 - [x] 01-01-PLAN.md — SvelteKit scaffold + dependency installation + build config
 - [x] 01-02-PLAN.md — Unified design token system (app.html FOUC script + app.css OKLCH tokens)
 - [x] 01-03-PLAN.md — Responsive nav shell (theme module, registry, NavShell, layout, placeholder routes)
-
-**UI hint**: yes
 
 ### Phase 2: Shared Components
 **Goal**: A complete, tested shared component library is available for both calculators to consume without duplication or component divergence
@@ -57,8 +69,6 @@ Plans:
 - [x] 02-04-PLAN.md — NumericInput.svelte + ResultsDisplay.svelte (ports from formula-calculator with token migration)
 - [x] 02-05-PLAN.md — AboutSheet.svelte + integration tests + visual checkpoint
 
-**UI hint**: yes
-
 ### Phase 3: Calculators
 **Goal**: Both PERT and formula calculators are fully functional inside the unified app with feature parity to their standalone predecessors and isolated, preserved state across tab switches
 **Depends on**: Phase 2
@@ -77,8 +87,6 @@ Plans:
 - [x] 03-03-PLAN.md — Port formula FormulaCalculator + ModifiedFormulaCalculator + BreastMilkFortifierCalculator (dark mode tokens, shared components, state wiring); wire /formula route
 - [x] 03-04-PLAN.md — Unit tests for PERT and formula calculation functions; visual checkpoint
 
-**UI hint**: yes
-
 ### Phase 4: PWA & Offline
 **Goal**: The app installs to the home screen, operates fully offline, and notifies clinicians when a new version with updated clinical data is available
 **Depends on**: Phase 3
@@ -94,14 +102,41 @@ Plans:
 - [x] 04-01-PLAN.md — Install @vite-pwa/sveltekit; SvelteKitPWA plugin config (Workbox precaching, manifest, icons); pwa.svelte.ts singleton; placeholder icons
 - [x] 04-02-PLAN.md — UpdateBanner.svelte + +layout.svelte wiring (SW registration, idle detection, auto-reload)
 
+</details>
+
+### Phase 5: Morphine Wean Calculator
+**Goal**: Clinicians can access a morphine weaning calculator from the app nav, enter patient parameters, choose a weaning mode, and see a complete step-by-step dose reduction schedule
+**Depends on**: Phase 4
+**Requirements**: MORPH-01, MORPH-02, MORPH-03, MORPH-04, MORPH-05, INT-01, INT-02, INT-03
+**Success Criteria** (what must be TRUE):
+  1. PERT calculator is completely removed — no PERT route, no PERT nav entry, no PERT business logic remains in the codebase
+  2. Morphine wean calculator appears in the nav bar and navigates to a functional calculator page
+  3. User can enter dosing weight (kg), max morphine dose (mg/kg/dose), and % decrease per step using the existing NumericInput components
+  4. User can switch between Linear and Compounding weaning modes; Linear subtracts a fixed mg amount each step, Compounding multiplies the previous dose by (1 - decreasePct) each step
+  5. A step-by-step weaning schedule table displays step number, dose (mg), dose (mg/kg/dose), and reduction amount (mg) for all steps until the dose reaches zero or near-zero
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 6: Quality & Accessibility
+**Goal**: The morphine wean calculator is verified against known spreadsheet values and meets the app's established accessibility standards
+**Depends on**: Phase 5
+**Requirements**: QA-01, QA-02
+**Success Criteria** (what must be TRUE):
+  1. Unit tests pass for both linear and compounding calculation functions using known input/output pairs from the reference spreadsheet
+  2. All morphine wean calculator inputs and the schedule table are keyboard-navigable, have appropriate ARIA labels, and meet WCAG 2.1 AA contrast in both themes
+  3. Touch targets on the morphine wean calculator are at least 48px and the interface is usable one-handed on mobile
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 5 -> 6
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation | 3/3 | Complete | 2026-04-01 |
-| 2. Shared Components | 5/5 | Complete   | 2026-04-01 |
-| 3. Calculators | 4/4 | Complete   | 2026-04-01 |
-| 4. PWA & Offline | 2/2 | Complete   | 2026-04-01 |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Foundation | v1.0 | 3/3 | Complete | 2026-04-01 |
+| 2. Shared Components | v1.0 | 5/5 | Complete | 2026-04-01 |
+| 3. Calculators | v1.0 | 4/4 | Complete | 2026-04-01 |
+| 4. PWA & Offline | v1.0 | 2/2 | Complete | 2026-04-01 |
+| 5. Morphine Wean Calculator | v1.1 | 0/0 | Not started | - |
+| 6. Quality & Accessibility | v1.1 | 0/0 | Not started | - |

@@ -148,12 +148,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PWA-02 | Phase 4 | Complete |
 | PWA-03 | Phase 4 | Complete |
 | PWA-04 | Phase 4 | Complete |
+| MORPH-01 | Phase 5 | Pending |
+| MORPH-02 | Phase 5 | Pending |
+| MORPH-03 | Phase 5 | Pending |
+| MORPH-04 | Phase 5 | Pending |
+| MORPH-05 | Phase 5 | Pending |
+| INT-01 | Phase 5 | Pending |
+| INT-02 | Phase 5 | Pending |
+| INT-03 | Phase 5 | Pending |
+| QA-01 | Phase 6 | Pending |
+| QA-02 | Phase 6 | Pending |
 
 **Coverage:**
-- v1 requirements: 33 total
-- Mapped to phases: 33
-- Unmapped: 0
+- v1 requirements: 33 total, 33 mapped, 0 unmapped
+- v1.1 requirements: 10 total, 10 mapped, 0 unmapped
 
 ---
 *Requirements defined: 2026-03-31*
-*Last updated: 2026-04-02 after v1.1 requirements added*
+*Last updated: 2026-04-02 after v1.1 roadmap creation*
