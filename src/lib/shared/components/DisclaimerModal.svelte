@@ -29,9 +29,10 @@
           be reviewed by qualified NICU staff before administration.
         </p>
         <p>
-          PERT dosing calculations are based on current enzyme activity data and FDA-approved brands. Formula
-          preparation calculations use manufacturer-provided caloric density and displacement values. Data
-          is embedded at build time and may not reflect the latest formulary updates.
+          Morphine weaning schedules are derived from institutional weaning protocols and should be
+          validated against your unit's clinical guidelines. Formula preparation calculations use
+          manufacturer-provided caloric density and displacement values. Data is embedded at build time
+          and may not reflect the latest formulary updates.
         </p>
         <p>
           Do not use this app as the sole basis for patient care decisions. If you are not a licensed
