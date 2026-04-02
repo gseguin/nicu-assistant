@@ -3,7 +3,7 @@
   import { disclaimer } from '$lib/shared/disclaimer.svelte.js';
 </script>
 
-<Dialog.Root open={!disclaimer.acknowledged} onOpenChange={() => {}}>
+<Dialog.Root open={disclaimer.initialized && !disclaimer.acknowledged} onOpenChange={() => {}}>
   <Dialog.Portal>
     <Dialog.Overlay
       class="fixed inset-0 z-50 bg-slate-900/65 backdrop-blur-sm"
