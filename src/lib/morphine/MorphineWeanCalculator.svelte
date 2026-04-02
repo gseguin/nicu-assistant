@@ -23,69 +23,59 @@
       : false;
     const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
-    // Magnification parameters
-    const MAX_SCALE = 1.06;         // peak scale at center
-    const INFLUENCE_PX = 200;       // distance in px over which magnification fades
-    const MAX_SHADOW_BOOST = 4;     // extra px of shadow blur at center
+    // Dock-style magnification: one card at a time, following scroll direction
+    const MAX_SCALE = 1.06;
+    const MAX_SHADOW_BOOST = 4;
 
     let rafId: number | null = null;
+    let lastScrollY = window.scrollY;
 
     function updateMagnification() {
       const cards = scheduleContainer?.querySelectorAll<HTMLElement>('[data-step-index]');
       if (!cards?.length) return;
 
-      // Adaptive focal point: shifts toward edges when schedule is at scroll extremes
-      // so the first/last cards can be magnified when scrolled all the way up/down
-      const containerRect = scheduleContainer!.getBoundingClientRect();
-      const viewportH = window.innerHeight;
-      const viewportCenter = viewportH / 2;
-
-      // How far the container extends beyond the viewport on each side
-      const overflowTop = Math.max(0, -containerRect.top);        // px scrolled past top
-      const overflowBottom = Math.max(0, containerRect.bottom - viewportH); // px remaining below
-      const totalOverflow = overflowTop + overflowBottom;
-
-      let focalPoint: number;
-      if (totalOverflow <= 0) {
-        // Entire schedule fits in viewport — center normally
-        focalPoint = viewportCenter;
-      } else {
-        // Lerp focal point: when scrolled to top (overflowTop=0), focal shifts up;
-        // when scrolled to bottom (overflowBottom=0), focal shifts down
-        const scrollRatio = totalOverflow > 0 ? overflowTop / totalOverflow : 0.5;
-        // Map 0→1 scroll ratio to a focal point range within the viewport
-        const focalTop = containerRect.top + 80;     // near first visible card
-        const focalBottom = viewportH - 120;          // near last visible card (above nav)
-        focalPoint = focalTop + (focalBottom - focalTop) * scrollRatio;
-        // Clamp to reasonable viewport range
-        focalPoint = Math.max(viewportH * 0.15, Math.min(viewportH * 0.75, focalPoint));
-      }
-
-      let closestIdx = -1;
-      let closestDist = Infinity;
-
-      cards.forEach((card, i) => {
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.top + rect.height / 2;
-        const distance = Math.abs(cardCenter - focalPoint);
-
-        if (distance < closestDist) {
-          closestDist = distance;
-          closestIdx = i;
-        }
-
-        if (prefersReducedMotion || !isMobile()) {
-          // No scale animation — just track active index
+      if (prefersReducedMotion || !isMobile()) {
+        cards.forEach((card) => {
           card.style.transform = '';
           card.style.boxShadow = '';
           card.style.zIndex = '';
-          return;
-        }
+        });
+        return;
+      }
 
-        // Map distance to scale: 1.0 at INFLUENCE_PX+ → MAX_SCALE at 0
-        const t = Math.max(0, 1 - distance / INFLUENCE_PX);
-        // Smooth easing: cubic ease-out for natural falloff
-        const eased = 1 - Math.pow(1 - t, 3);
+      const viewportH = window.innerHeight;
+      const containerRect = scheduleContainer!.getBoundingClientRect();
+
+      // Adaptive hot line: normally at 40% viewport (where the eye rests),
+      // but shifts down when near the bottom of the schedule so the last
+      // cards can be magnified, and up when near the top for the first cards.
+      const scrollMax = document.documentElement.scrollHeight - viewportH;
+      const scrollRatio = scrollMax > 0 ? window.scrollY / scrollMax : 0;
+      // Map scroll 0→1 to hotLine 30%→65% of viewport
+      const hotLine = viewportH * (0.30 + 0.35 * scrollRatio);
+
+      // Find the card whose center is closest to the hot line
+      let bestIdx = 0;
+      let bestDist = Infinity;
+      const cardCenters: number[] = [];
+
+      cards.forEach((card, i) => {
+        const rect = card.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        cardCenters.push(center);
+        const dist = Math.abs(center - hotLine);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestIdx = i;
+        }
+      });
+
+      // Apply scale: peak on the closest card, smooth linear falloff to neighbors
+      cards.forEach((card, i) => {
+        const indexDist = Math.abs(i - bestIdx);
+        // 0 → full scale, 1 → partial, 2+ → none
+        const t = Math.max(0, 1 - indexDist / 1.8);
+        const eased = t * t; // quadratic for snappy single-card focus
         const scale = 1 + (MAX_SCALE - 1) * eased;
         const shadowBoost = MAX_SHADOW_BOOST * eased;
 
@@ -93,12 +83,13 @@
         card.style.boxShadow = shadowBoost > 0.5
           ? `0 ${1 + shadowBoost}px ${4 + shadowBoost * 2}px rgba(0,0,0,${0.04 + 0.06 * eased})`
           : '';
-        card.style.zIndex = eased > 0.1 ? '1' : '';
+        card.style.zIndex = eased > 0.3 ? '1' : '';
       });
 
-      if (closestIdx !== activeStepIndex) {
-        activeStepIndex = closestIdx;
+      if (bestIdx !== activeStepIndex) {
+        activeStepIndex = bestIdx;
       }
+      lastScrollY = window.scrollY;
     }
 
     function onScroll() {
