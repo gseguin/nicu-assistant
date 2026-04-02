@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { calculateLinearSchedule, calculateCompoundingSchedule } from '$lib/morphine/calculations.js';
   import { morphineState } from '$lib/morphine/state.svelte.js';
   import NumericInput from '$lib/shared/components/NumericInput.svelte';
@@ -9,6 +10,44 @@
     linear: { id: 'linear', label: 'Linear' },
     compounding: { id: 'compounding', label: 'Compounding' },
   };
+
+  // Scroll-driven accent: track which step card is most visible in viewport
+  let activeStepIndex = $state(-1);
+  let scheduleContainer: HTMLElement | undefined = $state();
+
+  onMount(() => {
+    if (!scheduleContainer || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        let bestEntry: IntersectionObserverEntry | null = null;
+        for (const entry of entries) {
+          if (entry.isIntersecting && (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio)) {
+            bestEntry = entry;
+          }
+        }
+        if (bestEntry) {
+          const idx = Number((bestEntry.target as HTMLElement).dataset.stepIndex);
+          if (!isNaN(idx)) activeStepIndex = idx;
+        }
+      },
+      { threshold: [0.3, 0.6, 1.0], rootMargin: '-20% 0px -40% 0px' }
+    );
+
+    const observe = () => {
+      const cards = scheduleContainer?.querySelectorAll('[data-step-index]');
+      cards?.forEach((card) => observer.observe(card));
+    };
+
+    // Observe initially and re-observe when schedule changes
+    observe();
+    const mutObserver = new MutationObserver(observe);
+    mutObserver.observe(scheduleContainer, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutObserver.disconnect();
+    };
+  });
 
   function activateMode(mode: WeanMode) {
     morphineState.current.activeMode = mode;
@@ -148,17 +187,24 @@
       {#if morphineState.current.activeMode === mode}
         {#if schedule.length > 0}
           <section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true">
-            <div class="space-y-2">
-              {#each schedule as step}
-                <div class="card px-4 py-3 flex flex-col gap-1">
+            <div class="space-y-2" bind:this={scheduleContainer}>
+              {#each schedule as step, i}
+                {@const isActive = activeStepIndex === i}
+                {@const isFirst = step.step === 1}
+                <div
+                  data-step-index={i}
+                  class="card px-4 py-3 flex flex-col gap-1 transition-all duration-200 {isActive ? 'ring-2 ring-[var(--color-accent)] border-[var(--color-accent)] shadow-md' : ''} {isFirst ? 'border-l-4 border-l-[var(--color-accent)]' : ''}"
+                >
                   <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold text-[var(--color-text-secondary)]">Step {step.step}</span>
+                    <span class="text-xs font-semibold text-[var(--color-text-secondary)]">
+                      {isFirst ? 'Step 1 — Starting dose' : `Step ${step.step}`}
+                    </span>
                     {#if step.reductionMg > 0}
-                      <span class="text-xs font-medium text-[var(--color-error)]">-{step.reductionMg.toFixed(4)} mg</span>
+                      <span class="text-xs font-medium text-[var(--color-text-tertiary)]">-{step.reductionMg.toFixed(4)} mg</span>
                     {/if}
                   </div>
                   <div class="flex items-baseline gap-2">
-                    <span class="text-lg font-bold num text-[var(--color-text-primary)]">{step.doseMg.toFixed(4)}</span>
+                    <span class="{isFirst ? 'text-xl' : 'text-lg'} font-bold num text-[var(--color-text-primary)]">{step.doseMg.toFixed(4)}</span>
                     <span class="text-sm text-[var(--color-text-tertiary)]">mg</span>
                   </div>
                   <div class="text-xs text-[var(--color-text-secondary)] num">
@@ -185,7 +231,7 @@
       <button
         type="button"
         onclick={clearInputs}
-        class="text-2xs font-medium text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors px-3 py-1.5 rounded-lg min-h-[36px]"
+        class="text-2xs font-medium text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors px-3 py-1.5 rounded-lg min-h-[36px]"
       >
         Clear inputs
       </button>

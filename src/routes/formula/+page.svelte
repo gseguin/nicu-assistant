@@ -18,7 +18,7 @@
   <title>Formula Recipe | NICU Assistant</title>
 </svelte:head>
 
-<div class="max-w-lg mx-auto px-4 py-6 space-y-4">
+<div class="max-w-lg md:max-w-2xl mx-auto px-4 py-6 space-y-4">
   <header class="flex items-center gap-3">
     <Milk size={28} class="text-[var(--color-accent)]" aria-hidden="true" />
     <h1 class="text-title font-bold text-[var(--color-text-primary)]">Formula Recipe</h1>
