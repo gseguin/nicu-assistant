@@ -255,7 +255,7 @@
             </div>
           </div>
 
-          <section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true">
+          <section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true" class="mt-4">
             <div class="space-y-2" bind:this={scheduleContainer}>
               {#each schedule as step, i}
                 {@const isActive = activeStepIndex === i}
@@ -263,7 +263,7 @@
                 {@const reductionPct = i > 0 && schedule[i - 1].doseMg > 0 ? (step.reductionMg / schedule[i - 1].doseMg * 100) : 0}
                 <div
                   data-step-index={i}
-                  class="card px-4 py-3 flex flex-col gap-1 will-change-transform origin-center {isFirst ? 'border-l-4 border-l-[var(--color-accent)]' : ''}"
+                  class="card px-4 py-3 flex flex-col gap-1 will-change-transform origin-center"
                 >
                   <div class="flex items-center justify-between">
                     <span class="text-xs font-semibold text-[var(--color-text-secondary)]">
