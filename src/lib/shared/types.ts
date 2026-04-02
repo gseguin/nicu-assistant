@@ -4,7 +4,7 @@ export interface SelectOption {
 	group?: string;
 }
 
-export type CalculatorId = 'pert' | 'formula';
+export type CalculatorId = 'morphine-wean' | 'formula';
 
 export interface CalculatorContext {
 	id: CalculatorId;
