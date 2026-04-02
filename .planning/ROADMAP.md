@@ -173,8 +173,12 @@ Plans:
   2. All actionable recommendations from the critique are implemented in the codebase
   3. All suggested follow-up Impeccable commands (e.g., /polish, /typeset, /arrange) have been run and their recommendations implemented
   4. The app visually passes a final inspection — consistent spacing, clear visual hierarchy, and no layout issues across mobile and desktop
-**Plans**: TBD
+**Plans**: 2 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 08-01-PLAN.md — Run Impeccable /critique, document findings, implement all P0/P1/P2 recommendations
+- [ ] 08-02-PLAN.md — Run follow-up Impeccable commands (/polish, /typeset, /arrange, etc.) and implement their recommendations
 
 ## Progress
 
@@ -190,4 +194,4 @@ Phases execute in numeric order: 7 -> 8
 | 5. Morphine Wean Calculator | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 7. Navigation Restructure | v1.2 | 1/1 | Complete   | 2026-04-02 |
-| 8. Impeccable Critique & Polish | v1.2 | 0/0 | Not started | - |
+| 8. Impeccable Critique & Polish | v1.2 | 0/2 | Not started | - |
