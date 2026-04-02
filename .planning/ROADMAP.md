@@ -119,7 +119,7 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md — Remove PERT calculator; create morphine wean business logic, types, state, and update registry/about/types
-- [ ] 05-02-PLAN.md — Build MorphineWeanCalculator UI component with mode tabs, NumericInput fields, schedule display, and route page
+- [x] 05-02-PLAN.md — Build MorphineWeanCalculator UI component with mode tabs, NumericInput fields, schedule display, and route page
 
 ### Phase 6: Quality & Accessibility
 **Goal**: The morphine wean calculator is verified against known spreadsheet values and meets the app's established accessibility standards

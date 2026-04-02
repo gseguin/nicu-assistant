@@ -67,9 +67,9 @@ Requirements for morphine wean calculator milestone. Each maps to roadmap phases
 
 ### Morphine Wean Calculator
 
-- [ ] **MORPH-01**: User can enter dosing weight (kg), max morphine dose (mg/kg/dose), and % decrease per step
-- [ ] **MORPH-02**: User can switch between Linear and Compounding weaning modes
-- [ ] **MORPH-03**: Calculator displays a step-by-step weaning schedule table showing step number, dose (mg), dose (mg/kg/dose), and reduction amount (mg)
+- [x] **MORPH-01**: User can enter dosing weight (kg), max morphine dose (mg/kg/dose), and % decrease per step
+- [x] **MORPH-02**: User can switch between Linear and Compounding weaning modes
+- [x] **MORPH-03**: Calculator displays a step-by-step weaning schedule table showing step number, dose (mg), dose (mg/kg/dose), and reduction amount (mg)
 - [x] **MORPH-04**: Linear mode subtracts a fixed amount each step (weight × maxDose × decreasePct)
 - [x] **MORPH-05**: Compounding mode multiplies previous dose by (1 - decreasePct) each step
 
@@ -77,7 +77,7 @@ Requirements for morphine wean calculator milestone. Each maps to roadmap phases
 
 - [x] **INT-01**: Morphine wean calculator is registered in the calculator registry and accessible via nav
 - [x] **INT-02**: PERT calculator is removed from routes, nav registration, and the codebase
-- [ ] **INT-03**: Existing shared components (NumericInput, ResultsDisplay, SelectPicker) are reused for morphine wean inputs and output
+- [x] **INT-03**: Existing shared components (NumericInput, ResultsDisplay, SelectPicker) are reused for morphine wean inputs and output
 
 ### Quality
 
@@ -148,14 +148,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PWA-02 | Phase 4 | Complete |
 | PWA-03 | Phase 4 | Complete |
 | PWA-04 | Phase 4 | Complete |
-| MORPH-01 | Phase 5 | Pending |
-| MORPH-02 | Phase 5 | Pending |
-| MORPH-03 | Phase 5 | Pending |
+| MORPH-01 | Phase 5 | Complete |
+| MORPH-02 | Phase 5 | Complete |
+| MORPH-03 | Phase 5 | Complete |
 | MORPH-04 | Phase 5 | Complete |
 | MORPH-05 | Phase 5 | Complete |
 | INT-01 | Phase 5 | Complete |
 | INT-02 | Phase 5 | Complete |
-| INT-03 | Phase 5 | Pending |
+| INT-03 | Phase 5 | Complete |
 | QA-01 | Phase 6 | Pending |
 | QA-02 | Phase 6 | Pending |
 
