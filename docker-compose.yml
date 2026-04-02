@@ -1,0 +1,6 @@
+services:
+  nicu-assistant:
+    build: .
+    ports:
+      - "3002:80"
+    restart: unless-stopped

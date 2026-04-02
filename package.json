@@ -14,7 +14,11 @@
 		"test": "vitest",
 		"test:run": "vitest run",
 		"lint": "eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"predocker:build": "run-s build test:run",
+		"docker:build": "sudo docker compose build",
+		"predocker:deploy": "npm run docker:build",
+		"docker:deploy": "sudo docker compose up -d"
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "^4.11.1",
@@ -28,6 +32,7 @@
 		"@vite-pwa/sveltekit": "^1.1.0",
 		"@vitest/ui": "^4.1.2",
 		"jsdom": "^29.0.1",
+		"npm-run-all": "^4.1.5",
 		"svelte": "^5.54.0",
 		"svelte-check": "^4.4.2",
 		"tailwindcss": "^4.2.2",
