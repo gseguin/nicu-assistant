@@ -51,14 +51,12 @@
       const scrollProgress = scrollMax > 0 ? window.scrollY / scrollMax : 0;
       const floatingIdx = scrollProgress * (n - 1);
 
-      // Clamp the effective center so 3 cards are always magnified at edges
-      const effectiveCenter = Math.max(1, Math.min(n - 2, floatingIdx));
-
       cards.forEach((card, i) => {
-        // Continuous distance from the floating center — not integer-snapped
-        const dist = Math.abs(i - effectiveCenter);
-        // 0 → full (1.06), 1 → medium (1.03), 2+ → none
-        const t = Math.max(0, 1 - dist / 2);
+        // Continuous distance from the floating index
+        const dist = Math.abs(i - floatingIdx);
+        // 0 → full (1.06), 1 → medium (1.03), 2 → slight, 3+ → none
+        // Use radius of 2.5 so 3 cards are always visibly magnified
+        const t = Math.max(0, 1 - dist / 2.5);
         const scale = 1 + (MAX_SCALE - 1) * t;
         const shadowBoost = MAX_SHADOW_BOOST * t;
 
