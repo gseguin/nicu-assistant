@@ -27,7 +27,7 @@ vi.mock('$lib/morphine/state.svelte.js', () => ({
   },
 }));
 
-import MorphineWeanCalculator from '../MorphineWeanCalculator.svelte';
+import MorphineWeanCalculator from './MorphineWeanCalculator.svelte';
 
 describe('MorphineWeanCalculator', () => {
   beforeEach(() => {
