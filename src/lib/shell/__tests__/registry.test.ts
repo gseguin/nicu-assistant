@@ -9,10 +9,10 @@ describe('CALCULATOR_REGISTRY', () => {
     expect(CALCULATOR_REGISTRY).toHaveLength(2);
   });
 
-  it('includes PERT calculator as first entry', () => {
-    expect(CALCULATOR_REGISTRY[0].id).toBe('pert');
-    expect(CALCULATOR_REGISTRY[0].label).toBe('PERT');
-    expect(CALCULATOR_REGISTRY[0].href).toBe('/pert');
+  it('includes Morphine Wean calculator as first entry', () => {
+    expect(CALCULATOR_REGISTRY[0].id).toBe('morphine-wean');
+    expect(CALCULATOR_REGISTRY[0].label).toBe('Morphine Wean');
+    expect(CALCULATOR_REGISTRY[0].href).toBe('/morphine-wean');
   });
 
   it('includes Formula calculator as second entry', () => {

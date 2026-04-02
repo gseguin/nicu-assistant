@@ -9,7 +9,7 @@
   let aboutOpen = $state(false);
 
   const activeCalculatorId = $derived<CalculatorId>(
-    page.url.pathname.startsWith('/formula') ? 'formula' : 'pert'
+    page.url.pathname.startsWith('/formula') ? 'formula' : 'morphine-wean'
   );
 </script>
 

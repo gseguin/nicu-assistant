@@ -10,7 +10,7 @@ export function setCalculatorContext(ctx: CalculatorContext): void {
 export function getCalculatorContext(): CalculatorContext {
 	return (
 		getContext<CalculatorContext>(CALCULATOR_CONTEXT_KEY) ?? {
-			id: 'pert',
+			id: 'morphine-wean',
 			accentColor: 'var(--color-accent)'
 		}
 	);

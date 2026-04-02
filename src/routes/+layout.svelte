@@ -7,16 +7,18 @@
   import { theme } from '$lib/shared/theme.svelte.js';
   import { disclaimer } from '$lib/shared/disclaimer.svelte.js';
   import { pwa } from '$lib/shared/pwa.svelte.js';
-  import { pertState } from '$lib/pert/state.svelte.js';
+  import { morphineState } from '$lib/morphine/state.svelte.js';
   import { formulaState } from '$lib/formula/state.svelte.js';
   import { pwaInfo } from 'virtual:pwa-info';
 
   let { children } = $props();
 
   // Idle = no meaningful numeric inputs filled in either calculator (D-02)
+  // Morphine wean is idle when all inputs are still at defaults
   const isIdle = $derived(
-    pertState.current.meal.fatGramsRaw === '' &&
-    pertState.current.tubeFeed.fatGramsRaw === '' &&
+    morphineState.current.weightKg === 3.1 &&
+    morphineState.current.maxDoseMgKgDose === 0.04 &&
+    morphineState.current.decreasePct === 10 &&
     formulaState.current.modified.targetKcalOzRaw === '' &&
     formulaState.current.bmf.targetKcalOzRaw === ''
   );
