@@ -61,6 +61,29 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **PWA-03**: Active update prompt when new service worker detected (clinical safety: prevent stale formulas)
 - [x] **PWA-04**: App works fully offline after first load
 
+## v1.1 Requirements
+
+Requirements for morphine wean calculator milestone. Each maps to roadmap phases.
+
+### Morphine Wean Calculator
+
+- [ ] **MORPH-01**: User can enter dosing weight (kg), max morphine dose (mg/kg/dose), and % decrease per step
+- [ ] **MORPH-02**: User can switch between Linear and Compounding weaning modes
+- [ ] **MORPH-03**: Calculator displays a step-by-step weaning schedule table showing step number, dose (mg), dose (mg/kg/dose), and reduction amount (mg)
+- [ ] **MORPH-04**: Linear mode subtracts a fixed amount each step (weight × maxDose × decreasePct)
+- [ ] **MORPH-05**: Compounding mode multiplies previous dose by (1 - decreasePct) each step
+
+### Integration
+
+- [ ] **INT-01**: Morphine wean calculator is registered in the calculator registry and accessible via nav
+- [ ] **INT-02**: PERT calculator is removed from routes, nav registration, and the codebase
+- [ ] **INT-03**: Existing shared components (NumericInput, ResultsDisplay, SelectPicker) are reused for morphine wean inputs and output
+
+### Quality
+
+- [ ] **QA-01**: Unit tests cover both linear and compounding calculation functions with known spreadsheet values
+- [ ] **QA-02**: Morphine wean calculator meets existing accessibility standards (WCAG 2.1 AA, 48px touch targets, keyboard nav)
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -83,7 +106,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | User accounts / authentication | Anonymous clinical tool, no user data stored |
 | Backend API | All clinical data embedded at build time |
 | Analytics / telemetry | Clinical privacy concerns |
-| New calculators beyond PERT and formula | Architecture supports it but v1 ships with two |
+| PERT dosing calculator | Replaced by morphine wean calculator in v1.1 |
 | Monorepo / package splitting | Single SvelteKit app, no benefit from workspace packages |
 
 ## Traceability
@@ -133,4 +156,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-03-31*
-*Last updated: 2026-03-31 after roadmap creation*
+*Last updated: 2026-04-02 after v1.1 requirements added*
