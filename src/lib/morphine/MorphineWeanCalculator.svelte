@@ -23,12 +23,13 @@
       : false;
     const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
-    // Dock-style magnification: one card at a time, following scroll direction
+    // Dock-style magnification: continuous floating index driven by scroll progress.
+    // Maps total scroll position to a floating index (0.0 → 9.0) so the magnification
+    // slides smoothly through cards in the scroll direction, like the macOS Dock.
     const MAX_SCALE = 1.06;
     const MAX_SHADOW_BOOST = 4;
 
     let rafId: number | null = null;
-    let lastScrollY = window.scrollY;
 
     function updateMagnification() {
       const cards = scheduleContainer?.querySelectorAll<HTMLElement>('[data-step-index]');
@@ -43,58 +44,35 @@
         return;
       }
 
-      const viewportH = window.innerHeight;
-      const containerRect = scheduleContainer!.getBoundingClientRect();
+      const n = cards.length;
+      const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+      // Map scroll position to a continuous floating index across all cards
+      // scrollY=0 → index 0, scrollY=max → index n-1
+      const scrollProgress = scrollMax > 0 ? window.scrollY / scrollMax : 0;
+      const floatingIdx = scrollProgress * (n - 1);
 
-      // Adaptive hot line: normally at 40% viewport (where the eye rests),
-      // but shifts down when near the bottom of the schedule so the last
-      // cards can be magnified, and up when near the top for the first cards.
-      const scrollMax = document.documentElement.scrollHeight - viewportH;
-      const scrollRatio = scrollMax > 0 ? window.scrollY / scrollMax : 0;
-      // Map scroll 0→1 to hotLine 30%→65% of viewport
-      const hotLine = viewportH * (0.30 + 0.35 * scrollRatio);
-
-      // Find the card whose center is closest to the hot line
-      let bestIdx = 0;
-      let bestDist = Infinity;
-      const cardCenters: number[] = [];
+      // Clamp the effective center so 3 cards are always magnified at edges
+      const effectiveCenter = Math.max(1, Math.min(n - 2, floatingIdx));
 
       cards.forEach((card, i) => {
-        const rect = card.getBoundingClientRect();
-        const center = rect.top + rect.height / 2;
-        cardCenters.push(center);
-        const dist = Math.abs(center - hotLine);
-        if (dist < bestDist) {
-          bestDist = dist;
-          bestIdx = i;
-        }
-      });
-
-      // Apply scale: peak on closest card, visible falloff across 3 cards total.
-      // At edges (first/last card is peak), shift the magnification window
-      // inward so 3 cards are always magnified.
-      const lastIdx = cards.length - 1;
-      const effectiveCenter = bestIdx === 0 ? 1 : bestIdx === lastIdx ? lastIdx - 1 : bestIdx;
-
-      cards.forEach((card, i) => {
-        const indexDist = Math.abs(i - effectiveCenter);
+        // Continuous distance from the floating center — not integer-snapped
+        const dist = Math.abs(i - effectiveCenter);
         // 0 → full (1.06), 1 → medium (1.03), 2+ → none
-        const t = Math.max(0, 1 - indexDist / 2);
-        const eased = t; // linear falloff for even 3-card spread
-        const scale = 1 + (MAX_SCALE - 1) * eased;
-        const shadowBoost = MAX_SHADOW_BOOST * eased;
+        const t = Math.max(0, 1 - dist / 2);
+        const scale = 1 + (MAX_SCALE - 1) * t;
+        const shadowBoost = MAX_SHADOW_BOOST * t;
 
         card.style.transform = `scale(${scale})`;
         card.style.boxShadow = shadowBoost > 0.5
-          ? `0 ${1 + shadowBoost}px ${4 + shadowBoost * 2}px rgba(0,0,0,${0.04 + 0.06 * eased})`
+          ? `0 ${1 + shadowBoost}px ${4 + shadowBoost * 2}px rgba(0,0,0,${0.04 + 0.06 * t})`
           : '';
-        card.style.zIndex = eased > 0.3 ? '1' : '';
+        card.style.zIndex = t > 0.3 ? '1' : '';
       });
 
+      const bestIdx = Math.round(floatingIdx);
       if (bestIdx !== activeStepIndex) {
         activeStepIndex = bestIdx;
       }
-      lastScrollY = window.scrollY;
     }
 
     function onScroll() {
