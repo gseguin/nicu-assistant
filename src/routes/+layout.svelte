@@ -65,8 +65,8 @@
 <UpdateBanner />
 <div class="min-h-screen flex flex-col">
   <NavShell />
-  <!-- pb-20 clears the fixed bottom nav on mobile; no bottom padding needed on desktop -->
-  <main class="flex-1 pb-20 md:pb-0">
+  <!-- pb-16 clears the slimmer tab-only bottom nav on mobile; no bottom padding needed on desktop -->
+  <main class="flex-1 pb-16 md:pb-0">
     {@render children()}
   </main>
 </div>
