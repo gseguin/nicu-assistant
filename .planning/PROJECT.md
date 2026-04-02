@@ -2,11 +2,22 @@
 
 ## What This Is
 
-A PWA that unifies the PERT dosing calculator and the infant formula recipe calculator into a single clinical tool for NICU staff. It reuses the business logic and UI components from the existing standalone apps (`pert-calculator/` and `formula-calculator/`) with a shared component library, responsive navigation, and a plugin-like architecture that makes adding new calculators straightforward.
+A PWA that unifies clinical calculators into a single tool for NICU staff. Currently includes the infant formula recipe calculator and (as of v1.1) a morphine weaning schedule calculator. Built with a shared component library, responsive navigation, and a plugin-like architecture that makes adding new calculators straightforward.
 
 ## Core Value
 
 Clinicians can switch between NICU calculation tools instantly from a single app without losing context, using the same trusted interfaces they already know.
+
+## Current Milestone: v1.1 Morphine Wean Calculator
+
+**Goal:** Replace the PERT dosing calculator with a morphine weaning schedule calculator that generates step-by-step dose reduction plans.
+
+**Target features:**
+- Morphine wean calculator with 3 inputs: dosing weight (kg), max morphine dose (mg/kg/dose), % decrease per step
+- Two weaning modes: Linear (fixed mg reduction each step) and Compounding (% of current dose each step)
+- Step-by-step weaning schedule table: step number, dose (mg), dose (mg/kg/dose), reduction amount (mg)
+- Remove PERT calculator (routes, nav registration, business logic)
+- Reuse existing shared components and design system
 
 ## Requirements
 
@@ -33,7 +44,7 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - User accounts or authentication — anonymous clinical tool
 - Backend/API — all data embedded at build time, no server calls
 - Analytics or telemetry — clinical privacy concerns
-- New calculators beyond PERT and formula — architecture supports it but v1 ships with two
+- PERT dosing calculator — replaced by morphine wean calculator in v1.1
 
 ## Context
 
@@ -94,4 +105,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-31 after initialization*
+*Last updated: 2026-04-02 after milestone v1.1 start*
