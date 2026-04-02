@@ -75,7 +75,7 @@
 
 <!-- Mobile bottom tab bar: calculator tabs only, hidden on md+ -->
 <nav
-  class="fixed bottom-0 left-0 right-0 md:hidden
+  class="fixed bottom-0 left-0 right-0 z-10 md:hidden
          border-t border-[var(--color-border)] bg-[var(--color-surface)]
          pb-[env(safe-area-inset-bottom,0px)]"
   aria-label="Calculator navigation"
