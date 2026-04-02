@@ -129,7 +129,11 @@ Plans:
   1. Unit tests pass for both linear and compounding calculation functions using known input/output pairs from the reference spreadsheet
   2. All morphine wean calculator inputs and the schedule table are keyboard-navigable, have appropriate ARIA labels, and meet WCAG 2.1 AA contrast in both themes
   3. Touch targets on the morphine wean calculator are at least 48px and the interface is usable one-handed on mobile
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Spreadsheet parity unit tests + MorphineWeanCalculator component tests
+- [ ] 06-02-PLAN.md — Playwright axe-core WCAG 2.1 AA accessibility audit (light + dark themes)
 
 ## Progress
 
@@ -143,4 +147,4 @@ Phases execute in numeric order: 5 -> 6
 | 3. Calculators | v1.0 | 4/4 | Complete | 2026-04-01 |
 | 4. PWA & Offline | v1.0 | 2/2 | Complete | 2026-04-01 |
 | 5. Morphine Wean Calculator | v1.1 | 0/2 | In progress | - |
-| 6. Quality & Accessibility | v1.1 | 0/0 | Not started | - |
+| 6. Quality & Accessibility | v1.1 | 0/2 | Not started | - |
