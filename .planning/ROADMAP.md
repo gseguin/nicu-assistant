@@ -159,7 +159,10 @@ Plans:
   2. The top title bar displays the app name, an info (about) button, and a theme toggle button on both mobile and desktop viewports
   3. Info button in the title bar opens the AboutSheet and theme toggle switches between dark and light mode — same behavior as before, new location
   4. On desktop, the top nav bar contains the app name, calculator tabs, info button, and theme toggle — all accessible and functional
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 07-01-PLAN.md — Restructure NavShell: top title bar with app name + info + theme; tab-only bottom nav on mobile; desktop tabs in top bar
 
 ### Phase 8: Impeccable Critique & Polish
 **Goal**: The app's visual hierarchy, layout, and UX quality meet professional standards validated by systematic critique and iterative polish
@@ -186,5 +189,5 @@ Phases execute in numeric order: 7 -> 8
 | 4. PWA & Offline | v1.0 | 2/2 | Complete | 2026-04-01 |
 | 5. Morphine Wean Calculator | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
-| 7. Navigation Restructure | v1.2 | 0/0 | Not started | - |
+| 7. Navigation Restructure | v1.2 | 0/1 | In progress | - |
 | 8. Impeccable Critique & Polish | v1.2 | 0/0 | Not started | - |
