@@ -1,88 +1,24 @@
 # Requirements: NICU Assistant
 
-**Defined:** 2026-03-31
+**Defined:** 2026-04-02
 **Core Value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
 
-## v1 Requirements
+## v1.2 Requirements
 
-Requirements for initial release. Each maps to roadmap phases.
+Requirements for UI polish milestone. Each maps to roadmap phases.
 
-### Design System
+### Navigation Layout
 
-- [x] **DS-01**: Unified color tokens (Clinical Blue, BMF Amber, slate neutrals) defined as CSS custom properties in app.css
-- [x] **DS-02**: Dark/light theme toggle using Tailwind CSS 4 `@custom-variant` with class-based switching
-- [x] **DS-03**: FOUC prevention via inline `<script>` in app.html that reads persisted theme preference
-- [x] **DS-04**: Plus Jakarta Sans loaded from Google Fonts with tabular numerics for clinical output
-- [x] **DS-05**: Touch targets minimum 48px, WCAG 2.1 AA contrast ratios in both themes
+- [ ] **NAV-06**: Info (about) button and theme toggle are in the top title/header bar, not in the bottom tab bar
+- [ ] **NAV-07**: Calculator tab buttons (Morphine Wean, Formula) fill the full width of the bottom navigation on mobile
+- [ ] **NAV-08**: Top title bar displays app name alongside info and theme toggle buttons on both mobile and desktop
+- [ ] **NAV-09**: Desktop layout remains functional — info and theme toggle accessible in the top nav bar
 
-### Navigation & Shell
+### UI Critique & Polish
 
-- [x] **NAV-01**: Bottom tab bar on mobile (<768px) with icon + always-visible text label per calculator
-- [x] **NAV-02**: Top horizontal nav bar on desktop (>=768px) with same items
-- [x] **NAV-03**: Static calculator registry (TypeScript manifest) enabling new calculator addition with one entry + one route
-- [x] **NAV-04**: iOS safe-area-inset handling for bottom nav in standalone PWA mode
-- [x] **NAV-05**: Active tab state visually indicated with accessible aria-selected
-
-### Shared Components
-
-- [x] **SC-01**: Unified SelectPicker using native `<dialog>`, keyboard arrow-key navigation, optional option groups
-- [x] **SC-02**: Shared DisclaimerModal with single acceptance persisted in localStorage (new key: nicu_assistant_disclaimer_v1)
-- [x] **SC-03**: Shared NumericInput with decimal keyboard, wheel scroll support, min/max validation
-- [x] **SC-04**: Shared ResultsDisplay with large clinical-grade typography and aria-live announcements
-- [x] **SC-05**: Shared AboutSheet with per-calculator content via calculatorId prop
-- [x] **SC-06**: Focus management and ARIA roles/states across all shared components
-
-### PERT Calculator
-
-- [x] **PERT-01**: Meal mode: fat grams + lipase rate + brand/strength inputs produce capsule count
-- [x] **PERT-02**: Tube-feed mode with independent state from meal mode
-- [x] **PERT-03**: Tab switching between meal and tube-feed preserves both states
-- [x] **PERT-04**: All FDA medication brands and strengths from clinical-config.json
-- [x] **PERT-05**: Feature parity with standalone pert-calculator app
-
-### Formula Calculator
-
-- [x] **FORM-01**: Modified formula mode: brand + target kcal/oz + volume produce water mL and powder grams
-- [x] **FORM-02**: BMF mode: brand + target kcal/oz + volume + baseline EBM produce EBM mL and powder grams
-- [x] **FORM-03**: Dispensing measures (scoops, packets, tbsp, tsp) displayed when available
-- [x] **FORM-04**: All 40+ formula brands from formula-config.json with manufacturer grouping
-- [x] **FORM-05**: Feature parity with standalone formula-calculator app
-
-### Cross-Calculator
-
-- [x] **CC-01**: Calculator state preserved when switching between PERT and formula via nav
-- [x] **CC-02**: Each calculator's state isolated — no cross-contamination of inputs/results
-- [x] **CC-03**: Input validation on all numeric fields (prevent empty/invalid submissions)
-
-### PWA & Offline
-
-- [x] **PWA-01**: Service worker with precaching of all app assets via Workbox
-- [x] **PWA-02**: Web app manifest with icons (192px, 512px, 180px apple-touch), standalone display, portrait orientation
-- [x] **PWA-03**: Active update prompt when new service worker detected (clinical safety: prevent stale formulas)
-- [x] **PWA-04**: App works fully offline after first load
-
-## v1.1 Requirements
-
-Requirements for morphine wean calculator milestone. Each maps to roadmap phases.
-
-### Morphine Wean Calculator
-
-- [x] **MORPH-01**: User can enter dosing weight (kg), max morphine dose (mg/kg/dose), and % decrease per step
-- [x] **MORPH-02**: User can switch between Linear and Compounding weaning modes
-- [x] **MORPH-03**: Calculator displays a step-by-step weaning schedule table showing step number, dose (mg), dose (mg/kg/dose), and reduction amount (mg)
-- [x] **MORPH-04**: Linear mode subtracts a fixed amount each step (weight × maxDose × decreasePct)
-- [x] **MORPH-05**: Compounding mode multiplies previous dose by (1 - decreasePct) each step
-
-### Integration
-
-- [x] **INT-01**: Morphine wean calculator is registered in the calculator registry and accessible via nav
-- [x] **INT-02**: PERT calculator is removed from routes, nav registration, and the codebase
-- [x] **INT-03**: Existing shared components (NumericInput, ResultsDisplay, SelectPicker) are reused for morphine wean inputs and output
-
-### Quality
-
-- [x] **QA-01**: Unit tests cover both linear and compounding calculation functions with known spreadsheet values
-- [x] **QA-02**: Morphine wean calculator meets existing accessibility standards (WCAG 2.1 AA, 48px touch targets, keyboard nav)
+- [ ] **UX-01**: Run Impeccable /critique skill against the live dev server using Playwright MCP to assess visual hierarchy, layout, and overall UX quality
+- [ ] **UX-02**: Implement all recommendations from the Impeccable critique
+- [ ] **UX-03**: Run all suggested follow-up Impeccable commands (e.g., /polish, /typeset, /arrange) and implement their recommendations
 
 ## v2 Requirements
 
@@ -91,7 +27,7 @@ Deferred to future release. Tracked but not in current roadmap.
 ### History & Convenience
 
 - **HIST-01**: Calculation history log per calculator
-- **HIST-02**: Favorites or quick-access for common brand/strength configurations
+- **HIST-02**: Favorites or quick-access for common configurations
 - **CONV-01**: Search/filter across tools (relevant only when tool count exceeds 5)
 
 ### Native
@@ -106,8 +42,7 @@ Deferred to future release. Tracked but not in current roadmap.
 | User accounts / authentication | Anonymous clinical tool, no user data stored |
 | Backend API | All clinical data embedded at build time |
 | Analytics / telemetry | Clinical privacy concerns |
-| PERT dosing calculator | Replaced by morphine wean calculator in v1.1 |
-| Monorepo / package splitting | Single SvelteKit app, no benefit from workspace packages |
+| New calculators | v1.2 is polish only, no new features |
 
 ## Traceability
 
@@ -115,54 +50,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DS-01 | Phase 1 | Complete |
-| DS-02 | Phase 1 | Complete |
-| DS-03 | Phase 1 | Complete |
-| DS-04 | Phase 1 | Complete |
-| DS-05 | Phase 1 | Complete |
-| NAV-01 | Phase 1 | Complete |
-| NAV-02 | Phase 1 | Complete |
-| NAV-03 | Phase 1 | Complete |
-| NAV-04 | Phase 1 | Complete |
-| NAV-05 | Phase 1 | Complete |
-| SC-01 | Phase 2 | Complete |
-| SC-02 | Phase 2 | Complete |
-| SC-03 | Phase 2 | Complete |
-| SC-04 | Phase 2 | Complete |
-| SC-05 | Phase 2 | Complete |
-| SC-06 | Phase 2 | Complete |
-| PERT-01 | Phase 3 | Complete |
-| PERT-02 | Phase 3 | Complete |
-| PERT-03 | Phase 3 | Complete |
-| PERT-04 | Phase 3 | Complete |
-| PERT-05 | Phase 3 | Complete |
-| FORM-01 | Phase 3 | Complete |
-| FORM-02 | Phase 3 | Complete |
-| FORM-03 | Phase 3 | Complete |
-| FORM-04 | Phase 3 | Complete |
-| FORM-05 | Phase 3 | Complete |
-| CC-01 | Phase 3 | Complete |
-| CC-02 | Phase 3 | Complete |
-| CC-03 | Phase 3 | Complete |
-| PWA-01 | Phase 4 | Complete |
-| PWA-02 | Phase 4 | Complete |
-| PWA-03 | Phase 4 | Complete |
-| PWA-04 | Phase 4 | Complete |
-| MORPH-01 | Phase 5 | Complete |
-| MORPH-02 | Phase 5 | Complete |
-| MORPH-03 | Phase 5 | Complete |
-| MORPH-04 | Phase 5 | Complete |
-| MORPH-05 | Phase 5 | Complete |
-| INT-01 | Phase 5 | Complete |
-| INT-02 | Phase 5 | Complete |
-| INT-03 | Phase 5 | Complete |
-| QA-01 | Phase 6 | Complete |
-| QA-02 | Phase 6 | Complete |
+| — | — | — |
 
 **Coverage:**
-- v1 requirements: 33 total, 33 mapped, 0 unmapped
-- v1.1 requirements: 10 total, 10 mapped, 0 unmapped
+- v1.2 requirements: 7 total
+- Mapped to phases: 0
+- Unmapped: 7
 
 ---
-*Requirements defined: 2026-03-31*
-*Last updated: 2026-04-02 after v1.1 roadmap creation*
+*Requirements defined: 2026-04-02*
+*Last updated: 2026-04-02 after initial definition*
