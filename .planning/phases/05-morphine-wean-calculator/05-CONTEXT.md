@@ -32,6 +32,9 @@ Remove the PERT dosing calculator entirely (routes, nav entry, business logic, s
 ### State Pattern
 - **D-07:** Follow established pattern from Phase 3: module-level `$state` rune + sessionStorage backup in `src/lib/morphine/state.svelte.ts`. State survives tab switches, clears on tab close.
 
+### Data Storage
+- **D-08:** Store calculation parameters and formulas in a JSON config file (`src/lib/morphine/morphine-config.json`) for easier maintainability and updates. The JSON file contains default values, step count, and any configurable parameters. Calculation functions read from this config rather than hardcoding values.
+
 ### Claude's Discretion
 - Mobile-optimized schedule table layout (D-01) — Claude picks the best pattern for clinical readability on narrow screens
 - Icon choice for morphine wean calculator in nav registry — Claude selects appropriate Lucide icon
