@@ -114,8 +114,12 @@ Plans:
   3. User can enter dosing weight (kg), max morphine dose (mg/kg/dose), and % decrease per step using the existing NumericInput components
   4. User can switch between Linear and Compounding weaning modes; Linear subtracts a fixed mg amount each step, Compounding multiplies the previous dose by (1 - decreasePct) each step
   5. A step-by-step weaning schedule table displays step number, dose (mg), dose (mg/kg/dose), and reduction amount (mg) for all steps until the dose reaches zero or near-zero
-**Plans**: TBD
+**Plans**: 2 plans
 **UI hint**: yes
+
+Plans:
+- [ ] 05-01-PLAN.md — Remove PERT calculator; create morphine wean business logic, types, state, and update registry/about/types
+- [ ] 05-02-PLAN.md — Build MorphineWeanCalculator UI component with mode tabs, NumericInput fields, schedule display, and route page
 
 ### Phase 6: Quality & Accessibility
 **Goal**: The morphine wean calculator is verified against known spreadsheet values and meets the app's established accessibility standards
@@ -138,5 +142,5 @@ Phases execute in numeric order: 5 -> 6
 | 2. Shared Components | v1.0 | 5/5 | Complete | 2026-04-01 |
 | 3. Calculators | v1.0 | 4/4 | Complete | 2026-04-01 |
 | 4. PWA & Offline | v1.0 | 2/2 | Complete | 2026-04-01 |
-| 5. Morphine Wean Calculator | v1.1 | 0/0 | Not started | - |
+| 5. Morphine Wean Calculator | v1.1 | 0/2 | In progress | - |
 | 6. Quality & Accessibility | v1.1 | 0/0 | Not started | - |
