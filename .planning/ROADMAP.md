@@ -162,7 +162,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 07-01-PLAN.md — Restructure NavShell: top title bar with app name + info + theme; tab-only bottom nav on mobile; desktop tabs in top bar
+- [x] 07-01-PLAN.md — Restructure NavShell: top title bar with app name + info + theme; tab-only bottom nav on mobile; desktop tabs in top bar
 
 ### Phase 8: Impeccable Critique & Polish
 **Goal**: The app's visual hierarchy, layout, and UX quality meet professional standards validated by systematic critique and iterative polish
@@ -189,5 +189,5 @@ Phases execute in numeric order: 7 -> 8
 | 4. PWA & Offline | v1.0 | 2/2 | Complete | 2026-04-01 |
 | 5. Morphine Wean Calculator | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
-| 7. Navigation Restructure | v1.2 | 0/1 | In progress | - |
+| 7. Navigation Restructure | v1.2 | 1/1 | Complete   | 2026-04-02 |
 | 8. Impeccable Critique & Polish | v1.2 | 0/0 | Not started | - |

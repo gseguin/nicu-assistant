@@ -9,10 +9,10 @@ Requirements for UI polish milestone. Each maps to roadmap phases.
 
 ### Navigation Layout
 
-- [ ] **NAV-06**: Info (about) button and theme toggle are in the top title/header bar, not in the bottom tab bar
-- [ ] **NAV-07**: Calculator tab buttons (Morphine Wean, Formula) fill the full width of the bottom navigation on mobile
-- [ ] **NAV-08**: Top title bar displays app name alongside info and theme toggle buttons on both mobile and desktop
-- [ ] **NAV-09**: Desktop layout remains functional — info and theme toggle accessible in the top nav bar
+- [x] **NAV-06**: Info (about) button and theme toggle are in the top title/header bar, not in the bottom tab bar
+- [x] **NAV-07**: Calculator tab buttons (Morphine Wean, Formula) fill the full width of the bottom navigation on mobile
+- [x] **NAV-08**: Top title bar displays app name alongside info and theme toggle buttons on both mobile and desktop
+- [x] **NAV-09**: Desktop layout remains functional — info and theme toggle accessible in the top nav bar
 
 ### UI Critique & Polish
 
@@ -50,10 +50,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAV-06 | Phase 7 | Pending |
-| NAV-07 | Phase 7 | Pending |
-| NAV-08 | Phase 7 | Pending |
-| NAV-09 | Phase 7 | Pending |
+| NAV-06 | Phase 7 | Complete |
+| NAV-07 | Phase 7 | Complete |
+| NAV-08 | Phase 7 | Complete |
+| NAV-09 | Phase 7 | Complete |
 | UX-01 | Phase 8 | Pending |
 | UX-02 | Phase 8 | Pending |
 | UX-03 | Phase 8 | Pending |
