@@ -3,7 +3,8 @@
 ## Milestones
 
 - v1.0 MVP - Phases 1-4 (shipped 2026-04-01)
-- v1.1 Morphine Wean Calculator - Phases 5-6 (in progress)
+- v1.1 Morphine Wean Calculator - Phases 5-6 (shipped 2026-04-02)
+- v1.2 UI Polish - Phases 7-8 (in progress)
 
 ## Phases
 
@@ -23,10 +24,18 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 </details>
 
-### v1.1 Morphine Wean Calculator (In Progress)
+<details>
+<summary>v1.1 Morphine Wean Calculator (Phases 5-6) - SHIPPED 2026-04-02</summary>
 
-- [ ] **Phase 5: Morphine Wean Calculator** - Remove PERT calculator and build morphine wean calculator with linear and compounding modes
-- [ ] **Phase 6: Quality & Accessibility** - Unit tests for both calculation modes and accessibility validation
+- [x] **Phase 5: Morphine Wean Calculator** - Remove PERT calculator and build morphine wean calculator with linear and compounding modes
+- [x] **Phase 6: Quality & Accessibility** - Unit tests for both calculation modes and accessibility validation
+
+</details>
+
+### v1.2 UI Polish (In Progress)
+
+- [ ] **Phase 7: Navigation Restructure** - Move info and theme buttons to title bar; calculator tabs fill full mobile width
+- [ ] **Phase 8: Impeccable Critique & Polish** - Visual assessment via Impeccable commands and implementation of all recommendations
 
 ## Phase Details
 
@@ -104,6 +113,9 @@ Plans:
 
 </details>
 
+<details>
+<summary>v1.1 Morphine Wean Calculator (Phases 5-6) - SHIPPED 2026-04-02</summary>
+
 ### Phase 5: Morphine Wean Calculator
 **Goal**: Clinicians can access a morphine weaning calculator from the app nav, enter patient parameters, choose a weaning mode, and see a complete step-by-step dose reduction schedule
 **Depends on**: Phase 4
@@ -115,7 +127,6 @@ Plans:
   4. User can switch between Linear and Compounding weaning modes; Linear subtracts a fixed mg amount each step, Compounding multiplies the previous dose by (1 - decreasePct) each step
   5. A step-by-step weaning schedule table displays step number, dose (mg), dose (mg/kg/dose), and reduction amount (mg) for all steps until the dose reaches zero or near-zero
 **Plans**: 2 plans
-**UI hint**: yes
 
 Plans:
 - [x] 05-01-PLAN.md — Remove PERT calculator; create morphine wean business logic, types, state, and update registry/about/types
@@ -132,13 +143,40 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Spreadsheet parity unit tests + MorphineWeanCalculator component tests
+- [x] 06-01-PLAN.md — Spreadsheet parity unit tests + MorphineWeanCalculator component tests
 - [x] 06-02-PLAN.md — Playwright axe-core WCAG 2.1 AA accessibility audit (light + dark themes)
+
+</details>
+
+### v1.2 UI Polish (In Progress)
+
+### Phase 7: Navigation Restructure
+**Goal**: Calculator tab buttons occupy the full width of the bottom nav on mobile, because info and theme controls have moved to the top title bar
+**Depends on**: Phase 6
+**Requirements**: NAV-06, NAV-07, NAV-08, NAV-09
+**Success Criteria** (what must be TRUE):
+  1. On mobile, the bottom tab bar contains only calculator tabs (Morphine Wean, Formula) and they stretch to fill the full viewport width
+  2. The top title bar displays the app name, an info (about) button, and a theme toggle button on both mobile and desktop viewports
+  3. Info button in the title bar opens the AboutSheet and theme toggle switches between dark and light mode — same behavior as before, new location
+  4. On desktop, the top nav bar contains the app name, calculator tabs, info button, and theme toggle — all accessible and functional
+**Plans**: TBD
+
+### Phase 8: Impeccable Critique & Polish
+**Goal**: The app's visual hierarchy, layout, and UX quality meet professional standards validated by systematic critique and iterative polish
+**Depends on**: Phase 7
+**Requirements**: UX-01, UX-02, UX-03
+**Success Criteria** (what must be TRUE):
+  1. An Impeccable /critique assessment has been run against the live dev server and all findings are documented
+  2. All actionable recommendations from the critique are implemented in the codebase
+  3. All suggested follow-up Impeccable commands (e.g., /polish, /typeset, /arrange) have been run and their recommendations implemented
+  4. The app visually passes a final inspection — consistent spacing, clear visual hierarchy, and no layout issues across mobile and desktop
+**Plans**: TBD
+**UI hint**: yes
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 5 -> 6
+Phases execute in numeric order: 7 -> 8
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -146,5 +184,7 @@ Phases execute in numeric order: 5 -> 6
 | 2. Shared Components | v1.0 | 5/5 | Complete | 2026-04-01 |
 | 3. Calculators | v1.0 | 4/4 | Complete | 2026-04-01 |
 | 4. PWA & Offline | v1.0 | 2/2 | Complete | 2026-04-01 |
-| 5. Morphine Wean Calculator | v1.1 | 0/2 | In progress | - |
-| 6. Quality & Accessibility | v1.1 | 0/2 | Not started | - |
+| 5. Morphine Wean Calculator | v1.1 | 2/2 | Complete | 2026-04-02 |
+| 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
+| 7. Navigation Restructure | v1.2 | 0/0 | Not started | - |
+| 8. Impeccable Critique & Polish | v1.2 | 0/0 | Not started | - |

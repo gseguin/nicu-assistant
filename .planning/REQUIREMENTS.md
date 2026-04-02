@@ -50,13 +50,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| — | — | — |
+| NAV-06 | Phase 7 | Pending |
+| NAV-07 | Phase 7 | Pending |
+| NAV-08 | Phase 7 | Pending |
+| NAV-09 | Phase 7 | Pending |
+| UX-01 | Phase 8 | Pending |
+| UX-02 | Phase 8 | Pending |
+| UX-03 | Phase 8 | Pending |
 
 **Coverage:**
 - v1.2 requirements: 7 total
-- Mapped to phases: 0
-- Unmapped: 7
+- Mapped to phases: 7
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-02*
-*Last updated: 2026-04-02 after initial definition*
+*Last updated: 2026-04-02 after roadmap creation*
