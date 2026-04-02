@@ -70,10 +70,15 @@
         }
       });
 
-      // Apply scale: peak on closest card, visible falloff across 3 cards total
+      // Apply scale: peak on closest card, visible falloff across 3 cards total.
+      // At edges (first/last card is peak), shift the magnification window
+      // inward so 3 cards are always magnified.
+      const lastIdx = cards.length - 1;
+      const effectiveCenter = bestIdx === 0 ? 1 : bestIdx === lastIdx ? lastIdx - 1 : bestIdx;
+
       cards.forEach((card, i) => {
-        const indexDist = Math.abs(i - bestIdx);
-        // 0 → full (1.06), 1 → medium (1.04), 2+ → none
+        const indexDist = Math.abs(i - effectiveCenter);
+        // 0 → full (1.06), 1 → medium (1.03), 2+ → none
         const t = Math.max(0, 1 - indexDist / 2);
         const eased = t; // linear falloff for even 3-card spread
         const scale = 1 + (MAX_SCALE - 1) * eased;
