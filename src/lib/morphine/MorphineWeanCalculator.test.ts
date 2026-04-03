@@ -95,4 +95,57 @@ describe('MorphineWeanCalculator', () => {
     const tablist = screen.getByRole('tablist');
     expect(tablist).toHaveAttribute('aria-label', 'Weaning mode');
   });
+
+  describe('v1.2 polish fixes', () => {
+    beforeEach(() => {
+      mockState.weightKg = 3.1;
+      mockState.maxDoseMgKgDose = 0.04;
+      mockState.decreasePct = 10;
+    });
+
+    it('summary card shows start dose, end dose, and total reduction percentage', () => {
+      render(MorphineWeanCalculator);
+      expect(screen.getByText('Start')).toBeTruthy();
+      expect(screen.getByText('Total reduction')).toBeTruthy();
+      // Summary card contains both start and end dose values
+      expect(screen.getAllByText('0.1240 mg').length).toBeGreaterThanOrEqual(1);
+    });
+
+    it('reduction amounts show percentage alongside mg value', () => {
+      render(MorphineWeanCalculator);
+      // Linear mode: every step has 10.0% reduction
+      // Step 2 should show "-0.0124 mg (10.0%)"
+      expect(screen.getByText(/-0\.0124 mg \(10\.0%\)/)).toBeTruthy();
+    });
+
+    it('reduction amounts do NOT use error/red color class', () => {
+      render(MorphineWeanCalculator);
+      const container = document.querySelector('[aria-label="Weaning schedule"]');
+      expect(container).toBeTruthy();
+      // No element should have the error color for reductions
+      const errorElements = container!.querySelectorAll('[class*="color-error"]');
+      expect(errorElements.length).toBe(0);
+    });
+
+    it('step cards have will-change-transform for GPU acceleration', () => {
+      render(MorphineWeanCalculator);
+      const stepCard = document.querySelector('[data-step-index="0"]');
+      expect(stepCard).toBeTruthy();
+      expect(stepCard!.className).toContain('will-change-transform');
+    });
+
+    it('Step 1 does not have a left accent border', () => {
+      render(MorphineWeanCalculator);
+      const stepCard = document.querySelector('[data-step-index="0"]');
+      expect(stepCard).toBeTruthy();
+      expect(stepCard!.className).not.toContain('border-l-');
+    });
+
+    it('clear inputs button uses secondary text color, not tertiary', () => {
+      render(MorphineWeanCalculator);
+      const clearBtn = screen.getByText('Clear inputs');
+      expect(clearBtn.className).toContain('text-secondary');
+      expect(clearBtn.className).not.toContain('text-tertiary');
+    });
+  });
 });

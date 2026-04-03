@@ -53,6 +53,33 @@ describe('disclaimer singleton', () => {
     // Restore
     vi.restoreAllMocks();
   });
+
+  it('initialized becomes true after init() and modal gate works correctly', async () => {
+    // Test the full lifecycle in a single test to avoid module caching issues.
+    // The disclaimer singleton keeps state across dynamic imports in the same process.
+    const { disclaimer } = await import('../disclaimer.svelte.js');
+
+    // After init with empty localStorage: should show modal
+    disclaimer.init();
+    expect(disclaimer.initialized).toBe(true);
+    expect(disclaimer.acknowledged).toBe(false);
+    // Modal gate: initialized && !acknowledged = true (show modal)
+    expect(disclaimer.initialized && !disclaimer.acknowledged).toBe(true);
+
+    // After acknowledge: should hide modal
+    disclaimer.acknowledge();
+    expect(disclaimer.acknowledged).toBe(true);
+    // Modal gate: initialized && !acknowledged = false (hide modal)
+    expect(disclaimer.initialized && !disclaimer.acknowledged).toBe(false);
+  });
+
+  it('modal gate is false when previously acknowledged in localStorage', async () => {
+    localStorage.setItem(DISCLAIMER_KEY, 'true');
+    const { disclaimer } = await import('../disclaimer.svelte.js');
+    disclaimer.init();
+    // initialized=true, acknowledged=true → modal stays hidden
+    expect(disclaimer.initialized && !disclaimer.acknowledged).toBe(false);
+  });
 });
 
 // --- NumericInput component tests ---
