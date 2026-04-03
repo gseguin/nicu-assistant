@@ -64,9 +64,6 @@
             </li>
           {/each}
         </ul>
-        <p class="text-2xs text-[var(--color-text-tertiary)] italic border-t border-[var(--color-border)] pt-3">
-          {content.sourceLabel}
-        </p>
       </div>
     </Dialog.Content>
   </Dialog.Portal>
