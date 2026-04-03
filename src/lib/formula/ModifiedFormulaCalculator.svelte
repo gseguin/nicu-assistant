@@ -140,8 +140,9 @@
       />
     </div>
   {:else}
-    <div class="rounded-2xl border border-dashed border-[var(--color-border)] px-6 py-8 text-center" transition:fade aria-hidden="true">
-      <p class="text-sm font-medium text-[var(--color-text-tertiary)]">Select a brand to calculate.</p>
+    <div class="rounded-2xl bg-[var(--color-surface-alt)] px-6 py-10 text-center flex flex-col items-center gap-3" transition:fade aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-[var(--color-accent)] opacity-50"><path d="M10 2v4"/><path d="M14 2v4"/><rect width="16" height="16" x="4" y="4" rx="2"/><path d="M4 10h16"/><path d="M12 14v4"/><path d="M10 16h4"/></svg>
+      <p class="text-sm font-medium text-[var(--color-text-secondary)]">Choose a formula brand above to see the recipe.</p>
     </div>
   {/if}
 

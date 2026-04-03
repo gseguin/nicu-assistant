@@ -16,7 +16,7 @@ test.describe('Formula Calculator', () => {
 	});
 
 	test('shows empty state when no brand selected', async ({ page }) => {
-		await expect(page.getByText(/Select a brand to calculate/)).toBeVisible();
+		await expect(page.getByText(/Choose a formula brand above to see the recipe/)).toBeVisible();
 	});
 
 	test('brand selector shows placeholder', async ({ page }) => {
