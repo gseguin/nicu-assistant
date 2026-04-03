@@ -242,77 +242,75 @@
     />
   </section>
 
-  <!-- Tab Panels -->
+  <!-- ARIA tab panels (hidden placeholders for the inactive mode) -->
   {#each MODE_ORDER as mode}
     <div
       role="tabpanel"
       id="{mode}-panel"
       aria-labelledby="{mode}-tab"
       hidden={morphineState.current.activeMode !== mode}
-    >
-      {#if morphineState.current.activeMode === mode}
-        {#if schedule.length > 0}
-          <!-- Summary: start → end dose (pulses on recalculation) -->
-          {@const first = schedule[0]}
-          {@const last = schedule[schedule.length - 1]}
-          {@const totalReduction = first.doseMg - last.doseMg}
-          {#key calcKey}
-          <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-accent-light)] animate-summary-pulse">
-            <div class="flex flex-col">
-              <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Start</span>
-              <span class="text-base font-bold num text-[var(--color-text-primary)]">{first.doseMg.toFixed(4)} mg</span>
-            </div>
-            <div class="text-[var(--color-text-tertiary)] text-lg">→</div>
-            <div class="flex flex-col items-end">
-              <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Step {last.step}</span>
-              <span class="text-base font-bold num text-[var(--color-text-primary)]">{last.doseMg.toFixed(4)} mg</span>
-            </div>
-            <div class="flex flex-col items-end pl-3 border-l border-[var(--color-border)]">
-              <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Total reduction</span>
-              <span class="text-sm font-semibold num text-[var(--color-text-primary)]">{(totalReduction / first.doseMg * 100).toFixed(1)}%</span>
-            </div>
-          </div>
-          {/key}
-
-          <section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true" class="mt-4">
-            <div class="space-y-2" bind:this={scheduleContainer}>
-              {#each schedule as step, i}
-                {@const isActive = activeStepIndex === i}
-                {@const isFirst = step.step === 1}
-                {@const reductionPct = i > 0 && schedule[i - 1].doseMg > 0 ? (step.reductionMg / schedule[i - 1].doseMg * 100) : 0}
-                <div
-                  data-step-index={i}
-                  class="card px-4 py-3 flex flex-col gap-1 will-change-transform origin-center"
-                >
-                  <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold text-[var(--color-text-secondary)]">
-                      {isFirst ? 'Step 1 — Starting dose' : `Step ${step.step}`}
-                    </span>
-                    {#if step.reductionMg > 0}
-                      <span class="text-xs font-medium text-[var(--color-text-tertiary)]">-{step.reductionMg.toFixed(4)} mg ({reductionPct.toFixed(1)}%)</span>
-                    {/if}
-                  </div>
-                  <div class="flex items-baseline gap-2">
-                    <span class="{isFirst ? 'text-xl' : 'text-lg'} font-bold num text-[var(--color-text-primary)]">{step.doseMg.toFixed(4)}</span>
-                    <span class="text-sm text-[var(--color-text-tertiary)]">mg</span>
-                  </div>
-                  <div class="text-xs text-[var(--color-text-secondary)] num">
-                    {step.doseMgKgDose.toFixed(4)} mg/kg/dose
-                  </div>
-                </div>
-              {/each}
-            </div>
-          </section>
-        {:else}
-          <div class="rounded-2xl border border-dashed border-[var(--color-border)] px-6 py-8 text-center" aria-hidden="true">
-            <p class="text-sm font-medium text-[var(--color-text-tertiary)]">
-              Enter values above to generate weaning schedule.
-            </p>
-          </div>
-        {/if}
-      {/if}
-    </div>
+    ></div>
   {/each}
+
+  <!-- Schedule content (single instance — reacts to activeMode via derived schedule) -->
+  {#if schedule.length > 0}
+    <!-- Summary: start → end dose (pulses on recalculation) -->
+    {@const first = schedule[0]}
+    {@const last = schedule[schedule.length - 1]}
+    {@const totalReduction = first.doseMg - last.doseMg}
+    {#key calcKey}
+    <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-accent-light)] animate-summary-pulse">
+      <div class="flex flex-col">
+        <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Start</span>
+        <span class="text-base font-bold num text-[var(--color-text-primary)]">{first.doseMg.toFixed(4)} mg</span>
+      </div>
+      <div class="text-[var(--color-text-tertiary)] text-lg">→</div>
+      <div class="flex flex-col items-end">
+        <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Step {last.step}</span>
+        <span class="text-base font-bold num text-[var(--color-text-primary)]">{last.doseMg.toFixed(4)} mg</span>
+      </div>
+      <div class="flex flex-col items-end pl-3 border-l border-[var(--color-border)]">
+        <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Total reduction</span>
+        <span class="text-sm font-semibold num text-[var(--color-text-primary)]">{(totalReduction / first.doseMg * 100).toFixed(1)}%</span>
+      </div>
+    </div>
+    {/key}
+
+    <section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true" class="mt-4">
+      <div class="space-y-2" bind:this={scheduleContainer}>
+        {#each schedule as step, i}
+          {@const isFirst = step.step === 1}
+          {@const reductionPct = i > 0 && schedule[i - 1].doseMg > 0 ? (step.reductionMg / schedule[i - 1].doseMg * 100) : 0}
+          <div
+            data-step-index={i}
+            class="card px-4 py-3 flex flex-col gap-1 will-change-transform origin-center"
+          >
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-[var(--color-text-secondary)]">
+                {isFirst ? 'Step 1 — Starting dose' : `Step ${step.step}`}
+              </span>
+              {#if step.reductionMg > 0}
+                <span class="text-xs font-medium text-[var(--color-text-tertiary)]">-{step.reductionMg.toFixed(4)} mg ({reductionPct.toFixed(1)}%)</span>
+              {/if}
+            </div>
+            <div class="flex items-baseline gap-2">
+              <span class="{isFirst ? 'text-xl' : 'text-lg'} font-bold num text-[var(--color-text-primary)]">{step.doseMg.toFixed(4)}</span>
+              <span class="text-sm text-[var(--color-text-tertiary)]">mg</span>
+            </div>
+            <div class="text-xs text-[var(--color-text-secondary)] num">
+              {step.doseMgKgDose.toFixed(4)} mg/kg/dose
+            </div>
+          </div>
+        {/each}
+      </div>
+    </section>
+  {:else}
+    <div class="rounded-2xl border border-dashed border-[var(--color-border)] px-6 py-8 text-center" aria-hidden="true">
+      <p class="text-sm font-medium text-[var(--color-text-tertiary)]">
+        Enter values above to generate weaning schedule.
+      </p>
+    </div>
+  {/if}
 
   <!-- Clear Button -->
   {#if hasValues}
