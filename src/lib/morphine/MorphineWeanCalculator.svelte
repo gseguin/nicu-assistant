@@ -23,7 +23,10 @@
       : false;
     const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
-    // Dock-style magnification: continuous floating index driven by scroll progress.
+    // Expose magnification trigger for mode-switch re-initialization
+  let triggerMagnification: (() => void) | null = null;
+
+  // Dock-style magnification: continuous floating index driven by scroll progress.
     // Maps total scroll position to a floating index (0.0 → 9.0) so the magnification
     // slides smoothly through cards in the scroll direction, like the macOS Dock.
     const MAX_SCALE = 1.06;
@@ -84,6 +87,8 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     // Initial pass
     updateMagnification();
+    // Expose for mode-switch re-trigger
+    triggerMagnification = updateMagnification;
 
     // Re-run when cards change (mode switch)
     const mutObserver = new MutationObserver(() => updateMagnification());
@@ -93,11 +98,18 @@
       window.removeEventListener('scroll', onScroll);
       if (rafId !== null) cancelAnimationFrame(rafId);
       mutObserver.disconnect();
+      triggerMagnification = null;
     };
   });
 
   function activateMode(mode: WeanMode) {
     morphineState.current.activeMode = mode;
+    // After Svelte re-renders the new tab panel, re-run magnification
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        triggerMagnification?.();
+      });
+    });
   }
 
   function handleModeTabKeydown(event: KeyboardEvent, mode: WeanMode) {
@@ -146,6 +158,13 @@
     }
     return calculateCompoundingSchedule(weightKg, maxDoseMgKgDose, pct);
   });
+
+  // Recalculation feedback: derive a key from schedule identity to trigger CSS animation via {#key}
+  let calcKey = $derived(
+    schedule.length > 0
+      ? `${schedule[0].doseMg}-${schedule[schedule.length - 1].doseMg}-${morphineState.current.activeMode}`
+      : ''
+  );
 
   // Persist state on change
   $effect(() => {
@@ -233,11 +252,12 @@
     >
       {#if morphineState.current.activeMode === mode}
         {#if schedule.length > 0}
-          <!-- Summary: start → end dose -->
+          <!-- Summary: start → end dose (pulses on recalculation) -->
           {@const first = schedule[0]}
           {@const last = schedule[schedule.length - 1]}
           {@const totalReduction = first.doseMg - last.doseMg}
-          <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-accent-light)]">
+          {#key calcKey}
+          <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-accent-light)] animate-summary-pulse">
             <div class="flex flex-col">
               <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Start</span>
               <span class="text-base font-bold num text-[var(--color-text-primary)]">{first.doseMg.toFixed(4)} mg</span>
@@ -252,6 +272,7 @@
               <span class="text-sm font-semibold num text-[var(--color-text-primary)]">{(totalReduction / first.doseMg * 100).toFixed(1)}%</span>
             </div>
           </div>
+          {/key}
 
           <section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true" class="mt-4">
             <div class="space-y-2" bind:this={scheduleContainer}>
@@ -306,3 +327,16 @@
     </div>
   {/if}
 </div>
+
+<style>
+  @keyframes summary-pulse {
+    0% { opacity: 0.7; transform: scale(0.98); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  :global(.animate-summary-pulse) {
+    animation: summary-pulse 250ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.animate-summary-pulse) { animation: none; }
+  }
+</style>
