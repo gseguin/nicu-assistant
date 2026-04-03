@@ -54,7 +54,7 @@ test.describe('Morphine Wean Accessibility', () => {
 		await page.getByLabel('Decrease per step').fill('10');
 
 		// Wait for schedule to render
-		await expect(page.getByText('Step 1', { exact: true })).toBeVisible();
+		await expect(page.getByText(/Step 1 — Starting dose/)).toBeVisible();
 
 		const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
