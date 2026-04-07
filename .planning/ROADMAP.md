@@ -4,7 +4,7 @@
 
 - v1.0 MVP - Phases 1-4 (shipped 2026-04-01)
 - v1.1 Morphine Wean Calculator - Phases 5-6 (shipped 2026-04-02)
-- v1.2 UI Polish - Phases 7-8 (in progress)
+- v1.2 UI Polish - Phases 7-8 (shipped 2026-04-07)
 
 ## Phases
 
@@ -32,10 +32,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 </details>
 
-### v1.2 UI Polish (In Progress)
+<details>
+<summary>v1.2 UI Polish (Phases 7-8) - SHIPPED 2026-04-07</summary>
 
-- [ ] **Phase 7: Navigation Restructure** - Move info and theme buttons to title bar; calculator tabs fill full mobile width
-- [ ] **Phase 8: Impeccable Critique & Polish** - Visual assessment via Impeccable commands and implementation of all recommendations
+- [x] **Phase 7: Navigation Restructure** - Move info and theme buttons to title bar; calculator tabs fill full mobile width
+- [x] **Phase 8: Impeccable Critique & Polish** - Visual assessment via Impeccable commands and implementation of all recommendations
+
+</details>
 
 ## Phase Details
 
@@ -148,7 +151,8 @@ Plans:
 
 </details>
 
-### v1.2 UI Polish (In Progress)
+<details>
+<summary>v1.2 UI Polish (Phases 7-8) - SHIPPED 2026-04-07</summary>
 
 ### Phase 7: Navigation Restructure
 **Goal**: Calculator tab buttons occupy the full width of the bottom nav on mobile, because info and theme controls have moved to the top title bar
@@ -180,6 +184,8 @@ Plans:
 - [x] 08-01-PLAN.md — Run Impeccable /critique, document findings, implement all P0/P1/P2 recommendations
 - [x] 08-02-PLAN.md — Run follow-up Impeccable commands (/polish, /typeset, /arrange, etc.) and implement their recommendations
 
+</details>
+
 ## Progress
 
 **Execution Order:**
@@ -194,4 +200,4 @@ Phases execute in numeric order: 7 -> 8
 | 5. Morphine Wean Calculator | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 7. Navigation Restructure | v1.2 | 1/1 | Complete   | 2026-04-02 |
-| 8. Impeccable Critique & Polish | v1.2 | 0/2 | Not started | - |
+| 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
