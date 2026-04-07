@@ -6,6 +6,7 @@
 - v1.1 Morphine Wean Calculator - Phases 5-6 (shipped 2026-04-02)
 - v1.2 UI Polish - Phases 7-8 (shipped 2026-04-07)
 - v1.3 Fortification Calculator Refactor - Phases 9-11 (shipped 2026-04-07) — see [milestones/v1.3-ROADMAP.md](milestones/v1.3-ROADMAP.md)
+- v1.4 UI Polish - Phases 12-17 (active)
 
 ## Phases
 
@@ -47,6 +48,15 @@ Decimal phases appear between their surrounding integers in numeric order.
 See [milestones/v1.3-ROADMAP.md](milestones/v1.3-ROADMAP.md) for full archive.
 
 </details>
+
+### v1.4 UI Polish (Phases 12-17) - ACTIVE
+
+- [ ] **Phase 12: Shared SelectPicker Rewrite** - Custom `<dialog>`-based modal picker replacing bits-ui Select across both calculators
+- [ ] **Phase 13: Fortification Polish** - Mobile row layout, hero restyle, and visual refinement sweep for the Fortification calculator
+- [ ] **Phase 14: Morphine Wean Polish** - Visual refinement sweep and new SelectPicker adoption for the Morphine Wean calculator
+- [ ] **Phase 15: Shell & Navigation Polish** - Title bar, tab bar, theme toggle, and About sheet polish to match `.impeccable.md`
+- [ ] **Phase 16: Animation & Reduced Motion** - Calm micro-animations plus full `prefers-reduced-motion` support
+- [ ] **Phase 17: Accessibility Deep-Dive** - High-contrast review, screen reader audit, keyboard sweep, and axe-core validation
 
 ## Phase Details
 
@@ -194,6 +204,82 @@ Plans:
 
 </details>
 
+### v1.4 UI Polish (Phases 12-17) - ACTIVE
+
+#### Phase 12: Shared SelectPicker Rewrite
+**Goal**: Both calculators consume a custom-styled `<dialog>`-based modal picker that replaces the bits-ui Select, matches `.impeccable.md`, and drops the bits-ui Select dependency if unused
+**Depends on**: Phase 11 (v1.3 shipped)
+**Requirements**: PICK-01, PICK-02, PICK-03, PICK-04, PICK-05, PICK-06
+**Success Criteria** (what must be TRUE):
+  1. Every SelectPicker instance in the app opens a custom `<dialog>`-based modal picker — no bits-ui Select UI is rendered anywhere
+  2. A keyboard user can open the picker, move through options with Arrow/Home/End, confirm with Enter, dismiss with Esc, and the trigger button receives focus again on close
+  3. Grouped options (e.g. formulas grouped by manufacturer) render correctly with the new picker style, and focus-visible/selected states use `.impeccable.md` OKLCH tokens with no hardcoded colors
+  4. On a mobile viewport the picker fills the available width with ≥48 px touch targets and honors `env(safe-area-inset-bottom)`
+  5. `bits-ui` is removed from package.json if no other consumer remains, and the app still builds and passes tests
+**Plans**: TBD
+**UI hint**: yes
+
+#### Phase 13: Fortification Polish
+**Goal**: The Fortification calculator feels visually refined and mobile-first, with the "Amount to Add" hero matching morphine wean result theming
+**Depends on**: Phase 12
+**Requirements**: FORT-01, FORT-02, FORT-03
+**Success Criteria** (what must be TRUE):
+  1. On a mobile viewport "Target Calorie" and "Unit" pickers sit on the same row without overflow or touch-target regressions
+  2. The "Amount to Add" hero card uses the same typographic hierarchy, surface treatment, and brand accent as the morphine wean result card
+  3. Spacing, typography, and empty-state styling across the Fortification calculator are consistent with `.impeccable.md` after a visual sweep
+  4. Fortification calculations and spreadsheet-parity tests continue to pass unchanged
+**Plans**: TBD
+**UI hint**: yes
+
+#### Phase 14: Morphine Wean Polish
+**Goal**: The Morphine Wean calculator passes the same visual refinement sweep and adopts the new SelectPicker without regressions
+**Depends on**: Phase 12
+**Requirements**: MORPH-01, MORPH-02
+**Success Criteria** (what must be TRUE):
+  1. Spacing, typography, focus states, and empty/loading states in the Morphine Wean calculator match `.impeccable.md`
+  2. The Morphine Wean calculator uses the new shared SelectPicker with no visible or behavioral regressions vs. v1.3
+  3. Linear and compounding schedule outputs remain numerically identical to the spreadsheet-parity baseline
+  4. Dock-style scroll magnification on step cards continues to work across mode switches
+**Plans**: TBD
+**UI hint**: yes
+
+#### Phase 15: Shell & Navigation Polish
+**Goal**: The app shell (title bar, nav bar, theme toggle, About sheet) feels cohesive and matches `.impeccable.md`
+**Depends on**: Phase 12
+**Requirements**: SHELL-01, SHELL-02, SHELL-03
+**Success Criteria** (what must be TRUE):
+  1. The title bar renders the app name, info button, and theme toggle with spacing, typography, and iconography that match `.impeccable.md`
+  2. The bottom tab bar (mobile) and top nav (desktop) have refined active, hover, and focus-visible states using OKLCH tokens — no hardcoded colors
+  3. The theme toggle and About sheet share consistent typography and open/close motion with the rest of the shell
+  4. All shell interactive surfaces retain ≥48 px touch targets and safe-area-aware padding
+**Plans**: TBD
+**UI hint**: yes
+
+#### Phase 16: Animation & Reduced Motion
+**Goal**: Micro-animations across the app feel calm and purposeful, and users with `prefers-reduced-motion: reduce` get a fully static experience
+**Depends on**: Phases 13, 14, 15
+**Requirements**: ANIM-01, ANIM-02
+**Success Criteria** (what must be TRUE):
+  1. Focus transitions, recalc affordances, and hero updates use subtle, short-duration animations tuned for a clinical tone — no flashy or bouncy motion
+  2. With `prefers-reduced-motion: reduce` set, all non-essential motion is disabled or reduced to instant transitions — including picker open/close, tab changes, and hero updates
+  3. Dock-style scroll magnification on the morphine wean schedule either disables or degrades gracefully under reduced motion
+  4. No animation introduces a layout shift after first paint
+**Plans**: TBD
+**UI hint**: yes
+
+#### Phase 17: Accessibility Deep-Dive
+**Goal**: Both calculators and the shell pass a full WCAG 2.1 AA deep-dive covering contrast, screen readers, keyboard, and an automated axe-core sweep in light and dark
+**Depends on**: Phase 16
+**Requirements**: A11Y-01, A11Y-02, A11Y-03, A11Y-04
+**Success Criteria** (what must be TRUE):
+  1. A high-contrast review pass documents that every interactive surface meets WCAG 2.1 AA contrast in both light and dark themes
+  2. A screen reader user (VoiceOver or NVDA) can navigate both calculators and the shell with correct labels, live regions, and a predictable reading order
+  3. A keyboard-only user can reach every interactive surface with visible focus and predictable tab order — no focus traps, no hidden targets
+  4. The Playwright axe-core e2e suite passes for both calculators in light and dark modes with zero violations
+**Plans**: TBD
+**UI hint**: yes
+
+
 ## Progress
 
 **Execution Order:**
@@ -209,3 +295,10 @@ Phases execute in numeric order: (v1.3 phases shipped — see milestone archive)
 | 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 7. Navigation Restructure | v1.2 | 1/1 | Complete   | 2026-04-02 |
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
+| 9-11. v1.3 Fortification Refactor | v1.3 | — | Complete | 2026-04-07 |
+| 12. Shared SelectPicker Rewrite | v1.4 | 0/0 | Not started | - |
+| 13. Fortification Polish | v1.4 | 0/0 | Not started | - |
+| 14. Morphine Wean Polish | v1.4 | 0/0 | Not started | - |
+| 15. Shell & Navigation Polish | v1.4 | 0/0 | Not started | - |
+| 16. Animation & Reduced Motion | v1.4 | 0/0 | Not started | - |
+| 17. Accessibility Deep-Dive | v1.4 | 0/0 | Not started | - |
