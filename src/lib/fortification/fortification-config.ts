@@ -1,0 +1,12 @@
+import type { FortificationFormula } from './types.js';
+import config from './fortification-config.json';
+
+const formulas: FortificationFormula[] = config.formulas;
+
+export function getFortificationFormulas(): FortificationFormula[] {
+  return formulas;
+}
+
+export function getFormulaById(id: string): FortificationFormula | undefined {
+  return formulas.find((f) => f.id === id);
+}

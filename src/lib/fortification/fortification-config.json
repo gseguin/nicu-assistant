@@ -1,0 +1,244 @@
+{
+  "formulas": [
+    {
+      "id": "alfamino-infant",
+      "name": "Alfamino Infant",
+      "manufacturer": "",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 4.8,
+      "grams_per_scoop": 9.4
+    },
+    {
+      "id": "boost-kid-essentials",
+      "name": "Boost Kid Essentials",
+      "manufacturer": "",
+      "displacement_factor": 0.8,
+      "calorie_concentration": 5,
+      "grams_per_scoop": 10
+    },
+    {
+      "id": "elecare",
+      "name": "EleCare",
+      "manufacturer": "Abbott",
+      "displacement_factor": 0.76,
+      "calorie_concentration": 4.69,
+      "grams_per_scoop": 9.5
+    },
+    {
+      "id": "enfamil-a-r",
+      "name": "Enfamil A.R",
+      "manufacturer": "Mead Johnson",
+      "displacement_factor": 0.66,
+      "calorie_concentration": 5,
+      "grams_per_scoop": 9
+    },
+    {
+      "id": "enfamil-enfacare",
+      "name": "Enfamil EnfaCare",
+      "manufacturer": "Mead Johnson",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 9.8
+    },
+    {
+      "id": "enfamil-gentlease",
+      "name": "Enfamil Gentlease",
+      "manufacturer": "",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.9
+    },
+    {
+      "id": "enfamil-infant",
+      "name": "Enfamil Infant",
+      "manufacturer": "",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.8
+    },
+    {
+      "id": "enfamil-neuropro",
+      "name": "Enfamil NeuroPro",
+      "manufacturer": "",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.8
+    },
+    {
+      "id": "enfamil-prosobee",
+      "name": "Enfamil ProSobee",
+      "manufacturer": "Mead Johnson",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.8
+    },
+    {
+      "id": "enfamil-reguline",
+      "name": "Enfamil Reguline",
+      "manufacturer": "",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.8
+    },
+    {
+      "id": "gerber-good-start",
+      "name": "Gerber Good Start",
+      "manufacturer": "",
+      "displacement_factor": 0.76,
+      "calorie_concentration": 5.12,
+      "grams_per_scoop": 8.7
+    },
+    {
+      "id": "monogen",
+      "name": "Monogen",
+      "manufacturer": "Nutricia",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 4.7,
+      "grams_per_scoop": 5
+    },
+    {
+      "id": "neocate-infant",
+      "name": "Neocate Infant",
+      "manufacturer": "Nutricia",
+      "displacement_factor": 0.7,
+      "calorie_concentration": 4.83,
+      "grams_per_scoop": 4.6
+    },
+    {
+      "id": "nutramigen",
+      "name": "Nutramigen",
+      "manufacturer": "",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 9
+    },
+    {
+      "id": "pediasure",
+      "name": "PediaSure",
+      "manufacturer": "",
+      "displacement_factor": 0.8,
+      "calorie_concentration": 4.8,
+      "grams_per_scoop": 9.5
+    },
+    {
+      "id": "pediasure-peptide",
+      "name": "PediaSure Peptide",
+      "manufacturer": "",
+      "displacement_factor": 0.8,
+      "calorie_concentration": 4.8,
+      "grams_per_scoop": 9.5
+    },
+    {
+      "id": "peptamen-junior",
+      "name": "Peptamen Junior",
+      "manufacturer": "",
+      "displacement_factor": 0.8,
+      "calorie_concentration": 5,
+      "grams_per_scoop": 8
+    },
+    {
+      "id": "portagen",
+      "name": "Portagen",
+      "manufacturer": "Mead Johnson",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5,
+      "grams_per_scoop": 9.5
+    },
+    {
+      "id": "pregestimil",
+      "name": "Pregestimil",
+      "manufacturer": "Mead Johnson",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 4.8,
+      "grams_per_scoop": 8.9
+    },
+    {
+      "id": "puramino-infant",
+      "name": "Puramino Infant",
+      "manufacturer": "",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 4.8,
+      "grams_per_scoop": 9.4
+    },
+    {
+      "id": "similac-360-total-care",
+      "name": "Similac 360 Total Care",
+      "manufacturer": "",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.3
+    },
+    {
+      "id": "similac-advance",
+      "name": "Similac Advance",
+      "manufacturer": "Abbott",
+      "displacement_factor": 0.76,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.3
+    },
+    {
+      "id": "similac-alimentum",
+      "name": "Similac Alimentum",
+      "manufacturer": "Abbott",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 4.8,
+      "grams_per_scoop": 9.1
+    },
+    {
+      "id": "similac-hmf",
+      "name": "Similac HMF",
+      "manufacturer": "",
+      "displacement_factor": 1,
+      "calorie_concentration": 1.4,
+      "grams_per_scoop": 5
+    },
+    {
+      "id": "similac-isomil",
+      "name": "Similac Isomil",
+      "manufacturer": "",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.8
+    },
+    {
+      "id": "similac-neosure",
+      "name": "Similac NeoSure",
+      "manufacturer": "Abbott",
+      "displacement_factor": 0.79,
+      "calorie_concentration": 5.14,
+      "grams_per_scoop": 9.6
+    },
+    {
+      "id": "similac-pro-advance",
+      "name": "Similac Pro-Advance",
+      "manufacturer": "",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.3
+    },
+    {
+      "id": "similac-sensitive",
+      "name": "Similac Sensitive",
+      "manufacturer": "",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 5.1,
+      "grams_per_scoop": 8.3
+    },
+    {
+      "id": "similac-total-comfort",
+      "name": "Similac Total Comfort",
+      "manufacturer": "Abbott",
+      "displacement_factor": 0.78,
+      "calorie_concentration": 5.03,
+      "grams_per_scoop": 8.4
+    },
+    {
+      "id": "vivonex-pediatric",
+      "name": "Vivonex Pediatric",
+      "manufacturer": "Nestl\u00e9",
+      "displacement_factor": 0.75,
+      "calorie_concentration": 4,
+      "grams_per_scoop": 8
+    }
+  ]
+}
