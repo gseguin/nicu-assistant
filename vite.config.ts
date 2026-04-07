@@ -66,7 +66,12 @@ export default defineConfig({
 	server: {
 		allowedHosts: ['nicu-assistant-dev.heartsmiles.io'],
 		watch: {
-			ignored: ['**/.planning/**']
+			ignored: [
+				'**/.planning/**',
+				'**/.claude/**',
+				'**/.remember/**',
+				'**/.playwright-mcp/**'
+			]
 		}
 	},
 	resolve: {

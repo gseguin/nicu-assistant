@@ -441,35 +441,36 @@ Recommend **two plans** for Phase 9:
 - Three plans (types / config / calculations) over-fragments — types + config are coupled (parser uses types) and land together cleanly.
 - The split places the riskiest work (CALC logic + parity) in its own plan with a tight verification signal.
 
-## 8. Open Questions
+## 8. Open Questions (RESOLVED)
 
-1. **`TargetKcalOz` literal union vs. `number`?**
+
+**RESOLVED (D-01):** Use literal union `22 | 24 | 26 | 28 | 30` for Phase 9. Matches the shipped UI dropdown and gives exhaustive type-checking in the CALC-04 packet branch. If a future requirement adds an off-menu target, widen to `number` then. 1. **`TargetKcalOz` literal union vs. `number`?**
    - Spreadsheet dropdown is fixed at 22/24/26/28/30. Literal union gives exhaustive type checks in the CALC-04 packet logic.
    - But the general formula works for any positive number, and a future off-menu target (e.g. 27) would be a type error.
    - **Recommendation**: literal union for Phase 9 (matches shipped UI shape, catches typos). Widen to `number` later if requirements change. Flag for planner to confirm with user.
 
-2. **Manufacturer grouping — where does it come from?**
+**RESOLVED (D-02):** Include `manufacturer` in `fortification-config.json` now (option a). Plan 09-01 transcribes from xlsx and derives manufacturer by matching brand name against the existing `src/lib/formula/formula-config.json` brand list. Brands not in the legacy config get an empty `manufacturer` string and are flagged in 09-01-SUMMARY.md for human review. 2. **Manufacturer grouping — where does it come from?**
    - The xlsx Calculator tab only has formula name. Phase 10 needs manufacturer grouping. Options:
      - (a) Add `manufacturer` to each row in `fortification-config.json` now, sourced by matching brand names against existing `formula-config.json`.
      - (b) Defer to Phase 10 and leave the field out.
    - **Recommendation**: (a). It's a 5-minute transcription task now, vs. a schema migration in Phase 10. Flag unmatched brands (e.g. "Boost Kid Essentials", "Monogen") for user confirmation during Plan 09-01 execution.
 
-3. **Should `calculateFortification` throw or return sentinel on invalid inputs?**
+**RESOLVED (D-03):** Match the spreadsheet's `IFERROR(..., 0)` behavior — return zeros (`amountToAdd: 0`, `yieldMl: 0`, `exactKcalPerOz: 0`, `suggestedStartingVolumeMl: '0 (0 oz)'`) on non-finite results or `volumeMl <= 0`. Never throw. Phase 10 UI is responsible for input constraints and the 'Packets only available for Similac HMF' inline message. 3. **Should `calculateFortification` throw or return sentinel on invalid inputs?**
    - Morphine's functions assume valid inputs (no guards). The old `formula.ts` throws.
    - Spreadsheet behavior: wraps the general case in `IFERROR(..., 0)` — returns 0 on division error.
    - **Recommendation**: match the spreadsheet — return 0 for `amountToAdd` on non-finite results, never throw. Phase 10 UI will show a "Packets only available for Similac HMF" inline message when `unit=packets && name≠'Similac HMF'` (per UI success criterion), which is pure output-driven, no exception needed. Flag for planner confirmation.
 
-4. **Does the xlsx Calculator tab list exactly 30 brands or does it vary?**
+**RESOLVED (D-04):** Exact row count is determined empirically by Plan 09-01 Task 1 (read xlsx Calculator tab A3:D35). Plan 09-01 Task 2 verify asserts the exact count as a hard equality (executor fills in the literal after Task 1). Expected range is 28–33 based on the xlsx layout; the SUMMARY records the final number. 4. **Does the xlsx Calculator tab list exactly 30 brands or does it vary?**
    - Phase description says "~30" and REF-01 says "~30". Actual row count depends on xlsx. The 30-brand list in `additional_context` is authoritative. Planner should verify row count during transcription in Plan 09-01 and document the final count in the plan frontmatter.
 
-5. **Float precision for parity tests**
+**RESOLVED (D-05):** `toBeCloseTo(value, 4)` for `exactKcalPerOz` and any non-integer `amountToAdd`/`yieldMl`; `toBe()` for integer/whole-unit outputs and string outputs. Matches morphine's precedent. 5. **Float precision for parity tests**
    - Spreadsheet returns `23.5101662125341` for G11. `toBeCloseTo(23.5102, 4)` = precision to 4 decimal places = passes.
    - G10 `183.5` is exact → use `toBe(183.5)`.
    - G9 `2` (Teaspoons) is exact → use `toBe(2)`.
    - G12 is a string → use `toBe("180 (6.1 oz)")`.
    - **Recommendation**: use `toBeCloseTo(expected, 4)` for `exactKcalPerOz` and any general-case `amountToAdd` / `yieldMl`; use `toBe()` for integer or string outputs. Follow morphine's `, 4)` precedent.
 
-6. **Does `src/lib/shared/` provide anything the new module needs?**
+**RESOLVED (D-06):** No imports from `src/lib/shared/` in Phase 9. `calculations.ts` is a pure function with zero UI/state dependencies, exactly like `src/lib/morphine/calculations.ts`. 6. **Does `src/lib/shared/` provide anything the new module needs?**
    - Checked: `src/lib/shared/` contains `about-content.ts`, `context.ts`, `disclaimer.svelte.ts`, `index.ts`, `pwa.svelte.ts`, `theme.svelte.ts`, `types.ts`, `components/`. Morphine's `calculations.ts` imports nothing from shared. **Phase 9 calculations.ts should also import nothing from shared** — pure function has no UI/state dependencies. Types, config, and tests are all self-contained in `src/lib/fortification/`.
 
 ## Runtime State Inventory
