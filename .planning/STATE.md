@@ -1,32 +1,33 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.2
-milestone_name: UI Polish
-status: shipped
-stopped_at: v1.2 shipped 2026-04-07; ready for v1.3 milestone planning
+milestone: v1.3
+milestone_name: Fortification Calculator Refactor
+status: planning
+stopped_at: v1.3 roadmap created, ready to plan Phase 9
 last_updated: "2026-04-07T00:00:00.000Z"
 last_activity: 2026-04-07
 progress:
-  total_phases: 8
-  completed_phases: 8
-  total_plans: 22
-  completed_plans: 22
-  percent: 100
+  total_phases: 3
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-02)
+See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.2 shipped — awaiting v1.3 milestone planning
+**Current focus:** v1.3 Fortification Calculator Refactor — Phase 9 (not started)
 
 ## Current Position
 
-Milestone: v1.2 — Shipped 2026-04-07
-Status: Awaiting next milestone
+Milestone: v1.3 — Fortification Calculator Refactor
+Status: Planning
+Current phase: Phase 9 (not started)
 Last activity: 2026-04-07
 
 Progress: [░░░░░░░░░░] 0%
@@ -35,7 +36,7 @@ Progress: [░░░░░░░░░░] 0%
 
 **Velocity:**
 
-- Total plans completed: 18 (v1.0 + v1.1)
+- Total plans completed (prior milestones): 22
 - Average duration: ~5 min
 - Total execution time: ~2.5 hours
 
@@ -43,9 +44,10 @@ Progress: [░░░░░░░░░░] 0%
 
 ### Decisions
 
-- [v1.2]: Move info and theme buttons from bottom nav to top title bar
-- [v1.2]: Calculator tabs should fill full bottom nav width on mobile
-- [v1.2]: Use Impeccable critique workflow for visual polish validation
+- [v1.3]: Replace Modified + BMF modes with a single unified Fortification calculator matching the spreadsheet Calculator tab exactly
+- [v1.3]: Reference table (~30 formulas) stored as JSON config, consistent with v1.1 clinical-data-in-JSON decision
+- [v1.3]: Spreadsheet-parity unit tests are the source of truth for calculation correctness
+- [v1.3]: No new UI component primitives — reuse NumericInput and SelectPicker
 
 ### Pending Todos
 
@@ -57,6 +59,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-02
-Stopped at: v1.2 roadmap created, ready to plan Phase 7
+Last session: 2026-04-07
+Stopped at: v1.3 roadmap created, ready to plan Phase 9
 Resume file: None

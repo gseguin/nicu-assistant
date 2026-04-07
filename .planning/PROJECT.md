@@ -35,7 +35,17 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-(None — planning next milestone)
+**Milestone v1.3: Fortification Calculator Refactor**
+
+**Goal:** Replace the existing Modified Formula + BMF calculator with a single unified fortification calculator that matches the "Calculator" tab of `recipe-calculator.xlsx` exactly — supporting 5 unit selections, the displacement-corrected formula, and special-case handling for breast milk + HMF protocols.
+
+**Target features:**
+- Reference table of ~30 formulas (displacement factor, calorie concentration, grams per scoop) sourced from spreadsheet
+- 5 inputs: Base (Breast milk / Water), Starting Volume (mL), Formula Selection, Target Calorie (fixed dropdown), Unit Selection
+- 4 outputs: Amount in selected unit, Yield (mL), Exact kcal/oz, Suggested Starting Volume
+- Special cases: Packets only for Similac HMF; Breast milk + Teaspoons + 22/24 kcal HMF shortcuts
+- Replaces existing Modified + BMF code paths entirely
+- Spreadsheet-parity unit tests using values from Calculator tab
 
 ### Out of Scope
 
@@ -104,4 +114,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-03 after v1.2 milestone*
+*Last updated: 2026-04-07 — v1.3 Fortification Calculator Refactor milestone started*

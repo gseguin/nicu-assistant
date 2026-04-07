@@ -5,6 +5,7 @@
 - v1.0 MVP - Phases 1-4 (shipped 2026-04-01)
 - v1.1 Morphine Wean Calculator - Phases 5-6 (shipped 2026-04-02)
 - v1.2 UI Polish - Phases 7-8 (shipped 2026-04-07)
+- v1.3 Fortification Calculator Refactor - Phases 9-11 (in progress)
 
 ## Phases
 
@@ -39,6 +40,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 8: Impeccable Critique & Polish** - Visual assessment via Impeccable commands and implementation of all recommendations
 
 </details>
+
+### v1.3 Fortification Calculator Refactor (In Progress)
+
+- [ ] **Phase 9: Fortification Reference Data & Business Logic** - Embed formula reference table and implement pure `calculateFortification` function with all special cases and spreadsheet-parity tests
+- [ ] **Phase 10: Fortification Calculator UI** - Build new Svelte component using shared primitives, wire to new business logic, replace `/formula` route content
+- [ ] **Phase 11: Migration & Cleanup** - Remove all dead Modified Formula and BMF code, update registry/About, run axe-core a11y audit
 
 ## Phase Details
 
@@ -186,10 +193,49 @@ Plans:
 
 </details>
 
+### v1.3 Fortification Calculator Refactor (In Progress)
+
+### Phase 9: Fortification Reference Data & Business Logic
+**Goal**: A pure, fully tested `calculateFortification` function and embedded formula reference table that match the spreadsheet's Calculator tab exactly, with no UI changes
+**Depends on**: Phase 8
+**Requirements**: REF-01, REF-02, CALC-01, CALC-02, CALC-03, CALC-04, CALC-05, CALC-06, CALC-07, CALC-08, VAL-01, VAL-02
+**Success Criteria** (what must be TRUE):
+  1. A JSON config file embeds ~30 formulas (rows A3:D35 of recipe-calculator.xlsx) with `displacement_factor`, `calorie_concentration`, and `grams_per_scoop`, editable without touching TypeScript
+  2. `calculateFortification(inputs)` returns `{ amountToAdd, yieldMl, exactKcalPerOz, suggestedStartingVolumeMl }` for any combination of base, formula, volume, target kcal, and unit, with no UI dependencies
+  3. The documented spreadsheet-parity test passes: Neocate Infant + Breast milk + 180 mL + 24 kcal/oz + Teaspoons returns 2 tsp / 183.5 mL / 23.51 kcal/oz / "180 (6.1 oz)"
+  4. At least one unit test exists for each special case: HMF Packets at 22 kcal/oz, HMF Packets at 24 kcal/oz, Breast milk + Teaspoons + 22 kcal shortcut, Breast milk + Teaspoons + 24 kcal shortcut, Water base, and each unit type (Grams, Scoops, Teaspoons, Tablespoons, Packets)
+  5. The full v1.2 unit test suite still passes after the refactor — no regressions in morphine, shared components, or PWA behavior
+**Plans**: TBD
+
+### Phase 10: Fortification Calculator UI
+**Goal**: A clinician can open `/formula`, configure all five inputs using the existing shared components, and see all four outputs update live in both light and dark themes
+**Depends on**: Phase 9
+**Requirements**: UI-01, UI-02, UI-03, UI-04, UI-05
+**Success Criteria** (what must be TRUE):
+  1. From the nav bar a user opens the Formula calculator and sees five inputs: Base (Breast milk / Water), Starting Volume (mL), Formula Selection (~30 brands grouped by manufacturer), Target Calorie (22/24/26/28/30 kcal/oz dropdown), and Unit Selection (Grams / Scoops / Teaspoons / Tablespoons / Packets)
+  2. As the user changes any input, four outputs update live: Amount to Add in the selected unit (e.g. "2 Teaspoons"), Yield (mL), Exact kcal/oz, and Suggested Starting Volume formatted as "<mL> (<oz> oz)"
+  3. When Packets is selected with a formula other than Similac HMF, an inline message appears explaining Packets is only available for Similac HMF — the calculator does not silently display 0
+  4. All inputs reuse existing NumericInput and SelectPicker shared components — no new component primitives are introduced
+  5. The new calculator renders correctly in both light and dark themes with no hardcoded color values; `/formula` route renders the new Fortification component
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 11: Migration & Cleanup
+**Goal**: All legacy Modified Formula and BMF code is removed, the registry and About sheet reflect the unified Fortification calculator, and an axe-core audit confirms WCAG 2.1 AA compliance in both themes
+**Depends on**: Phase 10
+**Requirements**: MIG-01, MIG-02, MIG-03, MIG-04
+**Success Criteria** (what must be TRUE):
+  1. A grep for "ModifiedFormula" or "BreastMilkFortifier" anywhere under `src/` returns no matches outside test fixtures — no dead components, no orphaned tests, no unreferenced imports
+  2. `src/lib/shell/registry.ts` contains a single Fortification calculator entry and the AboutSheet content describes the unified calculator
+  3. Navigating to `/formula` renders the new Fortification calculator (verified by an end-to-end smoke check)
+  4. A Playwright axe-core accessibility audit reports zero WCAG 2.1 AA violations against the Fortification calculator in both light and dark themes, matching the v1.1 morphine audit pattern
+**Plans**: TBD
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 7 -> 8
+Phases execute in numeric order: 9 -> 10 -> 11
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -201,3 +247,6 @@ Phases execute in numeric order: 7 -> 8
 | 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 7. Navigation Restructure | v1.2 | 1/1 | Complete   | 2026-04-02 |
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
+| 9. Fortification Reference Data & Business Logic | v1.3 | 0/0 | Not started | - |
+| 10. Fortification Calculator UI | v1.3 | 0/0 | Not started | - |
+| 11. Migration & Cleanup | v1.3 | 0/0 | Not started | - |
