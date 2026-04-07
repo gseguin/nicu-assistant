@@ -8,19 +8,21 @@
   import { disclaimer } from '$lib/shared/disclaimer.svelte.js';
   import { pwa } from '$lib/shared/pwa.svelte.js';
   import { morphineState } from '$lib/morphine/state.svelte.js';
-  import { formulaState } from '$lib/formula/state.svelte.js';
+  import { fortificationState } from '$lib/fortification/state.svelte.js';
   import { pwaInfo } from 'virtual:pwa-info';
 
   let { children } = $props();
 
-  // Idle = no meaningful numeric inputs filled in either calculator (D-02)
-  // Morphine wean is idle when all inputs are still at defaults
+  // Idle = all inputs in both calculators still at defaults (D-02)
   const isIdle = $derived(
     morphineState.current.weightKg === 3.1 &&
     morphineState.current.maxDoseMgKgDose === 0.04 &&
     morphineState.current.decreasePct === 10 &&
-    formulaState.current.modified.targetKcalOzRaw === '' &&
-    formulaState.current.bmf.targetKcalOzRaw === ''
+    fortificationState.current.base === 'breast-milk' &&
+    fortificationState.current.volumeMl === 180 &&
+    fortificationState.current.formulaId === 'neocate-infant' &&
+    fortificationState.current.targetKcalOz === 24 &&
+    fortificationState.current.unit === 'teaspoons'
   );
 
   // Auto-reload when idle and an update is waiting (D-02: never silently reload during active use)
