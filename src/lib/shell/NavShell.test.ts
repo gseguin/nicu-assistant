@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 // NavShell is difficult to render in jsdom (requires SvelteKit routing context).
 // These tests verify the component's structural properties via source analysis.
 const navShellSource = readFileSync(
-  resolve(__dirname, 'NavShell.svelte'),
+  resolve(process.cwd(), 'src/lib/shell/NavShell.svelte'),
   'utf-8'
 );
 
