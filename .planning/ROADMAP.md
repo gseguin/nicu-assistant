@@ -45,6 +45,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 9: Fortification Reference Data & Business Logic** - Embed formula reference table and implement pure `calculateFortification` function with all special cases and spreadsheet-parity tests
 - [x] **Phase 10: Fortification Calculator UI** - Build new Svelte component using shared primitives, wire to new business logic, replace `/formula` route content
+- [ ] **Phase 10.1: Unit Selector to All-Units Display Refactor (INSERTED)** - Remove the unit dropdown and display all applicable unit amounts simultaneously in the Amount-to-Add card; collapse special-case state machinery
 - [ ] **Phase 11: Migration & Cleanup** - Remove all dead Modified Formula and BMF code, update registry/About, run axe-core a11y audit
 
 ## Phase Details
@@ -225,6 +226,20 @@ Plans:
 
 **UI hint**: yes
 
+### Phase 10.1: Unit Selector to All-Units Display Refactor (INSERTED)
+**Goal**: A clinician sees all applicable unit amounts (grams, teaspoons, tablespoons, scoops, and packets where applicable) simultaneously in the Amount to Add card without having to pre-select a unit; the unit dropdown and all special-case state machinery is removed
+**Depends on**: Phase 10
+**Requirements**: REFACTOR-01, REFACTOR-02, REFACTOR-03 (added inline in REQUIREMENTS.md)
+**Success Criteria** (what must be TRUE):
+  1. The Unit SelectPicker is removed from the FortificationCalculator UI; only 4 inputs remain (Base, Starting Volume, Formula, Target Calorie)
+  2. The Amount to Add card displays the computed amount in all applicable units simultaneously, ordered grams → teaspoons → tablespoons → scoops → packets
+  3. The packets row is rendered only when the selected formula is Similac HMF; for any other formula the packets row is hidden entirely (no inline message, no "0 packets" placeholder)
+  4. The verification card shows a single Yield (mL) and Exact kcal/oz computed using the grams branch (most precise) — Suggested Starting Volume is dropped
+  5. The `isBlocked` derived, the `prevFormulaId` auto-reset effect, the unit auto-reset on formula change, and the Tests 4/5/6 (Packets-blocked steady state, transition into blocked, HMF→non-HMF auto-reset) are all removed; the BM+Tsp+22/24 HMF teaspoon shortcut from CALC-05 is preserved and applied to the teaspoons row when conditions match
+  6. All other v1.3 tests still pass (no regressions in Phase 9 calculations, Phase 10 default render, Phase 10 live recalc test 3); the documented Neocate parity case is re-asserted in the new "all-units" form (BM/180/Neocate Infant/24 → grams ~4.51, teaspoons 2, tablespoons ~0.6, scoops ~0.98, packets row hidden; yield 183.5 mL; exact 23.5 kcal/oz)
+**Plans**: TBD
+**UI hint**: yes
+
 ### Phase 11: Migration & Cleanup
 **Goal**: All legacy Modified Formula and BMF code is removed, the registry and About sheet reflect the unified Fortification calculator, and an axe-core audit confirms WCAG 2.1 AA compliance in both themes
 **Depends on**: Phase 10
@@ -240,7 +255,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 9 -> 10 -> 11
+Phases execute in numeric order: 9 -> 10 -> 10.1 -> 11
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -254,4 +269,5 @@ Phases execute in numeric order: 9 -> 10 -> 11
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
 | 9. Fortification Reference Data & Business Logic | v1.3 | 2/2 | Complete | 2026-04-07 |
 | 10. Fortification Calculator UI | v1.3 | 2/2 | Complete | 2026-04-07 |
+| 10.1. Unit Selector to All-Units Display Refactor (INSERTED) | v1.3 | 0/0 | Not started | - |
 | 11. Migration & Cleanup | v1.3 | 0/0 | Not started | - |
