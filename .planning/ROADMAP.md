@@ -217,7 +217,12 @@ Plans:
   3. When Packets is selected with a formula other than Similac HMF, an inline message appears explaining Packets is only available for Similac HMF — the calculator does not silently display 0
   4. All inputs reuse existing NumericInput and SelectPicker shared components — no new component primitives are introduced
   5. The new calculator renders correctly in both light and dark themes with no hardcoded color values; `/formula` route renders the new Fortification component
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 10-01-PLAN.md — fortificationState singleton + FortificationCalculator component + colocated tests (UI-01..UI-05)
+- [ ] 10-02-PLAN.md — Wire /formula route, registry description, About sheet copy
+
 **UI hint**: yes
 
 ### Phase 11: Migration & Cleanup
