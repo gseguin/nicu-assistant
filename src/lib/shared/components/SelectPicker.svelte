@@ -31,11 +31,15 @@
 	// Calculator accent color from Svelte context (D-06)
 	const ctx = getCalculatorContext();
 	const accentColor = ctx.accentColor;
+
+	// Unique id for aria-labelledby association (a11y: proper label linkage)
+	const labelId = `select-${crypto.randomUUID()}`;
 </script>
 
 <div class="min-w-0 {className}">
 	<div class="flex flex-col gap-1.5">
 		<span
+			id={labelId}
 			class="text-xs font-semibold leading-none tracking-[0.02em] text-[var(--color-text-secondary)] ml-0.5"
 		>
 			{label}
@@ -44,7 +48,7 @@
 		<Select.Root type="single" bind:value items={options}>
 			<Select.Trigger
 				class="flex min-h-[3rem] w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-card)] px-3.5 py-2.5 text-left text-[0.9375rem] font-medium text-[var(--color-text-primary)] transition hover:border-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
-				aria-label="{label}: {selectedLabel}"
+				aria-labelledby={labelId}
 			>
 				<span class="flex-1">{selectedLabel}</span>
 				<ChevronDown

@@ -24,11 +24,10 @@ import FortificationCalculator from './FortificationCalculator.svelte';
 
 // Helpers ---------------------------------------------------------------
 
-// SelectPicker renders its label as a <span>, not a <label for=...>, and the
-// trigger button has aria-label "{label}: {selectedLabel}". Match the trigger
-// by the leading label prefix.
+// SelectPicker associates the visible <span> label to the trigger via
+// aria-labelledby, so the trigger's accessible name is exactly the label text.
 function getSelectTrigger(label: string): HTMLElement {
-  return screen.getByRole('button', { name: new RegExp(`^${label}:`) });
+  return screen.getByRole('button', { name: label });
 }
 
 // Escape to find the hero numeric value specifically inside the hero card
@@ -50,7 +49,7 @@ describe('FortificationCalculator', () => {
     // SelectPickers: match the trigger by its aria-label prefix
     expect(getSelectTrigger('Base')).toBeTruthy();
     expect(getSelectTrigger('Formula')).toBeTruthy();
-    expect(getSelectTrigger('Target Calorie \\(kcal/oz\\)')).toBeTruthy();
+    expect(getSelectTrigger('Target Calorie (kcal/oz)')).toBeTruthy();
     expect(getSelectTrigger('Unit')).toBeTruthy();
     expect(screen.getAllByRole('spinbutton')).toHaveLength(1);
   });
