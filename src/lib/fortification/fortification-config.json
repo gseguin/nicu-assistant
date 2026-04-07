@@ -3,7 +3,7 @@
     {
       "id": "alfamino-infant",
       "name": "Alfamino Infant",
-      "manufacturer": "",
+      "manufacturer": "Nestl\u00e9",
       "displacement_factor": 0.77,
       "calorie_concentration": 4.8,
       "grams_per_scoop": 9.4
@@ -11,7 +11,7 @@
     {
       "id": "boost-kid-essentials",
       "name": "Boost Kid Essentials",
-      "manufacturer": "",
+      "manufacturer": "Nestl\u00e9",
       "displacement_factor": 0.8,
       "calorie_concentration": 5,
       "grams_per_scoop": 10
@@ -43,7 +43,7 @@
     {
       "id": "enfamil-gentlease",
       "name": "Enfamil Gentlease",
-      "manufacturer": "",
+      "manufacturer": "Mead Johnson",
       "displacement_factor": 0.77,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 8.9
@@ -51,7 +51,7 @@
     {
       "id": "enfamil-infant",
       "name": "Enfamil Infant",
-      "manufacturer": "",
+      "manufacturer": "Mead Johnson",
       "displacement_factor": 0.77,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 8.8
@@ -59,7 +59,7 @@
     {
       "id": "enfamil-neuropro",
       "name": "Enfamil NeuroPro",
-      "manufacturer": "",
+      "manufacturer": "Mead Johnson",
       "displacement_factor": 0.75,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 8.8
@@ -75,7 +75,7 @@
     {
       "id": "enfamil-reguline",
       "name": "Enfamil Reguline",
-      "manufacturer": "",
+      "manufacturer": "Mead Johnson",
       "displacement_factor": 0.75,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 8.8
@@ -83,7 +83,7 @@
     {
       "id": "gerber-good-start",
       "name": "Gerber Good Start",
-      "manufacturer": "",
+      "manufacturer": "Nestl\u00e9",
       "displacement_factor": 0.76,
       "calorie_concentration": 5.12,
       "grams_per_scoop": 8.7
@@ -107,7 +107,7 @@
     {
       "id": "nutramigen",
       "name": "Nutramigen",
-      "manufacturer": "",
+      "manufacturer": "Mead Johnson",
       "displacement_factor": 0.75,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 9
@@ -115,7 +115,7 @@
     {
       "id": "pediasure",
       "name": "PediaSure",
-      "manufacturer": "",
+      "manufacturer": "Abbott",
       "displacement_factor": 0.8,
       "calorie_concentration": 4.8,
       "grams_per_scoop": 9.5
@@ -123,7 +123,7 @@
     {
       "id": "pediasure-peptide",
       "name": "PediaSure Peptide",
-      "manufacturer": "",
+      "manufacturer": "Abbott",
       "displacement_factor": 0.8,
       "calorie_concentration": 4.8,
       "grams_per_scoop": 9.5
@@ -131,7 +131,7 @@
     {
       "id": "peptamen-junior",
       "name": "Peptamen Junior",
-      "manufacturer": "",
+      "manufacturer": "Nestl\u00e9",
       "displacement_factor": 0.8,
       "calorie_concentration": 5,
       "grams_per_scoop": 8
@@ -155,7 +155,7 @@
     {
       "id": "puramino-infant",
       "name": "Puramino Infant",
-      "manufacturer": "",
+      "manufacturer": "Mead Johnson",
       "displacement_factor": 0.77,
       "calorie_concentration": 4.8,
       "grams_per_scoop": 9.4
@@ -163,7 +163,7 @@
     {
       "id": "similac-360-total-care",
       "name": "Similac 360 Total Care",
-      "manufacturer": "",
+      "manufacturer": "Abbott",
       "displacement_factor": 0.75,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 8.3
@@ -187,7 +187,7 @@
     {
       "id": "similac-hmf",
       "name": "Similac HMF",
-      "manufacturer": "",
+      "manufacturer": "Abbott",
       "displacement_factor": 1,
       "calorie_concentration": 1.4,
       "grams_per_scoop": 5
@@ -195,7 +195,7 @@
     {
       "id": "similac-isomil",
       "name": "Similac Isomil",
-      "manufacturer": "",
+      "manufacturer": "Abbott",
       "displacement_factor": 0.77,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 8.8
@@ -211,7 +211,7 @@
     {
       "id": "similac-pro-advance",
       "name": "Similac Pro-Advance",
-      "manufacturer": "",
+      "manufacturer": "Abbott",
       "displacement_factor": 0.75,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 8.3
@@ -219,7 +219,7 @@
     {
       "id": "similac-sensitive",
       "name": "Similac Sensitive",
-      "manufacturer": "",
+      "manufacturer": "Abbott",
       "displacement_factor": 0.75,
       "calorie_concentration": 5.1,
       "grams_per_scoop": 8.3
