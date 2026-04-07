@@ -1,5 +1,21 @@
 # Milestones
 
+## v1.3 Fortification Calculator Refactor (Shipped: 2026-04-07)
+
+**Phases completed:** 3 phases (9, 10, 11) + 1 inserted/reverted (10.1), 5 plans
+
+**Key accomplishments:**
+
+- Unified Fortification calculator matching the recipe-calculator.xlsx Calculator tab exactly, replacing legacy Modified Formula + BMF modes
+- 30 infant formulas (Abbott, Mead Johnson, Nestlé, Nutricia) embedded as clinician-editable JSON config with displacement_factor, calorie_concentration, grams_per_scoop
+- Spreadsheet-parity unit tests verifying the documented Neocate case to 13 decimals, plus per-unit and per-special-case coverage (BM+Tsp HMF shortcut, Packets HMF protocol)
+- Packets unit hidden from picker for non-HMF formulas with auto-reset on formula switch
+- WCAG 2.1 AA axe-core a11y audit for fortification calculator in light + dark modes
+- Carryover wins: SelectPicker label association via aria-labelledby (a11y improvement across all calculators), legacy Modified Formula + BMF code fully removed
+- Phase 10.1 (all-units display refactor) explored and reverted via clean git revert after customer feedback preferred the unit selector matching the spreadsheet
+
+---
+
 ## v1.2 UI Polish (Shipped: 2026-04-03)
 
 **Phases completed:** 4 phases, 14 plans, 27 tasks

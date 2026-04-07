@@ -32,20 +32,17 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ Comprehensive E2E tests (Playwright) — v1.2
 - ✓ App version from package.json in about dialog — v1.2
 - ✓ Disclaimer flash fix for returning users — v1.2
+- ✓ Unified fortification calculator matching the recipe-calculator.xlsx Calculator tab — v1.3
+- ✓ 30 infant formulas embedded as clinician-editable JSON config (Abbott, Mead Johnson, Nestlé, Nutricia) — v1.3
+- ✓ Spreadsheet-parity tests for fortification (documented Neocate case + per-unit + per-special-case coverage) — v1.3
+- ✓ Packets unit hidden from picker for non-HMF formulas (auto-reset on formula switch) — v1.3
+- ✓ WCAG 2.1 AA axe-core a11y audit for fortification (light + dark) — v1.3
+- ✓ Legacy Modified Formula + BMF code removed — v1.3
+- ✓ SelectPicker label association via aria-labelledby (improves a11y across all calculators) — v1.3
 
 ### Active
 
-**Milestone v1.3: Fortification Calculator Refactor**
-
-**Goal:** Replace the existing Modified Formula + BMF calculator with a single unified fortification calculator that matches the "Calculator" tab of `recipe-calculator.xlsx` exactly — supporting 5 unit selections, the displacement-corrected formula, and special-case handling for breast milk + HMF protocols.
-
-**Target features:**
-- Reference table of ~30 formulas (displacement factor, calorie concentration, grams per scoop) sourced from spreadsheet
-- 5 inputs: Base (Breast milk / Water), Starting Volume (mL), Formula Selection, Target Calorie (fixed dropdown), Unit Selection
-- 4 outputs: Amount in selected unit, Yield (mL), Exact kcal/oz, Suggested Starting Volume
-- Special cases: Packets only for Similac HMF; Breast milk + Teaspoons + 22/24 kcal HMF shortcuts
-- Replaces existing Modified + BMF code paths entirely
-- Spreadsheet-parity unit tests using values from Calculator tab
+(None — v1.3 shipped 2026-04-07; planning next milestone)
 
 ### Out of Scope
 
@@ -114,4 +111,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-07 — v1.3 Fortification Calculator Refactor milestone started*
+*Last updated: 2026-04-07 — v1.3 Fortification Calculator Refactor shipped and archived*
