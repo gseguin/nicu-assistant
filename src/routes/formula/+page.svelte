@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { setCalculatorContext } from '$lib/shared/context.js';
-  import { formulaState } from '$lib/formula/state.svelte.js';
-  import FormulaCalculator from '$lib/formula/FormulaCalculator.svelte';
+  import { fortificationState } from '$lib/fortification/state.svelte.js';
+  import FortificationCalculator from '$lib/fortification/FortificationCalculator.svelte';
   import { Milk } from '@lucide/svelte';
 
   onMount(() => {
@@ -10,7 +10,7 @@
       id: 'formula',
       accentColor: 'var(--color-accent)'
     });
-    formulaState.init();
+    fortificationState.init();
   });
 </script>
 
@@ -24,5 +24,5 @@
     <h1 class="text-title font-bold text-[var(--color-text-primary)]">Formula Recipe</h1>
   </header>
 
-  <FormulaCalculator />
+  <FortificationCalculator />
 </div>

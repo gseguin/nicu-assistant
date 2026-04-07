@@ -23,6 +23,6 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     label: 'Formula',
     href: '/formula',
     icon: Milk,
-    description: 'Infant formula recipe calculator',
+    description: 'Infant formula fortification calculator',
   },
 ] as const;

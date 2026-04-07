@@ -24,13 +24,13 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     ],
   },
   formula: {
-    title: 'Infant Formula Calculator',
+    title: 'Fortification Calculator',
     version: appVersion,
     description:
-      'Calculates powder (grams and scoops) and water (mL) quantities to prepare infant formula at a target calorie concentration.',
+      'Calculates the amount of formula powder, scoops, teaspoons, tablespoons, or HMF packets needed to fortify breast milk or water to a target calorie concentration. Implements displacement-corrected math for spreadsheet parity.',
     notes: [
-      'Supports standard modified formula and human milk fortifier (BMF) modes.',
-      'Displacement factors sourced from manufacturer reference data.',
+      'Five inputs (Base, Starting Volume, Formula, Target Calorie, Unit) and four outputs (Amount to Add, Yield, Exact kcal/oz, Suggested Starting Volume).',
+      '30 formulas across 4 manufacturers (Abbott, Mead Johnson, Nestlé, Nutricia). Packets unit is only available for Similac HMF.',
       "Results must be verified against your institution's feeding protocol.",
     ],
   },
