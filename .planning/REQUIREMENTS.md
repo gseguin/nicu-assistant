@@ -50,10 +50,10 @@ Replace the existing Modified Formula + BMF calculator with a single unified for
 
 ### Migration & Cleanup (MIG)
 
-- [ ] **MIG-01**: The existing Modified Formula and BMF code paths in `src/lib/formula/` are removed entirely — no dead code, no orphaned components, no orphaned tests
-- [ ] **MIG-02**: The calculator registry (`src/lib/shell/registry.ts`) and About sheet content reflect the new unified Fortification calculator (one entry, updated description)
-- [ ] **MIG-03**: The `/formula` route renders the new Fortification calculator
-- [ ] **MIG-04**: A Playwright axe-core accessibility audit (light + dark) passes for the new calculator at WCAG 2.1 AA, matching the v1.1 morphine pattern
+- [x] **MIG-01**: The existing Modified Formula and BMF code paths in `src/lib/formula/` are removed entirely — no dead code, no orphaned components, no orphaned tests
+- [x] **MIG-02**: The calculator registry (`src/lib/shell/registry.ts`) and About sheet content reflect the new unified Fortification calculator (one entry, updated description)
+- [x] **MIG-03**: The `/formula` route renders the new Fortification calculator
+- [x] **MIG-04**: A Playwright axe-core accessibility audit (light + dark) passes for the new calculator at WCAG 2.1 AA, matching the v1.1 morphine pattern
 
 ---
 
@@ -97,9 +97,9 @@ Replace the existing Modified Formula + BMF calculator with a single unified for
 | REFACTOR-01 | Phase 10.1 | Reverted |
 | REFACTOR-02 | Phase 10.1 | Reverted |
 | REFACTOR-03 | Phase 10.1 | Reverted |
-| MIG-01 | Phase 11 | Pending |
-| MIG-02 | Phase 11 | Pending |
-| MIG-03 | Phase 11 | Pending |
-| MIG-04 | Phase 11 | Pending |
+| MIG-01 | Phase 11 | Complete |
+| MIG-02 | Phase 11 | Complete |
+| MIG-03 | Phase 11 | Complete |
+| MIG-04 | Phase 11 | Complete |
 
 **Coverage:** 24/24 requirements mapped (REF×2, CALC×8, VAL×2, UI×5, REFACTOR×3, MIG×4)

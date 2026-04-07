@@ -275,4 +275,4 @@ Phases execute in numeric order: 9 -> 10 -> 11 (Phase 10.1 reverted)
 | 9. Fortification Reference Data & Business Logic | v1.3 | 2/2 | Complete | 2026-04-07 |
 | 10. Fortification Calculator UI | v1.3 | 2/2 | Complete | 2026-04-07 |
 | 10.1. Unit Selector to All-Units Display Refactor | v1.3 | 1/1 | Reverted | 2026-04-07 |
-| 11. Migration & Cleanup | v1.3 | 0/0 | Not started | - |
+| 11. Migration & Cleanup | v1.3 | 1/1 | Complete   | 2026-04-07 |
