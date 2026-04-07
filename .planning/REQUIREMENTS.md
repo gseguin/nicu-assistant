@@ -69,18 +69,18 @@ Replace the existing Modified Formula + BMF calculator with a single unified for
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| REF-01 | Phase 9 | Pending |
-| REF-02 | Phase 9 | Pending |
-| CALC-01 | Phase 9 | Pending |
-| CALC-02 | Phase 9 | Pending |
-| CALC-03 | Phase 9 | Pending |
-| CALC-04 | Phase 9 | Pending |
-| CALC-05 | Phase 9 | Pending |
-| CALC-06 | Phase 9 | Pending |
-| CALC-07 | Phase 9 | Pending |
-| CALC-08 | Phase 9 | Pending |
-| VAL-01 | Phase 9 | Pending |
-| VAL-02 | Phase 9 | Pending |
+| REF-01 | Phase 9 | Validated |
+| REF-02 | Phase 9 | Validated |
+| CALC-01 | Phase 9 | Validated |
+| CALC-02 | Phase 9 | Validated |
+| CALC-03 | Phase 9 | Validated |
+| CALC-04 | Phase 9 | Validated |
+| CALC-05 | Phase 9 | Validated |
+| CALC-06 | Phase 9 | Validated |
+| CALC-07 | Phase 9 | Validated |
+| CALC-08 | Phase 9 | Validated |
+| VAL-01 | Phase 9 | Validated |
+| VAL-02 | Phase 9 | Validated |
 | UI-01 | Phase 10 | Pending |
 | UI-02 | Phase 10 | Pending |
 | UI-03 | Phase 10 | Pending |

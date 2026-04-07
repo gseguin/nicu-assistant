@@ -43,7 +43,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### v1.3 Fortification Calculator Refactor (In Progress)
 
-- [ ] **Phase 9: Fortification Reference Data & Business Logic** - Embed formula reference table and implement pure `calculateFortification` function with all special cases and spreadsheet-parity tests
+- [x] **Phase 9: Fortification Reference Data & Business Logic** - Embed formula reference table and implement pure `calculateFortification` function with all special cases and spreadsheet-parity tests
 - [ ] **Phase 10: Fortification Calculator UI** - Build new Svelte component using shared primitives, wire to new business logic, replace `/formula` route content
 - [ ] **Phase 11: Migration & Cleanup** - Remove all dead Modified Formula and BMF code, update registry/About, run axe-core a11y audit
 
@@ -247,6 +247,6 @@ Phases execute in numeric order: 9 -> 10 -> 11
 | 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
 | 7. Navigation Restructure | v1.2 | 1/1 | Complete   | 2026-04-02 |
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
-| 9. Fortification Reference Data & Business Logic | v1.3 | 0/0 | Not started | - |
+| 9. Fortification Reference Data & Business Logic | v1.3 | 2/2 | Complete | 2026-04-07 |
 | 10. Fortification Calculator UI | v1.3 | 0/0 | Not started | - |
 | 11. Migration & Cleanup | v1.3 | 0/0 | Not started | - |
