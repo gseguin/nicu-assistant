@@ -86,14 +86,6 @@
     { value: '30', label: '30 kcal/oz' },
   ];
 
-  const unitOptions: SelectOption[] = [
-    { value: 'grams', label: 'Grams' },
-    { value: 'scoops', label: 'Scoops' },
-    { value: 'teaspoons', label: 'Teaspoons' },
-    { value: 'tablespoons', label: 'Tablespoons' },
-    { value: 'packets', label: 'Packets' },
-  ];
-
   const UNIT_LABELS: Record<UnitType, string> = {
     grams: 'Grams',
     scoops: 'Scoops',
@@ -102,13 +94,23 @@
     packets: 'Packets',
   };
 
-  // --- isBlocked (pure render-time consequence, no mutation) --------------
-  let isBlocked = $derived(
-    fortificationState.current.unit === 'packets' &&
-      fortificationState.current.formulaId !== 'similac-hmf'
-  );
+  // --- Unit options: Packets is only available for Similac HMF ------------
+  let unitOptions = $derived.by<SelectOption[]>(() => {
+    const base: SelectOption[] = [
+      { value: 'grams', label: 'Grams' },
+      { value: 'scoops', label: 'Scoops' },
+      { value: 'teaspoons', label: 'Teaspoons' },
+      { value: 'tablespoons', label: 'Tablespoons' },
+    ];
+    if (fortificationState.current.formulaId === 'similac-hmf') {
+      base.push({ value: 'packets', label: 'Packets' });
+    }
+    return base;
+  });
 
-  // --- Auto-reset on similac-hmf → non-HMF transition while packets ------
+  // --- Auto-reset on similac-hmf → non-HMF transition while packets selected.
+  // Without this, switching formula away from HMF would leave the state with
+  // an invalid unit that no longer appears in the picker.
   let prevFormulaId = fortificationState.current.formulaId;
   $effect(() => {
     const currFormulaId = fortificationState.current.formulaId;
@@ -125,7 +127,6 @@
 
   // --- Result derivation --------------------------------------------------
   let result = $derived.by(() => {
-    if (isBlocked) return null;
     const { base, volumeMl, formulaId, targetKcalOz, unit } = fortificationState.current;
     if (volumeMl === null || volumeMl <= 0) return null;
     const formula = getFormulaById(formulaId);
@@ -171,12 +172,6 @@
     />
 
     <SelectPicker label="Unit" bind:value={unitStr} options={unitOptions} />
-
-    {#if isBlocked}
-      <p class="text-xs text-[var(--color-text-secondary)] mt-1">
-        Packets is only available for Similac HMF
-      </p>
-    {/if}
   </section>
 
   <!-- Hero: Amount to Add -->
@@ -186,11 +181,7 @@
     >
       Amount to Add
     </span>
-    {#if isBlocked}
-      <div class="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Packets is only available for Similac HMF
-      </div>
-    {:else if result}
+    {#if result}
       <div class="mt-2 text-3xl font-bold num text-[var(--color-text-primary)]">
         {formatAmount(result.amountToAdd)}
         <span class="text-xl font-semibold text-[var(--color-text-secondary)]"
@@ -205,7 +196,7 @@
   </section>
 
   <!-- Verification Card -->
-  {#if result && !isBlocked}
+  {#if result}
     <section class="card" aria-label="Verification">
       <span
         class="text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wide"

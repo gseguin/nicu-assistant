@@ -83,38 +83,32 @@ describe('FortificationCalculator', () => {
     expect(screen.getByText('360 (12.2 oz)')).toBeTruthy();
   });
 
-  it('UI-03: isBlocked steady state on mount (no auto-reset)', async () => {
+  it('UI-03: Packets option is hidden from the Unit picker when formula is not Similac HMF', async () => {
     mockState.formulaId = 'neocate-infant';
-    mockState.unit = 'packets';
     render(FortificationCalculator);
     await tick();
 
-    // Blocked message appears (possibly twice — inline and hero body)
-    const messages = screen.getAllByText(/Packets is only available for Similac HMF/);
-    expect(messages.length).toBeGreaterThanOrEqual(1);
+    // The Unit picker trigger displays the currently-selected option label.
+    // Packets must not appear as the trigger value or in any select item for non-HMF.
+    const unitTrigger = screen.getByLabelText('Unit');
+    expect(unitTrigger.textContent ?? '').not.toContain('Packets');
 
-    // No yield/exact/suggested card rendered (verification suppressed)
-    expect(screen.queryByText(/\d+\.\d+\s*mL/)).toBeNull();
-    expect(screen.queryByText(/\d+\.\d+\s*kcal\/oz/)).toBeNull();
-
-    // Auto-reset must NOT fire on mount — no prior HMF state
-    expect(mockState.unit).toBe('packets');
+    // Defensive: scan the entire DOM. The only place "Packets" should appear
+    // for a non-HMF formula is in the source code (via grep), not in any
+    // rendered text node.
+    expect(screen.queryByText(/^Packets$/)).toBeNull();
   });
 
-  it('UI-03: selecting Packets while non-HMF enters blocked state (no auto-mutation)', async () => {
-    render(FortificationCalculator);
-    expect(
-      screen.queryByText(/Packets is only available for Similac HMF/)
-    ).toBeNull();
-
+  it('UI-03: Packets option is available in the Unit picker when formula is Similac HMF', async () => {
+    mockState.formulaId = 'similac-hmf';
     mockState.unit = 'packets';
+    render(FortificationCalculator);
     await tick();
 
-    expect(
-      screen.getAllByText(/Packets is only available for Similac HMF/).length
-    ).toBeGreaterThanOrEqual(1);
-    expect(screen.queryByText(/\d+\.\d+\s*mL/)).toBeNull();
-    expect(mockState.unit).toBe('packets');
+    // With formula = Similac HMF and unit = packets, the Unit picker trigger
+    // should show "Packets" as the selected value.
+    const unitTrigger = screen.getByLabelText('Unit');
+    expect(unitTrigger.textContent ?? '').toContain('Packets');
   });
 
   it('UI-03: auto-reset on similac-hmf → non-HMF transition while Packets selected', async () => {
