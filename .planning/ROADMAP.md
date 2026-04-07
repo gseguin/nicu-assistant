@@ -215,9 +215,12 @@ Plans:
   2. A keyboard user can open the picker, move through options with Arrow/Home/End, confirm with Enter, dismiss with Esc, and the trigger button receives focus again on close
   3. Grouped options (e.g. formulas grouped by manufacturer) render correctly with the new picker style, and focus-visible/selected states use `.impeccable.md` OKLCH tokens with no hardcoded colors
   4. On a mobile viewport the picker fills the available width with ≥48 px touch targets and honors `env(safe-area-inset-bottom)`
-  5. `bits-ui` is removed from package.json if no other consumer remains, and the app still builds and passes tests
-**Plans**: TBD
+  5. No `bits-ui` `Select` imports remain anywhere in `src/`; the app still builds and passes tests. (Full `bits-ui` removal deferred — `AboutSheet` + `DisclaimerModal` still use `bits-ui` `Dialog`.)
+**Plans**: 1 plan
 **UI hint**: yes
+
+Plans:
+- [ ] 12-01-PLAN.md — Atomic <dialog>-based SelectPicker rewrite + scrim token + jsdom polyfill + unit tests
 
 #### Phase 13: Fortification Polish
 **Goal**: The Fortification calculator feels visually refined and mobile-first, with the "Amount to Add" hero matching morphine wean result theming

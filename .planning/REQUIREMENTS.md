@@ -11,7 +11,7 @@
 - [ ] **PICK-03**: User sees grouped options (e.g. formulas grouped by manufacturer) rendered with the new picker style
 - [ ] **PICK-04**: User sees focus-visible outlines and selected-state styling that match `.impeccable.md` (warm clinical, OKLCH tokens, no hardcoded colors)
 - [ ] **PICK-05**: User on mobile sees the picker fill the available width with comfortable touch targets (≥48 px) and safe-area-aware bottom padding
-- [ ] **PICK-06**: bits-ui Select dependency removed from package.json if no other consumer remains
+- [ ] **PICK-06**: No `bits-ui` `Select` imports remain anywhere in `src/`. Full `bits-ui` dependency removal deferred — `AboutSheet.svelte` and `DisclaimerModal.svelte` still consume `bits-ui` `Dialog` and will be ported in a later milestone phase.
 
 ### Fortification calculator (FORT)
 
