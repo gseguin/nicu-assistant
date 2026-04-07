@@ -20,7 +20,6 @@ describe('fortificationState', () => {
       volumeMl: 180,
       formulaId: 'neocate-infant',
       targetKcalOz: 24,
-      unit: 'teaspoons',
     });
   });
 
@@ -32,7 +31,6 @@ describe('fortificationState', () => {
         volumeMl: 240,
         formulaId: 'similac-hmf',
         targetKcalOz: 22,
-        unit: 'packets',
       })
     );
     fortificationState.init();
@@ -40,7 +38,6 @@ describe('fortificationState', () => {
     expect(fortificationState.current.volumeMl).toBe(240);
     expect(fortificationState.current.formulaId).toBe('similac-hmf');
     expect(fortificationState.current.targetKcalOz).toBe(22);
-    expect(fortificationState.current.unit).toBe('packets');
   });
 
   it('init() with corrupt JSON silently keeps defaults', () => {
@@ -62,14 +59,12 @@ describe('fortificationState', () => {
 
   it('reset() returns state to defaults and removes the key from sessionStorage', () => {
     fortificationState.current.volumeMl = 500;
-    fortificationState.current.unit = 'grams';
     fortificationState.persist();
     expect(sessionStorage.getItem(SESSION_KEY)).not.toBeNull();
 
     fortificationState.reset();
 
     expect(fortificationState.current.volumeMl).toBe(180);
-    expect(fortificationState.current.unit).toBe('teaspoons');
     expect(sessionStorage.getItem(SESSION_KEY)).toBeNull();
   });
 

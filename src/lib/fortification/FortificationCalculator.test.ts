@@ -1,12 +1,31 @@
+// LOCKED REFERENCE VALUES — Neocate Infant + BM + 180 mL + 24 kcal/oz
+// (computed by calling calculateFortification directly via a scratch test in Task 2)
+//   grams       → amountToAdd 5.713238287266382, yieldMl 183.99926680108646, exact 24.000000000000004
+//   teaspoons   → amountToAdd 2,                yieldMl 183.5,               exact 23.510166212534063  (BM+Tsp+24 shortcut)
+//   tablespoons → amountToAdd 0.7617651049688509, yieldMl 183.99926680108646, exact 24.000000000000004
+//   scoops      → amountToAdd 1.2420083233187789, yieldMl 183.99926680108646, exact 24.000000000000004
+//   packets     → 0 (Neocate is non-HMF; row HIDDEN in UI)
+//
+// Verification card uses the GRAMS BRANCH:
+//   yield: 184.0 mL, exact: 24.0 kcal/oz
+//
+// LOCKED REFERENCE VALUES — Neocate Infant + BM + 360 mL + 24 kcal/oz
+//   grams       → amountToAdd 11.426476574532764, yieldMl 367.9985336021729, exact 24.000000000000004
+//   teaspoons   → amountToAdd 4,                  yieldMl 367,               exact 23.510166212534063
+//   tablespoons → amountToAdd 1.5235302099377017, yieldMl 367.9985336021729, exact 24.000000000000004
+//   scoops      → amountToAdd 2.4840166466375577, yieldMl 367.9985336021729, exact 24.000000000000004
+//   packets     → 0 (hidden)
+//
+// Verification card uses the GRAMS BRANCH:
+//   yield: 368.0 mL, exact: 24.0 kcal/oz
+
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, within } from '@testing-library/svelte';
 import { tick } from 'svelte';
 
 // Import a $state-backed mock from a .svelte.ts helper so post-render mutations
 // actually drive the component's reactivity (Svelte 5 $effect / $derived need
-// rune-tracked reads, not plain-object reads). The morphine test pattern uses a
-// plain object because it only sets state BEFORE render; the locked Phase 10
-// Test 3 requires mutating state AFTER render, which needs a real rune.
+// rune-tracked reads, not plain-object reads).
 import { mockState, resetMockState } from './test-mock-state.svelte.js';
 
 vi.mock('$lib/fortification/state.svelte.js', () => ({
@@ -24,18 +43,12 @@ import FortificationCalculator from './FortificationCalculator.svelte';
 
 // Helpers ---------------------------------------------------------------
 
-// SelectPicker renders its label as a <span>, not a <label for=...>, and the
-// trigger button has aria-label "{label}: {selectedLabel}". Match the trigger
-// by the leading label prefix.
 function getSelectTrigger(label: string): HTMLElement {
   return screen.getByRole('button', { name: new RegExp(`^${label}:`) });
 }
 
-// Escape to find the hero numeric value specifically inside the hero card
-// (which has aria-atomic="true" and aria-live="polite").
-function getHeroCard(): HTMLElement {
-  const heroLabel = screen.getByText('Amount to Add');
-  return heroLabel.closest('section') as HTMLElement;
+function getUnitRow(unit: string): HTMLElement | null {
+  return document.querySelector(`[data-unit-row="${unit}"]`);
 }
 
 describe('FortificationCalculator', () => {
@@ -43,111 +56,81 @@ describe('FortificationCalculator', () => {
     resetMockState();
   });
 
-  it('UI-01: renders all 5 inputs with correct labels', () => {
+  it('REFACTOR-01: renders 4 inputs (Base, Volume, Formula, Target Calorie) — no Unit picker', () => {
     render(FortificationCalculator);
-    // NumericInput uses <label for=> → getByLabelText works
     expect(screen.getByLabelText('Starting Volume (mL)')).toBeTruthy();
-    // SelectPickers: match the trigger by its aria-label prefix
     expect(getSelectTrigger('Base')).toBeTruthy();
     expect(getSelectTrigger('Formula')).toBeTruthy();
     expect(getSelectTrigger('Target Calorie \\(kcal/oz\\)')).toBeTruthy();
-    expect(getSelectTrigger('Unit')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: /^Unit:/ })).toBeNull();
     expect(screen.getAllByRole('spinbutton')).toHaveLength(1);
   });
 
-  it('UI-02: renders default outputs (Neocate parity case)', () => {
+  it('REFACTOR-02/03: default Neocate render shows 4 unit rows + grams-branch verification, no packets row', () => {
     render(FortificationCalculator);
-    const hero = getHeroCard();
-    expect(hero).toBeTruthy();
-    // Hero numeric: "2" inside the hero card
-    expect(within(hero).getByText(/^\s*2\s*$/)).toBeTruthy();
-    // Hero unit label: "Teaspoons" inside the hero card (the Unit select
-    // trigger outside also contains the word, so scope to the hero)
-    expect(within(hero).getByText('Teaspoons')).toBeTruthy();
-    // Verification values
-    expect(screen.getByText('183.5 mL')).toBeTruthy();
-    expect(screen.getByText('23.5 kcal/oz')).toBeTruthy();
-    expect(screen.getByText('180 (6.1 oz)')).toBeTruthy();
+
+    const gramsRow = getUnitRow('grams');
+    const tspRow = getUnitRow('teaspoons');
+    const tbspRow = getUnitRow('tablespoons');
+    const scoopsRow = getUnitRow('scoops');
+    expect(gramsRow).not.toBeNull();
+    expect(tspRow).not.toBeNull();
+    expect(tbspRow).not.toBeNull();
+    expect(scoopsRow).not.toBeNull();
+    expect(getUnitRow('packets')).toBeNull();
+
+    // Locked amount values (formatAmount: toFixed(2) then strip trailing zeros).
+    expect(within(gramsRow!).getByText('5.71')).toBeTruthy();
+    expect(within(tspRow!).getByText('2')).toBeTruthy();
+    expect(within(tbspRow!).getByText('0.76')).toBeTruthy();
+    expect(within(scoopsRow!).getByText('1.24')).toBeTruthy();
+
+    // Verification card: grams branch.
+    expect(screen.getByText('184.0 mL')).toBeTruthy();
+    expect(screen.getByText('24.0 kcal/oz')).toBeTruthy();
+
+    // Suggested Starting Volume must NOT be in the document.
+    expect(screen.queryByText(/Suggested/i)).toBeNull();
   });
 
-  it('UI-02: live recalc when volumeMl mutates after render', async () => {
+  it('REFACTOR-02: live recalc updates all unit rows and verification card on volume change', async () => {
     render(FortificationCalculator);
-    const hero = getHeroCard();
-    expect(within(hero).getByText(/^\s*2\s*$/)).toBeTruthy();
+
+    // Sanity: defaults.
+    expect(within(getUnitRow('grams')!).getByText('5.71')).toBeTruthy();
 
     mockState.volumeMl = 360;
     await tick();
 
-    expect(within(hero).getByText(/^\s*4\s*$/)).toBeTruthy();
-    expect(screen.getByText('367.0 mL')).toBeTruthy();
-    expect(screen.getByText('23.5 kcal/oz')).toBeTruthy();
-    expect(screen.getByText('360 (12.2 oz)')).toBeTruthy();
+    // Locked values for volume=360.
+    expect(within(getUnitRow('grams')!).getByText('11.43')).toBeTruthy();
+    expect(within(getUnitRow('teaspoons')!).getByText('4')).toBeTruthy();
+    expect(within(getUnitRow('tablespoons')!).getByText('1.52')).toBeTruthy();
+    expect(within(getUnitRow('scoops')!).getByText('2.48')).toBeTruthy();
+    expect(getUnitRow('packets')).toBeNull();
+
+    // Verification card: grams branch at 360 mL.
+    expect(screen.getByText('368.0 mL')).toBeTruthy();
+    expect(screen.getByText('24.0 kcal/oz')).toBeTruthy();
   });
 
-  it('UI-03: isBlocked steady state on mount (no auto-reset)', async () => {
-    mockState.formulaId = 'neocate-infant';
-    mockState.unit = 'packets';
+  it('REFACTOR-02: packets row only renders when formula = similac-hmf', async () => {
     render(FortificationCalculator);
-    await tick();
+    expect(getUnitRow('packets')).toBeNull();
 
-    // Blocked message appears (possibly twice — inline and hero body)
-    const messages = screen.getAllByText(/Packets is only available for Similac HMF/);
-    expect(messages.length).toBeGreaterThanOrEqual(1);
-
-    // No yield/exact/suggested card rendered (verification suppressed)
-    expect(screen.queryByText(/\d+\.\d+\s*mL/)).toBeNull();
-    expect(screen.queryByText(/\d+\.\d+\s*kcal\/oz/)).toBeNull();
-
-    // Auto-reset must NOT fire on mount — no prior HMF state
-    expect(mockState.unit).toBe('packets');
-  });
-
-  it('UI-03: selecting Packets while non-HMF enters blocked state (no auto-mutation)', async () => {
-    render(FortificationCalculator);
-    expect(
-      screen.queryByText(/Packets is only available for Similac HMF/)
-    ).toBeNull();
-
-    mockState.unit = 'packets';
-    await tick();
-
-    expect(
-      screen.getAllByText(/Packets is only available for Similac HMF/).length
-    ).toBeGreaterThanOrEqual(1);
-    expect(screen.queryByText(/\d+\.\d+\s*mL/)).toBeNull();
-    expect(mockState.unit).toBe('packets');
-  });
-
-  it('UI-03: auto-reset on similac-hmf → non-HMF transition while Packets selected', async () => {
     mockState.formulaId = 'similac-hmf';
-    mockState.unit = 'packets';
-    render(FortificationCalculator);
     await tick();
-    await tick();
-    // HMF + packets is valid — not blocked
-    expect(
-      screen.queryByText(/Packets is only available for Similac HMF/)
-    ).toBeNull();
+    expect(getUnitRow('packets')).not.toBeNull();
 
-    // Transition to non-HMF — should auto-reset unit to teaspoons
     mockState.formulaId = 'neocate-infant';
     await tick();
-    await tick();
-
-    expect(mockState.unit).toBe('teaspoons');
-    expect(
-      screen.queryByText(/Packets is only available for Similac HMF/)
-    ).toBeNull();
-    const hero = getHeroCard();
-    expect(within(hero).getByText(/^\s*2\s*$/)).toBeTruthy();
-    expect(within(hero).getByText('Teaspoons')).toBeTruthy();
+    expect(getUnitRow('packets')).toBeNull();
   });
 
-  it('UI-04: reuses only NumericInput + SelectPicker (4 select triggers + 1 numeric)', () => {
+  it('REFACTOR-01: 3 SelectPicker triggers + 1 NumericInput remain', () => {
     render(FortificationCalculator);
-    // 4 SelectPicker triggers — they are role="button" with data-select-trigger
     const triggers = document.querySelectorAll('[data-select-trigger]');
-    expect(triggers).toHaveLength(4);
+    expect(triggers).toHaveLength(3);
     expect(screen.getAllByRole('spinbutton')).toHaveLength(1);
   });
 

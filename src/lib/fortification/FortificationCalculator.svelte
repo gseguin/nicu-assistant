@@ -15,12 +15,8 @@
   let kcalStr = $state(String(fortificationState.current.targetKcalOz));
   let baseStr = $state<string>(fortificationState.current.base);
   let formulaStr = $state<string>(fortificationState.current.formulaId);
-  let unitStr = $state<string>(fortificationState.current.unit);
 
-  // Mirror → state (user input flows down to state). One effect per mirror so
-  // that a change to one mirror does not cause stale writes of the others.
-  // State reads are untracked so external state mutations never re-trigger
-  // these effects (which would clobber state with a stale mirror value).
+  // Mirror → state (user input flows down to state).
   $effect(() => {
     const k = kcalStr;
     untrack(() => {
@@ -46,14 +42,6 @@
       }
     });
   });
-  $effect(() => {
-    const u = unitStr;
-    untrack(() => {
-      if (fortificationState.current.unit !== u) {
-        fortificationState.current.unit = u as UnitType;
-      }
-    });
-  });
 
   // State → mirrors (external changes flow up to mirrors). Equality guards prevent ping-pong.
   $effect(() => {
@@ -61,7 +49,6 @@
     if (kcalStr !== String(s.targetKcalOz)) kcalStr = String(s.targetKcalOz);
     if (baseStr !== s.base) baseStr = s.base;
     if (formulaStr !== s.formulaId) formulaStr = s.formulaId;
-    if (unitStr !== s.unit) unitStr = s.unit;
   });
 
   // --- Option lists --------------------------------------------------------
@@ -86,54 +73,40 @@
     { value: '30', label: '30 kcal/oz' },
   ];
 
-  const unitOptions: SelectOption[] = [
-    { value: 'grams', label: 'Grams' },
-    { value: 'scoops', label: 'Scoops' },
-    { value: 'teaspoons', label: 'Teaspoons' },
-    { value: 'tablespoons', label: 'Tablespoons' },
-    { value: 'packets', label: 'Packets' },
-  ];
+  // --- All-units display ---------------------------------------------------
+  const ALL_UNITS = ['grams', 'teaspoons', 'tablespoons', 'scoops', 'packets'] as const satisfies readonly UnitType[];
 
   const UNIT_LABELS: Record<UnitType, string> = {
     grams: 'Grams',
-    scoops: 'Scoops',
     teaspoons: 'Teaspoons',
     tablespoons: 'Tablespoons',
+    scoops: 'Scoops',
     packets: 'Packets',
   };
 
-  // --- isBlocked (pure render-time consequence, no mutation) --------------
-  let isBlocked = $derived(
-    fortificationState.current.unit === 'packets' &&
-      fortificationState.current.formulaId !== 'similac-hmf'
-  );
+  function shouldShowRow(unit: UnitType, formulaId: string): boolean {
+    if (unit === 'packets') return formulaId === 'similac-hmf';
+    return true;
+  }
 
-  // --- Auto-reset on similac-hmf → non-HMF transition while packets ------
-  let prevFormulaId = fortificationState.current.formulaId;
-  $effect(() => {
-    const currFormulaId = fortificationState.current.formulaId;
-    const currUnit = fortificationState.current.unit;
-    if (
-      prevFormulaId === 'similac-hmf' &&
-      currFormulaId !== 'similac-hmf' &&
-      currUnit === 'packets'
-    ) {
-      fortificationState.current.unit = 'teaspoons';
-    }
-    prevFormulaId = currFormulaId;
-  });
-
-  // --- Result derivation --------------------------------------------------
-  let result = $derived.by(() => {
-    if (isBlocked) return null;
-    const { base, volumeMl, formulaId, targetKcalOz, unit } = fortificationState.current;
+  let unitResults = $derived.by(() => {
+    const { base, volumeMl, formulaId, targetKcalOz } = fortificationState.current;
     if (volumeMl === null || volumeMl <= 0) return null;
     const formula = getFormulaById(formulaId);
     if (!formula) return null;
-    return calculateFortification({ formula, base, volumeMl, targetKcalOz, unit });
+    return ALL_UNITS.map((unit) => ({
+      unit,
+      result: calculateFortification({ formula, base, volumeMl, targetKcalOz, unit }),
+    }));
   });
 
-  let unitLabel = $derived(UNIT_LABELS[(unitStr as UnitType)] ?? '');
+  let gramsResult = $derived.by(() => {
+    const { base, volumeMl, formulaId, targetKcalOz } = fortificationState.current;
+    if (volumeMl === null || volumeMl <= 0) return null;
+    const formula = getFormulaById(formulaId);
+    if (!formula) return null;
+    return calculateFortification({ formula, base, volumeMl, targetKcalOz, unit: 'grams' });
+  });
 
   function formatAmount(n: number): string {
     return n.toFixed(2).replace(/\.?0+$/, '');
@@ -169,14 +142,6 @@
       bind:value={kcalStr}
       options={kcalOptions}
     />
-
-    <SelectPicker label="Unit" bind:value={unitStr} options={unitOptions} />
-
-    {#if isBlocked}
-      <p class="text-xs text-[var(--color-text-secondary)] mt-1">
-        Packets is only available for Similac HMF
-      </p>
-    {/if}
   </section>
 
   <!-- Hero: Amount to Add -->
@@ -186,17 +151,26 @@
     >
       Amount to Add
     </span>
-    {#if isBlocked}
-      <div class="mt-2 text-sm text-[var(--color-text-secondary)]">
-        Packets is only available for Similac HMF
-      </div>
-    {:else if result}
-      <div class="mt-2 text-3xl font-bold num text-[var(--color-text-primary)]">
-        {formatAmount(result.amountToAdd)}
-        <span class="text-xl font-semibold text-[var(--color-text-secondary)]"
-          >{unitLabel}</span
-        >
-      </div>
+    {#if unitResults}
+      <dl class="mt-3 flex flex-col gap-2">
+        {#each unitResults as { unit, result } (unit)}
+          {#if shouldShowRow(unit, fortificationState.current.formulaId)}
+            <div
+              class="flex items-baseline justify-between"
+              data-unit-row={unit}
+            >
+              <dt class="text-sm text-[var(--color-text-secondary)]">
+                {UNIT_LABELS[unit]}
+              </dt>
+              <dd
+                class="text-base font-semibold num text-[var(--color-text-primary)]"
+              >
+                {formatAmount(result.amountToAdd)}
+              </dd>
+            </div>
+          {/if}
+        {/each}
+      </dl>
     {:else}
       <div class="mt-2 text-sm text-[var(--color-text-tertiary)]">
         Enter a starting volume to see the recipe.
@@ -205,7 +179,7 @@
   </section>
 
   <!-- Verification Card -->
-  {#if result && !isBlocked}
+  {#if gramsResult}
     <section class="card" aria-label="Verification">
       <span
         class="text-xs font-semibold text-[var(--color-text-secondary)] uppercase tracking-wide"
@@ -216,19 +190,13 @@
         <div class="flex items-baseline justify-between">
           <dt class="text-sm text-[var(--color-text-secondary)]">Yield</dt>
           <dd class="text-base font-semibold num text-[var(--color-text-primary)]">
-            {result.yieldMl.toFixed(1)} mL
+            {gramsResult.yieldMl.toFixed(1)} mL
           </dd>
         </div>
         <div class="flex items-baseline justify-between">
           <dt class="text-sm text-[var(--color-text-secondary)]">Exact</dt>
           <dd class="text-base font-semibold num text-[var(--color-text-primary)]">
-            {result.exactKcalPerOz.toFixed(1)} kcal/oz
-          </dd>
-        </div>
-        <div class="flex items-baseline justify-between">
-          <dt class="text-sm text-[var(--color-text-secondary)]">Suggested start</dt>
-          <dd class="text-base font-semibold num text-[var(--color-text-primary)]">
-            {result.suggestedStartingVolumeMl}
+            {gramsResult.exactKcalPerOz.toFixed(1)} kcal/oz
           </dd>
         </div>
       </dl>

@@ -3,7 +3,7 @@
 // SessionStorage-backed singleton for fortification calculator state persistence across route navigation.
 // Mirrors the morphine state pattern.
 
-import type { BaseType, UnitType, TargetKcalOz } from './types.js';
+import type { BaseType, TargetKcalOz } from './types.js';
 
 const SESSION_KEY = 'nicu_fortification_state';
 
@@ -12,7 +12,6 @@ export interface FortificationStateData {
   volumeMl: number | null;
   formulaId: string;
   targetKcalOz: TargetKcalOz;
-  unit: UnitType;
 }
 
 function defaultState(): FortificationStateData {
@@ -21,7 +20,6 @@ function defaultState(): FortificationStateData {
     volumeMl: 180,
     formulaId: 'neocate-infant',
     targetKcalOz: 24,
-    unit: 'teaspoons',
   };
 }
 
