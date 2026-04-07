@@ -269,5 +269,5 @@ Phases execute in numeric order: 9 -> 10 -> 10.1 -> 11
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
 | 9. Fortification Reference Data & Business Logic | v1.3 | 2/2 | Complete | 2026-04-07 |
 | 10. Fortification Calculator UI | v1.3 | 2/2 | Complete | 2026-04-07 |
-| 10.1. Unit Selector to All-Units Display Refactor (INSERTED) | v1.3 | 1/1 | Complete   | 2026-04-07 |
+| 10.1. Unit Selector to All-Units Display Refactor (INSERTED) | v1.3 | 0/0 | Not started | - |
 | 11. Migration & Cleanup | v1.3 | 0/0 | Not started | - |
