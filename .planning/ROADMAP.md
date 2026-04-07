@@ -45,7 +45,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 9: Fortification Reference Data & Business Logic** - Embed formula reference table and implement pure `calculateFortification` function with all special cases and spreadsheet-parity tests
 - [x] **Phase 10: Fortification Calculator UI** - Build new Svelte component using shared primitives, wire to new business logic, replace `/formula` route content
-- [ ] **Phase 10.1: Unit Selector to All-Units Display Refactor (INSERTED)** - Remove the unit dropdown and display all applicable unit amounts simultaneously in the Amount-to-Add card; collapse special-case state machinery
+- [~] **Phase 10.1: Unit Selector to All-Units Display Refactor (REVERTED 2026-04-07)** - Removed unit dropdown in favor of all-units display. **Reverted on customer feedback** — clinicians prefer the spreadsheet-matching unit selector over the all-units card. Code reverted via commits 38759f2 + 503ab72; planning artifacts retained for historical record.
 - [ ] **Phase 11: Migration & Cleanup** - Remove all dead Modified Formula and BMF code, update registry/About, run axe-core a11y audit
 
 ## Phase Details
@@ -226,8 +226,13 @@ Plans:
 
 **UI hint**: yes
 
-### Phase 10.1: Unit Selector to All-Units Display Refactor (INSERTED)
-**Goal**: A clinician sees all applicable unit amounts (grams, teaspoons, tablespoons, scoops, and packets where applicable) simultaneously in the Amount to Add card without having to pre-select a unit; the unit dropdown and all special-case state machinery is removed
+### Phase 10.1: Unit Selector to All-Units Display Refactor (REVERTED 2026-04-07)
+
+**Status:** REVERTED on customer feedback. Code reverted via commits 38759f2 + 503ab72. Planning artifacts (PLAN.md, this section) retained for historical record. Customer prefers the original Phase 10 design — spreadsheet-matching unit selector with single Amount-to-Add output — over the all-units display explored in this phase.
+
+**Why reverted:** Once the all-units output was implemented and the locked reference values were visible side-by-side, the inconsistency between branches became apparent (grams branch hits 24.0 kcal/oz exactly while teaspoons branch returns the BM+Tsp HMF protocol shortcut value of 23.51 kcal/oz at 2 tsp). More importantly, customer confirmed that clinicians prefer the explicit "select your unit, see one number" workflow that matches the source spreadsheet rather than scanning a multi-row card.
+
+**Original goal (preserved for record)**: A clinician sees all applicable unit amounts (grams, teaspoons, tablespoons, scoops, and packets where applicable) simultaneously in the Amount to Add card without having to pre-select a unit; the unit dropdown and all special-case state machinery is removed
 **Depends on**: Phase 10
 **Requirements**: REFACTOR-01, REFACTOR-02, REFACTOR-03 (added inline in REQUIREMENTS.md)
 **Success Criteria** (what must be TRUE):
@@ -255,7 +260,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 9 -> 10 -> 10.1 -> 11
+Phases execute in numeric order: 9 -> 10 -> 11 (Phase 10.1 reverted)
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -269,5 +274,5 @@ Phases execute in numeric order: 9 -> 10 -> 10.1 -> 11
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
 | 9. Fortification Reference Data & Business Logic | v1.3 | 2/2 | Complete | 2026-04-07 |
 | 10. Fortification Calculator UI | v1.3 | 2/2 | Complete | 2026-04-07 |
-| 10.1. Unit Selector to All-Units Display Refactor (INSERTED) | v1.3 | 0/0 | Not started | - |
+| 10.1. Unit Selector to All-Units Display Refactor | v1.3 | 1/1 | Reverted | 2026-04-07 |
 | 11. Migration & Cleanup | v1.3 | 0/0 | Not started | - |
