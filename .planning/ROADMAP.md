@@ -220,7 +220,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 10-01-PLAN.md — fortificationState singleton + FortificationCalculator component + colocated tests (UI-01..UI-05)
+- [x] 10-01-PLAN.md — fortificationState singleton + FortificationCalculator component + colocated tests (UI-01..UI-05)
 - [ ] 10-02-PLAN.md — Wire /formula route, registry description, About sheet copy
 
 **UI hint**: yes
@@ -253,5 +253,5 @@ Phases execute in numeric order: 9 -> 10 -> 11
 | 7. Navigation Restructure | v1.2 | 1/1 | Complete   | 2026-04-02 |
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
 | 9. Fortification Reference Data & Business Logic | v1.3 | 2/2 | Complete | 2026-04-07 |
-| 10. Fortification Calculator UI | v1.3 | 0/0 | Not started | - |
+| 10. Fortification Calculator UI | v1.3 | 1/2 | In Progress|  |
 | 11. Migration & Cleanup | v1.3 | 0/0 | Not started | - |

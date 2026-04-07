@@ -34,11 +34,11 @@ Replace the existing Modified Formula + BMF calculator with a single unified for
 
 ### User Interface (UI)
 
-- [ ] **UI-01**: A user can open the Formula calculator from the nav bar and see five inputs: Base (Breast milk / Water), Starting Volume (mL), Formula Selection (~30 brands grouped by manufacturer), Target Calorie (fixed dropdown of 22/24/26/28/30 kcal/oz), and Unit Selection (Grams / Scoops / Teaspoons / Tablespoons / Packets)
-- [ ] **UI-02**: A user sees four outputs update live as they change inputs: Amount to Add (in the selected unit, e.g. "2 Teaspoons"), Yield (mL), Exact kcal/oz, and Suggested Starting Volume
-- [ ] **UI-03**: When Packets is selected with a formula other than Similac HMF, the UI surfaces a clear inline message explaining that Packets is only available for Similac HMF (rather than silently showing 0)
-- [ ] **UI-04**: All inputs use existing shared components (NumericInput for volume, SelectPicker for formula/base/unit/kcal) — no new component primitives are introduced
-- [ ] **UI-05**: The calculator works correctly in both light and dark themes with no hardcoded color values
+- [x] **UI-01**: A user can open the Formula calculator from the nav bar and see five inputs: Base (Breast milk / Water), Starting Volume (mL), Formula Selection (~30 brands grouped by manufacturer), Target Calorie (fixed dropdown of 22/24/26/28/30 kcal/oz), and Unit Selection (Grams / Scoops / Teaspoons / Tablespoons / Packets)
+- [x] **UI-02**: A user sees four outputs update live as they change inputs: Amount to Add (in the selected unit, e.g. "2 Teaspoons"), Yield (mL), Exact kcal/oz, and Suggested Starting Volume
+- [x] **UI-03**: When Packets is selected with a formula other than Similac HMF, the UI surfaces a clear inline message explaining that Packets is only available for Similac HMF (rather than silently showing 0)
+- [x] **UI-04**: All inputs use existing shared components (NumericInput for volume, SelectPicker for formula/base/unit/kcal) — no new component primitives are introduced
+- [x] **UI-05**: The calculator works correctly in both light and dark themes with no hardcoded color values
 
 ### Migration & Cleanup (MIG)
 
@@ -81,11 +81,11 @@ Replace the existing Modified Formula + BMF calculator with a single unified for
 | CALC-08 | Phase 9 | Validated |
 | VAL-01 | Phase 9 | Validated |
 | VAL-02 | Phase 9 | Validated |
-| UI-01 | Phase 10 | Pending |
-| UI-02 | Phase 10 | Pending |
-| UI-03 | Phase 10 | Pending |
-| UI-04 | Phase 10 | Pending |
-| UI-05 | Phase 10 | Pending |
+| UI-01 | Phase 10 | Complete |
+| UI-02 | Phase 10 | Complete |
+| UI-03 | Phase 10 | Complete |
+| UI-04 | Phase 10 | Complete |
+| UI-05 | Phase 10 | Complete |
 | MIG-01 | Phase 11 | Pending |
 | MIG-02 | Phase 11 | Pending |
 | MIG-03 | Phase 11 | Pending |
