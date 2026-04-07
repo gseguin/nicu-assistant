@@ -42,9 +42,9 @@ Replace the existing Modified Formula + BMF calculator with a single unified for
 
 ### Refactor — All-Units Display (REFACTOR) — added inline at Phase 10.1
 
-- [ ] **REFACTOR-01**: The Unit SelectPicker is removed from the FortificationCalculator UI; the calculator has 4 inputs (Base, Starting Volume, Formula, Target Calorie); the unit auto-reset effect, the `prevFormulaId` tracking, the `isBlocked` derived, and Tests 4/5/6 are removed
-- [ ] **REFACTOR-02**: The Amount to Add card displays the computed amount in all applicable units simultaneously (grams, teaspoons, tablespoons, scoops, and packets when formula = Similac HMF); the packets row is hidden entirely for non-HMF formulas (no inline message, no zero placeholder); display order is grams → teaspoons → tablespoons → scoops → packets; the BM+Tsp+22/24 HMF teaspoon shortcut is preserved and applied to the teaspoons row when conditions match
-- [ ] **REFACTOR-03**: The verification card shows a single Yield (mL) and Exact kcal/oz computed using the grams branch; the Suggested Starting Volume output is dropped from the UI; the documented Neocate parity case (BM/180/Neocate Infant/24 → grams 4.51, teaspoons 2, tablespoons 0.6, scoops 0.98, no packets row, yield 183.5 mL, exact 23.5 kcal/oz) is asserted in the new form; all other v1.3 tests still pass
+- [x] **REFACTOR-01**: The Unit SelectPicker is removed from the FortificationCalculator UI; the calculator has 4 inputs (Base, Starting Volume, Formula, Target Calorie); the unit auto-reset effect, the `prevFormulaId` tracking, the `isBlocked` derived, and Tests 4/5/6 are removed
+- [x] **REFACTOR-02**: The Amount to Add card displays the computed amount in all applicable units simultaneously (grams, teaspoons, tablespoons, scoops, and packets when formula = Similac HMF); the packets row is hidden entirely for non-HMF formulas (no inline message, no zero placeholder); display order is grams → teaspoons → tablespoons → scoops → packets; the BM+Tsp+22/24 HMF teaspoon shortcut is preserved and applied to the teaspoons row when conditions match
+- [x] **REFACTOR-03**: The verification card shows a single Yield (mL) and Exact kcal/oz computed using the grams branch; the Suggested Starting Volume output is dropped from the UI; the documented Neocate parity case (BM/180/Neocate Infant/24 → grams 4.51, teaspoons 2, tablespoons 0.6, scoops 0.98, no packets row, yield 183.5 mL, exact 23.5 kcal/oz) is asserted in the new form; all other v1.3 tests still pass
 
 ### Migration & Cleanup (MIG)
 
@@ -92,9 +92,9 @@ Replace the existing Modified Formula + BMF calculator with a single unified for
 | UI-03 | Phase 10 | Complete |
 | UI-04 | Phase 10 | Complete |
 | UI-05 | Phase 10 | Complete |
-| REFACTOR-01 | Phase 10.1 | Pending |
-| REFACTOR-02 | Phase 10.1 | Pending |
-| REFACTOR-03 | Phase 10.1 | Pending |
+| REFACTOR-01 | Phase 10.1 | Complete |
+| REFACTOR-02 | Phase 10.1 | Complete |
+| REFACTOR-03 | Phase 10.1 | Complete |
 | MIG-01 | Phase 11 | Pending |
 | MIG-02 | Phase 11 | Pending |
 | MIG-03 | Phase 11 | Pending |
