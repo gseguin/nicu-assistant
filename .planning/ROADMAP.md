@@ -231,8 +231,11 @@ Plans:
   2. The "Amount to Add" hero card uses the same typographic hierarchy, surface treatment, and brand accent as the morphine wean result card
   3. Spacing, typography, and empty-state styling across the Fortification calculator are consistent with `.impeccable.md` after a visual sweep
   4. Fortification calculations and spreadsheet-parity tests continue to pass unchanged
-**Plans**: TBD
+**Plans**: 1 plan
 **UI hint**: yes
+
+Plans:
+- [ ] 13-01-PLAN.md — Fortification calculator visual polish: mobile row pairing, hero restyle, spacing sweep
 
 #### Phase 14: Morphine Wean Polish
 **Goal**: The Morphine Wean calculator passes the same visual refinement sweep and adopts the new SelectPicker without regressions
