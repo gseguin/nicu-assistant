@@ -233,7 +233,7 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
 | 18-20. v1.5 Tab Identity & Search | v1.5 | 5/5 | Complete | 2026-04-07 |
 | 21. Shared SegmentedToggle | v1.6 | 2/2 | Complete   | 2026-04-08 |
-| 22. NumericInput Hardening | v1.6 | 0/? | Not started | - |
+| 22. NumericInput Hardening | v1.6 | 0/1 | Planned | - |
 | 23. Result Feedback | v1.6 | 0/? | Not started | - |
 | 24. A11y Verification | v1.6 | 0/? | Not started | - |
 
@@ -269,8 +269,11 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
   3. Editing the value back within range clears the advisory immediately on next valid input
   4. Every Morphine and Formula `NumericInput` instance is wired with ranges sourced from `morphine-config.json` / `fortification-config.json` — no inline magic numbers
   5. Component tests cover hint rendering, blur-outside message, blur-back-inside clear, and the no-clamp guarantee
-**Plans**: TBD
+**Plans**: 1 plan
 **UI hint**: yes
+
+Plans:
+- [ ] 22-01-PLAN.md — NumericInput hasBlurred gate + rangeHint + config-sourced ranges in Morphine & Formula consumers
 
 ### Phase 23: Result Feedback (aria-live + entrance)
 **Goal**: When a result appears or updates, screen reader users hear it and sighted users see a calm motion cue — without losing input flow
