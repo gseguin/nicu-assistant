@@ -29,11 +29,11 @@
         {@const isActive = page.url.pathname.startsWith(calc.href)}
         <a
           href={calc.href}
-          class="flex items-center gap-2 px-4 py-3 text-ui font-medium
+          class="{calc.identityClass} flex items-center gap-2 px-4 py-3 text-ui font-medium
                  min-h-[48px] border-b-2 transition-colors rounded-t-lg
-                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-identity)]
                  {isActive
-                   ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                   ? 'border-[var(--color-identity)] text-[var(--color-identity)]'
                    : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
           aria-label={calc.description}
           aria-selected={isActive}
@@ -86,11 +86,11 @@
       {@const isActive = page.url.pathname.startsWith(calc.href)}
       <a
         href={calc.href}
-        class="flex flex-col items-center justify-center flex-1 gap-1
+        class="{calc.identityClass} flex flex-col items-center justify-center flex-1 gap-1
                min-h-14 py-2 text-ui font-medium transition-colors
-               focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]
+               focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)]
                {isActive
-                 ? 'text-[var(--color-accent)] font-semibold'
+                 ? 'text-[var(--color-identity)] font-semibold'
                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
         aria-label={calc.description}
         aria-selected={isActive}
