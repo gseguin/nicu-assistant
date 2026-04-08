@@ -234,14 +234,14 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 18-20. v1.5 Tab Identity & Search | v1.5 | 5/5 | Complete | 2026-04-07 |
 | 21. Shared SegmentedToggle | v1.6 | 2/2 | Complete   | 2026-04-08 |
 | 22. NumericInput Hardening | v1.6 | 1/1 | Complete   | 2026-04-08 |
-| 23. Result Feedback | v1.6 | 0/? | Not started | - |
+| 23. Result Feedback | v1.6 | 1/1 | Complete   | 2026-04-08 |
 | 24. A11y Verification | v1.6 | 0/? | Not started | - |
 
 ### v1.6 Toggle & Harden (Phases 21-24)
 
 - [x] **Phase 21: Shared SegmentedToggle (build + wire)** - Extract toggle from Morphine, wire Morphine + Formula consumers (completed 2026-04-08)
 - [x] **Phase 22: NumericInput Hardening** - Optional min/max with visible hint and advisory blur message (no clamp) (completed 2026-04-08)
-- [ ] **Phase 23: Result Feedback** - aria-live result hero with reduced-motion-gated entrance
+- [x] **Phase 23: Result Feedback** - aria-live result hero with reduced-motion-gated entrance (completed 2026-04-08)
 - [ ] **Phase 24: A11y Verification** - axe sweep covering toggle, range hint, and error message in both themes/tabs
 
 ## Phase Details (v1.6)

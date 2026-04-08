@@ -24,9 +24,9 @@
 
 ### Result Feedback (from /critique P1: Result Appears Silently)
 
-- [ ] **FEED-01**: The result hero number element in both `MorphineWeanCalculator.svelte` and `FortificationCalculator.svelte` carries `aria-live="polite"` and `aria-atomic="true"` so screen readers announce the new value when calculations update.
-- [ ] **FEED-02**: When the result transitions from hidden to visible (or value changes), the hero scales from 95% → 100% over ~200ms. The transition is gated by the existing `prefers-reduced-motion: reduce` constant pattern (matches v1.4 motion audit).
-- [ ] **FEED-03**: The transition does NOT auto-scroll the page or steal focus. Users stay in input flow.
+- [x] **FEED-01**: The result hero number element in both `MorphineWeanCalculator.svelte` and `FortificationCalculator.svelte` carries `aria-live="polite"` and `aria-atomic="true"` so screen readers announce the new value when calculations update.
+- [x] **FEED-02**: When the result transitions from hidden to visible (or value changes), the hero scales from 95% → 100% over ~200ms. The transition is gated by the existing `prefers-reduced-motion: reduce` constant pattern (matches v1.4 motion audit).
+- [x] **FEED-03**: The transition does NOT auto-scroll the page or steal focus. Users stay in input flow.
 
 ### Accessibility
 
@@ -66,9 +66,9 @@
 | HARD-04 | Phase 22 | Complete |
 | HARD-05 | Phase 22 | Complete |
 | HARD-06 | Phase 22 | Complete |
-| FEED-01 | Phase 23 | Pending |
-| FEED-02 | Phase 23 | Pending |
-| FEED-03 | Phase 23 | Pending |
+| FEED-01 | Phase 23 | Complete |
+| FEED-02 | Phase 23 | Complete |
+| FEED-03 | Phase 23 | Complete |
 | A11Y-01 | Phase 24 | Pending |
 | A11Y-02 | Phase 24 | Pending |
 | A11Y-03 | Phase 21 | Complete |
