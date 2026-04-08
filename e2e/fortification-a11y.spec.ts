@@ -82,51 +82,9 @@ test.describe('Fortification Calculator Accessibility', () => {
 		expect(results.violations).toEqual([]);
 	});
 
-	test('fortification advisory message has no axe violations in light mode', async ({ page }) => {
-		await page.evaluate(() => {
-			document.documentElement.classList.remove('dark');
-			document.documentElement.classList.add('light');
-			document.documentElement.setAttribute('data-theme', 'light');
-		});
-
-		const volume = page.getByRole('spinbutton').first();
-		await volume.fill('99999');
-		await volume.blur();
-
-		await expect(page.getByText(/outside expected range/i)).toBeVisible();
-
-		await page.addStyleTag({
-			content:
-				'*, *::before, *::after { transition: none !important; animation: none !important; }'
-		});
-		await page.waitForTimeout(250);
-
-		const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
-		expect(results.violations).toEqual([]);
-	});
-
-	test('fortification advisory message has no axe violations in dark mode', async ({ page }) => {
-		await page.evaluate(() => {
-			document.documentElement.classList.add('no-transition');
-			document.documentElement.classList.remove('light');
-			document.documentElement.classList.add('dark');
-			document.documentElement.setAttribute('data-theme', 'dark');
-		});
-		await page.waitForTimeout(250);
-
-		const volume = page.getByRole('spinbutton').first();
-		await volume.fill('99999');
-		await volume.blur();
-
-		await expect(page.getByText(/outside expected range/i)).toBeVisible();
-
-		await page.addStyleTag({
-			content:
-				'*, *::before, *::after { transition: none !important; animation: none !important; }'
-		});
-		await page.waitForTimeout(250);
-
-		const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
-		expect(results.violations).toEqual([]);
-	});
+	// Advisory-message a11y sweep is covered by morphine-wean-a11y.spec.ts (light + dark).
+	// Fortification's only NumericInput (Starting Volume) opts out of the range advisory
+	// via `showRangeError={false}` per v1.7 UX decision, so there's no Formula-surface to
+	// exercise here. Morphine's weight/dose/percent inputs still render the advisory in
+	// both themes, providing full coverage of the same component styling.
 });
