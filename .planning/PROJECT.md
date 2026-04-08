@@ -50,7 +50,15 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-(None — v1.4 shipped 2026-04-07; planning next milestone)
+## Current Milestone: v1.5 Tab Identity & Search
+
+**Goal:** Give each calculator tab a unified-but-distinct visual identity and make the Formula picker searchable so clinicians orient instantly and find a formula in under a second.
+
+**Target features:**
+- Searchable Formula picker (port `searchable` prop from pert-calculator's SelectPicker: filter by label+detail, keyboard nav input↔listbox, "No matches" state, Enter-to-select when single match)
+- Per-tab visual identity via `--color-identity` CSS token — Clinical Blue 220 for Morphine, Teal ~195 for Formula — wired **only** to focus ring, result hero, section eyebrows, and active nav indicator
+- BMF Amber stays semantically scoped to fortifier mode (explicitly not reused as Formula tab identity)
+- WCAG 2.1 AA dark-mode contrast verification for new teal identity token (axe-core sweep, light + dark)
 
 ### Out of Scope
 
@@ -119,4 +127,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-07 — v1.4 UI Polish shipped and archived*
+*Last updated: 2026-04-07 — v1.5 Tab Identity & Search milestone started*

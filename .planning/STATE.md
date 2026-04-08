@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.4
-milestone_name: UI Polish
+milestone: v1.5
+milestone_name: Tab Identity & Search
 current_phase: null
-status: shipped
-stopped_at: v1.4 archived 2026-04-07; ready for /gsd-new-milestone
-last_updated: "2026-04-08T03:15:00.000Z"
+status: defining_requirements
+stopped_at: v1.5 started 2026-04-07; defining requirements
+last_updated: "2026-04-07T00:00:00.000Z"
 last_activity: 2026-04-07
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 6
-  completed_plans: 6
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -26,12 +26,12 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 
 ## Current Position
 
-Milestone: v1.4 — UI Polish (SHIPPED 2026-04-07)
-Status: Shipped & archived
-Current phase: None
-Last activity: 2026-04-07
+Milestone: v1.5 — Tab Identity & Search
+Status: Defining requirements
+Current phase: Not started
+Last activity: 2026-04-07 — milestone started
 
-Progress: [██████████] 100%
+Progress: [          ] 0%
 
 ## Performance Metrics
 
