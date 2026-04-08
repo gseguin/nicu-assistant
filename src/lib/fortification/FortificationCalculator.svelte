@@ -195,6 +195,7 @@
           max={inputs.volumeMl.max}
           step={inputs.volumeMl.step}
           showRangeHint={false}
+          showRangeError={false}
           placeholder="180"
           id="fortification-volume"
         />

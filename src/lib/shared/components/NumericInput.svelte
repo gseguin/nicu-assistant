@@ -20,6 +20,7 @@
     max,
     step = 0.1,
     showRangeHint = true,
+    showRangeError = true,
     id = `numeric-input-${++idCounter}`
   } = $props<{
     value: number | null;
@@ -31,6 +32,7 @@
     max?: number;
     step?: number;
     showRangeHint?: boolean;
+    showRangeError?: boolean;
     id?: string;
   }>();
 
@@ -39,6 +41,7 @@
 
   // Derived out-of-range error: show advisory on blur when value exceeds min/max
   let rangeError = $derived.by(() => {
+    if (!showRangeError) return '';
     if (error) return '';
     if (value === null) return '';
     if (!hasBlurred) return '';
