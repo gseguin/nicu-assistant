@@ -53,8 +53,32 @@ test.describe('Morphine Wean Accessibility', () => {
 		// Wait for schedule to render
 		await expect(page.getByText(/Step 1 — Starting dose/)).toBeVisible();
 
+		// Render the identity focus ring so axe can see it
+		await page.getByLabel('Dosing weight').focus();
+
 		const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
+		expect(results.violations).toEqual([]);
+	});
+
+	test('morphine wean page has no axe violations with schedule visible in dark mode', async ({ page }) => {
+		await page.evaluate(() => {
+			document.documentElement.classList.add('no-transition');
+			document.documentElement.classList.remove('light');
+			document.documentElement.classList.add('dark');
+			document.documentElement.setAttribute('data-theme', 'dark');
+		});
+		await page.waitForTimeout(250);
+
+		await page.getByLabel('Dosing weight').fill('3.1');
+		await page.getByLabel('Max morphine dose').fill('0.04');
+		await page.getByLabel('Decrease per step').fill('10');
+		await expect(page.getByText(/Step 1 — Starting dose/)).toBeVisible();
+
+		// Render the identity focus ring so axe can see it
+		await page.getByLabel('Dosing weight').focus();
+
+		const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 		expect(results.violations).toEqual([]);
 	});
 });

@@ -56,8 +56,29 @@ test.describe('Fortification Calculator Accessibility', () => {
 		// already produces a visible fortification result — wait for the hero output.
 		await expect(page.getByText('Amount to Add')).toBeVisible();
 
+		// Focus the first numeric input to render the identity focus ring
+		await page.getByRole('spinbutton').first().focus();
+
 		const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
+		expect(results.violations).toEqual([]);
+	});
+
+	test('fortification page has no axe violations with results visible in dark mode', async ({ page }) => {
+		await page.evaluate(() => {
+			document.documentElement.classList.add('no-transition');
+			document.documentElement.classList.remove('light');
+			document.documentElement.classList.add('dark');
+			document.documentElement.setAttribute('data-theme', 'dark');
+		});
+		await page.waitForTimeout(250);
+
+		await expect(page.getByText('Amount to Add')).toBeVisible();
+
+		// Focus the first numeric input to render the identity focus ring
+		await page.getByRole('spinbutton').first().focus();
+
+		const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 		expect(results.violations).toEqual([]);
 	});
 });
