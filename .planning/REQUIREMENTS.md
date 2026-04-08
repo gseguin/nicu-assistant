@@ -53,15 +53,15 @@
 | SEARCH-04 | Phase 18 | Complete |
 | SEARCH-05 | Phase 18 | Complete |
 | SEARCH-06 | Phase 18 | Complete |
-| IDENT-01 | Phase 19 | Pending |
+| IDENT-01 | Phase 19 | Complete |
 | IDENT-02 | Phase 19 | Complete |
 | IDENT-03 | Phase 19 | Complete |
 | IDENT-04 | Phase 19 | Complete |
-| IDENT-05 | Phase 19 | Pending |
-| IDENT-06 | Phase 19 | Pending |
-| IDENT-07 | Phase 19 | Pending |
-| A11Y-01 | Phase 20 | Pending |
-| A11Y-02 | Phase 20 | Pending |
+| IDENT-05 | Phase 19 | Complete |
+| IDENT-06 | Phase 19 | Complete |
+| IDENT-07 | Phase 19 | Complete |
+| A11Y-01 | Phase 20 | Complete |
+| A11Y-02 | Phase 20 | Complete |
 | A11Y-03 | Phase 18 | Complete |
 
 **Coverage:** 16/16 v1.5 requirements mapped ✓
