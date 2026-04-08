@@ -1,5 +1,58 @@
 import '@testing-library/jest-dom/vitest';
 
+// jsdom does not implement matchMedia; stub to report prefers-reduced-motion
+// so Svelte slide transitions collapse to duration 0 in tests.
+if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: (query: string) => ({
+      matches: query.includes('prefers-reduced-motion'),
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    }),
+  });
+}
+
+// jsdom does not implement Element.animate — Svelte's slide transition calls it.
+if (typeof Element !== 'undefined' && !Element.prototype.animate) {
+  Element.prototype.animate = function () {
+    const anim: Record<string, unknown> = {
+      cancel() {
+        const fn = anim.oncancel as ((e: unknown) => void) | null;
+        if (fn) fn({});
+      },
+      finish() {
+        const fn = anim.onfinish as ((e: unknown) => void) | null;
+        if (fn) fn({});
+      },
+      play: () => {},
+      pause: () => {},
+      reverse: () => {},
+      addEventListener: (type: string, cb: () => void) => {
+        if (type === 'finish') queueMicrotask(cb);
+      },
+      removeEventListener: () => {},
+      onfinish: null,
+      oncancel: null,
+      currentTime: 0,
+      playState: 'finished',
+      finished: Promise.resolve(),
+      ready: Promise.resolve(),
+    };
+    // Immediately invoke onfinish once assigned
+    queueMicrotask(() => {
+      const fn = anim.onfinish as ((e: unknown) => void) | null;
+      if (fn) fn({});
+    });
+    return anim as unknown as Animation;
+  };
+}
+
 // jsdom (^29) does not implement HTMLDialogElement.showModal/close,
 // and it does not apply UA stylesheets — so closed <dialog>s would
 // still be considered "visible" by @testing-library. Default closed

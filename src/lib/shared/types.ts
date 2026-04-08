@@ -10,3 +10,9 @@ export interface CalculatorContext {
 	id: CalculatorId;
 	accentColor: string;
 }
+
+export interface NumericInputRange {
+	min: number;
+	max: number;
+	step: number;
+}

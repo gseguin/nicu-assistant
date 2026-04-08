@@ -16,8 +16,8 @@
     placeholder = '',
     suffix = '',
     error = '',
-    min = 0,
-    max = 1000,
+    min,
+    max,
     step = 0.1,
     id = `numeric-input-${++idCounter}`
   } = $props<{
@@ -33,17 +33,29 @@
   }>();
 
   let isFocused = $state(false);
+  let hasBlurred = $state(false);
 
-  // Derived out-of-range error: show inline guidance when value exceeds min/max
+  // Derived out-of-range error: show advisory on blur when value exceeds min/max
   let rangeError = $derived.by(() => {
-    if (error) return ''; // external error takes precedence
+    if (error) return '';
     if (value === null) return '';
-    if (value < min) return `Minimum is ${min}`;
-    if (value > max) return `Maximum is ${max}`;
+    if (!hasBlurred) return '';
+    const belowMin = min !== undefined && value < min;
+    const aboveMax = max !== undefined && value > max;
+    if (belowMin || aboveMax) return 'Outside expected range — verify';
     return '';
   });
 
   let displayError = $derived(error || rangeError);
+
+  let rangeHint = $derived.by(() => {
+    if (displayError) return '';
+    if (min === undefined && max === undefined) return '';
+    const unit = suffix ? ` ${suffix}` : '';
+    if (min !== undefined && max !== undefined) return `${min}–${max}${unit}`;
+    if (min !== undefined) return `≥ ${min}${unit}`;
+    return `≤ ${max}${unit}`;
+  });
 
   // Handle manual input parsing
   function handleInput(e: Event) {
@@ -71,6 +83,7 @@
   // Show inline error on blur instead of silently clamping
   function handleBlur(_e: FocusEvent) {
     isFocused = false;
+    hasBlurred = true;
   }
 
   // Svelte action to handle non-passive wheel events
@@ -82,12 +95,12 @@
       e.preventDefault();
 
       const direction = e.deltaY > 0 ? -1 : 1;
-      // Start from min when empty, so first scroll gives a valid value
-      const current = value ?? (direction > 0 ? min - step : max + step);
-      // Use toFixed to avoid floating point jitter, then parse back to number
+      const lowerBound = min ?? Number.NEGATIVE_INFINITY;
+      const upperBound = max ?? Number.POSITIVE_INFINITY;
+      const current = value ?? (direction > 0 ? lowerBound - step : upperBound + step);
       const next = parseFloat((current + direction * step).toFixed(1));
-
-      if (next >= min && next <= max) {
+      if (!Number.isFinite(next)) return;
+      if (next >= lowerBound && next <= upperBound) {
         value = next;
       }
     };
@@ -120,8 +133,8 @@
       onblur={handleBlur}
       onkeydown={handleKeydown}
       {placeholder}
-      {min}
-      {max}
+      min={min ?? undefined}
+      max={max ?? undefined}
       {step}
       class="num w-full pl-4 py-3 bg-[var(--color-surface-card)] border rounded-xl shadow-sm transition-all outline-none text-[var(--color-text-primary)] font-medium text-base {displayError ? 'border-[var(--color-error)] ring-1 ring-[var(--color-error)]' : 'border-[var(--color-border)] focus:border-[var(--color-identity)] focus:ring-2 focus:ring-[var(--color-identity)]'} {isFocused ? 'scale-[1.01] border-[var(--color-identity)]' : ''} {suffix.length > 3 ? 'pr-20' : (suffix ? 'pr-12' : 'pr-4')}"
       aria-invalid={!!displayError}
@@ -138,6 +151,12 @@
       </span>
     {/if}
   </div>
+
+  {#if rangeHint}
+    <p class="text-xs text-[var(--color-text-tertiary)] ml-1">
+      {rangeHint}
+    </p>
+  {/if}
 
   {#if displayError}
     <p
