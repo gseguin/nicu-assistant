@@ -171,7 +171,7 @@
   }
   .identity-morphine {
     --color-identity:      var(--color-accent);
-    --color-identity-hero: var(--color-accent-light);
+    --color-identity-hero: oklch(95% 0.04 220);
   }
   .identity-formula {
     --color-identity:      oklch(49% 0.11 195);
