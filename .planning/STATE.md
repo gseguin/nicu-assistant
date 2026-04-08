@@ -2,17 +2,17 @@
 gsd_state_version: 1.0
 milestone: v1.7
 milestone_name: Formula Micro-Polish
-current_phase: 25
-status: ready_to_plan
-stopped_at: v1.7 started 2026-04-08; ready to plan Phase 25
+current_phase: null
+status: shipped
+stopped_at: v1.7 archived 2026-04-08; ready for /gsd-new-milestone
 last_updated: "2026-04-08T00:00:00.000Z"
 last_activity: 2026-04-08
 progress:
   total_phases: 1
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  completed_phases: 1
+  total_plans: 1
+  completed_plans: 1
+  percent: 100
 ---
 
 # Project State
@@ -22,16 +22,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.7 Formula Micro-Polish — label cleanup, row layout, auto-packets
+**Current focus:** None — v1.7 shipped, awaiting next milestone
 
 ## Current Position
 
-Milestone: v1.7 — Formula Micro-Polish
-Status: Ready to plan
-Current phase: 25 — Formula Micro-Polish
-Last activity: 2026-04-08 — milestone started
+Milestone: v1.7 — Formula Micro-Polish (SHIPPED 2026-04-08)
+Status: Shipped & archived
+Current phase: None
+Last activity: 2026-04-08
 
-Progress: [          ] 0% (0/1 phase)
+Progress: [██████████] 100% (1/1 phase)
 
 ## Performance Metrics
 

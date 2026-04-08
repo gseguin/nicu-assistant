@@ -61,17 +61,15 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ `aria-live="polite"` + `aria-atomic="true"` on both result heroes (Morphine summary + Formula "Amount to Add") — v1.6
 - ✓ Playwright a11y suite extended with 4 advisory-message variants; 12/12 axe sweeps green with zero OKLCH tuning — v1.6
 - ✓ `package.json` version bumped to 1.6.0 — v1.6
+- ✓ Formula field labels cleaned — `"Starting Volume"` / `"Target Calorie"` drop unit parentheticals — v1.7
+- ✓ Formula picker + Starting Volume share a single row at all breakpoints; Target Calorie + Unit get their own `grid-cols-2` row — v1.7
+- ✓ Auto-select packets when picking a packets-capable formula; data-driven via new `packetsSupported?: boolean` field + `formulaSupportsPackets(id)` helper — v1.7
+- ✓ `showRangeError` opt-out prop on NumericInput (complement to v1.6 `showRangeHint`); Formula Starting Volume opts out of both — v1.7
+- ✓ `package.json` version bumped to 1.7.0 — v1.7
 
 ### Active
 
-## Current Milestone: v1.7 Formula Micro-Polish
-
-**Goal:** Tighten three small rough edges in the Formula calculator uncovered during bedside use.
-
-**Target features:**
-- Strip unit parentheticals from Formula field labels (suffix already shows the unit — labels should be clean)
-- Put Formula picker and Starting Volume on the same row (all screen sizes) to shorten the input column
-- When the user picks a packets-capable formula (currently `similac-hmf`), auto-select `packets` as the Unit
+(None — v1.7 shipped 2026-04-08; planning next milestone)
 
 ### Out of Scope
 
@@ -140,4 +138,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-08 — v1.7 Formula Micro-Polish milestone started*
+*Last updated: 2026-04-08 — v1.7 Formula Micro-Polish shipped and archived*

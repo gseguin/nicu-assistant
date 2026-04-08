@@ -1,5 +1,23 @@
 # Milestones
 
+## v1.7 Formula Micro-Polish (Shipped: 2026-04-08)
+
+**Phases completed:** 1 phase (25), 8 commits, +313/-95 diff across 13 files
+
+**Tag:** `v1.7.0`
+
+**Key accomplishments:**
+
+- Formula field labels cleaned — `"Starting Volume"` / `"Target Calorie"` drop the redundant unit parentheticals (suffix already shows the unit).
+- Formula picker + Starting Volume input share a single row on all screen sizes; Target Calorie + Unit get their own `grid-cols-2` row beneath.
+- Auto-select packets when the user picks a packets-capable formula — data-driven via new `packetsSupported?: boolean` field on `FortificationFormula` + `formulaSupportsPackets(id)` helper. Preserves v1.3 auto-reset when switching away.
+- `showRangeError` prop added to NumericInput (complement to v1.6's `showRangeHint`). Formula Starting Volume now passes both opt-outs for a calm surface while still enforcing the range in the scroll-wheel clamp.
+- Version bumped to `1.7.0`.
+
+See [milestones/v1.7-ROADMAP.md](milestones/v1.7-ROADMAP.md) and [milestones/v1.7-REQUIREMENTS.md](milestones/v1.7-REQUIREMENTS.md) for full archive.
+
+---
+
 ## v1.6 Toggle & Harden (Shipped: 2026-04-08)
 
 **Phases completed:** 4 phases (21, 22, 23, 24), 5 plans, 20 commits, +3000/-174 diff across 36 files
