@@ -163,7 +163,12 @@
       id="fortification-volume"
     />
 
-    <SelectPicker label="Formula" bind:value={formulaStr} options={formulaOptions} />
+    <SelectPicker
+      label="Formula"
+      bind:value={formulaStr}
+      options={formulaOptions}
+      searchable
+    />
 
     <div class="grid grid-cols-2 gap-4">
       <SelectPicker

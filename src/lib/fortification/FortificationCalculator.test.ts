@@ -27,7 +27,7 @@ import FortificationCalculator from './FortificationCalculator.svelte';
 // SelectPicker associates the visible <span> label to the trigger via
 // aria-labelledby, so the trigger's accessible name is exactly the label text.
 function getSelectTrigger(label: string): HTMLElement {
-  return screen.getByRole('button', { name: label });
+  return screen.getByLabelText(label);
 }
 
 // Escape to find the hero numeric value specifically inside the hero card
