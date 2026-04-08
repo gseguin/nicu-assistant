@@ -32,3 +32,9 @@ export interface FortificationResult {
   exactKcalPerOz: number;
   suggestedStartingVolumeMl: string;
 }
+
+import type { NumericInputRange } from '$lib/shared/types.js';
+
+export interface FortificationInputRanges {
+  volumeMl: NumericInputRange;
+}

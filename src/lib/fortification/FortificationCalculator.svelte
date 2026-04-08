@@ -3,6 +3,7 @@
   import {
     getFormulaById,
     getFortificationFormulas,
+    inputs,
   } from '$lib/fortification/fortification-config.js';
   import { untrack } from 'svelte';
   import { fortificationState } from '$lib/fortification/state.svelte.js';
@@ -157,9 +158,9 @@
       bind:value={fortificationState.current.volumeMl}
       label="Starting Volume (mL)"
       suffix="mL"
-      min={1}
-      max={1000}
-      step={1}
+      min={inputs.volumeMl.min}
+      max={inputs.volumeMl.max}
+      step={inputs.volumeMl.step}
       placeholder="180"
       id="fortification-volume"
     />

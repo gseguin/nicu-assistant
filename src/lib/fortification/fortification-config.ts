@@ -1,7 +1,9 @@
-import type { FortificationFormula } from './types.js';
+import type { FortificationFormula, FortificationInputRanges } from './types.js';
 import config from './fortification-config.json';
 
 const formulas: FortificationFormula[] = config.formulas;
+
+export const inputs: FortificationInputRanges = config.inputs as FortificationInputRanges;
 
 export function getFortificationFormulas(): FortificationFormula[] {
   return formulas;

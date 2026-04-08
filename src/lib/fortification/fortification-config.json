@@ -240,5 +240,8 @@
       "calorie_concentration": 4,
       "grams_per_scoop": 8
     }
-  ]
+  ],
+  "inputs": {
+    "volumeMl": { "min": 1, "max": 1000, "step": 1 }
+  }
 }
