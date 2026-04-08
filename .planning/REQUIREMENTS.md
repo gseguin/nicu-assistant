@@ -9,9 +9,9 @@
 - [x] **TOG-01**: A new shared `SegmentedToggle` component exists in `src/lib/shared/components/` with a 2–N option API consistent with `SelectPicker` (label, options, value binding).
 - [x] **TOG-02**: The `SegmentedToggle` active segment renders using `var(--color-identity)` so it picks up the per-tab identity hue automatically (Clinical Blue in Morphine, Teal in Formula).
 - [x] **TOG-03**: The `SegmentedToggle` supports keyboard navigation: `←` / `→` move between segments, `Home` / `End` jump to first/last, and the active state is reflected via `aria-pressed` or `role="tab"` ARIA semantics matching Morphine's existing tablist pattern.
-- [ ] **TOG-04**: Morphine `MorphineWeanCalculator.svelte` consumes the shared `SegmentedToggle` for the Linear/Compounding mode switch with no behavior change. The inline tablist code is removed.
-- [ ] **TOG-05**: Formula `FortificationCalculator.svelte` uses `SegmentedToggle` for the `Base` choice (Breast milk / Formula) instead of `SelectPicker`. The old `Base` SelectPicker option list is removed.
-- [ ] **TOG-06**: Existing morphine and fortification tests still pass. Morphine mode switching behavior is unchanged from v1.5; Formula base switching behavior is unchanged from v1.5.
+- [x] **TOG-04**: Morphine `MorphineWeanCalculator.svelte` consumes the shared `SegmentedToggle` for the Linear/Compounding mode switch with no behavior change. The inline tablist code is removed.
+- [x] **TOG-05**: Formula `FortificationCalculator.svelte` uses `SegmentedToggle` for the `Base` choice (Breast milk / Formula) instead of `SelectPicker`. The old `Base` SelectPicker option list is removed.
+- [x] **TOG-06**: Existing morphine and fortification tests still pass. Morphine mode switching behavior is unchanged from v1.5; Formula base switching behavior is unchanged from v1.5.
 
 ### NumericInput Hardening (from /critique P1: Error Prevention)
 
@@ -57,9 +57,9 @@
 | TOG-01 | Phase 21 | Complete |
 | TOG-02 | Phase 21 | Complete |
 | TOG-03 | Phase 21 | Complete |
-| TOG-04 | Phase 21 | Pending |
-| TOG-05 | Phase 21 | Pending |
-| TOG-06 | Phase 21 | Pending |
+| TOG-04 | Phase 21 | Complete |
+| TOG-05 | Phase 21 | Complete |
+| TOG-06 | Phase 21 | Complete |
 | HARD-01 | Phase 22 | Pending |
 | HARD-02 | Phase 22 | Pending |
 | HARD-03 | Phase 22 | Pending |
