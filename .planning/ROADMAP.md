@@ -236,7 +236,11 @@ Plans:
   3. Shell chrome (title bar, app name, theme toggle, info button, body text, input borders, neutral surfaces) remains on global/neutral tokens and shows no identity hue
   4. BMF Amber continues to be scoped exclusively to fortifier-mode semantic signaling on the Formula tab — it is not reused as Formula tab identity, and switching into fortifier mode still reads as a distinct in-tab state
   5. Navigating between Morphine and Formula visibly swaps the four identity surfaces while leaving everything else unchanged
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 19-01-PLAN.md — Identity tokens + registry wiring + nav tab active indicator
+- [ ] 19-02-PLAN.md — Wire identity to body surfaces (heroes, eyebrows, focus-visible)
 **UI hint**: yes
 
 ### Phase 20: Identity A11y Verification
@@ -268,5 +272,5 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 9-11. v1.3 Fortification Refactor | v1.3 | — | Complete | 2026-04-07 |
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
 | 18. Searchable SelectPicker | v1.5 | 1/2 | In Progress|  |
-| 19. Tab Identity Token | v1.5 | 0/0 | Not started | - |
+| 19. Tab Identity Token | v1.5 | 0/2 | Not started | - |
 | 20. Identity A11y Verification | v1.5 | 0/0 | Not started | - |
