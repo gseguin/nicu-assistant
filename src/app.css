@@ -163,3 +163,28 @@
     box-shadow: 0 0 0 2px var(--color-accent-light);
   }
 }
+
+@layer base {
+  :root {
+    --color-identity:      var(--color-accent);
+    --color-identity-hero: var(--color-accent-light);
+  }
+  .identity-morphine {
+    --color-identity:      var(--color-accent);
+    --color-identity-hero: var(--color-accent-light);
+  }
+  .identity-formula {
+    --color-identity:      oklch(49% 0.11 195);
+    --color-identity-hero: oklch(92% 0.05 195);
+  }
+  .dark .identity-morphine,
+  [data-theme="dark"] .identity-morphine {
+    --color-identity:      var(--color-accent);
+    --color-identity-hero: oklch(32% 0.10 220);
+  }
+  .dark .identity-formula,
+  [data-theme="dark"] .identity-formula {
+    --color-identity:      oklch(82% 0.09 195);
+    --color-identity-hero: oklch(30% 0.08 195);
+  }
+}
