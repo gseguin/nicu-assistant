@@ -47,18 +47,16 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ `prefers-reduced-motion: reduce` honored across every motion surface — v1.4
 - ✓ WCAG 2.1 AA dark-mode contrast fix — `--color-text-secondary` and `--color-accent` bumped; axe-core color-contrast rule now enabled in both themes — v1.4
 - ✓ New `--color-scrim` OKLCH token + jsdom HTMLDialogElement polyfill with setup-time self-test — v1.4
+- ✓ Searchable Formula picker — opt-in `searchable` prop on shared SelectPicker, ArrowDown/ArrowUp traversal, Enter-to-select-single-match, "No matches" state — v1.5
+- ✓ Per-tab visual identity via new `--color-identity` token (Clinical Blue 220 / new Teal ~195) wired to exactly 4 surfaces: result hero, focus rings, eyebrows, active nav indicator — v1.5
+- ✓ NavShell per-tab identity via `identityClass` field on registry — v1.5
+- ✓ Morphine identity hero tuned to literal `oklch(95% 0.04 220)` to clear 4.5:1 (caught by Phase 20 axe sweep) — v1.5
+- ✓ Playwright a11y suite extended with focus-ring + dark-visible variants; 8/8 axe sweeps green — v1.5
+- ✓ `package.json` version bumped to 1.5.0 (about dialog reflects shipped state) — v1.5
 
 ### Active
 
-## Current Milestone: v1.5 Tab Identity & Search
-
-**Goal:** Give each calculator tab a unified-but-distinct visual identity and make the Formula picker searchable so clinicians orient instantly and find a formula in under a second.
-
-**Target features:**
-- Searchable Formula picker (port `searchable` prop from pert-calculator's SelectPicker: filter by label+detail, keyboard nav input↔listbox, "No matches" state, Enter-to-select when single match)
-- Per-tab visual identity via `--color-identity` CSS token — Clinical Blue 220 for Morphine, Teal ~195 for Formula — wired **only** to focus ring, result hero, section eyebrows, and active nav indicator
-- BMF Amber stays semantically scoped to fortifier mode (explicitly not reused as Formula tab identity)
-- WCAG 2.1 AA dark-mode contrast verification for new teal identity token (axe-core sweep, light + dark)
+(None — v1.5 shipped 2026-04-07; planning next milestone)
 
 ### Out of Scope
 
@@ -127,4 +125,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-07 — v1.5 Tab Identity & Search milestone started*
+*Last updated: 2026-04-07 — v1.5 Tab Identity & Search shipped and archived*

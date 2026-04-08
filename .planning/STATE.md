@@ -2,17 +2,17 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Tab Identity & Search
-current_phase: Phase 18 — Searchable SelectPicker
-status: planning
-stopped_at: Completed 19-02-PLAN.md
-last_updated: "2026-04-08T04:18:38.775Z"
-last_activity: 2026-04-07 — roadmap created
+current_phase: null
+status: shipped
+stopped_at: v1.5 archived 2026-04-07; ready for /gsd-new-milestone
+last_updated: "2026-04-07T00:00:00.000Z"
+last_activity: 2026-04-07
 progress:
-  total_phases: 11
-  completed_phases: 0
-  total_plans: 4
-  completed_plans: 2
-  percent: 50
+  total_phases: 3
+  completed_phases: 3
+  total_plans: 5
+  completed_plans: 5
+  percent: 100
 ---
 
 # Project State
@@ -22,16 +22,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.5 — Tab Identity & Search (Phases 18-20)
+**Current focus:** None — v1.5 shipped, awaiting next milestone
 
 ## Current Position
 
-Milestone: v1.5 — Tab Identity & Search
-Status: Ready to plan
-Current phase: Phase 18 — Searchable SelectPicker
-Last activity: 2026-04-07 — roadmap created
+Milestone: v1.5 — Tab Identity & Search (SHIPPED 2026-04-07)
+Status: Shipped & archived
+Current phase: None
+Last activity: 2026-04-07
 
-Progress: [          ] 0% (0/3 phases)
+Progress: [██████████] 100% (3/3 phases)
 
 ## Performance Metrics
 

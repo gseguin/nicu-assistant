@@ -1,5 +1,24 @@
 # Milestones
 
+## v1.5 Tab Identity & Search (Shipped: 2026-04-07)
+
+**Phases completed:** 3 phases (18, 19, 20), 5 plans, 18 commits, +3030/-47 diff across 28 files
+
+**Tag:** `v1.5.0`
+
+**Key accomplishments:**
+
+- Searchable Formula picker — case-insensitive label+manufacturer filter, ArrowDown/ArrowUp traversal between input and listbox, Enter-to-select-single-match, "No matches" state, query reset on reopen. Wired via opt-in `searchable` prop on the shared SelectPicker; Morphine pickers untouched (existing T-01..T-11 still pass).
+- Per-tab visual identity via new `--color-identity` CSS token — Morphine reuses Clinical Blue 220, Formula gets a new Teal ~195 (light + dark, OKLCH). Wired to exactly 4 surfaces: result hero card, focus-visible outlines, section eyebrow labels, and the active calculator tab indicator in both mobile and desktop nav. Shell chrome and BMF tokens untouched.
+- NavShell per-tab identity via new `identityClass` field on `CalculatorEntry` — applied directly to each tab `<a>` element, solving the "nav lives above the route" cascade trap.
+- Real WCAG failure caught and fixed by Phase 20's axe sweep: Phase 19's Morphine schedule eyebrow on the new identity-hero card was 3.61:1 (re-used `--color-accent-light`). Tuned `.identity-morphine` light hero to literal `oklch(95% 0.04 220)`, restoring 4.5:1 without touching `--color-accent*`.
+- Playwright a11y suite extended — focus-ring rendered + dark-mode results-visible variants now covered for both calculators. 8/8 axe sweeps green, no `disableRules` escape hatches.
+- App version finally bumped from `1.2.0` (stuck since v1.2) to `1.5.0` so the about dialog reflects shipped state.
+
+See [milestones/v1.5-ROADMAP.md](milestones/v1.5-ROADMAP.md) and [milestones/v1.5-REQUIREMENTS.md](milestones/v1.5-REQUIREMENTS.md) for full archive.
+
+---
+
 ## v1.4 UI Polish (Shipped: 2026-04-07)
 
 **Phases completed:** 6 phases (12, 13, 14, 15, 16, 17), 6 plans, 8 commits
