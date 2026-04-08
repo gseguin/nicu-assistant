@@ -223,7 +223,7 @@ Plans:
 
 Plans:
 - [ ] 18-01-PLAN.md — SelectPicker searchable prop, filter, keyboard, no-matches
-- [ ] 18-02-PLAN.md — Wire Formula picker + T-12..T-18 component tests
+- [x] 18-02-PLAN.md — Wire Formula picker + T-12..T-18 component tests
 **UI hint**: yes
 
 ### Phase 19: Tab Identity Token
@@ -267,6 +267,6 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
 | 9-11. v1.3 Fortification Refactor | v1.3 | — | Complete | 2026-04-07 |
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
-| 18. Searchable SelectPicker | v1.5 | 0/0 | Not started | - |
+| 18. Searchable SelectPicker | v1.5 | 1/2 | In Progress|  |
 | 19. Tab Identity Token | v1.5 | 0/0 | Not started | - |
 | 20. Identity A11y Verification | v1.5 | 0/0 | Not started | - |

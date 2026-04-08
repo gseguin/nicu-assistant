@@ -6,12 +6,12 @@
 
 ### Search (Formula picker)
 
-- [ ] **SEARCH-01**: User can type to filter formulas in the Formula picker by both label and detail/manufacturer text (case-insensitive substring match).
-- [ ] **SEARCH-02**: User sees a "No matches" empty state inside the picker dialog when the search query filters out every option.
-- [ ] **SEARCH-03**: User can keyboard-navigate between the search input and the filtered list — ArrowDown from the input jumps to the first option; ArrowUp from the first option returns to the input.
-- [ ] **SEARCH-04**: User can press Enter in the search input to select the single remaining option when exactly one match is filtered.
-- [ ] **SEARCH-05**: The `searchable` prop on the shared `SelectPicker` is opt-in; Morphine-tab pickers and any non-Formula consumer remain unchanged (no search affordance rendered).
-- [ ] **SEARCH-06**: Search query resets to empty every time the picker reopens; focus lands on the search input on open when `searchable` is true.
+- [x] **SEARCH-01**: User can type to filter formulas in the Formula picker by both label and detail/manufacturer text (case-insensitive substring match).
+- [x] **SEARCH-02**: User sees a "No matches" empty state inside the picker dialog when the search query filters out every option.
+- [x] **SEARCH-03**: User can keyboard-navigate between the search input and the filtered list — ArrowDown from the input jumps to the first option; ArrowUp from the first option returns to the input.
+- [x] **SEARCH-04**: User can press Enter in the search input to select the single remaining option when exactly one match is filtered.
+- [x] **SEARCH-05**: The `searchable` prop on the shared `SelectPicker` is opt-in; Morphine-tab pickers and any non-Formula consumer remain unchanged (no search affordance rendered).
+- [x] **SEARCH-06**: Search query resets to empty every time the picker reopens; focus lands on the search input on open when `searchable` is true.
 
 ### Tab Identity
 
@@ -27,7 +27,7 @@
 
 - [ ] **A11Y-01**: Every surface that uses `--color-identity` meets WCAG 2.1 AA contrast in both light and dark mode, verified via the existing axe-core sweep (color-contrast rule enabled).
 - [ ] **A11Y-02**: The new teal hue passes 4.5:1 for text/icon usage and 3:1 for non-text UI (focus rings, indicators) against its adjacent surface tokens in both themes.
-- [ ] **A11Y-03**: Searchable picker keyboard interactions (SEARCH-03, SEARCH-04) are covered by a component test or E2E test asserting ArrowDown/ArrowUp traversal and Enter-to-select-single-match.
+- [x] **A11Y-03**: Searchable picker keyboard interactions (SEARCH-03, SEARCH-04) are covered by a component test or E2E test asserting ArrowDown/ArrowUp traversal and Enter-to-select-single-match.
 
 ## Future Requirements
 
@@ -47,12 +47,12 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEARCH-01 | Phase 18 | Pending |
-| SEARCH-02 | Phase 18 | Pending |
-| SEARCH-03 | Phase 18 | Pending |
-| SEARCH-04 | Phase 18 | Pending |
-| SEARCH-05 | Phase 18 | Pending |
-| SEARCH-06 | Phase 18 | Pending |
+| SEARCH-01 | Phase 18 | Complete |
+| SEARCH-02 | Phase 18 | Complete |
+| SEARCH-03 | Phase 18 | Complete |
+| SEARCH-04 | Phase 18 | Complete |
+| SEARCH-05 | Phase 18 | Complete |
+| SEARCH-06 | Phase 18 | Complete |
 | IDENT-01 | Phase 19 | Pending |
 | IDENT-02 | Phase 19 | Pending |
 | IDENT-03 | Phase 19 | Pending |
@@ -62,7 +62,7 @@
 | IDENT-07 | Phase 19 | Pending |
 | A11Y-01 | Phase 20 | Pending |
 | A11Y-02 | Phase 20 | Pending |
-| A11Y-03 | Phase 18 | Pending |
+| A11Y-03 | Phase 18 | Complete |
 
 **Coverage:** 16/16 v1.5 requirements mapped ✓
 
