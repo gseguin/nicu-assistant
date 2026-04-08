@@ -8,6 +8,7 @@ export interface CalculatorEntry {
   href: string;        // SvelteKit href
   icon: Component;     // Lucide icon component
   description: string; // Screen reader accessible description
+  identityClass: 'identity-morphine' | 'identity-formula';
 }
 
 export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
@@ -17,6 +18,7 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     href: '/morphine-wean',
     icon: Syringe,
     description: 'Morphine weaning schedule calculator',
+    identityClass: 'identity-morphine',
   },
   {
     id: 'formula',
@@ -24,5 +26,6 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     href: '/formula',
     icon: Milk,
     description: 'Infant formula fortification calculator',
+    identityClass: 'identity-formula',
   },
 ] as const;

@@ -18,7 +18,7 @@
   <title>Morphine Wean | NICU Assistant</title>
 </svelte:head>
 
-<div class="max-w-lg md:max-w-4xl mx-auto px-4 py-6 space-y-4">
+<div class="identity-morphine max-w-lg md:max-w-4xl mx-auto px-4 py-6 space-y-4">
   <header class="flex items-center gap-3">
     <Syringe size={28} class="text-[var(--color-accent)]" aria-hidden="true" />
     <h1 class="text-title font-bold text-[var(--color-text-primary)]">Morphine Wean</h1>
