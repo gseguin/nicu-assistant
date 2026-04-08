@@ -29,20 +29,17 @@ test.describe('Morphine Wean Accessibility', () => {
 	});
 
 	test('morphine wean page has no axe violations in dark mode', async ({ page }) => {
-		// Switch to dark mode
+		// Switch to dark mode. Disable theme transitions so axe reads the final
+		// computed colors rather than mid-transition interpolations.
 		await page.evaluate(() => {
+			document.documentElement.classList.add('no-transition');
 			document.documentElement.classList.remove('light');
 			document.documentElement.classList.add('dark');
 			document.documentElement.setAttribute('data-theme', 'dark');
 		});
+		await page.waitForTimeout(250);
 
-		// TODO: Re-enable color-contrast once dark mode theme colors are updated
-		// to meet WCAG 2.1 AA contrast ratios. Currently excluded due to pre-existing
-		// contrast issues in the dark theme (accent color #00a7d2 on dark backgrounds).
-		const results = await new AxeBuilder({ page })
-			.withTags(['wcag2a', 'wcag2aa'])
-			.disableRules(['color-contrast'])
-			.analyze();
+		const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
 		expect(results.violations).toEqual([]);
 	});

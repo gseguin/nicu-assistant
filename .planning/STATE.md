@@ -5,8 +5,8 @@ milestone_name: UI Polish
 current_phase: Phase 12 — Shared SelectPicker Rewrite (not started)
 status: executing
 stopped_at: v1.4 roadmap created; ready to plan Phase 12
-last_updated: "2026-04-08T03:05:31.082Z"
-last_activity: 2026-04-08 -- Phase 16 planning complete
+last_updated: "2026-04-08T03:09:07.692Z"
+last_activity: 2026-04-08 -- Phase 17 planning complete
 progress:
   total_phases: 8
   completed_phases: 4
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-04-07)
 Milestone: v1.4 — UI Polish
 Status: Ready to execute
 Current phase: Phase 12 — Shared SelectPicker Rewrite (not started)
-Last activity: 2026-04-08 -- Phase 16 planning complete
+Last activity: 2026-04-08 -- Phase 17 planning complete
 
 Progress: [░░░░░░░░░░] 0% (0/6 phases)
 
