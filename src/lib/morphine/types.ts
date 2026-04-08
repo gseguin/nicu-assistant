@@ -13,3 +13,11 @@ export interface MorphineStateData {
   maxDoseMgKgDose: number | null;
   decreasePct: number | null;
 }
+
+import type { NumericInputRange } from '$lib/shared/types.js';
+
+export interface MorphineInputRanges {
+  weightKg: NumericInputRange;
+  maxDoseMgKgDose: NumericInputRange;
+  decreasePct: NumericInputRange;
+}

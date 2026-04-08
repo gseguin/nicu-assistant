@@ -4,7 +4,10 @@
   import { morphineState } from '$lib/morphine/state.svelte.js';
   import NumericInput from '$lib/shared/components/NumericInput.svelte';
   import SegmentedToggle from '$lib/shared/components/SegmentedToggle.svelte';
-  import type { WeanMode, WeanStep } from '$lib/morphine/types.js';
+  import type { WeanMode, WeanStep, MorphineInputRanges } from '$lib/morphine/types.js';
+  import config from '$lib/morphine/morphine-config.json';
+
+  const inputs = config.inputs as MorphineInputRanges;
 
   const MODE_OPTIONS: { value: WeanMode; label: string }[] = [
     { value: 'linear', label: 'Linear' },
@@ -154,9 +157,9 @@
       bind:value={morphineState.current.weightKg}
       label="Dosing weight"
       suffix="kg"
-      min={0.1}
-      max={200}
-      step={0.1}
+      min={inputs.weightKg.min}
+      max={inputs.weightKg.max}
+      step={inputs.weightKg.step}
       placeholder="3.1"
       id="morphine-weight"
     />
@@ -164,9 +167,9 @@
       bind:value={morphineState.current.maxDoseMgKgDose}
       label="Max morphine dose"
       suffix="mg/kg/dose"
-      min={0.001}
-      max={1}
-      step={0.001}
+      min={inputs.maxDoseMgKgDose.min}
+      max={inputs.maxDoseMgKgDose.max}
+      step={inputs.maxDoseMgKgDose.step}
       placeholder="0.04"
       id="morphine-max-dose"
     />
@@ -174,9 +177,9 @@
       bind:value={morphineState.current.decreasePct}
       label="Decrease per step"
       suffix="%"
-      min={1}
-      max={50}
-      step={1}
+      min={inputs.decreasePct.min}
+      max={inputs.decreasePct.max}
+      step={inputs.decreasePct.step}
       placeholder="10"
       id="morphine-decrease"
     />
