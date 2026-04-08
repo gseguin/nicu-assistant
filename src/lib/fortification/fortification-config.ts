@@ -12,3 +12,7 @@ export function getFortificationFormulas(): FortificationFormula[] {
 export function getFormulaById(id: string): FortificationFormula | undefined {
   return formulas.find((f) => f.id === id);
 }
+
+export function formulaSupportsPackets(id: string): boolean {
+  return getFormulaById(id)?.packetsSupported === true;
+}

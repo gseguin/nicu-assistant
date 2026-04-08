@@ -14,6 +14,7 @@ export interface FortificationFormula {
   displacement_factor: number;
   calorie_concentration: number;
   grams_per_scoop: number;
+  packetsSupported?: boolean;
 }
 
 // Inputs to calculateFortification (consumed by Plan 09-02).

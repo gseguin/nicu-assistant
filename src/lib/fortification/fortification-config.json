@@ -190,7 +190,8 @@
       "manufacturer": "Abbott",
       "displacement_factor": 1,
       "calorie_concentration": 1.4,
-      "grams_per_scoop": 5
+      "grams_per_scoop": 5,
+      "packetsSupported": true
     },
     {
       "id": "similac-isomil",
