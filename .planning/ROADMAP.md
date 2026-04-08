@@ -219,7 +219,11 @@ Plans:
   3. Reopening the Formula picker resets the search query to empty and places initial focus on the search input
   4. Morphine-tab pickers and any other SelectPicker consumer that does not opt in render with no search affordance and behave identically to v1.4
   5. Component or E2E test asserts ArrowDown/ArrowUp traversal and Enter-to-select-single-match behavior, passing in CI
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 18-01-PLAN.md — SelectPicker searchable prop, filter, keyboard, no-matches
+- [ ] 18-02-PLAN.md — Wire Formula picker + T-12..T-18 component tests
 **UI hint**: yes
 
 ### Phase 19: Tab Identity Token
