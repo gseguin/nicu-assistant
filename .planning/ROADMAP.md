@@ -232,3 +232,66 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 9-11. v1.3 Fortification Refactor | v1.3 | — | Complete | 2026-04-07 |
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
 | 18-20. v1.5 Tab Identity & Search | v1.5 | 5/5 | Complete | 2026-04-07 |
+| 21. Shared SegmentedToggle | v1.6 | 0/? | Not started | - |
+| 22. NumericInput Hardening | v1.6 | 0/? | Not started | - |
+| 23. Result Feedback | v1.6 | 0/? | Not started | - |
+| 24. A11y Verification | v1.6 | 0/? | Not started | - |
+
+### v1.6 Toggle & Harden (Phases 21-24)
+
+- [ ] **Phase 21: Shared SegmentedToggle (build + wire)** - Extract toggle from Morphine, wire Morphine + Formula consumers
+- [ ] **Phase 22: NumericInput Hardening** - Optional min/max with visible hint and advisory blur message (no clamp)
+- [ ] **Phase 23: Result Feedback** - aria-live result hero with reduced-motion-gated entrance
+- [ ] **Phase 24: A11y Verification** - axe sweep covering toggle, range hint, and error message in both themes/tabs
+
+## Phase Details (v1.6)
+
+### Phase 21: Shared SegmentedToggle (build + wire)
+**Goal**: Both calculators express 2-option choices through one shared, identity-aware, keyboard-accessible toggle component
+**Depends on**: Phase 20 (v1.5 identity token)
+**Requirements**: TOG-01, TOG-02, TOG-03, TOG-04, TOG-05, TOG-06, A11Y-03
+**Success Criteria** (what must be TRUE):
+  1. A `SegmentedToggle` component exists in `src/lib/shared/components/` with a SelectPicker-consistent API (label, options, bound value)
+  2. The active segment renders with `var(--color-identity)`, automatically picking up Clinical Blue in Morphine and Teal in Formula
+  3. Keyboard users can move between segments with `←`/`→` and jump with `Home`/`End`; ARIA semantics match Morphine's prior tablist
+  4. Morphine Linear/Compounding switch and Formula Breast milk/Formula base switch both use `SegmentedToggle`; old inline tablist + Base SelectPicker code is gone
+  5. All pre-existing morphine and fortification tests still pass with no behavior change; new component tests cover keyboard nav
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 22: NumericInput Hardening
+**Goal**: Out-of-range clinical values cannot slip through silently, but the user keeps full typing freedom
+**Depends on**: Phase 21
+**Requirements**: HARD-01, HARD-02, HARD-03, HARD-04, HARD-05, HARD-06
+**Success Criteria** (what must be TRUE):
+  1. `NumericInput` accepts optional `min` and `max` props and renders a visible range hint (e.g. `0.5-10 kg`) under the field when supplied
+  2. On blur, a value outside `[min, max]` shows an inline "Outside expected range — verify" advisory in `var(--color-error)` with no auto-clamp
+  3. Editing the value back within range clears the advisory immediately on next valid input
+  4. Every Morphine and Formula `NumericInput` instance is wired with ranges sourced from `morphine-config.json` / `fortification-config.json` — no inline magic numbers
+  5. Component tests cover hint rendering, blur-outside message, blur-back-inside clear, and the no-clamp guarantee
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 23: Result Feedback (aria-live + entrance)
+**Goal**: When a result appears or updates, screen reader users hear it and sighted users see a calm motion cue — without losing input flow
+**Depends on**: Phase 22
+**Requirements**: FEED-01, FEED-02, FEED-03
+**Success Criteria** (what must be TRUE):
+  1. The result hero in both Morphine and Fortification carries `aria-live="polite"` + `aria-atomic="true"` and announces value updates
+  2. The hero scales 95% → 100% over ~200ms when transitioning from hidden to visible or when the value changes
+  3. The entrance transition is gated by the existing `prefers-reduced-motion: reduce` constant pattern (matches v1.4 motion audit)
+  4. No auto-scroll, no focus theft — the user stays in their current input field
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 24: A11y Verification
+**Goal**: Every new v1.6 surface passes WCAG 2.1 AA in both themes and both tab identities, verified by the axe-core sweep
+**Depends on**: Phase 23
+**Requirements**: A11Y-01, A11Y-02
+**Success Criteria** (what must be TRUE):
+  1. `SegmentedToggle` active and inactive segments meet WCAG 2.1 AA contrast in light + dark for both Clinical Blue (Morphine) and Teal (Formula) identity
+  2. The NumericInput range hint and the inline error message both meet WCAG 2.1 AA contrast in light + dark
+  3. The Playwright axe sweep is extended to cover the new states (toggle rendered, range hint visible, error message visible) with no `disableRules` escape hatches
+  4. All axe sweeps green across both calculators in both themes
+**Plans**: TBD
+**UI hint**: yes

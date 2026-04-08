@@ -52,7 +52,28 @@
 
 ## Traceability
 
-*(populated by roadmap)*
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| TOG-01 | Phase 21 | Pending |
+| TOG-02 | Phase 21 | Pending |
+| TOG-03 | Phase 21 | Pending |
+| TOG-04 | Phase 21 | Pending |
+| TOG-05 | Phase 21 | Pending |
+| TOG-06 | Phase 21 | Pending |
+| HARD-01 | Phase 22 | Pending |
+| HARD-02 | Phase 22 | Pending |
+| HARD-03 | Phase 22 | Pending |
+| HARD-04 | Phase 22 | Pending |
+| HARD-05 | Phase 22 | Pending |
+| HARD-06 | Phase 22 | Pending |
+| FEED-01 | Phase 23 | Pending |
+| FEED-02 | Phase 23 | Pending |
+| FEED-03 | Phase 23 | Pending |
+| A11Y-01 | Phase 24 | Pending |
+| A11Y-02 | Phase 24 | Pending |
+| A11Y-03 | Phase 21 | Pending |
+
+**Coverage:** 18/18 v1.6 requirements mapped.
 
 ---
 *Last updated: 2026-04-07 — v1.6 requirements defined*
