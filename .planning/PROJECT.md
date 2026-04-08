@@ -56,7 +56,14 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-(None — v1.5 shipped 2026-04-07; planning next milestone)
+## Current Milestone: v1.6 Toggle & Harden
+
+**Goal:** Resolve the "two patterns for one decision" inconsistency between calculators, and harden the input layer so out-of-range values can't slip through silently.
+
+**Target features:**
+- Extract a shared `SegmentedToggle` component from Morphine's tablist pattern; replace Formula `Base` SelectPicker with the same control. Active segment uses `var(--color-identity)` so identity carries automatically.
+- `NumericInput` gains `min`/`max` hardening: visible range hint, soft-clamp on blur, inline "Outside expected range — verify" message. Doesn't block typing.
+- Result hero gets `aria-live="polite"` + a 200ms scale-from-95% entrance gated by `prefers-reduced-motion`. No auto-scroll.
 
 ### Out of Scope
 
@@ -125,4 +132,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-07 — v1.5 Tab Identity & Search shipped and archived*
+*Last updated: 2026-04-07 — v1.6 Toggle & Harden milestone started*
