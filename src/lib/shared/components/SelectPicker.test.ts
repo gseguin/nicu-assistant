@@ -123,3 +123,133 @@ describe('SelectPicker', () => {
     expect(() => screen.getByLabelText('Fruit')).not.toThrow();
   });
 });
+
+const searchableOptions = [
+  { value: 'sim-adv', label: 'Similac Advance', group: 'Abbott' },
+  { value: 'sim-neo', label: 'Similac NeoSure', group: 'Abbott' },
+  { value: 'enfa-ar', label: 'Enfamil AR', group: 'Mead Johnson' },
+  { value: 'enfa-pre', label: 'Enfamil Premature', group: 'Mead Johnson' },
+  { value: 'gerb', label: 'Gerber Good Start', group: 'Nestle' },
+];
+
+function openTrigger(label: string) {
+  return screen.getByLabelText(label) as HTMLButtonElement;
+}
+
+describe('SelectPicker searchable mode', () => {
+  it('T-12 opens with search input focused and empty', async () => {
+    render(SelectPicker, {
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+    });
+    await fireEvent.click(openTrigger('Formula'));
+    await tick();
+    const input = screen.getByRole('textbox', { name: /Filter Formula/i }) as HTMLInputElement;
+    expect(input).toBeTruthy();
+    expect(input.value).toBe('');
+    expect(document.activeElement).toBe(input);
+  });
+
+  it('T-13 typing filters by label and group (case-insensitive)', async () => {
+    render(SelectPicker, {
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+    });
+    await fireEvent.click(openTrigger('Formula'));
+    await tick();
+    const input = screen.getByRole('textbox', { name: /Filter Formula/i }) as HTMLInputElement;
+
+    await fireEvent.input(input, { target: { value: 'abb' } });
+    await tick();
+    expect(screen.getAllByRole('option').length).toBe(2);
+
+    await fireEvent.input(input, { target: { value: 'enfa' } });
+    await tick();
+    expect(screen.getAllByRole('option').length).toBe(2);
+
+    await fireEvent.input(input, { target: { value: 'pre' } });
+    await tick();
+    const opts = screen.getAllByRole('option');
+    expect(opts.length).toBe(1);
+    expect(opts[0].textContent).toContain('Enfamil Premature');
+  });
+
+  it('T-14 shows "No matches" with role=status when filter empty', async () => {
+    render(SelectPicker, {
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+    });
+    await fireEvent.click(openTrigger('Formula'));
+    await tick();
+    const input = screen.getByRole('textbox', { name: /Filter Formula/i }) as HTMLInputElement;
+    await fireEvent.input(input, { target: { value: 'zzzzzz' } });
+    await tick();
+    expect(screen.queryAllByRole('option').length).toBe(0);
+    const status = screen.getByRole('status');
+    expect(status.textContent).toContain('No matches');
+  });
+
+  it('T-15 ArrowDown enters list, ArrowUp returns to search input', async () => {
+    render(SelectPicker, {
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+    });
+    await fireEvent.click(openTrigger('Formula'));
+    await tick();
+    const input = screen.getByRole('textbox', { name: /Filter Formula/i }) as HTMLInputElement;
+    expect(document.activeElement).toBe(input);
+
+    await fireEvent.keyDown(input, { key: 'ArrowDown' });
+    await tick();
+    expect((document.activeElement as HTMLElement).getAttribute('data-index')).toBe('0');
+
+    await fireEvent.keyDown(document.activeElement as HTMLElement, { key: 'ArrowUp' });
+    await tick();
+    expect(document.activeElement).toBe(input);
+  });
+
+  it('T-16 Enter on single match selects and closes', async () => {
+    render(SelectPicker, {
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+    });
+    const trigger = openTrigger('Formula');
+    await fireEvent.click(trigger);
+    await tick();
+    const input = screen.getByRole('textbox', { name: /Filter Formula/i }) as HTMLInputElement;
+    await fireEvent.input(input, { target: { value: 'gerb' } });
+    await tick();
+    await fireEvent.keyDown(input, { key: 'Enter' });
+    await tick();
+    expect(trigger.textContent).toContain('Gerber Good Start');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('T-17 reopening resets searchQuery and refocuses input', async () => {
+    const { container } = render(SelectPicker, {
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+    });
+    const trigger = openTrigger('Formula');
+    await fireEvent.click(trigger);
+    await tick();
+    let input = screen.getByRole('textbox', { name: /Filter Formula/i }) as HTMLInputElement;
+    await fireEvent.input(input, { target: { value: 'abb' } });
+    await tick();
+    expect(screen.getAllByRole('option').length).toBe(2);
+
+    const dialog = container.querySelector('dialog')!;
+    dialog.close();
+    await tick();
+
+    await fireEvent.click(trigger);
+    await tick();
+    input = screen.getByRole('textbox', { name: /Filter Formula/i }) as HTMLInputElement;
+    expect(input.value).toBe('');
+    expect(document.activeElement).toBe(input);
+    expect(screen.getAllByRole('option').length).toBe(searchableOptions.length);
+  });
+
+  it('T-18 searchable=false (default) renders no Filter textbox', async () => {
+    render(SelectPicker, {
+      props: { label: 'Formula', value: '', options: searchableOptions },
+    });
+    await fireEvent.click(openTrigger('Formula'));
+    await tick();
+    expect(screen.queryByRole('textbox', { name: /Filter Formula/i })).toBeNull();
+  });
+});
