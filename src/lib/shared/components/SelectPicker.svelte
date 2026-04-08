@@ -9,12 +9,14 @@
     value = $bindable(),
     options,
     placeholder = 'Select...',
+    searchable = false,
     class: className = '',
   }: {
     label: string;
     value: string;
     options: SelectOption[];
     placeholder?: string;
+    searchable?: boolean;
     class?: string;
   } = $props();
 
@@ -28,8 +30,11 @@
 
   let dialog = $state<HTMLDialogElement | null>(null);
   let triggerBtn = $state<HTMLButtonElement | null>(null);
+  let listboxEl = $state<HTMLDivElement | null>(null);
+  let searchInput = $state<HTMLInputElement | null>(null);
   let open = $state(false);
   let focusedIndex = $state(-1);
+  let searchQuery = $state('');
 
   const selectedLabel = $derived(
     options.find((o) => o.value === value)?.label ?? placeholder
@@ -40,6 +45,27 @@
     [...new Set(options.map((o) => o.group).filter(Boolean) as string[])]
   );
 
+  const normalizedQuery = $derived(searchQuery.trim().toLowerCase());
+  const isSearching = $derived(searchable && normalizedQuery.length > 0);
+  const filteredOptions = $derived(
+    isSearching
+      ? options.filter(
+          (o) =>
+            o.label.toLowerCase().includes(normalizedQuery) ||
+            (o.group?.toLowerCase().includes(normalizedQuery) ?? false)
+        )
+      : options
+  );
+  const showGrouped = $derived(hasGroups && !isSearching);
+
+  $effect(() => {
+    if (!searchable) return;
+    searchQuery;
+    if (focusedIndex >= filteredOptions.length) {
+      focusedIndex = filteredOptions.length - 1;
+    }
+  });
+
   function slug(s: string): string {
     return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   }
@@ -47,11 +73,16 @@
   async function openPicker() {
     if (!dialog) return;
     open = true;
+    searchQuery = '';
     const idx = options.findIndex((o) => o.value === value);
     focusedIndex = idx >= 0 ? idx : 0;
     dialog.showModal();
     await tick();
-    focusOption(focusedIndex);
+    if (searchable) {
+      searchInput?.focus();
+    } else {
+      focusOption(focusedIndex);
+    }
   }
 
   function closePicker() {
@@ -71,13 +102,34 @@
     closePicker();
   }
 
-  function handleListboxKeydown(e: KeyboardEvent) {
+  async function handleSearchKeydown(e: KeyboardEvent) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      focusedIndex = Math.min(focusedIndex + 1, options.length - 1);
+      if (filteredOptions.length === 0) return;
+      await tick();
+      focusedIndex = 0;
+      focusOption(0);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (filteredOptions.length === 1) {
+        select(filteredOptions[0].value);
+      }
+    }
+  }
+
+  function handleListboxKeydown(e: KeyboardEvent) {
+    const list = isSearching ? filteredOptions : options;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      focusedIndex = Math.min(focusedIndex + 1, list.length - 1);
       focusOption(focusedIndex);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
+      if (searchable && focusedIndex <= 0) {
+        focusedIndex = -1;
+        searchInput?.focus();
+        return;
+      }
       focusedIndex = Math.max(focusedIndex - 1, 0);
       focusOption(focusedIndex);
     } else if (e.key === 'Home') {
@@ -86,7 +138,7 @@
       focusOption(focusedIndex);
     } else if (e.key === 'End') {
       e.preventDefault();
-      focusedIndex = options.length - 1;
+      focusedIndex = list.length - 1;
       focusOption(focusedIndex);
     }
   }
@@ -98,6 +150,7 @@
   function handleClose() {
     open = false;
     focusedIndex = -1;
+    searchQuery = '';
     triggerBtn?.focus();
   }
 </script>
@@ -116,7 +169,9 @@
       type="button"
       data-select-trigger
       aria-labelledby={labelId}
-      aria-haspopup="dialog"
+      aria-haspopup={searchable ? 'listbox' : 'dialog'}
+      aria-controls={searchable ? listboxId : undefined}
+      role={searchable ? 'combobox' : undefined}
       aria-expanded={open ? 'true' : 'false'}
       class="flex min-h-12 w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-card)] px-3.5 py-2.5 text-left text-[0.9375rem] font-medium text-[var(--color-text-primary)] transition hover:border-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
       onclick={openPicker}
@@ -150,7 +205,22 @@
           </span>
         </header>
 
+        {#if searchable}
+          <div class="border-b border-[var(--color-border)] px-4 py-3">
+            <input
+              bind:this={searchInput}
+              type="text"
+              class="w-full min-h-12 bg-transparent text-sm font-medium text-[var(--color-text-primary)] outline-none placeholder:text-[var(--color-text-tertiary)]"
+              placeholder="Search..."
+              aria-label="Filter {label}"
+              bind:value={searchQuery}
+              onkeydown={handleSearchKeydown}
+            />
+          </div>
+        {/if}
+
         <div
+          bind:this={listboxEl}
           id={listboxId}
           role="listbox"
           aria-labelledby={dialogTitleId}
@@ -158,7 +228,7 @@
           class="max-h-[70svh] overflow-y-auto px-2 py-2"
           onkeydown={handleListboxKeydown}
         >
-          {#if hasGroups}
+          {#if showGrouped}
             {#each groups as group (group)}
               {@const headingId = `${listboxId}-g-${slug(group)}`}
               <div role="group" aria-labelledby={headingId}>
@@ -194,7 +264,7 @@
               </div>
             {/each}
           {:else}
-            {#each options as option, idx (option.value)}
+            {#each filteredOptions as option, idx (option.value)}
               <button
                 type="button"
                 role="option"
@@ -214,6 +284,14 @@
                 {/if}
               </button>
             {/each}
+            {#if searchable && filteredOptions.length === 0}
+              <p
+                role="status"
+                class="px-4 py-3 text-sm text-[var(--color-text-tertiary)]"
+              >
+                No matches
+              </p>
+            {/if}
           {/if}
         </div>
       </div>
