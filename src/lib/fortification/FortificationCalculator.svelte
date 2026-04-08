@@ -8,6 +8,7 @@
   import { fortificationState } from '$lib/fortification/state.svelte.js';
   import NumericInput from '$lib/shared/components/NumericInput.svelte';
   import SelectPicker from '$lib/shared/components/SelectPicker.svelte';
+  import SegmentedToggle from '$lib/shared/components/SegmentedToggle.svelte';
   import type { SelectOption } from '$lib/shared/types.js';
   import type { BaseType, UnitType, TargetKcalOz } from './types.js';
 
@@ -150,7 +151,7 @@
 <div class="space-y-6">
   <!-- Inputs Card -->
   <section class="card flex flex-col gap-4">
-    <SelectPicker label="Base" bind:value={baseStr} options={baseOptions} />
+    <SegmentedToggle label="Base" bind:value={baseStr} options={baseOptions} />
 
     <NumericInput
       bind:value={fortificationState.current.volumeMl}

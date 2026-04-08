@@ -3,13 +3,13 @@
   import { calculateLinearSchedule, calculateCompoundingSchedule } from '$lib/morphine/calculations.js';
   import { morphineState } from '$lib/morphine/state.svelte.js';
   import NumericInput from '$lib/shared/components/NumericInput.svelte';
+  import SegmentedToggle from '$lib/shared/components/SegmentedToggle.svelte';
   import type { WeanMode, WeanStep } from '$lib/morphine/types.js';
 
-  const MODE_ORDER: WeanMode[] = ['linear', 'compounding'];
-  const MODE_CONFIG: Record<WeanMode, { id: string; label: string }> = {
-    linear: { id: 'linear', label: 'Linear' },
-    compounding: { id: 'compounding', label: 'Compounding' },
-  };
+  const MODE_OPTIONS: { value: WeanMode; label: string }[] = [
+    { value: 'linear', label: 'Linear' },
+    { value: 'compounding', label: 'Compounding' },
+  ];
 
   // Dock-style magnification: scale cards based on distance from viewport center
   let activeStepIndex = $state(-1);
@@ -102,51 +102,6 @@
     };
   });
 
-  function activateMode(mode: WeanMode) {
-    morphineState.current.activeMode = mode;
-    // After Svelte re-renders the new tab panel, re-run magnification
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        triggerMagnification?.();
-      });
-    });
-  }
-
-  function handleModeTabKeydown(event: KeyboardEvent, mode: WeanMode) {
-    const currentIndex = MODE_ORDER.indexOf(mode);
-    let nextIndex = currentIndex;
-
-    switch (event.key) {
-      case 'ArrowRight':
-        event.preventDefault();
-        nextIndex = (currentIndex + 1) % MODE_ORDER.length;
-        break;
-      case 'ArrowLeft':
-        event.preventDefault();
-        nextIndex = (currentIndex - 1 + MODE_ORDER.length) % MODE_ORDER.length;
-        break;
-      case 'Home':
-        event.preventDefault();
-        nextIndex = 0;
-        break;
-      case 'End':
-        event.preventDefault();
-        nextIndex = MODE_ORDER.length - 1;
-        break;
-      case ' ':
-      case 'Enter':
-        event.preventDefault();
-        activateMode(mode);
-        return;
-      default:
-        return;
-    }
-
-    const nextMode = MODE_ORDER[nextIndex];
-    activateMode(nextMode);
-    document.getElementById(`${nextMode}-tab`)?.focus();
-  }
-
   // Derived schedule computation
   let schedule: WeanStep[] = $derived.by(() => {
     const { weightKg, maxDoseMgKgDose, decreasePct, activeMode } = morphineState.current;
@@ -186,27 +141,12 @@
 
 <div class="space-y-6">
   <!-- Mode Switcher -->
-  <div
-    class="flex p-1 bg-[var(--color-surface-alt)] rounded-2xl shadow-inner border border-[var(--color-border)]"
-    role="tablist"
-    aria-label="Weaning mode"
-  >
-    {#each MODE_ORDER as mode}
-      {@const cfg = MODE_CONFIG[mode]}
-      <button
-        role="tab"
-        aria-selected={morphineState.current.activeMode === mode}
-        aria-controls="{mode}-panel"
-        id="{mode}-tab"
-        tabindex={morphineState.current.activeMode === mode ? 0 : -1}
-        class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all font-semibold text-ui outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] {morphineState.current.activeMode === mode ? 'bg-[var(--color-surface-card)] text-[var(--color-identity)] shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-identity)] hover:bg-[var(--color-surface)]'}"
-        onclick={() => activateMode(mode)}
-        onkeydown={(e) => handleModeTabKeydown(e, mode)}
-      >
-        <span>{cfg.label}</span>
-      </button>
-    {/each}
-  </div>
+  <SegmentedToggle
+    label="Weaning mode"
+    ariaLabel="Weaning mode"
+    bind:value={morphineState.current.activeMode}
+    options={MODE_OPTIONS}
+  />
 
   <!-- Inputs Card -->
   <section class="card flex flex-col gap-4">
@@ -241,16 +181,6 @@
       id="morphine-decrease"
     />
   </section>
-
-  <!-- ARIA tab panels (hidden placeholders for the inactive mode) -->
-  {#each MODE_ORDER as mode}
-    <div
-      role="tabpanel"
-      id="{mode}-panel"
-      aria-labelledby="{mode}-tab"
-      hidden={morphineState.current.activeMode !== mode}
-    ></div>
-  {/each}
 
   <!-- Schedule content (single instance — reacts to activeMode via derived schedule) -->
   {#if schedule.length > 0}

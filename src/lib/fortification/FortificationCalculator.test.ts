@@ -136,12 +136,16 @@ describe('FortificationCalculator', () => {
     expect(within(hero).getByText('Teaspoons')).toBeTruthy();
   });
 
-  it('UI-04: reuses only NumericInput + SelectPicker (4 select triggers + 1 numeric)', () => {
+  it('UI-04: reuses NumericInput + SelectPicker + SegmentedToggle (3 select triggers + 1 numeric + 1 toggle)', () => {
     render(FortificationCalculator);
-    // 4 SelectPicker triggers — they are role="button" with data-select-trigger
+    // 3 SelectPicker triggers remaining (Formula, kcal, Unit) — Base is now a SegmentedToggle
     const triggers = document.querySelectorAll('[data-select-trigger]');
-    expect(triggers).toHaveLength(4);
+    expect(triggers).toHaveLength(3);
     expect(screen.getAllByRole('spinbutton')).toHaveLength(1);
+    // Base SegmentedToggle renders a tablist with 2 tabs
+    const tablists = document.querySelectorAll('[role="tablist"]');
+    expect(tablists).toHaveLength(1);
+    expect(document.querySelectorAll('[role="tab"]')).toHaveLength(2);
   });
 
   it('UI-05: uses OKLCH design tokens, not hardcoded colors', () => {
