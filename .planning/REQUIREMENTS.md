@@ -16,9 +16,9 @@
 ### Tab Identity
 
 - [ ] **IDENT-01**: A new `--color-identity` CSS custom property is defined for both light and dark themes, scoped per calculator route (Morphine = Clinical Blue 220, Formula = new Teal ~195).
-- [ ] **IDENT-02**: The Morphine and Formula result hero cards pick up `--color-identity` (background and/or large numeric color) so the displayed result instantly signals which tab the user is in.
-- [ ] **IDENT-03**: Focus-visible outlines on inputs, buttons, and pickers inside a calculator body use `--color-identity` so keyboard focus reinforces tab identity.
-- [ ] **IDENT-04**: Section eyebrow labels (e.g. "Step", "Target calorie") within a calculator use `--color-identity`.
+- [x] **IDENT-02**: The Morphine and Formula result hero cards pick up `--color-identity` (background and/or large numeric color) so the displayed result instantly signals which tab the user is in.
+- [x] **IDENT-03**: Focus-visible outlines on inputs, buttons, and pickers inside a calculator body use `--color-identity` so keyboard focus reinforces tab identity.
+- [x] **IDENT-04**: Section eyebrow labels (e.g. "Step", "Target calorie") within a calculator use `--color-identity`.
 - [ ] **IDENT-05**: The active calculator tab in the responsive nav (bottom bar on mobile, top nav on desktop) uses `--color-identity` for its active indicator.
 - [ ] **IDENT-06**: BMF Amber remains scoped exclusively to the fortifier-mode semantic signal and is NOT reused as Formula-tab identity — switching to fortifier mode still reads as a distinct in-tab state.
 - [ ] **IDENT-07**: Shell chrome (title bar, app name, theme toggle, info button, body text, input borders, surface tokens) stays on neutral/global tokens and does NOT pick up `--color-identity`.
@@ -54,9 +54,9 @@
 | SEARCH-05 | Phase 18 | Complete |
 | SEARCH-06 | Phase 18 | Complete |
 | IDENT-01 | Phase 19 | Pending |
-| IDENT-02 | Phase 19 | Pending |
-| IDENT-03 | Phase 19 | Pending |
-| IDENT-04 | Phase 19 | Pending |
+| IDENT-02 | Phase 19 | Complete |
+| IDENT-03 | Phase 19 | Complete |
+| IDENT-04 | Phase 19 | Complete |
 | IDENT-05 | Phase 19 | Pending |
 | IDENT-06 | Phase 19 | Pending |
 | IDENT-07 | Phase 19 | Pending |

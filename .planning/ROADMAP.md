@@ -240,7 +240,7 @@ Plans:
 
 Plans:
 - [ ] 19-01-PLAN.md — Identity tokens + registry wiring + nav tab active indicator
-- [ ] 19-02-PLAN.md — Wire identity to body surfaces (heroes, eyebrows, focus-visible)
+- [x] 19-02-PLAN.md — Wire identity to body surfaces (heroes, eyebrows, focus-visible)
 **UI hint**: yes
 
 ### Phase 20: Identity A11y Verification
@@ -272,5 +272,5 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 9-11. v1.3 Fortification Refactor | v1.3 | — | Complete | 2026-04-07 |
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
 | 18. Searchable SelectPicker | v1.5 | 1/2 | In Progress|  |
-| 19. Tab Identity Token | v1.5 | 0/2 | Not started | - |
+| 19. Tab Identity Token | v1.5 | 1/2 | In Progress|  |
 | 20. Identity A11y Verification | v1.5 | 0/0 | Not started | - |
