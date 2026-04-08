@@ -15,12 +15,12 @@
 
 ### NumericInput Hardening (from /critique P1: Error Prevention)
 
-- [ ] **HARD-01**: `NumericInput` accepts optional `min` and `max` props.
-- [ ] **HARD-02**: When `min` and/or `max` are provided, a small range hint renders under the input (e.g. `0.5–10 kg`) using existing `text-tertiary` typography.
-- [ ] **HARD-03**: On blur, if the entered value is outside the `min..max` range, the field shows an inline message ("Outside expected range — verify") in `var(--color-error)`. The value is NOT auto-clamped — the user keeps typing freedom; the message is advisory only.
-- [ ] **HARD-04**: When the entered value returns to within range on subsequent edits, the inline message clears immediately.
-- [ ] **HARD-05**: All Morphine and Formula `NumericInput` instances are wired with their clinical ranges sourced from existing JSON config files (`morphine-config.json`, `fortification-config.json`). No magic numbers in component code.
-- [ ] **HARD-06**: Component tests assert: hint renders when min/max provided, blur outside range shows message, blur back inside range clears it, no auto-clamp.
+- [x] **HARD-01**: `NumericInput` accepts optional `min` and `max` props.
+- [x] **HARD-02**: When `min` and/or `max` are provided, a small range hint renders under the input (e.g. `0.5–10 kg`) using existing `text-tertiary` typography.
+- [x] **HARD-03**: On blur, if the entered value is outside the `min..max` range, the field shows an inline message ("Outside expected range — verify") in `var(--color-error)`. The value is NOT auto-clamped — the user keeps typing freedom; the message is advisory only.
+- [x] **HARD-04**: When the entered value returns to within range on subsequent edits, the inline message clears immediately.
+- [x] **HARD-05**: All Morphine and Formula `NumericInput` instances are wired with their clinical ranges sourced from existing JSON config files (`morphine-config.json`, `fortification-config.json`). No magic numbers in component code.
+- [x] **HARD-06**: Component tests assert: hint renders when min/max provided, blur outside range shows message, blur back inside range clears it, no auto-clamp.
 
 ### Result Feedback (from /critique P1: Result Appears Silently)
 
@@ -60,12 +60,12 @@
 | TOG-04 | Phase 21 | Complete |
 | TOG-05 | Phase 21 | Complete |
 | TOG-06 | Phase 21 | Complete |
-| HARD-01 | Phase 22 | Pending |
-| HARD-02 | Phase 22 | Pending |
-| HARD-03 | Phase 22 | Pending |
-| HARD-04 | Phase 22 | Pending |
-| HARD-05 | Phase 22 | Pending |
-| HARD-06 | Phase 22 | Pending |
+| HARD-01 | Phase 22 | Complete |
+| HARD-02 | Phase 22 | Complete |
+| HARD-03 | Phase 22 | Complete |
+| HARD-04 | Phase 22 | Complete |
+| HARD-05 | Phase 22 | Complete |
+| HARD-06 | Phase 22 | Complete |
 | FEED-01 | Phase 23 | Pending |
 | FEED-02 | Phase 23 | Pending |
 | FEED-03 | Phase 23 | Pending |

@@ -5,7 +5,7 @@ milestone_name: Tab Identity & Search
 current_phase: 21 — Shared SegmentedToggle (build + wire)
 status: planning
 stopped_at: v1.6 roadmap created
-last_updated: "2026-04-08T15:17:11.346Z"
+last_updated: "2026-04-08T15:39:43.276Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 8
