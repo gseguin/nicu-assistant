@@ -9,6 +9,7 @@
 - v1.4 UI Polish - Phases 12-17 (shipped 2026-04-07) — see [milestones/v1.4-ROADMAP.md](milestones/v1.4-ROADMAP.md)
 - [v1.5 Tab Identity & Search](milestones/v1.5-ROADMAP.md) - Phases 18-20 (shipped 2026-04-07)
 - [v1.6 Toggle & Harden](milestones/v1.6-ROADMAP.md) - Phases 21-24 (shipped 2026-04-08)
+- v1.7 Formula Micro-Polish - Phase 25 (active)
 
 ## Phases
 
@@ -234,6 +235,23 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
 | 18-20. v1.5 Tab Identity & Search | v1.5 | 5/5 | Complete | 2026-04-07 |
 | 21-24. v1.6 Toggle & Harden | v1.6 | 5/5 | Complete | 2026-04-08 |
+| 25. Formula Micro-Polish | v1.7 | 0/1 | Not started | - |
+
+### v1.7 Formula Micro-Polish (Phase 25)
+
+- [ ] **Phase 25: Formula Micro-Polish** - Strip unit parentheticals from labels, put Formula + Starting Volume on one row, auto-select packets for packets-capable formulas
+
+### Phase 25: Formula Micro-Polish
+**Goal**: Three small rough edges in the Formula calculator fixed — labels stop repeating units, Formula + Starting Volume share a row, and packets auto-select when the formula supports them
+**Depends on**: Phase 24 (v1.6 complete)
+**Requirements**: LBL-01, LBL-02, LBL-03, ROW-01, ROW-02, ROW-03, AUTO-01, AUTO-02, AUTO-03, AUTO-04, REG-01, REG-02, REG-03
+**Success Criteria** (what must be TRUE):
+  1. Starting Volume and Target Calorie NumericInput labels read `"Starting Volume"` and `"Target Calorie"` — no `(mL)` or `(kcal/oz)` parentheticals
+  2. Formula picker and Starting Volume input share a single row on all screen sizes, with Formula first and Starting Volume second, preserving 48px touch targets and identity focus rings
+  3. Selecting a packets-capable formula (currently `similac-hmf`) automatically switches the Unit to `packets`; auto-reset off `packets` when switching away is preserved
+  4. The auto-select is data-driven by the formula's unit list in config, not hardcoded to a specific formula ID
+  5. All existing tests stay green (149/149 vitest, 12/12 Playwright a11y); new tests cover ROW-03, AUTO-01, AUTO-02
+**Plans**: TBD
 
 <details>
 <summary>v1.6 — Phases 21-24 (shipped 2026-04-08)</summary>

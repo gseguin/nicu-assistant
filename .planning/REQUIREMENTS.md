@@ -47,7 +47,23 @@
 
 ## Traceability
 
-*(populated by roadmap)*
+| Requirement | Phase | Status |
+|---|---|---|
+| LBL-01 | Phase 25 | Pending |
+| LBL-02 | Phase 25 | Pending |
+| LBL-03 | Phase 25 | Pending |
+| ROW-01 | Phase 25 | Pending |
+| ROW-02 | Phase 25 | Pending |
+| ROW-03 | Phase 25 | Pending |
+| AUTO-01 | Phase 25 | Pending |
+| AUTO-02 | Phase 25 | Pending |
+| AUTO-03 | Phase 25 | Pending |
+| AUTO-04 | Phase 25 | Pending |
+| REG-01 | Phase 25 | Pending |
+| REG-02 | Phase 25 | Pending |
+| REG-03 | Phase 25 | Pending |
+
+**Coverage:** 13/13 v1.7 requirements mapped ✓
 
 ---
 *Last updated: 2026-04-08 — v1.7 requirements defined*
