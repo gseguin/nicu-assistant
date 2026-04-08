@@ -1,6 +1,13 @@
 <script lang="ts">
   import { slide } from 'svelte/transition';
 
+  // Reduced-motion preference read once at module-load.
+  // Matches the pattern used by MorphineWeanCalculator's dock magnification.
+  const PREFERS_REDUCED_MOTION =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false;
+
   let idCounter = 0;
 
   let {
@@ -136,7 +143,7 @@
     <p
       id="{id}-error"
       class="text-xs text-[var(--color-error)] ml-1"
-      transition:slide={{ duration: 150 }}
+      transition:slide={{ duration: PREFERS_REDUCED_MOTION ? 0 : 150 }}
     >
       {displayError}
     </p>
