@@ -173,6 +173,7 @@
       min={inputs.volumeMl.min}
       max={inputs.volumeMl.max}
       step={inputs.volumeMl.step}
+      showRangeHint={false}
       placeholder="180"
       id="fortification-volume"
     />

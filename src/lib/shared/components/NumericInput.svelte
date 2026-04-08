@@ -19,6 +19,7 @@
     min,
     max,
     step = 0.1,
+    showRangeHint = true,
     id = `numeric-input-${++idCounter}`
   } = $props<{
     value: number | null;
@@ -29,6 +30,7 @@
     min?: number;
     max?: number;
     step?: number;
+    showRangeHint?: boolean;
     id?: string;
   }>();
 
@@ -49,6 +51,7 @@
   let displayError = $derived(error || rangeError);
 
   let rangeHint = $derived.by(() => {
+    if (!showRangeHint) return '';
     if (displayError) return '';
     if (min === undefined && max === undefined) return '';
     const unit = suffix ? ` ${suffix}` : '';
