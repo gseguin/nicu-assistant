@@ -1,6 +1,7 @@
 <script lang="ts">
   import { calculateFortification } from '$lib/fortification/calculations.js';
   import {
+    formulaSupportsPackets,
     getFormulaById,
     getFortificationFormulas,
     inputs,
@@ -104,7 +105,7 @@
       { value: 'teaspoons', label: 'Teaspoons' },
       { value: 'tablespoons', label: 'Tablespoons' },
     ];
-    if (fortificationState.current.formulaId === 'similac-hmf') {
+    if (formulaSupportsPackets(fortificationState.current.formulaId)) {
       base.push({ value: 'packets', label: 'Packets' });
     }
     return base;
@@ -117,12 +118,22 @@
   $effect(() => {
     const currFormulaId = fortificationState.current.formulaId;
     const currUnit = fortificationState.current.unit;
-    if (
-      prevFormulaId === 'similac-hmf' &&
-      currFormulaId !== 'similac-hmf' &&
-      currUnit === 'packets'
-    ) {
-      fortificationState.current.unit = 'teaspoons';
+    if (prevFormulaId !== currFormulaId) {
+      // v1.3 reset: leaving a packets-capable formula while packets selected
+      if (
+        formulaSupportsPackets(prevFormulaId) &&
+        !formulaSupportsPackets(currFormulaId) &&
+        currUnit === 'packets'
+      ) {
+        fortificationState.current.unit = 'teaspoons';
+      }
+      // v1.7 AUTO-01..04: entering a packets-capable formula auto-selects packets
+      if (
+        !formulaSupportsPackets(prevFormulaId) &&
+        formulaSupportsPackets(currFormulaId)
+      ) {
+        fortificationState.current.unit = 'packets';
+      }
     }
     prevFormulaId = currFormulaId;
   });
@@ -166,28 +177,33 @@
   <section class="card flex flex-col gap-4">
     <SegmentedToggle label="Base" bind:value={baseStr} options={baseOptions} />
 
-    <NumericInput
-      bind:value={fortificationState.current.volumeMl}
-      label="Starting Volume (mL)"
-      suffix="mL"
-      min={inputs.volumeMl.min}
-      max={inputs.volumeMl.max}
-      step={inputs.volumeMl.step}
-      showRangeHint={false}
-      placeholder="180"
-      id="fortification-volume"
-    />
-
-    <SelectPicker
-      label="Formula"
-      bind:value={formulaStr}
-      options={formulaOptions}
-      searchable
-    />
+    <div class="flex gap-3 items-end">
+      <div class="flex-1 min-w-0">
+        <SelectPicker
+          label="Formula"
+          bind:value={formulaStr}
+          options={formulaOptions}
+          searchable
+        />
+      </div>
+      <div class="basis-28 shrink-0">
+        <NumericInput
+          bind:value={fortificationState.current.volumeMl}
+          label="Starting Volume"
+          suffix="mL"
+          min={inputs.volumeMl.min}
+          max={inputs.volumeMl.max}
+          step={inputs.volumeMl.step}
+          showRangeHint={false}
+          placeholder="180"
+          id="fortification-volume"
+        />
+      </div>
+    </div>
 
     <div class="grid grid-cols-2 gap-4">
       <SelectPicker
-        label="Target Calorie (kcal/oz)"
+        label="Target Calorie"
         bind:value={kcalStr}
         options={kcalOptions}
       />

@@ -45,11 +45,11 @@ describe('FortificationCalculator', () => {
   it('UI-01: renders all 5 inputs with correct labels', () => {
     render(FortificationCalculator);
     // NumericInput uses <label for=> → getByLabelText works
-    expect(screen.getByLabelText('Starting Volume (mL)')).toBeTruthy();
+    expect(screen.getByLabelText('Starting Volume')).toBeTruthy();
     // SelectPickers: match the trigger by its aria-label prefix
     expect(getSelectTrigger('Base')).toBeTruthy();
     expect(getSelectTrigger('Formula')).toBeTruthy();
-    expect(getSelectTrigger('Target Calorie (kcal/oz)')).toBeTruthy();
+    expect(getSelectTrigger('Target Calorie')).toBeTruthy();
     expect(getSelectTrigger('Unit')).toBeTruthy();
     expect(screen.getAllByRole('spinbutton')).toHaveLength(1);
   });
@@ -134,6 +134,43 @@ describe('FortificationCalculator', () => {
     const hero = getHeroCard();
     expect(within(hero).getByText(/^\s*2\s*$/)).toBeTruthy();
     expect(within(hero).getByText('Teaspoons')).toBeTruthy();
+  });
+
+  it('AUTO-01: switching TO similac-hmf auto-selects packets', async () => {
+    mockState.formulaId = 'neocate-infant';
+    mockState.unit = 'teaspoons';
+    render(FortificationCalculator);
+    await tick();
+    expect(mockState.unit).toBe('teaspoons');
+
+    mockState.formulaId = 'similac-hmf';
+    await tick();
+    await tick();
+
+    expect(mockState.unit).toBe('packets');
+  });
+
+  it('AUTO-02: switching FROM similac-hmf while packets selected resets unit (regression)', async () => {
+    mockState.formulaId = 'similac-hmf';
+    mockState.unit = 'packets';
+    render(FortificationCalculator);
+    await tick();
+
+    mockState.formulaId = 'neocate-infant';
+    await tick();
+    await tick();
+
+    expect(mockState.unit).toBe('teaspoons');
+  });
+
+  it('AUTO-03: initial mount with persisted similac-hmf does NOT clobber saved unit', async () => {
+    mockState.formulaId = 'similac-hmf';
+    mockState.unit = 'grams';
+    render(FortificationCalculator);
+    await tick();
+    await tick();
+
+    expect(mockState.unit).toBe('grams');
   });
 
   it('UI-04: reuses NumericInput + SelectPicker + SegmentedToggle (3 select triggers + 1 numeric + 1 toggle)', () => {
