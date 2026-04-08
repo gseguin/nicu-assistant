@@ -39,21 +39,18 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ WCAG 2.1 AA axe-core a11y audit for fortification (light + dark) — v1.3
 - ✓ Legacy Modified Formula + BMF code removed — v1.3
 - ✓ SelectPicker label association via aria-labelledby (improves a11y across all calculators) — v1.3
+- ✓ Shared SelectPicker rewritten as native `<dialog>`-based modal picker (drop-in, no consumer edits) — v1.4
+- ✓ Fortification mobile layout — Target Calorie + Unit on same row — v1.4
+- ✓ Fortification "Amount to Add" hero restyled to match morphine wean result theming — v1.4
+- ✓ Visual refinement sweep across both calculators (spacing, typography, eyebrow parity) — v1.4
+- ✓ Shell polish — min-h-14 title bar, tracking-tight app name, visible focus outlines on desktop + mobile nav — v1.4
+- ✓ `prefers-reduced-motion: reduce` honored across every motion surface — v1.4
+- ✓ WCAG 2.1 AA dark-mode contrast fix — `--color-text-secondary` and `--color-accent` bumped; axe-core color-contrast rule now enabled in both themes — v1.4
+- ✓ New `--color-scrim` OKLCH token + jsdom HTMLDialogElement polyfill with setup-time self-test — v1.4
 
 ### Active
 
-**Milestone v1.4 — UI Polish**
-
-**Goal:** Broad polish pass across both calculators and the shell — visual refinement, mobile UX, animation/feedback, accessibility deep-dive — guided by `.impeccable.md` as the design contract.
-
-- Shared SelectPicker rewrite — custom `<dialog>`-based modal picker, drop bits-ui Select dependency
-- Fortification mobile layout — "Target Calorie" and "Unit" on same row at mobile widths
-- Fortification "Amount to Add" hero restyled to match morphine wean result theming
-- Visual refinement sweep across both calculators (spacing, typography, empty/loading states)
-- Micro-animations and feedback polish (focus states, transitions, recalc affordances)
-- Shell & nav polish (title bar, tab bar, theme toggle, About sheet)
-- `prefers-reduced-motion` honored throughout
-- High-contrast review pass + screen reader audit + keyboard shortcut review
+(None — v1.4 shipped 2026-04-07; planning next milestone)
 
 ### Out of Scope
 
@@ -122,4 +119,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-07 — v1.4 UI Polish milestone started*
+*Last updated: 2026-04-07 — v1.4 UI Polish shipped and archived*

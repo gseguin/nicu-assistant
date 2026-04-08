@@ -1,5 +1,21 @@
 # Milestones
 
+## v1.4 UI Polish (Shipped: 2026-04-07)
+
+**Phases completed:** 6 phases (12, 13, 14, 15, 16, 17), 6 plans, 8 commits
+
+**Key accomplishments:**
+
+- Shared SelectPicker rewritten from bits-ui Select to a hand-rolled Svelte 5 component on native `HTMLDialogElement.showModal()` — drop-in compatible, 11 new colocated unit tests, jsdom polyfill with setup-time self-test, BLOCKER fix for dialog aria-labelledby collision with the trigger
+- Fortification visual polish — mobile row pairing for Target Calorie + Unit, "Amount to Add" hero restyled with `bg-[var(--color-accent-light)]` + `text-5xl` tabular numeric matching morphine wean result theming, spacing/typography sweep with `text-2xs` eyebrow unification
+- Morphine Wean polish — step card eyebrows and meta typography aligned to Phase 13 rhythm; dock-style scroll magnification untouched
+- Shell & navigation polish — `min-h-14` title bar, `tracking-tight` app name, visible accent focus outlines on desktop tabs and mobile tab bar, active-state weight bump
+- Animation & reduced-motion audit — full motion table documented; NumericInput `transition:slide` guarded via `matchMedia('(prefers-reduced-motion: reduce)')` at module load; no layout-shift animations anywhere
+- Accessibility deep-dive — 5 dark-mode color-contrast violations traced to two under-bright OKLCH tokens and fixed (`--color-text-secondary` 70%→80%, `--color-accent` 72%→82%); `disableRules(['color-contrast'])` escape hatch removed from both a11y specs; Playwright axe suite 6/6 green with color-contrast enabled in both themes
+- New `--color-scrim` OKLCH token added for `<dialog>::backdrop` styling; all shell and calculator surfaces use only `var(--color-*)` tokens
+
+---
+
 ## v1.3 Fortification Calculator Refactor (Shipped: 2026-04-07)
 
 **Phases completed:** 3 phases (9, 10, 11) + 1 inserted/reverted (10.1), 5 plans
