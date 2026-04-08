@@ -173,7 +173,7 @@
       aria-controls={searchable ? listboxId : undefined}
       role={searchable ? 'combobox' : undefined}
       aria-expanded={open ? 'true' : 'false'}
-      class="flex min-h-12 w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-card)] px-3.5 py-2.5 text-left text-[0.9375rem] font-medium text-[var(--color-text-primary)] transition hover:border-[var(--color-accent)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
+      class="flex min-h-12 w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-card)] px-3.5 py-2.5 text-left text-[0.9375rem] font-medium text-[var(--color-text-primary)] transition hover:border-[var(--color-identity)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-identity)]"
       onclick={openPicker}
     >
       <span class="flex-1 truncate">{selectedLabel}</span>
@@ -247,7 +247,7 @@
                       data-index={idx}
                       aria-selected={option.value === value ? 'true' : 'false'}
                       tabindex={idx === focusedIndex ? 0 : -1}
-                      class="flex w-full items-center justify-between rounded-xl px-4 py-3 min-h-12 text-sm text-[var(--color-text-primary)] transition hover:bg-[var(--color-surface-alt)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)] aria-selected:bg-[var(--color-surface-alt)] aria-selected:font-semibold"
+                      class="flex w-full items-center justify-between rounded-xl px-4 py-3 min-h-12 text-sm text-[var(--color-text-primary)] transition hover:bg-[var(--color-surface-alt)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)] aria-selected:bg-[var(--color-surface-alt)] aria-selected:font-semibold"
                       onclick={() => select(option.value)}
                     >
                       <span>{option.label}</span>
@@ -271,7 +271,7 @@
                 data-index={idx}
                 aria-selected={option.value === value ? 'true' : 'false'}
                 tabindex={idx === focusedIndex ? 0 : -1}
-                class="flex w-full items-center justify-between rounded-xl px-4 py-3 min-h-12 text-sm text-[var(--color-text-primary)] transition hover:bg-[var(--color-surface-alt)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)] aria-selected:bg-[var(--color-surface-alt)] aria-selected:font-semibold"
+                class="flex w-full items-center justify-between rounded-xl px-4 py-3 min-h-12 text-sm text-[var(--color-text-primary)] transition hover:bg-[var(--color-surface-alt)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)] aria-selected:bg-[var(--color-surface-alt)] aria-selected:font-semibold"
                 onclick={() => select(option.value)}
               >
                 <span>{option.label}</span>

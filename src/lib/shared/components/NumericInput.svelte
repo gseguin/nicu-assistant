@@ -123,7 +123,7 @@
       {min}
       {max}
       {step}
-      class="num w-full pl-4 py-3 bg-[var(--color-surface-card)] border rounded-xl shadow-sm transition-all outline-none text-[var(--color-text-primary)] font-medium text-base {displayError ? 'border-[var(--color-error)] ring-1 ring-[var(--color-error)]' : 'border-[var(--color-border)] focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent-light)]'} {isFocused ? 'scale-[1.01] border-[var(--color-accent)]' : ''} {suffix.length > 3 ? 'pr-20' : (suffix ? 'pr-12' : 'pr-4')}"
+      class="num w-full pl-4 py-3 bg-[var(--color-surface-card)] border rounded-xl shadow-sm transition-all outline-none text-[var(--color-text-primary)] font-medium text-base {displayError ? 'border-[var(--color-error)] ring-1 ring-[var(--color-error)]' : 'border-[var(--color-border)] focus:border-[var(--color-identity)] focus:ring-2 focus:ring-[var(--color-identity)]'} {isFocused ? 'scale-[1.01] border-[var(--color-identity)]' : ''} {suffix.length > 3 ? 'pr-20' : (suffix ? 'pr-12' : 'pr-4')}"
       aria-invalid={!!displayError}
       aria-describedby={displayError ? `${id}-error` : (suffix ? `${id}-suffix` : undefined)}
       aria-label={label || placeholder}

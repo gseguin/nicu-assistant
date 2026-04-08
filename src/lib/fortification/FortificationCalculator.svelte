@@ -182,12 +182,12 @@
 
   <!-- Hero: Amount to Add -->
   <section
-    class="card bg-[var(--color-accent-light)] px-5 py-5"
+    class="card bg-[var(--color-identity-hero)] px-5 py-5"
     aria-live="polite"
     aria-atomic="true"
   >
     <span
-      class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]"
+      class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-identity)]"
     >
       Amount to Add
     </span>
@@ -211,7 +211,7 @@
   {#if result}
     <section class="card" aria-label="Verification">
       <span
-        class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]"
+        class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-identity)]"
       >
         Verification
       </span>

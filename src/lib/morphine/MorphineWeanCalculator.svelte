@@ -199,7 +199,7 @@
         aria-controls="{mode}-panel"
         id="{mode}-tab"
         tabindex={morphineState.current.activeMode === mode ? 0 : -1}
-        class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all font-semibold text-ui outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent-light)] {morphineState.current.activeMode === mode ? 'bg-[var(--color-surface-card)] text-[var(--color-accent)] shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-surface)]'}"
+        class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all font-semibold text-ui outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] {morphineState.current.activeMode === mode ? 'bg-[var(--color-surface-card)] text-[var(--color-identity)] shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-identity)] hover:bg-[var(--color-surface)]'}"
         onclick={() => activateMode(mode)}
         onkeydown={(e) => handleModeTabKeydown(e, mode)}
       >
@@ -259,18 +259,18 @@
     {@const last = schedule[schedule.length - 1]}
     {@const totalReduction = first.doseMg - last.doseMg}
     {#key calcKey}
-    <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-accent-light)] animate-summary-pulse">
+    <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-identity-hero)] animate-summary-pulse">
       <div class="flex flex-col">
-        <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Start</span>
+        <span class="text-2xs font-medium text-[var(--color-identity)]">Start</span>
         <span class="text-base font-bold num text-[var(--color-text-primary)]">{first.doseMg.toFixed(4)} mg</span>
       </div>
       <div class="text-[var(--color-text-tertiary)] text-lg">→</div>
       <div class="flex flex-col items-end">
-        <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Step {last.step}</span>
+        <span class="text-2xs font-medium text-[var(--color-identity)]">Step {last.step}</span>
         <span class="text-base font-bold num text-[var(--color-text-primary)]">{last.doseMg.toFixed(4)} mg</span>
       </div>
       <div class="flex flex-col items-end pl-3 border-l border-[var(--color-border)]">
-        <span class="text-2xs font-medium text-[var(--color-text-secondary)]">Total reduction</span>
+        <span class="text-2xs font-medium text-[var(--color-identity)]">Total reduction</span>
         <span class="text-sm font-semibold num text-[var(--color-text-primary)]">{(totalReduction / first.doseMg * 100).toFixed(1)}%</span>
       </div>
     </div>
@@ -286,7 +286,7 @@
             class="card px-4 py-3 flex flex-col gap-1 will-change-transform origin-center"
           >
             <div class="flex items-center justify-between">
-              <span class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
+              <span class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-identity)]">
                 {isFirst ? 'Step 1 — Starting dose' : `Step ${step.step}`}
               </span>
               {#if step.reductionMg > 0}
