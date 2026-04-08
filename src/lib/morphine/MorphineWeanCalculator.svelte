@@ -286,18 +286,18 @@
             class="card px-4 py-3 flex flex-col gap-1 will-change-transform origin-center"
           >
             <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-[var(--color-text-secondary)]">
+              <span class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-text-secondary)]">
                 {isFirst ? 'Step 1 — Starting dose' : `Step ${step.step}`}
               </span>
               {#if step.reductionMg > 0}
-                <span class="text-xs font-medium text-[var(--color-text-tertiary)]">-{step.reductionMg.toFixed(4)} mg ({reductionPct.toFixed(1)}%)</span>
+                <span class="text-2xs font-medium text-[var(--color-text-tertiary)]">-{step.reductionMg.toFixed(4)} mg ({reductionPct.toFixed(1)}%)</span>
               {/if}
             </div>
             <div class="flex items-baseline gap-2">
               <span class="{isFirst ? 'text-xl' : 'text-lg'} font-bold num text-[var(--color-text-primary)]">{step.doseMg.toFixed(4)}</span>
               <span class="text-sm text-[var(--color-text-tertiary)]">mg</span>
             </div>
-            <div class="text-xs text-[var(--color-text-secondary)] num">
+            <div class="text-2xs font-medium text-[var(--color-text-secondary)] num">
               {step.doseMgKgDose.toFixed(4)} mg/kg/dose
             </div>
           </div>
