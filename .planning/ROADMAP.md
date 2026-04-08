@@ -232,7 +232,7 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 9-11. v1.3 Fortification Refactor | v1.3 | — | Complete | 2026-04-07 |
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
 | 18-20. v1.5 Tab Identity & Search | v1.5 | 5/5 | Complete | 2026-04-07 |
-| 21. Shared SegmentedToggle | v1.6 | 0/? | Not started | - |
+| 21. Shared SegmentedToggle | v1.6 | 1/2 | In Progress|  |
 | 22. NumericInput Hardening | v1.6 | 0/? | Not started | - |
 | 23. Result Feedback | v1.6 | 0/? | Not started | - |
 | 24. A11y Verification | v1.6 | 0/? | Not started | - |

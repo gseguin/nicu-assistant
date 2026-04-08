@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.6
-milestone_name: Toggle & Harden
-current_phase: 21
-status: ready_to_plan
-stopped_at: v1.6 roadmap created; awaiting /gsd-plan-phase 21
-last_updated: "2026-04-07T00:00:00.000Z"
+milestone: v1.5
+milestone_name: Tab Identity & Search
+current_phase: 21 — Shared SegmentedToggle (build + wire)
+status: planning
+stopped_at: v1.6 roadmap created
+last_updated: "2026-04-08T15:13:24.777Z"
 last_activity: 2026-04-07
 progress:
-  total_phases: 4
+  total_phases: 1
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  total_plans: 2
+  completed_plans: 1
+  percent: 50
 ---
 
 # Project State

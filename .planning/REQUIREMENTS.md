@@ -6,9 +6,9 @@
 
 ### Shared SegmentedToggle (from /critique P1: Consistency)
 
-- [ ] **TOG-01**: A new shared `SegmentedToggle` component exists in `src/lib/shared/components/` with a 2–N option API consistent with `SelectPicker` (label, options, value binding).
-- [ ] **TOG-02**: The `SegmentedToggle` active segment renders using `var(--color-identity)` so it picks up the per-tab identity hue automatically (Clinical Blue in Morphine, Teal in Formula).
-- [ ] **TOG-03**: The `SegmentedToggle` supports keyboard navigation: `←` / `→` move between segments, `Home` / `End` jump to first/last, and the active state is reflected via `aria-pressed` or `role="tab"` ARIA semantics matching Morphine's existing tablist pattern.
+- [x] **TOG-01**: A new shared `SegmentedToggle` component exists in `src/lib/shared/components/` with a 2–N option API consistent with `SelectPicker` (label, options, value binding).
+- [x] **TOG-02**: The `SegmentedToggle` active segment renders using `var(--color-identity)` so it picks up the per-tab identity hue automatically (Clinical Blue in Morphine, Teal in Formula).
+- [x] **TOG-03**: The `SegmentedToggle` supports keyboard navigation: `←` / `→` move between segments, `Home` / `End` jump to first/last, and the active state is reflected via `aria-pressed` or `role="tab"` ARIA semantics matching Morphine's existing tablist pattern.
 - [ ] **TOG-04**: Morphine `MorphineWeanCalculator.svelte` consumes the shared `SegmentedToggle` for the Linear/Compounding mode switch with no behavior change. The inline tablist code is removed.
 - [ ] **TOG-05**: Formula `FortificationCalculator.svelte` uses `SegmentedToggle` for the `Base` choice (Breast milk / Formula) instead of `SelectPicker`. The old `Base` SelectPicker option list is removed.
 - [ ] **TOG-06**: Existing morphine and fortification tests still pass. Morphine mode switching behavior is unchanged from v1.5; Formula base switching behavior is unchanged from v1.5.
@@ -32,7 +32,7 @@
 
 - [ ] **A11Y-01**: WCAG 2.1 AA contrast holds for the new `SegmentedToggle` active and inactive segments in both light and dark modes, both tabs (Clinical Blue + Teal identity), via the existing axe-core sweep.
 - [ ] **A11Y-02**: WCAG 2.1 AA contrast holds for the new range hint text and the inline error message in both themes.
-- [ ] **A11Y-03**: SegmentedToggle keyboard interactions (TOG-03) covered by component tests.
+- [x] **A11Y-03**: SegmentedToggle keyboard interactions (TOG-03) covered by component tests.
 
 ## Future Requirements
 
@@ -54,9 +54,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TOG-01 | Phase 21 | Pending |
-| TOG-02 | Phase 21 | Pending |
-| TOG-03 | Phase 21 | Pending |
+| TOG-01 | Phase 21 | Complete |
+| TOG-02 | Phase 21 | Complete |
+| TOG-03 | Phase 21 | Complete |
 | TOG-04 | Phase 21 | Pending |
 | TOG-05 | Phase 21 | Pending |
 | TOG-06 | Phase 21 | Pending |
@@ -71,7 +71,7 @@
 | FEED-03 | Phase 23 | Pending |
 | A11Y-01 | Phase 24 | Pending |
 | A11Y-02 | Phase 24 | Pending |
-| A11Y-03 | Phase 21 | Pending |
+| A11Y-03 | Phase 21 | Complete |
 
 **Coverage:** 18/18 v1.6 requirements mapped.
 
