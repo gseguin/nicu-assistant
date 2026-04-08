@@ -251,7 +251,10 @@ Plans:
   1. The Playwright axe-core sweep runs on both the Morphine and Formula routes in light and dark themes with the color-contrast rule enabled and reports zero violations on any surface using `--color-identity`
   2. The new Teal ~195 token measures at least 4.5:1 contrast for text/icon use and at least 3:1 for non-text UI (focus rings, active tab indicator) against its adjacent surface tokens in both themes, documented in the phase notes
   3. If any identity surface fails contrast, the OKLCH lightness/chroma values are tuned and re-verified until green — no `disableRules(['color-contrast'])` escape hatches are added
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 20-01-PLAN.md — Extend axe sweeps (focus ring + dark visible) and conditionally tune identity OKLCH
 **UI hint**: yes
 
 ## Progress
@@ -273,4 +276,4 @@ Phases execute in numeric order. v1.5 begins at Phase 18.
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
 | 18. Searchable SelectPicker | v1.5 | 1/2 | In Progress|  |
 | 19. Tab Identity Token | v1.5 | 1/2 | In Progress|  |
-| 20. Identity A11y Verification | v1.5 | 0/0 | Not started | - |
+| 20. Identity A11y Verification | v1.5 | 0/1 | Not started | - |
