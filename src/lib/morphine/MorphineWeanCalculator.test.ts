@@ -90,6 +90,47 @@ describe('MorphineWeanCalculator', () => {
     ).toBeTruthy();
   });
 
+  describe('Phase 23-01: result feedback', () => {
+    beforeEach(() => {
+      mockState.weightKg = 3.1;
+      mockState.maxDoseMgKgDose = 0.04;
+      mockState.decreasePct = 10;
+    });
+
+    it('summary card has aria-live="polite" and aria-atomic="true"', () => {
+      render(MorphineWeanCalculator);
+      const summary = document.querySelector('.animate-result-pulse');
+      expect(summary).toBeTruthy();
+      expect(summary!.getAttribute('aria-live')).toBe('polite');
+      expect(summary!.getAttribute('aria-atomic')).toBe('true');
+    });
+
+    it('summary card uses shared .animate-result-pulse class (old class removed)', () => {
+      render(MorphineWeanCalculator);
+      expect(document.querySelector('.animate-result-pulse')).toBeTruthy();
+      expect(document.querySelector('.animate-summary-pulse')).toBeNull();
+    });
+
+    it('does not call scrollIntoView or steal focus on render', () => {
+      if (!('scrollIntoView' in HTMLElement.prototype)) {
+        Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+          value: () => {},
+          writable: true,
+          configurable: true,
+        });
+      }
+      const scrollSpy = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+      const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
+      const activeBefore = document.activeElement;
+      render(MorphineWeanCalculator);
+      expect(scrollSpy).not.toHaveBeenCalled();
+      expect(focusSpy).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(activeBefore);
+      scrollSpy.mockRestore();
+      focusSpy.mockRestore();
+    });
+  });
+
   it('tablist has correct ARIA label', () => {
     render(MorphineWeanCalculator);
     const tablist = screen.getByRole('tablist');

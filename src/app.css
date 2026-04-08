@@ -1,4 +1,10 @@
 @import "tailwindcss";
+@source not "../.planning";
+@source not "../.claude";
+@source not "../.remember";
+@source not "../.playwright-mcp";
+@source not "../e2e";
+@source not "./**/*.{test,spec}.{js,ts}";
 
 /* DS-02 / D-06: Class-based dark variant for Tailwind CSS 4 */
 /* Tailwind CSS 4 removes the darkMode config option; use @custom-variant instead. */
@@ -136,6 +142,19 @@
   .num {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
+  }
+
+  /* Shared result entrance animation — Morphine summary card + Formula hero */
+  @keyframes result-pulse {
+    0%   { opacity: 0.7; transform: scale(0.95); }
+    100% { opacity: 1;   transform: scale(1); }
+  }
+  .animate-result-pulse {
+    animation: result-pulse 200ms cubic-bezier(0.25, 1, 0.5, 1);
+    transform-origin: center;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-result-pulse { animation: none; }
   }
 
   /* Icon button — header actions, toggle button */

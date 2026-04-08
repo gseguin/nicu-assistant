@@ -138,6 +138,18 @@
 
   let unitLabel = $derived(UNIT_LABELS[(unitStr as UnitType)] ?? '');
 
+  // Animation re-trigger key: bumps whenever result identity changes so
+  // {#key calcKey} re-mounts the hero inner wrapper and replays .animate-result-pulse.
+  let calcKey = $state(0);
+  $effect(() => {
+    void result?.amountToAdd;
+    void result?.yieldMl;
+    void result?.exactKcalPerOz;
+    untrack(() => {
+      calcKey += 1;
+    });
+  });
+
   function formatAmount(n: number): string {
     return n.toFixed(2).replace(/\.?0+$/, '');
   }
@@ -188,25 +200,29 @@
     aria-live="polite"
     aria-atomic="true"
   >
-    <span
-      class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-identity)]"
-    >
-      Amount to Add
-    </span>
-    {#if result}
-      <div class="mt-3 flex items-baseline gap-2">
-        <span class="text-5xl font-bold num text-[var(--color-text-primary)]"
-          >{formatAmount(result.amountToAdd)}</span
+    {#key calcKey}
+      <div class="animate-result-pulse">
+        <span
+          class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-identity)]"
         >
-        <span class="text-lg font-semibold text-[var(--color-text-secondary)]"
-          >{unitLabel}</span
-        >
+          Amount to Add
+        </span>
+        {#if result}
+          <div class="mt-3 flex items-baseline gap-2">
+            <span class="text-5xl font-bold num text-[var(--color-text-primary)]"
+              >{formatAmount(result.amountToAdd)}</span
+            >
+            <span class="text-lg font-semibold text-[var(--color-text-secondary)]"
+              >{unitLabel}</span
+            >
+          </div>
+        {:else}
+          <p class="mt-3 text-sm text-[var(--color-text-tertiary)]">
+            Enter a starting volume to see the recipe.
+          </p>
+        {/if}
       </div>
-    {:else}
-      <p class="mt-3 text-sm text-[var(--color-text-tertiary)]">
-        Enter a starting volume to see the recipe.
-      </p>
-    {/if}
+    {/key}
   </section>
 
   <!-- Verification Card -->

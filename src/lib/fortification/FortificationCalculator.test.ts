@@ -148,6 +148,54 @@ describe('FortificationCalculator', () => {
     expect(document.querySelectorAll('[role="tab"]')).toHaveLength(2);
   });
 
+  describe('Phase 23-01: result feedback', () => {
+    it('hero retains aria-live="polite" and aria-atomic="true"', () => {
+      render(FortificationCalculator);
+      const hero = getHeroCard();
+      expect(hero.getAttribute('aria-live')).toBe('polite');
+      expect(hero.getAttribute('aria-atomic')).toBe('true');
+    });
+
+    it('hero inner wrapper has .animate-result-pulse class when result present', () => {
+      render(FortificationCalculator);
+      const hero = getHeroCard();
+      expect(hero.querySelector('.animate-result-pulse')).toBeTruthy();
+    });
+
+    it('hero inner wrapper re-mounts when result changes ({#key calcKey})', async () => {
+      render(FortificationCalculator);
+      const hero = getHeroCard();
+      const before = hero.querySelector('.animate-result-pulse');
+      expect(before).toBeTruthy();
+      mockState.volumeMl = 360;
+      await tick();
+      const after = hero.querySelector('.animate-result-pulse');
+      expect(after).toBeTruthy();
+      expect(after).not.toBe(before);
+    });
+
+    it('does not call scrollIntoView or steal focus on result update', async () => {
+      if (!('scrollIntoView' in HTMLElement.prototype)) {
+        Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+          value: () => {},
+          writable: true,
+          configurable: true,
+        });
+      }
+      const scrollSpy = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+      const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
+      render(FortificationCalculator);
+      const activeBefore = document.activeElement;
+      mockState.volumeMl = 360;
+      await tick();
+      expect(scrollSpy).not.toHaveBeenCalled();
+      expect(focusSpy).not.toHaveBeenCalled();
+      expect(document.activeElement).toBe(activeBefore);
+      scrollSpy.mockRestore();
+      focusSpy.mockRestore();
+    });
+  });
+
   it('UI-05: uses OKLCH design tokens, not hardcoded colors', () => {
     const { container } = render(FortificationCalculator);
     const html = container.innerHTML;

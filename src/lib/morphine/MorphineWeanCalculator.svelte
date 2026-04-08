@@ -192,7 +192,7 @@
     {@const last = schedule[schedule.length - 1]}
     {@const totalReduction = first.doseMg - last.doseMg}
     {#key calcKey}
-    <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-identity-hero)] animate-summary-pulse">
+    <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-identity-hero)] animate-result-pulse" aria-live="polite" aria-atomic="true">
       <div class="flex flex-col">
         <span class="text-2xs font-medium text-[var(--color-identity)]">Start</span>
         <span class="text-base font-bold num text-[var(--color-text-primary)]">{first.doseMg.toFixed(4)} mg</span>
@@ -259,15 +259,3 @@
   {/if}
 </div>
 
-<style>
-  @keyframes summary-pulse {
-    0% { opacity: 0.7; transform: scale(0.98); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-  :global(.animate-summary-pulse) {
-    animation: summary-pulse 250ms cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    :global(.animate-summary-pulse) { animation: none; }
-  }
-</style>
