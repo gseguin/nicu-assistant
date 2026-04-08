@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Tab Identity & Search
-current_phase: null
-status: defining_requirements
-stopped_at: v1.5 started 2026-04-07; defining requirements
+current_phase: 18
+status: ready_to_plan
+stopped_at: v1.5 roadmap created 2026-04-07; ready to plan Phase 18
 last_updated: "2026-04-07T00:00:00.000Z"
 last_activity: 2026-04-07
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -22,16 +22,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** None — v1.4 shipped, awaiting next milestone
+**Current focus:** v1.5 — Tab Identity & Search (Phases 18-20)
 
 ## Current Position
 
 Milestone: v1.5 — Tab Identity & Search
-Status: Defining requirements
-Current phase: Not started
-Last activity: 2026-04-07 — milestone started
+Status: Ready to plan
+Current phase: Phase 18 — Searchable SelectPicker
+Last activity: 2026-04-07 — roadmap created
 
-Progress: [          ] 0%
+Progress: [          ] 0% (0/3 phases)
 
 ## Performance Metrics
 
@@ -50,6 +50,8 @@ Progress: [          ] 0%
 - [v1.4]: New `--color-scrim` OKLCH token for `<dialog>::backdrop`
 - [v1.4]: A11y specs add `no-transition` class + 250ms settle before axe analyze to avoid reading mid-transition interpolated colors
 - [v1.4]: NumericInput `transition:slide` guarded via PREFERS_REDUCED_MOTION constant read at module load (matches dock magnification pattern)
+- [v1.5]: Port `searchable` prop from pert-calculator SelectPicker (Svelte 5 version) rather than rebuild from scratch
+- [v1.5]: Tab identity scoped to exactly 4 surfaces (result hero, focus rings, eyebrow labels, active nav indicator); shell chrome stays neutral; BMF Amber stays scoped to fortifier mode only
 
 ### Pending Todos
 
@@ -62,5 +64,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-07
-Stopped at: v1.4 milestone archived; run /gsd-new-milestone to start next milestone
-Resume file: None
+Stopped at: v1.5 roadmap created; ready to run /gsd-plan-phase 18
+Resume file: .planning/ROADMAP.md

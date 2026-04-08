@@ -7,6 +7,7 @@
 - v1.2 UI Polish - Phases 7-8 (shipped 2026-04-07)
 - v1.3 Fortification Calculator Refactor - Phases 9-11 (shipped 2026-04-07) — see [milestones/v1.3-ROADMAP.md](milestones/v1.3-ROADMAP.md)
 - v1.4 UI Polish - Phases 12-17 (shipped 2026-04-07) — see [milestones/v1.4-ROADMAP.md](milestones/v1.4-ROADMAP.md)
+- v1.5 Tab Identity & Search - Phases 18-20 (active)
 
 ## Phases
 
@@ -55,6 +56,12 @@ See [milestones/v1.3-ROADMAP.md](milestones/v1.3-ROADMAP.md) for full archive.
 See [milestones/v1.4-ROADMAP.md](milestones/v1.4-ROADMAP.md) for full archive.
 
 </details>
+
+### v1.5 Tab Identity & Search (Phases 18-20)
+
+- [ ] **Phase 18: Searchable SelectPicker** - Port `searchable` prop with filter, keyboard traversal, and Enter-to-select; wire Formula picker
+- [ ] **Phase 19: Tab Identity Token** - Define `--color-identity` per-route token (Clinical Blue / new Teal ~195) and wire to 4 surfaces
+- [ ] **Phase 20: Identity A11y Verification** - axe-core color-contrast sweep across both tabs and both themes; tune and lock in
 
 ## Phase Details
 
@@ -202,10 +209,47 @@ Plans:
 
 </details>
 
+### Phase 18: Searchable SelectPicker
+**Goal**: Clinicians using the Formula picker can filter 30+ formulas by typing and reach the right option in under a second via keyboard or touch, while Morphine pickers remain unchanged
+**Depends on**: Phase 17 (v1.4 complete)
+**Requirements**: SEARCH-01, SEARCH-02, SEARCH-03, SEARCH-04, SEARCH-05, SEARCH-06, A11Y-03
+**Success Criteria** (what must be TRUE):
+  1. Typing in the Formula picker filters the list by case-insensitive substring match across both label and detail/manufacturer text, with a "No matches" empty state when the query filters everything out
+  2. Keyboard traversal works bidirectionally — ArrowDown from the search input focuses the first filtered option, ArrowUp from the first option returns focus to the input, and Enter in the input selects the single remaining option when exactly one match remains
+  3. Reopening the Formula picker resets the search query to empty and places initial focus on the search input
+  4. Morphine-tab pickers and any other SelectPicker consumer that does not opt in render with no search affordance and behave identically to v1.4
+  5. Component or E2E test asserts ArrowDown/ArrowUp traversal and Enter-to-select-single-match behavior, passing in CI
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 19: Tab Identity Token
+**Goal**: Each calculator tab carries a distinct but restrained visual identity via a single `--color-identity` token wired to exactly four surfaces, so clinicians instantly recognize which calculator they are in without the shell or body chrome changing color
+**Depends on**: Phase 18
+**Requirements**: IDENT-01, IDENT-02, IDENT-03, IDENT-04, IDENT-05, IDENT-06, IDENT-07
+**Success Criteria** (what must be TRUE):
+  1. A `--color-identity` CSS custom property is defined for both light and dark themes and is scoped per calculator route — Morphine resolves to Clinical Blue hue 220, Formula resolves to new Teal hue ~195 with new OKLCH values added for both themes
+  2. The result hero card, focus-visible outlines inside the calculator body, section eyebrow labels, and the active calculator tab indicator in both the mobile bottom nav and desktop top nav all pick up `--color-identity` — and no other surfaces do
+  3. Shell chrome (title bar, app name, theme toggle, info button, body text, input borders, neutral surfaces) remains on global/neutral tokens and shows no identity hue
+  4. BMF Amber continues to be scoped exclusively to fortifier-mode semantic signaling on the Formula tab — it is not reused as Formula tab identity, and switching into fortifier mode still reads as a distinct in-tab state
+  5. Navigating between Morphine and Formula visibly swaps the four identity surfaces while leaving everything else unchanged
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 20: Identity A11y Verification
+**Goal**: Every surface using `--color-identity` meets WCAG 2.1 AA contrast in both themes for both tabs, verified by the existing axe-core sweep with color-contrast enabled
+**Depends on**: Phase 19
+**Requirements**: A11Y-01, A11Y-02
+**Success Criteria** (what must be TRUE):
+  1. The Playwright axe-core sweep runs on both the Morphine and Formula routes in light and dark themes with the color-contrast rule enabled and reports zero violations on any surface using `--color-identity`
+  2. The new Teal ~195 token measures at least 4.5:1 contrast for text/icon use and at least 3:1 for non-text UI (focus rings, active tab indicator) against its adjacent surface tokens in both themes, documented in the phase notes
+  3. If any identity surface fails contrast, the OKLCH lightness/chroma values are tuned and re-verified until green — no `disableRules(['color-contrast'])` escape hatches are added
+**Plans**: TBD
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: (v1.3 phases shipped — see milestone archive)
+Phases execute in numeric order. v1.5 begins at Phase 18.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -219,3 +263,6 @@ Phases execute in numeric order: (v1.3 phases shipped — see milestone archive)
 | 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
 | 9-11. v1.3 Fortification Refactor | v1.3 | — | Complete | 2026-04-07 |
 | 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
+| 18. Searchable SelectPicker | v1.5 | 0/0 | Not started | - |
+| 19. Tab Identity Token | v1.5 | 0/0 | Not started | - |
+| 20. Identity A11y Verification | v1.5 | 0/0 | Not started | - |

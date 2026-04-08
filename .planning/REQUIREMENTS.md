@@ -45,7 +45,26 @@
 
 ## Traceability
 
-*(populated by roadmap)*
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| SEARCH-01 | Phase 18 | Pending |
+| SEARCH-02 | Phase 18 | Pending |
+| SEARCH-03 | Phase 18 | Pending |
+| SEARCH-04 | Phase 18 | Pending |
+| SEARCH-05 | Phase 18 | Pending |
+| SEARCH-06 | Phase 18 | Pending |
+| IDENT-01 | Phase 19 | Pending |
+| IDENT-02 | Phase 19 | Pending |
+| IDENT-03 | Phase 19 | Pending |
+| IDENT-04 | Phase 19 | Pending |
+| IDENT-05 | Phase 19 | Pending |
+| IDENT-06 | Phase 19 | Pending |
+| IDENT-07 | Phase 19 | Pending |
+| A11Y-01 | Phase 20 | Pending |
+| A11Y-02 | Phase 20 | Pending |
+| A11Y-03 | Phase 18 | Pending |
+
+**Coverage:** 16/16 v1.5 requirements mapped ✓
 
 ---
-*Last updated: 2026-04-07 — v1.5 requirements defined*
+*Last updated: 2026-04-07 — v1.5 roadmap created, traceability populated*
