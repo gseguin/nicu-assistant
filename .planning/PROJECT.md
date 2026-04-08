@@ -53,17 +53,18 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ Morphine identity hero tuned to literal `oklch(95% 0.04 220)` to clear 4.5:1 (caught by Phase 20 axe sweep) — v1.5
 - ✓ Playwright a11y suite extended with focus-ring + dark-visible variants; 8/8 axe sweeps green — v1.5
 - ✓ `package.json` version bumped to 1.5.0 (about dialog reflects shipped state) — v1.5
+- ✓ Shared `SegmentedToggle` component extracted from Morphine's tablist — identity-aware, keyboard nav (←/→/Home/End), `role="tablist"` ARIA — v1.6
+- ✓ Morphine refactored + Formula `Base` SelectPicker replaced with the shared toggle — v1.6
+- ✓ `NumericInput` hardened: visible range hint, blur-gated "Outside expected range — verify" advisory (no auto-clamp), `showRangeHint` opt-out prop — v1.6
+- ✓ Clinical input ranges moved from magic numbers to `inputs` block in `morphine-config.json` / `fortification-config.json` with typed TS wrappers — v1.6
+- ✓ Shared `.animate-result-pulse` class in `src/app.css` (200ms scale-from-95%, reduced-motion gated) applied to both calculator heroes — v1.6
+- ✓ `aria-live="polite"` + `aria-atomic="true"` on both result heroes (Morphine summary + Formula "Amount to Add") — v1.6
+- ✓ Playwright a11y suite extended with 4 advisory-message variants; 12/12 axe sweeps green with zero OKLCH tuning — v1.6
+- ✓ `package.json` version bumped to 1.6.0 — v1.6
 
 ### Active
 
-## Current Milestone: v1.6 Toggle & Harden
-
-**Goal:** Resolve the "two patterns for one decision" inconsistency between calculators, and harden the input layer so out-of-range values can't slip through silently.
-
-**Target features:**
-- Extract a shared `SegmentedToggle` component from Morphine's tablist pattern; replace Formula `Base` SelectPicker with the same control. Active segment uses `var(--color-identity)` so identity carries automatically.
-- `NumericInput` gains `min`/`max` hardening: visible range hint, soft-clamp on blur, inline "Outside expected range — verify" message. Doesn't block typing.
-- Result hero gets `aria-live="polite"` + a 200ms scale-from-95% entrance gated by `prefers-reduced-motion`. No auto-scroll.
+(None — v1.6 shipped 2026-04-08; planning next milestone)
 
 ### Out of Scope
 
@@ -132,4 +133,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-07 — v1.6 Toggle & Harden milestone started*
+*Last updated: 2026-04-08 — v1.6 Toggle & Harden shipped and archived*

@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.5
-milestone_name: Tab Identity & Search
-current_phase: 21 — Shared SegmentedToggle (build + wire)
-status: planning
-stopped_at: Completed 24-01-PLAN.md
-last_updated: "2026-04-08T15:52:42.111Z"
-last_activity: 2026-04-07
+milestone: v1.6
+milestone_name: Toggle & Harden
+current_phase: null
+status: shipped
+stopped_at: v1.6 archived 2026-04-08; ready for /gsd-new-milestone
+last_updated: "2026-04-08T00:00:00.000Z"
+last_activity: 2026-04-08
 progress:
-  total_phases: 8
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  total_phases: 4
+  completed_phases: 4
+  total_plans: 5
+  completed_plans: 5
+  percent: 100
 ---
 
 # Project State
@@ -22,16 +22,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.6 Toggle & Harden — unify the two-pattern toggle inconsistency and harden NumericInput against silent out-of-range entry.
+**Current focus:** None — v1.6 shipped, awaiting next milestone
 
 ## Current Position
 
-Milestone: v1.6 — Toggle & Harden
-Status: Ready to plan
-Current phase: 21 — Shared SegmentedToggle (build + wire)
-Last activity: 2026-04-07
+Milestone: v1.6 — Toggle & Harden (SHIPPED 2026-04-08)
+Status: Shipped & archived
+Current phase: None
+Last activity: 2026-04-08
 
-Progress: [          ] 0% (0/4 phases)
+Progress: [██████████] 100% (4/4 phases)
 
 ## Performance Metrics
 

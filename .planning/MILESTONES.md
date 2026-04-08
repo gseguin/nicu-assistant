@@ -1,5 +1,25 @@
 # Milestones
 
+## v1.6 Toggle & Harden (Shipped: 2026-04-08)
+
+**Phases completed:** 4 phases (21, 22, 23, 24), 5 plans, 20 commits, +3000/-174 diff across 36 files
+
+**Tag:** `v1.6.0`
+
+**Key accomplishments:**
+
+- Shared `SegmentedToggle` component extracted from Morphine's Linear/Compounding tablist — identity-aware (active segment picks up Clinical Blue / Teal via v1.5 route wrappers), keyboard nav (←/→/Home/End), `role="tablist"` ARIA. Morphine refactored to consume it with zero behavior change; Formula `Base` SelectPicker replaced.
+- `NumericInput` hardened: visible range hint (`0.1–200 kg` en-dash), blur-gated "Outside expected range — verify" advisory (em dash), no auto-clamp, opt-out `showRangeHint` prop for cases where the hint is redundant.
+- Clinical input ranges moved from magic numbers at call sites into JSON config (`inputs` top-level key in both `morphine-config.json` and `fortification-config.json`) with typed TS wrappers.
+- Result feedback parity — shared `.animate-result-pulse` class in `src/app.css` (200ms scale-from-95% entrance, reduced-motion gated); `aria-live="polite"` + `aria-atomic="true"` on both calculator result heroes; no auto-scroll, no focus theft.
+- Zero WCAG regressions — every v1.6 surface passed AA on first axe sweep. Playwright a11y green 12/12 (added 4 new advisory-message variants covering both calculators × both themes).
+- Phase 22 bonus infra fix — jsdom stubs for `matchMedia` + `Element.animate` in `src/test-setup.ts` unblocked blur-triggered transition tests and benefited Phase 23's result-pulse tests.
+- Version bumped to `1.6.0`.
+
+See [milestones/v1.6-ROADMAP.md](milestones/v1.6-ROADMAP.md) and [milestones/v1.6-REQUIREMENTS.md](milestones/v1.6-REQUIREMENTS.md) for full archive.
+
+---
+
 ## v1.5 Tab Identity & Search (Shipped: 2026-04-07)
 
 **Phases completed:** 3 phases (18, 19, 20), 5 plans, 18 commits, +3030/-47 diff across 28 files
