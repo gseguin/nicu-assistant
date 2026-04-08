@@ -5,6 +5,7 @@ export { setCalculatorContext, getCalculatorContext } from './context.js';
 export type { SelectOption, CalculatorId, CalculatorContext } from './types.js';
 // Components
 export { default as SelectPicker } from './components/SelectPicker.svelte';
+export { default as SegmentedToggle } from './components/SegmentedToggle.svelte';
 export { default as DisclaimerModal } from './components/DisclaimerModal.svelte';
 export { default as NumericInput } from './components/NumericInput.svelte';
 export { default as ResultsDisplay } from './components/ResultsDisplay.svelte';
