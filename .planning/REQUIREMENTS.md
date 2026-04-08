@@ -30,8 +30,8 @@
 
 ### Accessibility
 
-- [ ] **A11Y-01**: WCAG 2.1 AA contrast holds for the new `SegmentedToggle` active and inactive segments in both light and dark modes, both tabs (Clinical Blue + Teal identity), via the existing axe-core sweep.
-- [ ] **A11Y-02**: WCAG 2.1 AA contrast holds for the new range hint text and the inline error message in both themes.
+- [x] **A11Y-01**: WCAG 2.1 AA contrast holds for the new `SegmentedToggle` active and inactive segments in both light and dark modes, both tabs (Clinical Blue + Teal identity), via the existing axe-core sweep.
+- [x] **A11Y-02**: WCAG 2.1 AA contrast holds for the new range hint text and the inline error message in both themes.
 - [x] **A11Y-03**: SegmentedToggle keyboard interactions (TOG-03) covered by component tests.
 
 ## Future Requirements
@@ -69,8 +69,8 @@
 | FEED-01 | Phase 23 | Complete |
 | FEED-02 | Phase 23 | Complete |
 | FEED-03 | Phase 23 | Complete |
-| A11Y-01 | Phase 24 | Pending |
-| A11Y-02 | Phase 24 | Pending |
+| A11Y-01 | Phase 24 | Complete |
+| A11Y-02 | Phase 24 | Complete |
 | A11Y-03 | Phase 21 | Complete |
 
 **Coverage:** 18/18 v1.6 requirements mapped.

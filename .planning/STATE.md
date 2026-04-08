@@ -4,8 +4,8 @@ milestone: v1.5
 milestone_name: Tab Identity & Search
 current_phase: 21 — Shared SegmentedToggle (build + wire)
 status: planning
-stopped_at: Completed 23-01-PLAN.md
-last_updated: "2026-04-08T15:49:44.249Z"
+stopped_at: Completed 24-01-PLAN.md
+last_updated: "2026-04-08T15:52:42.111Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 8
@@ -52,6 +52,7 @@ Progress: [          ] 0% (0/4 phases)
 - [v1.6]: SegmentedToggle is for 2-4 option choices only; SelectPicker stays for N-of-many. No replacement of SelectPicker itself.
 - [v1.6]: NumericInput min/max is advisory only — never auto-clamp the user's input.
 - [Phase 23]: Shared .animate-result-pulse lives in src/app.css; untrack() guards the Formula calcKey write
+- [Phase 24]: No OKLCH tuning required — all v1.6 surfaces passed AA on first sweep
 
 ### Pending Todos
 
@@ -63,6 +64,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-08T15:49:44.247Z
-Stopped at: Completed 23-01-PLAN.md
+Last session: 2026-04-08T15:52:42.109Z
+Stopped at: Completed 24-01-PLAN.md
 Resume file: None
