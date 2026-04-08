@@ -15,12 +15,12 @@
 
 <!-- Top title bar: always visible on all viewports -->
 <header
-  class="sticky top-0 left-0 right-0 z-10
+  class="sticky top-0 left-0 right-0 z-10 min-h-14
          flex items-center px-4 gap-2
          border-b border-[var(--color-border)] bg-[var(--color-surface)]"
 >
   <!-- App name -->
-  <span class="font-semibold text-base text-[var(--color-text-primary)]">NICU Assist</span>
+  <span class="font-semibold text-base tracking-tight text-[var(--color-text-primary)]">NICU Assist</span>
 
   <!-- Desktop calculator tabs (hidden on mobile) -->
   <nav class="hidden md:flex gap-2 ml-4" aria-label="Calculator navigation">
@@ -30,7 +30,8 @@
         <a
           href={calc.href}
           class="flex items-center gap-2 px-4 py-3 text-ui font-medium
-                 min-h-[48px] border-b-2 transition-colors
+                 min-h-[48px] border-b-2 transition-colors rounded-t-lg
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
                  {isActive
                    ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
                    : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
@@ -86,10 +87,11 @@
       <a
         href={calc.href}
         class="flex flex-col items-center justify-center flex-1 gap-1
-               min-h-[48px] py-2 text-ui font-medium
+               min-h-14 py-2 text-ui font-medium transition-colors
+               focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]
                {isActive
-                 ? 'text-[var(--color-accent)]'
-                 : 'text-[var(--color-text-secondary)]'}"
+                 ? 'text-[var(--color-accent)] font-semibold'
+                 : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
         aria-label={calc.description}
         aria-selected={isActive}
         role="tab"
