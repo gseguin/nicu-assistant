@@ -64,7 +64,14 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-(None — v1.6 shipped 2026-04-08; planning next milestone)
+## Current Milestone: v1.7 Formula Micro-Polish
+
+**Goal:** Tighten three small rough edges in the Formula calculator uncovered during bedside use.
+
+**Target features:**
+- Strip unit parentheticals from Formula field labels (suffix already shows the unit — labels should be clean)
+- Put Formula picker and Starting Volume on the same row (all screen sizes) to shorten the input column
+- When the user picks a packets-capable formula (currently `similac-hmf`), auto-select `packets` as the Unit
 
 ### Out of Scope
 
@@ -133,4 +140,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-08 — v1.6 Toggle & Harden shipped and archived*
+*Last updated: 2026-04-08 — v1.7 Formula Micro-Polish milestone started*
