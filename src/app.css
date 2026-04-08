@@ -73,6 +73,7 @@
     --color-bmf-result:      oklch(44% 0.13 55);     /* darker amber — result card bg, 4.5:1 w/ white */
     --color-error:           oklch(50% 0.20 25);
     --color-error-light:     oklch(90% 0.06 25);
+    --color-scrim:           oklch(18% 0.012 230 / 0.55);
   }
 
   /* Dark mode — activated by .dark class OR [data-theme="dark"] */
@@ -93,6 +94,7 @@
     --color-bmf-result:      oklch(44% 0.13 55);     /* darker amber — same as light (both need dark bg for white text) */
     --color-error:           oklch(72% 0.16 25);
     --color-error-light:     oklch(25% 0.08 25);
+    --color-scrim:           oklch(8% 0.012 240 / 0.70);
   }
 
   /* DS-04: Apply Plus Jakarta Sans globally */
