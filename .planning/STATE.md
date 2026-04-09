@@ -4,14 +4,14 @@ milestone: v1.8
 milestone_name: GIR Calculator
 status: Roadmap ready, awaiting `/gsd-plan-phase 26`
 stopped_at: v1.8 ROADMAP.md written; next step `/gsd-plan-phase 26`
-last_updated: "2026-04-09T14:48:07.102Z"
+last_updated: "2026-04-09T14:50:32.722Z"
 last_activity: 2026-04-09 — Roadmap drafted (3 phases, 27 reqs, 100% coverage)
 progress:
   total_phases: 3
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
-  completed_plans: 1
-  percent: 50
+  completed_plans: 2
+  percent: 100
 ---
 
 # Project State
