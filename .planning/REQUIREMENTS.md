@@ -41,11 +41,11 @@
 
 ### Architecture & Integration (ARCH)
 
-- [ ] **ARCH-01**: GIR calculator is added as the third entry in `src/lib/shell/registry.ts`, appended after Morphine and Formula (preserves existing tab order / muscle memory)
-- [ ] **ARCH-02**: New `.identity-gir` CSS block in `src/app.css` (light + dark) with literal OKLCH values (hue ~145 green or ~295 violet), pinned at `oklch(95% 0.04 H)` pattern to pre-empt the v1.5 Phase 20 axe-contrast issue; scoped to exactly the 4 identity surfaces (result hero, focus rings, eyebrows, active nav indicator) — no palette drift
-- [ ] **ARCH-03**: `identityClass` union in the registry extended to include `'identity-gir'`
+- [x] **ARCH-01**: GIR calculator is added as the third entry in `src/lib/shell/registry.ts`, appended after Morphine and Formula (preserves existing tab order / muscle memory)
+- [x] **ARCH-02**: New `.identity-gir` CSS block in `src/app.css` (light + dark) with literal OKLCH values (hue ~145 green or ~295 violet), pinned at `oklch(95% 0.04 H)` pattern to pre-empt the v1.5 Phase 20 axe-contrast issue; scoped to exactly the 4 identity surfaces (result hero, focus rings, eyebrows, active nav indicator) — no palette drift
+- [x] **ARCH-03**: `identityClass` union in the registry extended to include `'identity-gir'`
 - [x] **ARCH-04**: New `src/lib/gir/` module contains `types.ts`, `gir-config.json`, `gir-config.ts` (typed wrapper), `calculations.ts` (pure functions), `state.svelte.ts` (rune singleton with dedicated `nicu_gir_state` sessionStorage key), `GirCalculator.svelte`, `GlucoseTitrationGrid.svelte`
-- [ ] **ARCH-05**: New route `src/routes/gir/+page.svelte` composes `<GirCalculator />` with `identity-gir` wrapper and calls `girState.init()` on mount
+- [x] **ARCH-05**: New route `src/routes/gir/+page.svelte` composes `<GirCalculator />` with `identity-gir` wrapper and calls `girState.init()` on mount
 - [ ] **ARCH-06**: Existing shared components (`NumericInput`, `ResultsDisplay`, `DisclaimerModal`, `AboutSheet`, `NavShell`, `.animate-result-pulse`) are reused with **zero modifications** — no new props added to any shared component for v1.8
 
 ### Testing & Quality (TEST)
@@ -111,11 +111,11 @@
 | SAFE-04 | Phase 27 | Pending |
 | SAFE-05 | Phase 26 | Complete |
 | REF-01  | Phase 27 | Pending |
-| ARCH-01 | Phase 27 | Pending |
-| ARCH-02 | Phase 27 | Pending |
-| ARCH-03 | Phase 27 | Pending |
+| ARCH-01 | Phase 27 | Complete |
+| ARCH-02 | Phase 27 | Complete |
+| ARCH-03 | Phase 27 | Complete |
 | ARCH-04 | Phase 26 + 27 (module scaffolded in 26, UI files added in 27) | Complete |
-| ARCH-05 | Phase 27 | Pending |
+| ARCH-05 | Phase 27 | Complete |
 | ARCH-06 | Phase 27 | Pending |
 | TEST-01 | Phase 26 | Complete |
 | TEST-02 | Phase 28 | Pending |

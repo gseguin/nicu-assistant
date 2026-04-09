@@ -94,7 +94,7 @@ See individual milestone archives for phase details.
   5. Dextrose % > 12.5 shows a prominent amber-toned "requires central venous access" advisory (visually stronger than the grey range hint); Current GIR > 12 and < 4 each surface their respective advisories; all three inputs source advisory min/max from `gir-config.json` with both `showRangeHint` and `showRangeError` enabled (advisory-only, no clamp); a static population reference card (IDM/LGA 3–5, IUGR 5–7, Preterm/NPO 4–6) is visible inline
   6. `.identity-gir` is added to `src/app.css` with literal `oklch(...)` values (hue ~145 dextrose green) for both light and dark, the `identityClass` union is extended to include `'identity-gir'`, and no shared component (`NumericInput`, `ResultsDisplay`, `NavShell`, `AboutSheet`, `DisclaimerModal`, `SegmentedToggle`) receives any new prop for v1.8
 **Plans**: 3 plans
-- [ ] 27-01-PLAN.md — Identity OKLCH block + registry entry + /gir route wrapper (ARCH-01, ARCH-02, ARCH-03, ARCH-05)
+- [x] 27-01-PLAN.md — Identity OKLCH block + registry entry + /gir route wrapper (ARCH-01, ARCH-02, ARCH-03, ARCH-05)
 - [ ] 27-02-PLAN.md — GlucoseTitrationGrid radiogroup component + tests (TITR-01..08, CORE-05)
 - [ ] 27-03-PLAN.md — GirCalculator composition + advisories + reference card + route wiring (CORE-01, CORE-04, CORE-05, SAFE-01..04, REF-01, ARCH-04, ARCH-06)
 **UI hint**: yes
@@ -125,5 +125,5 @@ Phases execute in numeric order. v1.8 begins at Phase 26.
 | 21-24 | v1.6 | 5/5 | Complete | 2026-04-08 |
 | 25 | v1.7 | 1/1 | Complete | 2026-04-08 |
 | 26. GIR Foundation | v1.8 | 2/2 | Complete   | 2026-04-09 |
-| 27. GIR UI, Identity & Registration | v1.8 | 0/? | Not started | - |
+| 27. GIR UI, Identity & Registration | v1.8 | 1/3 | In Progress|  |
 | 28. GIR A11y, E2E & Ship | v1.8 | 0/? | Not started | - |
