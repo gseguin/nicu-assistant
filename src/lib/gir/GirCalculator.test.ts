@@ -59,14 +59,18 @@ describe('GirCalculator', () => {
     expect(screen.getAllByText('mg/kg/min').length).toBeGreaterThan(0);
   });
 
-  it('selecting a bucket updates target-guidance hero', async () => {
+  it('selecting a bucket updates target-guidance hero with Δ rate as the action', async () => {
     girState.current.weightKg = 3.1;
     girState.current.dextrosePct = 12.5;
     girState.current.mlPerKgPerDay = 80;
     render(GirCalculator);
     const radios = screen.getAllByRole('radio');
     await fireEvent.click(radios[2]); // 40-50 bucket (first-rendered layout)
-    expect(screen.getByText('TARGET GIR')).toBeTruthy();
+    // Post-Phase 30-01: summary hero eyebrow is ADJUST RATE / HYPERGLYCEMIA / TARGET REACHED
+    // and the big number is Δ rate (ml/hr), not GIR (mg/kg/min).
+    expect(screen.getByText('ADJUST RATE')).toBeTruthy();
+    // Direction word appears in the bucket cards AND the summary hero — at least 2 matches.
+    expect(screen.getAllByText(/\((increase|decrease)\)/).length).toBeGreaterThanOrEqual(2);
   });
 
   it('GIR >12 advisory surfaces when computed GIR is high', () => {

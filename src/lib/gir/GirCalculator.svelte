@@ -38,10 +38,17 @@
     girState.current.selectedBucketId = bucketId;
   }
 
-  function formatDelta(delta: number): string {
-    if (delta > 0) return `▲ ${delta.toFixed(1)} ml/hr (increase)`;
-    if (delta < 0) return `▼ ${Math.abs(delta).toFixed(1)} ml/hr (decrease)`;
-    return '0 ml/hr (no change)';
+  type DeltaHero =
+    | { kind: 'stop' }
+    | { kind: 'no-change' }
+    | { kind: 'delta'; glyph: '▲' | '▼'; abs: string; word: '(increase)' | '(decrease)' };
+
+  function deltaHero(row: { bucketId: string; deltaRateMlHr: number; targetGirMgKgMin: number }): DeltaHero {
+    if (row.targetGirMgKgMin <= 0) return { kind: 'stop' };
+    if (row.deltaRateMlHr === 0) return { kind: 'no-change' };
+    if (row.deltaRateMlHr > 0)
+      return { kind: 'delta', glyph: '▲', abs: row.deltaRateMlHr.toFixed(1), word: '(increase)' };
+    return { kind: 'delta', glyph: '▼', abs: Math.abs(row.deltaRateMlHr).toFixed(1), word: '(decrease)' };
   }
 
   // Persist on change
@@ -184,20 +191,31 @@
         aria-atomic="true"
       >
         {#if selectedRow}
+          {@const hero = deltaHero(selectedRow)}
           <div class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-identity)]">
-            TARGET GIR
+            {#if hero.kind === 'stop'}HYPERGLYCEMIA{:else if hero.kind === 'no-change'}TARGET REACHED{:else}ADJUST RATE{/if}
           </div>
-          {#if selectedRow.targetGirMgKgMin <= 0}
-            <div class="text-title font-bold text-[var(--color-text-primary)]">
-              0 mg/kg/min — consider stopping infusion
+          {#if hero.kind === 'stop'}
+            <div class="flex items-baseline gap-2">
+              <span class="text-display font-black uppercase tracking-wider text-[var(--color-text-primary)]">STOP</span>
+              <span class="text-ui text-[var(--color-text-secondary)]">dextrose infusion</span>
+            </div>
+          {:else if hero.kind === 'no-change'}
+            <div class="flex items-baseline gap-2">
+              <span class="text-display font-black num text-[var(--color-text-tertiary)]" aria-hidden="true">—</span>
+              <span class="text-ui text-[var(--color-text-secondary)]">no change</span>
+            </div>
+            <div class="text-ui text-[var(--color-text-secondary)] num mt-2">
+              {selectedRow.targetFluidsMlKgDay.toFixed(0)} ml/kg/day · {selectedRow.targetRateMlHr.toFixed(1)} ml/hr · {selectedRow.targetGirMgKgMin.toFixed(1)} mg/kg/min
             </div>
           {:else}
             <div class="flex items-baseline gap-2">
-              <span class="text-display font-black num text-[var(--color-text-primary)]">{selectedRow.targetGirMgKgMin.toFixed(1)}</span>
-              <span class="text-ui text-[var(--color-text-secondary)]">mg/kg/min</span>
+              <span class="text-display font-black num text-[var(--color-text-primary)]">{hero.glyph} {hero.abs}</span>
+              <span class="text-ui text-[var(--color-text-tertiary)]">ml/hr</span>
+              <span class="text-ui text-[var(--color-text-secondary)]">{hero.word}</span>
             </div>
             <div class="text-ui text-[var(--color-text-secondary)] num mt-2">
-              {selectedRow.targetFluidsMlKgDay.toFixed(0)} ml/kg/day · {selectedRow.targetRateMlHr.toFixed(1)} ml/hr · {formatDelta(selectedRow.deltaRateMlHr)}
+              {selectedRow.targetFluidsMlKgDay.toFixed(0)} ml/kg/day · {selectedRow.targetRateMlHr.toFixed(1)} ml/hr · {selectedRow.targetGirMgKgMin.toFixed(1)} mg/kg/min
             </div>
           {/if}
         {:else}
