@@ -91,12 +91,14 @@ describe('GlucoseTitrationGrid', () => {
 
   it('positive delta renders ▲ + (increase)', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
-    expect(screen.getAllByText(/▲.*\(increase\)/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText('▲').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('(increase)').length).toBeGreaterThan(0);
   });
 
   it('negative delta renders ▼ + (decrease)', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
-    expect(screen.getAllByText(/▼.*\(decrease\)/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText('▼').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('(decrease)').length).toBeGreaterThan(0);
   });
 
   it('zero delta renders em-dash hero in text-display font-black span', () => {
