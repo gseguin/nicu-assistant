@@ -5,8 +5,9 @@ import { describe, it, expect } from 'vitest';
 import { CALCULATOR_REGISTRY, type CalculatorEntry } from '$lib/shell/registry';
 
 describe('CALCULATOR_REGISTRY', () => {
-  it('has exactly 2 calculator entries', () => {
-    expect(CALCULATOR_REGISTRY).toHaveLength(2);
+  it('contains the expected calculator ids', () => {
+    const ids = CALCULATOR_REGISTRY.map((e) => e.id).sort();
+    expect(ids).toEqual(['formula', 'gir', 'morphine-wean']);
   });
 
   it('includes Morphine Wean calculator as first entry', () => {
@@ -19,6 +20,11 @@ describe('CALCULATOR_REGISTRY', () => {
     expect(CALCULATOR_REGISTRY[1].id).toBe('formula');
     expect(CALCULATOR_REGISTRY[1].label).toBe('Formula');
     expect(CALCULATOR_REGISTRY[1].href).toBe('/formula');
+  });
+
+  it('includes GIR calculator as third entry', () => {
+    expect(CALCULATOR_REGISTRY[2].id).toBe('gir');
+    expect(CALCULATOR_REGISTRY[2].href).toBe('/gir');
   });
 
   it('all entries have required fields', () => {
