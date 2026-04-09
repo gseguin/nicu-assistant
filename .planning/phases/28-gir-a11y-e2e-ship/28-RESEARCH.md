@@ -543,22 +543,22 @@ Phase 28 is a test-addition + docs-bump phase. No rename, no data migration, no 
 
 **Mitigation:** A2 (radio count) should be the FIRST thing Wave 0 verifies — run `pnpm exec playwright test --headed e2e/gir.spec.ts` once with a `console.log` to see actual radio count at both viewports.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should playwright.config.ts add a mobile project or should `gir.spec.ts` use per-test `test.use({ viewport })`?**
    - What we know: existing config has only `chromium`. Other specs don't run mobile.
    - What's unclear: Whether the team wants mobile coverage extended to all specs (project-level) or scoped to GIR (file-level).
-   - Recommendation: **Option B (file-level)** — keeps Phase 28 scope tight. Revisit project-level in a future phase if mobile parity for all specs becomes a requirement.
+   - RESOLVED: **Option B (file-level `test.use({ viewport })`)** — keeps Phase 28 scope tight. Revisit project-level in a future phase if mobile parity for all specs becomes a requirement.
 
 2. **Should the 6 axe variants include a mobile-viewport sweep?**
    - What we know: morphine/fortification a11y sweeps do not run at mobile viewport.
    - What's unclear: Whether GIR should pioneer mobile axe coverage.
-   - Recommendation: **No** — match existing pattern (desktop-only sweeps). GIR's responsive stack-vs-table means mobile is a different DOM, but that's covered by Vitest tests. If axe reveals a mobile-only issue later, add Variant 7 then.
+   - RESOLVED: **No — desktop-only sweeps.** Match existing pattern. GIR's responsive stack-vs-table means mobile is a different DOM, but that's covered by Vitest tests. If axe reveals a mobile-only issue later, add Variant 7 then.
 
 3. **Does PROJECT.md Validated list need one line per requirement or one line per milestone feature?**
    - What we know: v1.7 has 4 lines, v1.6 has 9 lines — not strict per-requirement.
    - What's unclear: The grouping convention.
-   - Recommendation: Match v1.6 density (~8-12 bullet lines summarizing the milestone), not all 34 requirement IDs.
+   - RESOLVED: **Match v1.6 density (~8-12 bullet lines summarizing the milestone)**, not all 34 requirement IDs.
 
 ## Sources
 
