@@ -93,7 +93,10 @@ See individual milestone archives for phase details.
   4. Selected bucket is highlighted via `--color-identity-hero` (not opacity) and drives a target-guidance hero below the grid; at <480px the grid stacks as 88px+ tappable cards, at ≥480px as a table with 48px+ rows — all 6 rows always visible, no horizontal scroll
   5. Dextrose % > 12.5 shows a prominent amber-toned "requires central venous access" advisory (visually stronger than the grey range hint); Current GIR > 12 and < 4 each surface their respective advisories; all three inputs source advisory min/max from `gir-config.json` with both `showRangeHint` and `showRangeError` enabled (advisory-only, no clamp); a static population reference card (IDM/LGA 3–5, IUGR 5–7, Preterm/NPO 4–6) is visible inline
   6. `.identity-gir` is added to `src/app.css` with literal `oklch(...)` values (hue ~145 dextrose green) for both light and dark, the `identityClass` union is extended to include `'identity-gir'`, and no shared component (`NumericInput`, `ResultsDisplay`, `NavShell`, `AboutSheet`, `DisclaimerModal`, `SegmentedToggle`) receives any new prop for v1.8
-**Plans**: TBD
+**Plans**: 3 plans
+- [ ] 27-01-PLAN.md — Identity OKLCH block + registry entry + /gir route wrapper (ARCH-01, ARCH-02, ARCH-03, ARCH-05)
+- [ ] 27-02-PLAN.md — GlucoseTitrationGrid radiogroup component + tests (TITR-01..08, CORE-05)
+- [ ] 27-03-PLAN.md — GirCalculator composition + advisories + reference card + route wiring (CORE-01, CORE-04, CORE-05, SAFE-01..04, REF-01, ARCH-04, ARCH-06)
 **UI hint**: yes
 
 ### Phase 28: GIR A11y, E2E & Ship
