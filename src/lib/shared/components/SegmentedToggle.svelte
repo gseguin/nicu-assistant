@@ -72,7 +72,7 @@
       aria-selected={active}
       id="{uid}-tab-{option.value}"
       tabindex={active ? 0 : -1}
-      class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all font-semibold text-ui outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] {active ? 'bg-[var(--color-surface-card)] text-[var(--color-identity)] shadow-sm' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-identity)] hover:bg-[var(--color-surface)]'}"
+      class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all font-semibold text-ui outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] {active ? 'bg-[var(--color-surface-card)] text-[var(--color-identity)] shadow-sm' : 'text-[var(--color-text-primary)] hover:text-[var(--color-identity)] hover:bg-[var(--color-surface)]'}"
       onclick={() => activate(option.value)}
       onkeydown={(e) => handleKeydown(e, option.value)}
     >
