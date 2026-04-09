@@ -10,13 +10,13 @@
 
 ### GIR Hero Swap (client field feedback)
 
-- [ ] **GIR-SWAP-01**: On every GIR titration bucket card (all 6 buckets + the "current state" card), Δ rate (▲/▼ X.X ml/hr with "increase"/"decrease" label) is rendered as the hero — same typographic weight/size GIR `mg/kg/min` had in v1.8.
-- [ ] **GIR-SWAP-02**: GIR `mg/kg/min` moves into the secondary metrics row, taking the rightmost slot Δ rate vacated (row order: Fluids | Rate | GIR).
-- [ ] **GIR-SWAP-03**: The "current state" top card (Δ rate = 0) shows a neutral/placeholder treatment instead of ▲/▼ arrows — no misleading "increase" on a zero-change bucket.
-- [ ] **GIR-SWAP-04**: Identity color, focus rings, roving tabindex, `role="radiogroup"` semantics, `aria-live` announcements, and `prefers-reduced-motion` behavior from v1.8 are preserved unchanged.
-- [ ] **GIR-SWAP-05**: Component tests updated — GlucoseTitrationGrid tests assert Δ rate is in the hero slot and GIR mg/kg/min is in the secondary row; keyboard matrix + radiogroup tests still pass.
-- [ ] **GIR-SWAP-06**: Playwright E2E updated — GIR happy-path at mobile 375 + desktop 1280 asserts the new hero layout.
-- [ ] **GIR-SWAP-07**: All 16 axe sweeps (morphine 6 + fortification 4 + gir 6) stay green in light + dark; new layout audited before PR (per v1.8 "axe before PR" decision).
+- [x] **GIR-SWAP-01**: On every GIR titration bucket card (all 6 buckets + the "current state" card), Δ rate (▲/▼ X.X ml/hr with "increase"/"decrease" label) is rendered as the hero — same typographic weight/size GIR `mg/kg/min` had in v1.8.
+- [x] **GIR-SWAP-02**: GIR `mg/kg/min` moves into the secondary metrics row, taking the rightmost slot Δ rate vacated (row order: Fluids | Rate | GIR).
+- [x] **GIR-SWAP-03**: The "current state" top card (Δ rate = 0) shows a neutral/placeholder treatment instead of ▲/▼ arrows — no misleading "increase" on a zero-change bucket.
+- [x] **GIR-SWAP-04**: Identity color, focus rings, roving tabindex, `role="radiogroup"` semantics, `aria-live` announcements, and `prefers-reduced-motion` behavior from v1.8 are preserved unchanged.
+- [x] **GIR-SWAP-05**: Component tests updated — GlucoseTitrationGrid tests assert Δ rate is in the hero slot and GIR mg/kg/min is in the secondary row; keyboard matrix + radiogroup tests still pass.
+- [x] **GIR-SWAP-06**: Playwright E2E updated — GIR happy-path at mobile 375 + desktop 1280 asserts the new hero layout.
+- [x] **GIR-SWAP-07**: All 16 axe sweeps (morphine 6 + fortification 4 + gir 6) stay green in light + dark; new layout audited before PR (per v1.8 "axe before PR" decision).
 
 ### Impeccable Polish Pass
 
@@ -58,13 +58,13 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| GIR-SWAP-01 | Phase 29 | Pending |
-| GIR-SWAP-02 | Phase 29 | Pending |
-| GIR-SWAP-03 | Phase 29 | Pending |
-| GIR-SWAP-04 | Phase 29 | Pending |
-| GIR-SWAP-05 | Phase 29 | Pending |
-| GIR-SWAP-06 | Phase 29 | Pending |
-| GIR-SWAP-07 | Phase 29 | Pending |
+| GIR-SWAP-01 | Phase 29 | Complete |
+| GIR-SWAP-02 | Phase 29 | Complete |
+| GIR-SWAP-03 | Phase 29 | Complete |
+| GIR-SWAP-04 | Phase 29 | Complete |
+| GIR-SWAP-05 | Phase 29 | Complete |
+| GIR-SWAP-06 | Phase 29 | Complete |
+| GIR-SWAP-07 | Phase 29 | Complete |
 | POLISH-01 | Phase 30 | Pending |
 | POLISH-02 | Phase 30 | Pending |
 | POLISH-03 | Phase 30 | Pending |

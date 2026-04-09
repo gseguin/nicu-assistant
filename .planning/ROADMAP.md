@@ -41,7 +41,7 @@ See [milestones/v1.8-ROADMAP.md](milestones/v1.8-ROADMAP.md) for full phase deta
 
 ### v1.9 GIR Titration Hero Swap + Polish (Phases 29-31)
 
-- [ ] **Phase 29: GIR Titration Hero Swap** — Δ rate becomes hero on all buckets; GIR mg/kg/min moves to secondary row; a11y preserved; tests + axe updated
+- [x] **Phase 29: GIR Titration Hero Swap** — Δ rate becomes hero on all buckets; GIR mg/kg/min moves to secondary row; a11y preserved; tests + axe updated (completed 2026-04-09)
 - [ ] **Phase 30: Impeccable Polish + Tech Debt Sweep** — Critique-driven P1/P2 fixes across all 3 calculators; dep updates, dead code, lint/TS strict, deferred cleanups
 - [ ] **Phase 31: Release v1.9** — Version bump, AboutSheet refresh, PROJECT.md Validated list update
 
@@ -58,7 +58,7 @@ See [milestones/v1.8-ROADMAP.md](milestones/v1.8-ROADMAP.md) for full phase deta
   4. Keyboard nav, roving tabindex, `role="radiogroup"`, `aria-live` announcements, identity color, focus rings, and `prefers-reduced-motion` behave identically to v1.8 (component tests + E2E pass).
   5. All 16 axe sweeps (morphine 6 + fortification 4 + gir 6) are green in light + dark on the new layout, audited BEFORE PR.
 **Plans**: 1 plan
-- [ ] 29-01-PLAN.md — Hero swap + em-dash Δ=0 + STOP card + action-first aria-label + tests + axe gate
+- [x] 29-01-PLAN.md — Hero swap + em-dash Δ=0 + STOP card + action-first aria-label + tests + axe gate
 **UI hint**: yes
 
 ### Phase 30: Impeccable Polish + Tech Debt Sweep
@@ -90,6 +90,6 @@ See [milestones/v1.8-ROADMAP.md](milestones/v1.8-ROADMAP.md) for full phase deta
 |-------|-----------|----------------|--------|-----------|
 | 1-25 | v1.0-v1.7 | — | Complete | 2026-04-08 |
 | 26-28 | v1.8 | 9/9 | Complete | 2026-04-09 |
-| 29. GIR Titration Hero Swap | v1.9 | 0/0 | Not started | - |
+| 29. GIR Titration Hero Swap | v1.9 | 1/1 | Complete   | 2026-04-09 |
 | 30. Polish + Tech Debt Sweep | v1.9 | 0/0 | Not started | - |
 | 31. Release v1.9 | v1.9 | 0/0 | Not started | - |
