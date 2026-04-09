@@ -1,275 +1,125 @@
-# Technology Stack
+# Stack Research — v1.8 GIR Calculator
 
-**Project:** NICU Assistant — Unified Clinical PWA
-**Researched:** 2026-03-31
-**Stack focus:** Unification-specific patterns. Core stack (SvelteKit 2, Svelte 5, Tailwind 4, Vite, adapter-static, @vite-pwa/sveltekit, Vitest, Playwright) is inherited from both existing apps and is not re-litigated here.
+**Researched:** 2026-04-09
+**Mode:** Ecosystem (subsequent-milestone, additive)
+**Overall confidence:** HIGH — the existing validated stack was designed for exactly this case (plugin-like registration + shared components), and GIR is structurally a close sibling of Morphine Wean.
 
----
+## Verdict
 
-## Inherited Stack (already decided)
+**No new runtime dependencies.** The GIR calculator is implementable end-to-end with the stack already in place (SvelteKit 2.55 + Svelte 5 runes + Tailwind CSS 4 + @lucide/svelte + shared `src/lib/shared/components/*`). The only additive changes are:
 
-These are locked in by both existing apps — no alternatives evaluated.
+1. One new Lucide icon import in `registry.ts` (e.g. `Droplet` or `Droplets` — already exposed by the existing `@lucide/svelte` package, zero install cost).
+2. One new route `src/routes/gir/+page.svelte` and one new `gir-config.json` following the `morphine-config.json` / `fortification-config.json` pattern.
+3. Two new CSS custom-property blocks in `src/app.css` (`.identity-gir` + its dark variant), reusing the exact mechanism shipped in v1.5.
+4. One small additive prop on an existing shared component (see "New Component Props" below) — only if we decide the glucose range picker should visually live inside the titration table rather than above it. The default recommendation is to **reuse `SegmentedToggle` as-is** above the table and keep the table purely presentational, which requires zero component changes.
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| SvelteKit | ^2.55.0 | Application framework |
-| Svelte (runes) | ^5.55.0 | Component model |
-| TypeScript | ^5.9.3 | Type safety |
-| Vite | ^7.x – ^8.x | Build tool (see note below) |
-| Tailwind CSS | ^4.2.2 | Styling via `@tailwindcss/vite` plugin |
-| @vite-pwa/sveltekit | ^1.1.0 | Service worker, manifest, offline caching |
-| @sveltejs/adapter-static | ^3.0.10 | SPA output, `200.html` fallback |
-| Vitest | ^4.1.2 | Unit and component testing |
-| Playwright | ^1.58.2 | E2E and PWA tests |
-| pnpm | ^10.33.0 | Package manager |
+Rationale: the v1.1/v1.3/v1.6 pattern (JSON config → typed TS wrapper → state singleton with `$state` rune → shared components → spreadsheet-parity tests) already covers Weight / Dextrose% / ml/kg/day inputs, a result hero, and an advisory/tabular display. Nothing about GIR math (`GIR = (dextrose% × ml/kg/day × 10) / 1440` in mg/kg/min) or a 6-bucket titration lookup requires a new library.
 
-**Vite version note:** pert-calculator pins Vite ^7.3.1; formula-calculator uses ^8.0.3. Use ^7.x in the unified app to match the more conservative existing constraint. Upgrade to 8 in a dedicated step after both calculators are migrated.
+## Reused As-Is
 
----
+| Concern | Existing asset | Notes |
+|---|---|---|
+| Calculator registration | `src/lib/shell/registry.ts` `CalculatorEntry` + `identityClass` union | Extend union to `'identity-morphine' \| 'identity-formula' \| 'identity-gir'` and append one entry. This is the same diff shape as v1.5 teal add. |
+| Numeric inputs (Weight, Dextrose %, ml/kg/day) | `NumericInput` (v1.6 range hint + v1.7 `showRangeError` opt-out) | Already supports config-driven min/max/step, blur-gated "Outside expected range" advisory, and per-field opt-outs. GIR can use defaults. |
+| Dextrose % selection (if discrete D5/D7.5/D10/D12.5/D15) | `SelectPicker` (v1.4 native `<dialog>`, v1.5 `searchable`) | Small fixed list → non-searchable mode; drop-in. Alternative: `SegmentedToggle` if only 3–4 common strengths. |
+| Glucose range picker (6 buckets) | `SegmentedToggle` (v1.6) | `role="tablist"` + ←/→/Home/End keyboard nav + identity-aware focus ring are exactly what a 6-bucket titration picker needs. Six options fit the pattern Morphine already uses for 2. A 6-wide tablist on mobile may need `overflow-x-auto` at the parent — that's a route-level style, not a component change. |
+| Result hero (Current GIR mg/kg/min + Initial rate ml/hr) | `ResultsDisplay` + `.animate-result-pulse` + `aria-live="polite"` pattern from Morphine/Formula v1.6 | Same hero slot, same eyebrow+value+unit typography, same identity-driven background via `--color-identity-hero`. |
+| Disclaimer / About / Nav shell | `DisclaimerModal`, `AboutSheet`, `NavShell` | Zero changes. `NavShell` already consumes `identityClass` from registry (v1.5). |
+| Clinical data externalization | JSON config + typed TS wrapper pattern (`morphine-config.json`, `fortification-config.json` with `inputs` block from v1.6) | `gir-config.json` with `inputs` (weight/dextrose/mlkgday ranges) + `buckets` (6 glucose ranges with target GIR / target fluids / delta rate). Parity tests read the same JSON the UI reads — the v1.3 pattern. |
+| Spreadsheet parity | Vitest 4 + existing pattern from v1.1 (Morphine) and v1.3 (Fortification Neocate case) | `GIR-Wean-Calculator.xlsx` CALC tab → golden fixtures → `gir.test.ts` co-located next to `gir.ts`. No new test tooling. |
+| A11y sweeps | Playwright + axe-core (v1.5: 8 sweeps, v1.6: 12 sweeps) | Add 4 GIR sweeps (light+dark × default+bucket-selected). Zero new dependencies. |
+| PWA shell / offline | `@vite-pwa/sveltekit` 1.1 Workbox precache | New route picked up automatically at build time; `gir-config.json` is bundled. No config change needed. |
+| Icon | `@lucide/svelte` (already installed) | Recommended: `Droplet` or `Droplets` (glucose-as-fluid semantic). `Activity` or `Zap` are wrong — too generic/energetic for a calm clinical tone. |
 
-## New Dependencies for Unification
+## New Component Props (if any)
 
-These are the additions required to build the shell, navigation, theming, and plugin architecture.
+**Default recommendation: zero new props.** Place the `SegmentedToggle` glucose-range picker *above* a plain `<table>` (or semantic `role="table"` div grid) and drive a local `$state` selected-bucket variable; the table rows read that variable and apply `data-selected={bucket === selected}` with a Tailwind conditional class for the highlight. The table is presentational-only, the picker is the existing component.
 
-### Navigation Icons
+**Only if route-level testing shows the "picker-above-table + highlighted row below" pattern is confusing** (P2 finding in an impeccable critique), consider this additive, opt-in prop on `SegmentedToggle`:
 
-**Use `@lucide/svelte` ^0.577.0 (not `lucide-svelte`).**
+- Prop: `orientation?: 'horizontal' | 'vertical'` — default `'horizontal'`, preserves current behavior. Vertical would allow the 6-bucket picker to *be* the table's leftmost column. This is non-trivial (tablist keyboard semantics become ↑/↓ instead of ←/→, per WAI-ARIA APG) and should be deferred to a follow-up milestone unless the critique specifically demands it.
 
-Rationale: `lucide-svelte` targets Svelte 3/4 and maintains a legacy compatibility shim for Svelte 5. `@lucide/svelte` is the official Svelte 5-native package from the Lucide authors, uses `$props()` rune syntax natively, and has no compatibility layer overhead. formula-calculator already imports `lucide-svelte` at ^1.0.1 — this is the correct modern package name for Svelte 4 compatibility but it re-exports from `@lucide/svelte` internally. For a new greenfield project on Svelte 5, use the canonical Svelte 5 package directly.
+**Do NOT** add a "table mode" or "row slot" prop to `SegmentedToggle`. A tablist is not a table; conflating them breaks ARIA semantics and the shared component's single responsibility. Keep the table as a table.
 
-Confidence: HIGH — verified from lucide.dev official docs and npm package pages.
+`NumericInput`, `SelectPicker`, `ResultsDisplay`, `DisclaimerModal`, `AboutSheet` require **no changes**.
 
-```bash
-pnpm add @lucide/svelte
-```
+## Third Identity Hue Recommendation
 
-Icons needed for navigation: `FlaskConical` (PERT), `Milk` (Formula), `Settings` or `Info` (future).
+### Constraints recap
+- Must be distinguishable from Clinical Blue (hue 220) and Formula Teal (hue 195) in OKLCH — a hue gap of ≥25° from both is a safe perceptual threshold.
+- Must pass WCAG 2.1 AA against surface tokens in **both** light and dark mode (same contract the v1.5 Morphine hero had to meet — recall v1.5 bumped the Morphine hero to literal `oklch(95% 0.04 220)` to clear 4.5:1).
+- Must feel semantically right for "glucose / energy / sugar" without drifting into warning/error territory (red is reserved; amber is already the BMF mode inside Formula and would collide).
+- Must stay inside the "warm clinical, calm, trustworthy" brand — no neon, no saturated consumer pops.
 
-### Theme Management
+### Recommendation: **hue 145 — "Dextrose Green"**
 
-**Do NOT use `svelte-themes` (^2.0.10) or any other theme library.**
+- **Semantic fit:** Green reads as "metabolic / nutrition / vitality" in clinical contexts and is the conventional color for glucose strips and many dextrose bag labels. It is not a warning green (those sit near 130–135 at high chroma); at hue 145 with controlled chroma it reads as a cool, slightly teal-leaning green that visually pairs with (but never blurs into) the Formula teal at 195.
+- **Perceptual gap from neighbors:** 220 (Morphine) → 195 (Formula) → 145 (GIR). Gaps of 25° and 50° — both above the ~20° threshold where OKLCH hues become easily confusable at moderate chroma. Importantly, 145 is on the opposite side of 195 from 220, so GIR will never be mistaken for Formula even under blue-light filters.
+- **Anti-collision with semantics:** Error stays at hue 25 (red). BMF amber stays at hue 55–65. Clinical blue stays at 220. Formula teal at 195. Nothing occupies 140–160.
+- **Avoided alternatives:**
+  - Hue 90–110 (yellow-green / lime): too close to BMF amber, reads as caution.
+  - Hue 160–180 (emerald → cyan): too close to Formula teal at 195, and 170 in particular is a "success" color in most design systems — semantic collision risk on any future "valid/submitted" UI state.
+  - Hue 280–310 (purple/magenta): strong distinguishability but clashes with "warm clinical, calm" brand; reads as marketing/consumer.
+  - Hue 25–60 (red→amber): reserved for error and BMF.
 
-Rationale: `svelte-themes` adds a dependency boundary for something trivially implementable with 20 lines in `app.html` + a `.svelte.ts` store. The project uses `adapter-static`, making the cookie-based SSR approach irrelevant — there is no server-side handler. The inline script in `app.html` is the canonical solution for static SPAs. Keeping this in-house means zero third-party dependency for a core shell concern.
+### Literal OKLCH values
 
-Confidence: HIGH — documented pattern from Tailwind CSS v4 official docs and SvelteKit static adapter constraints.
-
-**Implementation pattern:**
-
-1. In `src/app.html`, add an inline `<script>` in `<head>` that reads `localStorage.theme` (or falls back to `prefers-color-scheme`) and immediately adds/removes the `dark` class on `<html>`.
-2. In `src/app.css`, configure Tailwind's dark variant with `@custom-variant dark (&:where(.dark, .dark *))`.
-3. A `.svelte.ts` module exports a reactive `theme` rune (`$state`) and a toggle function that mutates `localStorage` and `document.documentElement.classList` in sync.
-4. Mount the toggle button in the shell's top/bottom nav.
-
-This satisfies FOUC prevention (inline script runs before first paint), localStorage persistence, system-preference detection on first visit, and Tailwind CSS 4's class-based dark mode.
-
-### No Additional UI Component Libraries
-
-**Do not add Flowbite Svelte, shadcn-svelte, daisyUI, or any similar library.**
-
-Rationale: Both existing apps deliberately avoided component libraries because clinical UIs need full control over contrast, spacing, and interaction semantics. The shared component library is `src/lib/components/` within this app — a straight merge of the deduplicated components from both existing apps. This is the same approach both apps already use, and it avoids any dependency that could introduce contrast or layout regressions in a WCAG-critical context.
-
-Confidence: HIGH — consistent with explicit decisions documented in both apps' CLAUDE.md files and PROJECT.md.
-
----
-
-## Shared Component Library Pattern
-
-**Use SvelteKit's built-in `$lib` alias. No separate package, no monorepo.**
-
-Rationale: The unified app is a single SvelteKit application, not a monorepo with published packages. `$lib` (maps to `src/lib/`) is the standard SvelteKit mechanism for shared modules and is exactly what both existing apps already use for their components. A monorepo or published workspace package would add Turborepo/changesets complexity for zero benefit — there is only one consumer.
-
-Confidence: HIGH — directly documented in SvelteKit official docs (`svelte.dev/docs/kit/$lib`).
-
-**Directory structure for shared components:**
-
-```
-src/lib/
-  components/            # shared UI primitives (merged from both apps)
-    SelectPicker.svelte
-    NumericInput.svelte
-    DisclaimerModal.svelte
-    AboutSheet.svelte
-    ResultsDisplay.svelte
-  calculators/           # calculator-specific components
-    pert/
-      DosingCalculator.svelte
-      dosing.ts
-      medications.ts
-      clinical-config.json
-    formula/
-      FormulaCalculator.svelte
-      ModifiedFormulaCalculator.svelte
-      BreastMilkFortifierCalculator.svelte
-      BrandSelector.svelte
-      formula.ts
-      formula-config.ts
-      formula-config.json
-  registry.ts            # calculator registration manifest
-  theme.svelte.ts        # reactive theme state
-  navigation.ts          # nav item types and config
-```
-
----
-
-## Plugin-Like Calculator Registration
-
-**Use a TypeScript manifest array + Svelte 5 `Component` type. No dynamic imports, no runtime registry.**
-
-Rationale: The "plugin-like" requirement does not need runtime module loading. The goal is that adding calculator #3 requires touching only one file (`registry.ts`) and adding a route. SvelteKit's file-based routing already provides the route isolation; the registry provides the navigation manifest.
-
-Confidence: HIGH — Svelte 5 `Component` type is documented in `svelte.dev/docs/svelte/typescript`. The pattern is native TypeScript + SvelteKit idioms, no experimental APIs.
-
-**`src/lib/registry.ts` pattern:**
-
-```typescript
-import type { Component } from 'svelte';
-
-export interface CalculatorMeta {
-  id: string;              // used as route segment: /calculators/[id]
-  label: string;           // nav label
-  icon: Component;         // lucide-svelte icon component
-  description: string;     // screen reader hint / tooltip
-}
-
-// Adding calculator N = append one entry here + create src/routes/calculators/[id]/
-export const calculators: CalculatorMeta[] = [
-  {
-    id: 'pert',
-    label: 'PERT',
-    icon: FlaskConical,         // imported from @lucide/svelte
-    description: 'PERT enzyme dosing calculator',
-  },
-  {
-    id: 'formula',
-    label: 'Formula',
-    icon: Milk,
-    description: 'Infant formula recipe calculator',
-  },
-];
-```
-
-The shell nav reads `calculators` to render tab items. Each calculator lives at `src/routes/calculators/[id]/+page.svelte`. The layout at `src/routes/calculators/+layout.svelte` renders the shell nav. This means the app shell never imports calculator components directly — it only knows about `CalculatorMeta`.
-
----
-
-## Responsive Navigation
-
-**CSS-only approach: `fixed bottom-0` on mobile, `sticky top-0` on desktop, Tailwind breakpoints for switching.**
-
-Rationale: No JavaScript needed to determine layout. Tailwind's `md:` breakpoint (768px) is the switch point. The nav is a single Svelte component that renders differently at different widths — it does not conditionally mount two components, which would cause layout shift.
-
-Confidence: HIGH for the CSS pattern; MEDIUM for the exact breakpoint (768px is standard but can be adjusted based on tested bedside device widths).
-
-**Key implementation requirements:**
-
-- `viewport-fit=cover` in the `<meta name="viewport">` tag (already standard for PWA installability on iOS).
-- Bottom nav uses `pb-[env(safe-area-inset-bottom,0px)]` to clear the iOS home indicator.
-- Touch targets: minimum 48px height for each tab item (WCAG 2.1 AA + clinical constraint).
-- Always-visible labels: icon + text label, never icon-only (clinical trust requires labels).
-- Active tab: distinct color, not just opacity change (color-blind accessible).
-
-**Pattern:**
-
-```html
-<!-- AppNav.svelte: one component, two visual states -->
-<nav class="
-  fixed bottom-0 left-0 right-0 flex
-  pb-[env(safe-area-inset-bottom,0px)]
-  md:sticky md:top-0 md:bottom-auto md:pb-0
-  border-t md:border-t-0 md:border-b
-  bg-surface
-">
-  <!-- tab items -->
-</nav>
-```
-
----
-
-## Tailwind CSS 4 Dark Mode Configuration
-
-**Use `@custom-variant` class strategy. Define all color tokens as dual-value CSS custom properties inside `@theme`.**
-
-Rationale: Tailwind CSS 4 removes `darkMode: 'class'` from config. The equivalent in CSS-first config is `@custom-variant dark (&:where(.dark, .dark *))`. This is the documented v4 approach from `tailwindcss.com/docs/dark-mode`. Defining colors as `@theme` CSS custom properties means each token has one dark and one light value, keeping theming co-located with the token definition rather than scattered across components.
-
-Confidence: HIGH — verified from official Tailwind CSS v4 documentation.
-
-**`src/app.css` pattern:**
+Modeled directly on the v1.5 Formula teal block in `src/app.css` (lines 195–208), with lightness pulled from the same pattern that passed axe in v1.5 and the "95% L / 0.04 C hero" discipline that the Morphine hero had to adopt post-audit:
 
 ```css
-@import "tailwindcss";
-
-/* Override dark variant to use .dark class on <html> */
-@custom-variant dark (&:where(.dark, .dark *));
-
-@theme {
-  /* Shared Clinical Blue palette — both modes */
-  --color-primary:        oklch(52% 0.18 243);   /* light */
-  --color-primary-dark:   oklch(68% 0.16 243);   /* dark mode accent */
-
-  /* Surface tokens — switch per mode in @layer base */
-  --color-surface:        oklch(100% 0 0);
-  --color-surface-alt:    oklch(97% 0 0);
-  --color-on-surface:     oklch(15% 0 0);
-
-  /* BMF Amber — formula calculator only, but registered globally */
-  --color-amber:          oklch(72% 0.14 70);
-
-  /* Typography */
-  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+/* src/app.css — add inside the existing @layer base identity block */
+.identity-gir {
+  --color-identity:      oklch(46% 0.12 145);   /* light-mode accent text + focus ring */
+  --color-identity-hero: oklch(94% 0.045 145);  /* light-mode hero background */
 }
-
-@layer base {
-  .dark {
-    --color-surface:     oklch(15% 0.01 243);
-    --color-surface-alt: oklch(20% 0.01 243);
-    --color-on-surface:  oklch(93% 0 0);
-  }
+.dark .identity-gir,
+[data-theme="dark"] .identity-gir {
+  --color-identity:      oklch(82% 0.10 145);   /* dark-mode accent text + focus ring */
+  --color-identity-hero: oklch(30% 0.09 145);   /* dark-mode hero background */
 }
 ```
 
-This lets every component use `bg-surface`, `text-on-surface`, etc., and the dark mode switch happens in one place.
+### Contrast sanity check
 
----
+Token contract (restating from `src/app.css`):
+- Light `--color-surface-card` = `oklch(100% 0 0)` → pure white, L=1.0
+- Light `--color-text-primary` = `oklch(18% 0.012 230)` → near-black, L≈0.18
+- Dark `--color-surface-card` = `oklch(23% 0.014 236)` → L≈0.23
+- Dark `--color-text-primary` = `oklch(93% 0.006 230)` → L≈0.93
 
-## Full Dependency Additions
+**Light mode:**
+- `--color-identity` at L=46% on white card (L=100%): the v1.5 Formula teal uses `oklch(49% 0.11 195)` on the same surface and passes AA for UI text (3:1) and body text (4.5:1). Hue 145 at L=46% is perceptually *slightly darker* than L=49% (green luminance weighting), so the contrast against white will be **marginally better** than the already-passing Formula teal. Expected contrast ratio ≈ 5.0–5.4:1 vs white. **PASS 4.5:1 AA normal text.**
+- `--color-identity-hero` at L=94% holding L=18% body text: this replicates the Morphine post-audit fix pattern (L=95% hero behind primary text). Expected ratio ≈ 12–13:1. **PASS 4.5:1 AA.** The hero background is for decorative framing; the text on it is `--color-text-primary`, not the identity color.
 
-```bash
-# Runtime additions to existing stack
-pnpm add @lucide/svelte
+**Dark mode:**
+- `--color-identity` at L=82% on dark card L=23%: the Formula dark teal uses `oklch(82% 0.09 195)` on the same surface and passes. Hue 145 at the same L and slightly higher chroma (0.10) produces essentially identical luminance. Expected ratio ≈ 7.5–8:1 vs dark card. **PASS 4.5:1 AA, likely AAA.**
+- `--color-identity-hero` at L=30% holding L=93% primary text: Formula dark hero uses L=30% and clears 4.5:1. Expected ratio ≈ 9–10:1. **PASS.**
 
-# No other new runtime dependencies needed
-# svelte-themes: NOT added (inline script approach)
-# flowbite/shadcn/daisyUI: NOT added (custom components)
-# turborepo/nx: NOT added (single-app $lib approach)
-```
+**Caveat — chroma-induced lightness drift:** OKLCH lightness is perceptually uniform but per-channel luminance varies with hue. Green hues render slightly brighter than blue hues at equal L. This means the light-mode `--color-identity` at L=46% might land closer to a 5.0:1 ratio (rather than 5.4:1) — still safely above AA but the Phase 20-equivalent axe sweep in v1.8 is mandatory confirmation, same as Morphine/Formula went through. If the axe sweep fails (extremely unlikely given the headroom), bump the light-mode accent to `oklch(44% 0.12 145)` (darker) — this is the same one-step adjustment v1.5 used for the Morphine hero.
 
----
+## What NOT to Add
 
-## Alternatives Considered
-
-| Category | Recommended | Alternative | Why Not |
-|----------|-------------|-------------|---------|
-| Icons | `@lucide/svelte` | `lucide-svelte` | `lucide-svelte` is the Svelte 3/4 package; `@lucide/svelte` is the official Svelte 5 package. Both exist on npm; use the right one. |
-| Icons | `@lucide/svelte` | `heroicons` (manual SVG) | Already in formula-calculator's package.json as lucide-svelte; consistency is more valuable than switching. |
-| Theme | Inline script + `.svelte.ts` | `svelte-themes` ^2.0.10 | Adds a dependency for ~20 lines of code. No server-side capability needed (adapter-static). In-house is more auditable for clinical tool. |
-| Theme | Inline script + `.svelte.ts` | Cookie-based SSR | Requires a server — adapter-static SPA has no server. Overcomplicated. |
-| Shared components | `$lib` within single app | pnpm workspace monorepo | Monorepo adds Turborepo, changesets, workspace protocols, dual build steps. Single consumer = no monorepo benefit. |
-| Shared components | `$lib` within single app | Published npm package | Publishing to npm (public or private) is excessive for one app. |
-| Component library | Custom (merge existing) | shadcn-svelte | shadcn/ui brings opinionated Radix-style components that fight clinical design. More dependencies, more surface area, less contrast control. |
-| Calculator registry | TypeScript manifest array | Dynamic imports (`import()`) | Dynamic imports add code splitting complexity with no user-visible benefit; both calculators are small and always-needed. Manifest array is simpler and fully type-checked. |
-| Nav layout | CSS-only dual layout | Two separate nav components, JS-toggled | Two mounted components waste memory and can cause layout shift during hydration. Single CSS-responsive component is simpler. |
-
----
+- **No new charting / table / dataviz library.** A 6-row titration table is plain HTML. Introducing `@tanstack/svelte-table`, `ag-grid`, or similar would add bundle weight, break offline-first, and contradict the "earn trust through restraint" design principle.
+- **No math library (`mathjs`, `decimal.js`, etc.).** GIR math is single-step floating-point arithmetic within safe ranges; native JS `number` is sufficient, matching what Morphine and Formula already do. Spreadsheet parity is established via fixtures, not arbitrary-precision arithmetic.
+- **No animation library.** The existing `.animate-result-pulse` (200 ms, reduced-motion gated) covers the hero. Adding `svelte/motion` tweens or `motion-one` for a row-highlight effect is out of character — a 150 ms CSS `background-color` transition on the selected row, already covered by the global `html:not(.no-transition) *` rule in `src/app.css` line 120, is sufficient.
+- **No new icon pack.** `@lucide/svelte` has Droplet/Droplets and is already installed. Adding Heroicons or Phosphor to get a "better" glucose icon is gratuitous.
+- **No dynamic imports / route-level code splitting for GIR.** The registry-as-manifest decision in v1.0 was explicit. GIR is always-needed. Splitting adds Vite config complexity and a perceptible first-paint cost on the GIR tab.
+- **No new state manager.** The `$state` rune + sessionStorage backup pattern used by Morphine and Formula is the convention. No Zustand/nanostores/Pinia equivalents.
+- **No conflation of `SegmentedToggle` with table semantics.** See "New Component Props." A tablist is not a table row selector; they have different ARIA contracts. If the interaction pattern needs to evolve, introduce a new `RangeSelector` component rather than overloading `SegmentedToggle`.
+- **No new theme mechanism.** The v1.5 `identityClass` → CSS-variable swap is the one and only per-tab identity mechanism. Do not introduce Tailwind theme `extend` variants or CSS-in-JS for this.
+- **No clinical-range autocorrection.** v1.6 explicitly chose "advisory on blur, no auto-clamp." GIR must honor the same contract — a 25% dextrose entry should warn, not snap to 20%.
 
 ## Sources
 
-- Tailwind CSS v4 dark mode docs: https://tailwindcss.com/docs/dark-mode
-- `@lucide/svelte` official guide: https://lucide.dev/guide/packages/lucide-svelte
-- Svelte 5 `Component` type: https://svelte.dev/docs/svelte/typescript
-- SvelteKit `$lib` alias: https://svelte.dev/docs/kit/$lib
-- Svelte 5 global state patterns: https://mainmatter.com/blog/2025/03/11/global-state-in-svelte-5/
-- `@vite-pwa/sveltekit` v1.1.0 releases: https://github.com/vite-pwa/sveltekit/releases
-- Safe area insets for iOS PWA: https://dev.to/karmasakshi/make-your-pwas-look-handsome-on-ios-1o08
-- CSS env() MDN reference: https://developer.mozilla.org/en-US/docs/Web/CSS/env
-- svelte-themes (considered but rejected): https://github.com/beynar/svelte-themes
-- SvelteKit adapter-static dark mode FOUC: https://dev.to/willkre/persistent-theme-switch-dark-mode-with-svelte-sveltekit-tailwind-1b9g
+- Tailwind CSS v4 dark mode + `@custom-variant` (matches the existing `app.css` pattern): https://tailwindcss.com/docs/dark-mode — HIGH confidence (official docs, current major version)
+- OKLCH color model, perceptual uniformity, and hue spacing: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch — HIGH confidence (MDN, authoritative)
+- Oklch.com interactive picker for contrast verification (standard tool used during v1.4/v1.5 audits): https://oklch.com/ — MEDIUM confidence (community tool, widely used)
+- WCAG 2.1 AA contrast requirements (4.5:1 normal text, 3:1 UI components + large text): https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html — HIGH confidence (W3C normative)
+- WAI-ARIA Authoring Practices, Tabs pattern (keyboard model that `SegmentedToggle` already implements): https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ — HIGH confidence (W3C APG)
+- Svelte 5 runes / `$state` / `$bindable` / `$props` (pattern used in `SegmentedToggle.svelte`): https://svelte.dev/docs/svelte/what-are-runes — HIGH confidence (official)
+- `@lucide/svelte` (official Svelte 5 package, already an installed dependency; Droplet/Droplets icons confirmed present in the Lucide icon set): https://lucide.dev/icons/ — HIGH confidence (official icon catalog)
+- Existing project evidence (HIGH confidence, local verification):
+  - `src/app.css` lines 186–209 — existing identity-pattern block this milestone extends verbatim
+  - `src/lib/shell/registry.ts` — `identityClass` union to extend
+  - `src/lib/shared/components/SegmentedToggle.svelte` — `role="tablist"` with full keyboard nav already wired to `--color-identity`
+  - `.planning/PROJECT.md` lines 51–67 — v1.5/v1.6/v1.7 shipped contracts this milestone inherits

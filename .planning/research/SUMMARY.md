@@ -1,202 +1,133 @@
-# Project Research Summary
+# v1.8 GIR Calculator — Research Synthesis
 
-**Project:** NICU Assistant — Unified Clinical PWA
-**Domain:** Multi-calculator clinical PWA (SvelteKit 2 + Svelte 5 + Tailwind CSS 4)
-**Researched:** 2026-03-31
-**Confidence:** HIGH
-
-## Executive Summary
-
-NICU Assistant is a unified point-of-care PWA that merges two standalone clinical calculators (pert-calculator and formula-calculator) into a single installable application. The stack is already decided and locked — SvelteKit 2, Svelte 5 runes, Tailwind CSS 4, and `@vite-pwa/sveltekit` are inherited from both source apps and are not re-evaluated. The architecture is a two-layer shell-and-calculator model: a root layout that owns PWA bootstrap, the shared disclaimer gate, theme injection, and responsive navigation, with each calculator living at its own SvelteKit route (`/pert`, `/formula`). A static TypeScript registry (`CALCULATOR_REGISTRY`) is the only interface between the shell and the calculators — the shell knows about calculators via this manifest and nothing else. The single new runtime dependency is `@lucide/svelte` (the official Svelte 5-native icon package); no component library or theme library is added.
-
-The recommended build approach is strictly bottom-up and follows the architectural dependency chain: design system tokens first, then shared UI components (merging and reconciling the divergent implementations from both source apps), then the shell and registry, then each calculator ported into the unified structure, and finally PWA configuration. The order is not negotiable — the theme system must exist before any component can be styled, and the shared component library must be settled before the calculators are ported. The largest risk in this project is component divergence: both apps have `SelectPicker`, `DisclaimerModal`, and theme systems that evolved independently and are architecturally incompatible. Merging them carelessly produces silent runtime breakage (wrong prop shapes, stale scroll locks, theme blind spots on the formula tab).
-
-The key clinical risks are: stale cached data served after a silent service worker takeover (a dietitian acts on a corrected formula that the cached app has not received), and the well-documented pattern of clinical calculator apps silently accepting invalid inputs. Both are preventable — stale-data risk via `registerType: 'prompt'` with a visible update banner, and invalid-input risk by preserving all existing validation logic unchanged during the port and adding explicit edge-case tests. The app is a static SPA with no backend and no patient data — HIPAA surface area is zero, and authentication, telemetry, and push notifications are explicitly out of scope.
+**Date:** 2026-04-09
+**Overall confidence:** HIGH
+**Sources:** STACK.md, FEATURES.md, ARCHITECTURE.md, PITFALLS.md
 
 ---
 
-## Key Findings
+## Verdict
 
-### Recommended Stack
+**Ship GIR as a structural sibling of Morphine Wean with zero new runtime dependencies.** The v1.5 identity pattern, v1.6 `NumericInput` advisory contract, and v1.1/v1.3 JSON-config + spreadsheet-parity discipline cover every requirement. The only additive surface is a new `src/lib/gir/` module, a new route, one registry entry, one `.identity-gir` CSS block, and one dedicated `GlucoseTitrationGrid.svelte` radiogroup subcomponent (calculator-local, not shared).
 
-The core stack is inherited and non-negotiable. Only one new runtime dependency is added: `@lucide/svelte` (the official Svelte 5-native icon package, distinct from `lucide-svelte` which targets Svelte 3/4). Theme management, dark mode, and shared components are all implemented in-house — no third-party libraries are added for these concerns. Vite is pinned to `^7.x` to match the more conservative of the two existing constraints; the upgrade to `^8.x` is a separate post-migration step.
-
-**Core technologies:**
-- **SvelteKit ^2.55.0:** Application framework — locked by both source apps
-- **Svelte 5 (runes) ^5.55.0:** Component model — `$state`, `$derived`, `$effect` used throughout; `.svelte.ts` extension required for rune singletons
-- **TypeScript ^5.9.3:** Type safety — pure `.ts` files for all business logic, no Svelte imports
-- **Tailwind CSS ^4.2.2:** Styling via `@tailwindcss/vite`; `@custom-variant dark` for class-based dark mode (replaces `darkMode: 'class'` from v3)
-- **@vite-pwa/sveltekit ^1.1.0:** Service worker, precache manifest, offline support — `registerType: 'prompt'` required (not `'autoUpdate'`)
-- **@sveltejs/adapter-static ^3.0.10:** SPA output with `200.html` fallback; `prerender = true; ssr = false` in root layout
-- **@lucide/svelte ^0.577.0:** Navigation icons — the Svelte 5-native package (NOT `lucide-svelte`)
-- **pnpm ^10.33.0:** Package manager
-
-### Expected Features
-
-**Must have (table stakes):**
-- Responsive navigation — bottom tab bar on mobile, top bar on desktop; 48px touch targets, always-labeled tabs (icon + text)
-- Single shared medical disclaimer — accepted once, persisted in `localStorage`, version-keyed `nicu_assistant:disclaimer:v1`
-- Full offline operation — cache-first service worker; all clinical data is JSON-embedded at build time so offline is the natural state
-- PWA installability — `display: standalone` manifest, deferred install prompt triggered after first successful calculation (not on first load)
-- Dark and light theme toggle — `prefers-color-scheme` default, manual override, `localStorage` persistence; blocking inline script in `app.html` prevents FOUC
-- Input validation with physiologic range enforcement — inline errors, block calculation on invalid/empty inputs, never silently treat empty as zero
-- Real-time output synchronization — preserved via Svelte 5 `$derived` runes (already in both source apps, must not regress)
-- Shared design system — unified Tailwind `@theme` tokens, Plus Jakarta Sans, 48px touch targets, Clinical Blue + BMF Amber palettes
-- WCAG 2.1 AA accessibility — ARIA live regions for results, focus management, visible focus rings
-- Service worker update notification — non-intrusive banner when new version is available, never auto-reload during active use
-
-**Should have (competitive differentiators):**
-- Plugin-like calculator registry — adding calculator N requires only appending to `CALCULATOR_REGISTRY` and creating a route directory
-- Calculator context preservation on tab switch — conditional rendering (`display: none`) rather than unmounting, avoids re-entry errors
-- Network status indicator — visible offline pill in nav bar, visible only when actually offline
-- About / version info sheet — app version, formula references, disclaimer text; existing in both source apps, needs unification
-- Contextual install prompt after first successful calculation — higher conversion than first-load prompt
-
-**Defer to v2+:**
-- Search and discovery UI — add only at 7+ calculators
-- Favorites / recently used lists — add at 5+ calculators
-- Native app builds (Capacitor / TWA)
-- Per-calculator onboarding or tutorials
-- Analytics, telemetry, or crash reporting
-
-### Architecture Approach
-
-The architecture is a strict two-layer model. The shell layer (root layout) owns everything that applies to all calculators: PWA bootstrap, the disclaimer gate, theme injection, and the responsive navigation shell. The calculator layer is a set of independent route pages (`/pert`, `/formula`) where each calculator manages its own ephemeral `$state` — no calculator state is lifted to the shell or shared with sibling calculators. The shell knows calculators only through the static `CALCULATOR_REGISTRY` manifest; calculators know nothing about the shell. Three `.svelte.ts` module singletons handle the only cross-cutting concerns: `theme.ts` (current theme), `disclaimer.ts` (acknowledgment state), and `about-sheet.ts` (event bus for the about sheet). All business logic lives in pure `.ts` files with no Svelte imports.
-
-**Major components:**
-1. **Root `+layout.svelte`** — PWA init, disclaimer gate, theme injection, renders `NavShell`; imports `CALCULATOR_REGISTRY` (read-only)
-2. **`NavShell.svelte`** — Responsive navigation driven by `CALCULATOR_REGISTRY`; bottom bar mobile / top bar desktop via Tailwind breakpoints; active tab derived from `$page.url.pathname`
-3. **`CALCULATOR_REGISTRY` (`registry.ts`)** — Static `readonly` array of `CalculatorEntry` objects; the only interface between shell and calculators
-4. **`DisclaimerModal.svelte`** — Native `<dialog showModal()>` gate; non-dismissable until acknowledged; unified key `nicu_assistant:disclaimer:v1`
-5. **`theme.ts` singleton** — `$state` getter/setter wrapper; reads/writes `localStorage` and `data-theme` attribute on `<html>`
-6. **`DosingCalculator.svelte` + `dosing.ts`** — PERT calculator UI and pure business logic (no Svelte imports)
-7. **`FormulaCalculator.svelte` + `formula.ts`** — Formula calculator UI and pure business logic (no Svelte imports)
-8. **Shared components (`$lib/shared/components/`)** — `SelectPicker`, `NumericInput`, `ResultsDisplay`, `AboutSheet`; zero calculator-specific imports
-
-### Critical Pitfalls
-
-1. **Incompatible `SelectPicker` implementations** — PERT uses native `<dialog>` with keyboard nav; formula uses a `fixed` overlay div with body scroll mutation and different prop shape (`id` vs `value`, grouped options). Resolution: use PERT's `<dialog>` as the base, extend for `group` and `placeholder` props, migrate formula data from `id` to `value`, remove the `document.body.style.overflow` mutation entirely. Write tests for grouped rendering and keyboard nav before replacing either source usage.
-
-2. **Theme system divergence causes formula tab to ignore dark mode** — Formula hardcodes OKLCH literals in component classes; PERT uses a CSS custom property token system. After porting, the formula tab will stay light in dark mode until every hardcoded color is mapped to the unified token set. Resolution: complete the design token migration (mapping formula palette onto unified `@theme` tokens) before testing any formula component in dark mode.
-
-3. **FOUC on dark mode load** — `localStorage` theme preference is invisible to the prerendered HTML; JS runs after first paint, causing a light-to-dark flash for dark-mode users in a dim clinical environment. Resolution: blocking inline `<script>` in `app.html` reads `localStorage` and sets `document.documentElement.dataset.theme` before any CSS renders. Must be in `app.html`, not in any Svelte component.
-
-4. **Stale clinical data served from PWA cache after deployment** — The default `autoUpdate` service worker strategy silently keeps old data on installed PWAs until all tabs are closed. On a shared NICU iPad, this may never happen during a shift. Resolution: use `registerType: 'prompt'` with a prominent in-app update banner, or `skipWaiting: true` + `clientsClaim: true` for immediate takeover with forced reload.
-
-5. **`SelectPicker` scroll lock leaks across routes** — Formula's overlay-based picker sets `document.body.style.overflow = 'hidden'` which may not clean up if the user navigates away while the picker is open, locking scroll on the destination route. Resolution: fully eliminated by adopting the native `<dialog>` approach (pitfall 1 resolution).
+**Milestone shape: 3 phases, advisory-only input rails consistent with v1.6.**
+- **Phase A — Foundation:** types, `gir-config.json`, pure `calculations.ts` with frozen JSON parity fixture, `state.svelte.ts`. Headless, Vitest-green gate.
+- **Phase B — UI + identity + registration:** `GlucoseTitrationGrid.svelte` (radiogroup), `GirCalculator.svelte`, `/gir` route, registry entry + `identityClass` union extension, provisional `.identity-gir` OKLCH block.
+- **Phase C — A11y + E2E + version bump:** Playwright flows + axe sweeps (light + dark + focus + advisory variants), OKLCH tuning if axe flags, 1.8.0 bump, PROJECT.md validated list.
 
 ---
 
-## Implications for Roadmap
+## Clinical Formula (verified)
 
-Based on the architectural dependency chain documented in ARCHITECTURE.md (Build Order Implications, section 10), the roadmap should follow this sequence strictly. Each phase is a prerequisite for the next.
+```
+GIR (mg/kg/min) = (Dex% × Rate_mL/hr × 10) / (Weight_kg × 60)
+Initial Rate (mL/hr) = Weight_kg × mL/kg/day / 24
+```
 
-### Phase 1: Project Scaffold and Design System
+**Confirmed against** MDCalc (Guenst & Nelson, Chest 1994), Hawkes & Hwang *J Perinatol* (PMC7286731), Pediatric Oncall, Cornell PICU, Ashford St Peters neonatal fluids guideline. Confidence HIGH.
 
-**Rationale:** Nothing can be styled or built until the unified token system exists. This is the foundation layer. The theme divergence between source apps (FOUC, formula dark-mode blindness) must be resolved before any component work begins.
-**Delivers:** New SvelteKit project with unified `app.css` (`@theme` tokens, Clinical Blue + BMF Amber palettes, Plus Jakarta Sans self-hosted via `@fontsource`), inline FOUC-prevention script in `app.html`, `theme.ts` singleton, `disclaimer.ts` singleton, `adapter-static` + `ssr = false` config.
-**Addresses:** Shared design system (table stakes), dark/light theme toggle (table stakes)
-**Avoids:** Pitfall 5 (theme divergence), Pitfall 6 (FOUC), Pitfall 12 (font flicker)
+**Implementation rule:** use exact `10/60` and `1/144` in code — never the spreadsheet's truncated `0.167` / `0.0069` (the latter introduces ~0.85% error). Parity tests allow ~1% epsilon and document the reason.
 
-### Phase 2: Shared Component Library
+**Unit decisions (locked):**
+- **Glucose:** mg/dL only. mmol/L toggle deferred. Every threshold label includes `mg/dL` inline; footnote *"Multiply mmol/L by 18 to convert."*
+- **Dextrose:** entered as percent literal (`12.5`, not `0.125`), `%` suffix, placeholder `e.g. 12.5`.
+- **Weight:** kg only.
+- **Fluid order:** mL/kg/day input; mL/hr is a derived output, never an input.
 
-**Rationale:** Both calculators consume shared components. Porting either calculator before the shared library is settled will produce rework. The `SelectPicker` reconciliation is the hardest component problem in this project and must be solved in isolation before either calculator is migrated.
-**Delivers:** Unified `SelectPicker` (PERT `<dialog>` base + formula group/placeholder extensions), `NumericInput`, `ResultsDisplay`, `DisclaimerModal` (native `<dialog>`, unified key `nicu_assistant:disclaimer:v1`), `AboutSheet`, `polyfills.ts`. Tests for grouped rendering, keyboard nav, and validation edge cases.
-**Addresses:** Input validation (table stakes), WCAG accessibility (table stakes)
-**Avoids:** Pitfall 1 (SelectPicker incompatibility), Pitfall 2 (DisclaimerModal regression), Pitfall 11 (scroll lock leak), Pitfall 13 (NumericInput missing from PERT), Pitfall 14 (validation gaps)
+## Titration Protocol (framing matters)
 
-### Phase 3: Shell, Registry, and Navigation
+The spreadsheet's 6-bucket +1.5 / +1.0 / +0.5 / −0.5 / −1.0 / −1.5 protocol (severe-neuro / <40 / 40–50 / 50–60 / 60–70 / >70) is **institutional, not a published guideline**. Published guidelines (BAPM, AAP, Stanford/JH, PES) commonly prescribe 2 mg/kg/min steps; the spreadsheet's finer conservative steps suit gentle weaning.
 
-**Rationale:** The shell wraps the calculators. It must exist — with the registry, `NavShell`, and root layout wired up — before calculator routes can be added and tested end-to-end.
-**Delivers:** `CALCULATOR_REGISTRY` (static manifest for PERT and formula), `NavShell.svelte` (bottom bar mobile / top bar desktop, derived active state from `$page.url.pathname`), root `+layout.svelte` (disclaimer gate, theme init, NavShell render), root `+page.svelte` redirect, `about-sheet.ts` event bus. iOS safe-area insets (`env(safe-area-inset-bottom)`, `viewport-fit=cover`). Namespaced `localStorage` key convention (`nicu_assistant:{scope}:{key}`).
-**Addresses:** Responsive navigation (table stakes), plugin registry (differentiator), calculator context preservation (differentiator)
-**Avoids:** Pitfall 7 (nav state not URL-derived), Pitfall 8 (iOS Safari bottom nav clip), Pitfall 9 (localStorage key collisions), Pitfall 15 (no escape from broken state in standalone mode)
+**UI framing is safety-critical:**
+- Label: *"GIR titration helper — institutional adjustment protocol. Verify against your institutional standard before acting."*
+- Column header: *"If current glucose is…"* — **not** *"Recommended for…"*
+- **No default row selection.** Hero shows empty-state *"Select a glucose range to see target rate"* until clinician picks.
+- AboutSheet cites spreadsheet + published sources and explicitly notes the protocol is institutional.
 
-### Phase 4: PERT Calculator Port
+---
 
-**Rationale:** Port the simpler calculator first to validate the shared component library and directory structure under real conditions before tackling formula's more complex multi-mode UI.
-**Delivers:** `src/lib/calculators/pert/` directory (`DosingCalculator.svelte`, `dosing.ts`, `medications.ts`, `clinical-config.*`), `/pert/+page.svelte` route. PERT inputs migrated to `NumericInput`. Existing `dosing.test.ts` passing against ported logic. `resolveOptionLabel` decoupled from `SelectPicker` (moved to `$lib/utils/options.ts`).
-**Addresses:** Real-time output sync (table stakes), input validation (table stakes)
-**Avoids:** Pitfall 10 (broken import aliases), Pitfall 14 (validation regressions)
+## Features
 
-### Phase 5: Formula Calculator Port
+**Table stakes:** Weight/Dex%/mL/kg/day inputs → Current GIR hero + Initial mL/hr; Dex% chip picker (5/7.5/10/12.5); peripheral-access warning when Dex% > 12.5; max-GIR > 12 and min-GIR < 4 advisories; 6×4 titration helper with clinician-selected bucket highlight; spreadsheet-parity tests.
 
-**Rationale:** Formula is the more complex calculator (three modes: standard, modified, BMF; brand selector with grouping; amber accent colors). Port after PERT confirms the shared infrastructure is solid.
-**Delivers:** `src/lib/calculators/formula/` directory (all components and logic), `/formula/+page.svelte` route. Formula components migrated from hardcoded OKLCH literals to unified token classes. BMF Amber palette verified in both light and dark modes. Existing `formula.test.ts` passing against ported logic.
-**Addresses:** Shared design system (table stakes — verified by dark mode working on formula tab)
-**Avoids:** Pitfall 5 (theme divergence visible on formula tab)
+**Differentiators:** total glucose load g/kg/day (`GIR × 1.44`); total daily fluid mL/day; population reference card (IDM/LGA, IUGR, Preterm/NPO); EPIC dot-phrase copy-to-clipboard (`.hypoglywean`).
 
-### Phase 6: PWA Infrastructure and Offline Validation
+**Anti-features:** calculation history (PHI risk), IV compounding (pharmacy scope), EHR auto-ordering, patient identifiers, TPN macronutrients, alarms.
 
-**Rationale:** PWA configuration depends on finalized route structure (all routes must exist before the precache manifest can be verified). This is last because a broken precache manifest would need re-running with every route change.
-**Delivers:** `vite.config.ts` with `@vite-pwa/sveltekit` configured (`registerType: 'prompt'`, `globPatterns` with `client/` prefix, Workbox cache config), `manifest.json` (correct `display: standalone`, icon set, `start_url`), visible in-app update banner component, network status indicator, contextual install prompt (deferred `beforeinstallprompt` after first calculation). End-to-end offline tests (every route loads in DevTools Offline mode). Stale-update test (deploy a change, verify installed PWA shows update banner within expected window).
-**Addresses:** Full offline operation (table stakes), PWA installability (table stakes), service worker update notification (table stakes), network status indicator (differentiator)
-**Avoids:** Pitfall 3 (stale clinical data), Pitfall 4 (missing `client/` prefix in precache manifest)
+**Canonical naming:** nav tab `GIR`, full name `Glucose Infusion Rate`, eyebrow `mg/kg/min · titration helper`.
 
-### Phase Ordering Rationale
+---
 
-- Phases 1-3 are pure prerequisites with no user-visible calculator functionality: they establish the complete foundation before any calculator code is touched.
-- Phases 4-5 are parallel in principle but sequenced to catch shared-library issues on the simpler calculator first.
-- Phase 6 is explicitly last because the precache manifest must enumerate all final routes.
-- The formula dark-mode token migration (Pitfall 5) is baked into Phase 5, not deferred — deferring it would ship a broken dark mode experience.
-- Calculator context preservation (conditional rendering rather than unmounting) must be confirmed in Phase 3 shell work before calculators are routed; it affects the `+layout.svelte` structure.
+## Architecture
 
-### Research Flags
+**New files under `src/lib/gir/`:** `types.ts`, `gir-config.json`, `gir-config.ts` + test, `calculations.ts` + test, `state.svelte.ts`, `GirCalculator.svelte` + test, `GlucoseTitrationGrid.svelte`. Plus `src/routes/gir/+page.svelte`, `tests/e2e/gir.spec.ts`, `tests/e2e/gir-a11y.spec.ts`.
 
-Phases with well-documented patterns (skip `research-phase`):
-- **Phase 1:** Tailwind CSS 4 `@custom-variant` dark mode and `@theme` tokens are fully documented in official docs. FOUC-prevention inline script is a standard static-SPA pattern.
-- **Phase 3:** SvelteKit routing, `$page.url.pathname` active-tab derivation, and `adapter-static` SPA fallback are all standard SvelteKit patterns.
-- **Phase 4:** PERT business logic is ported unchanged from a working implementation. No new algorithms.
+**Modified files:** `src/lib/shell/registry.ts` (append entry, extend `identityClass` union), `src/app.css` (add `.identity-gir` light + dark blocks), `package.json` → 1.8.0.
 
-Phases likely needing extra care during planning (not external research, but careful implementation planning):
-- **Phase 2:** The `SelectPicker` reconciliation has no single authoritative reference — it requires auditing both source implementations side-by-side before writing the unified version. Budget significant time for the audit and tests.
-- **Phase 5:** Formula's token migration requires a systematic audit of every hardcoded color value in every formula component. A checklist of components and their OKLCH literals should be generated at the start of this phase.
-- **Phase 6:** The stale-update test requires an actual deployment cycle to verify (not just `pnpm preview`). Needs a test environment or a staging deploy.
+**Shared components reuse with ZERO modifications:** `NumericInput` (v1.6 `showRangeHint` + v1.7 `showRangeError`), `ResultsDisplay`, `DisclaimerModal`, `AboutSheet`, `NavShell`, `.animate-result-pulse`. `SegmentedToggle` is intentionally **not** used for the titration grid — tablist semantics conflict with a 6-row clinical radiogroup. Instead, a new dedicated `GlucoseTitrationGrid.svelte` with `role="radiogroup"` + `role="radio"` rows, roving tabindex, ↑/↓/Home/End keyboard nav lives under `src/lib/gir/` (extract to shared only if v1.9+ needs it).
+
+**State:** `$state` rune singleton with `init/persist/reset`, sessionStorage key `nicu_gir_state`. Raw inputs only in state module; component computes `$derived(calculateGir(state.current, buckets))`.
+
+**Config:** clinical data lives in `gir-config.json` (defaults, input ranges, glucose buckets). Same JSON drives UI and parity tests. Frozen JSON fixture for parity tests (don't re-read xlsx).
+
+---
+
+## Identity Hue
+
+**Recommendation: hue ~145 "Dextrose Green"**, with violet ~295 as the fallback if green reads too close to Formula teal in practice. Perceptual gap: Morphine 220 → Formula 195 → GIR 145 (25° and 50° — safely distinguishable). Green maps to "metabolic/glucose" semantically without colliding with error (red 25), BMF amber (55–65), or Formula teal (195).
+
+**Literal OKLCH values (mandatory starting point, per Phase 20 Morphine precedent — never eyeball):**
+```css
+.identity-gir {
+  --color-identity:      oklch(46% 0.12 145);
+  --color-identity-hero: oklch(94% 0.045 145);
+}
+.dark .identity-gir,
+[data-theme="dark"] .identity-gir {
+  --color-identity:      oklch(82% 0.10 145);
+  --color-identity-hero: oklch(30% 0.09 145);
+}
+```
+
+**Rule:** axe-test in both themes before merge. If AA fails, darken light-mode accent to `oklch(44% 0.12 145)` (same one-step fix the v1.5 Morphine hero needed).
+
+---
+
+## Top Risks
+
+| # | Risk | Mitigation |
+|---|---|---|
+| 1 | Dextrose entered as fraction (0.125 vs 12.5) → GIR off 100× | `%` suffix, placeholder `e.g. 12.5`, advisory 2.5–25, parity tests at 5/10/12.5/25 |
+| 2 | mg/dL vs mmol/L ambiguity on glucose thresholds | mg/dL only v1.8; every threshold labeled inline; conversion footnote |
+| 3 | Titration table read as clinical recommendation | *"If current glucose is…"* framing; no default selection; institutional-helper label |
+| 4 | 6×4 table cramped on 375px mobile | Card layout <480px (6 full-width cards, ≥88px min height); `role="grid"` table ≥480px; never horizontal-scroll, never collapse a row |
+| 5 | Third identity hue fails dark-mode AA (Phase 20 repeat) | Start from literal OKLCH above; axe sweep both themes before PR |
+| 6 | Peripheral extravasation harm from Dex% > 12.5 | Elevated amber advisory (not standard grey hint) — the only rail tied to a concrete harm pathway |
+| 7 | Spreadsheet constant truncation drift | Use exact `10/60` + `1/144`; parity tests with 1% epsilon, documented |
+| 8 | iOS keyboard missing decimal key | `inputmode="decimal"` on all 3 numeric inputs; Playwright assertion |
+| 9 | EPIC paste with locale comma (`12,5`) → NaN | Normalize `trim().replace(',', '.')` at input layer |
+| 10 | Negative Δ rate sign confusion (decrease vs new rate) | ▲/▼ glyph + text (never color alone — WCAG 1.4.1); column helper `(decrease)` / `(increase)` |
 
 ---
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
-|------|------------|-------|
-| Stack | HIGH | Inherited from both source apps; one new dependency (`@lucide/svelte`) verified from official lucide.dev docs. Vite version pinning is a deliberate conservative choice. |
-| Features | HIGH for table stakes; MEDIUM for differentiators | Table stakes validated against clinical calculator safety literature (PMC4433091) and reference apps (MDCalc, NicuApp). Differentiators validated against PWA UX research and existing app CLAUDE.md decisions. |
-| Architecture | HIGH | Derived from direct inspection of both source codebases plus official SvelteKit docs. Build order and component boundaries are authoritative. |
-| Pitfalls | HIGH for Critical (1-6); MEDIUM for Moderate (7-11); LOW for Minor (12-15) | Critical pitfalls are directly observable in the source code diffs. Moderate pitfalls are well-documented iOS/PWA behaviors. Minor pitfalls are quality issues with low severity. |
+|---|---|---|
+| Stack | HIGH | Zero new deps; pattern is a direct sibling of Morphine Wean |
+| Formula | HIGH | Verified against 5 independent authoritative sources |
+| Titration protocol | MEDIUM | Institutional, not a guideline — framed accordingly |
+| Architecture | HIGH | Exact 3-phase pattern proven in v1.1/v1.3/v1.5/v1.6 |
+| Identity hue | MEDIUM-HIGH | Math and precedent are solid; axe confirmation mandatory |
+| Safety rails | HIGH | Peripheral-access threshold backed by ASPEN + UCSF + PMC8372860 |
 
-**Overall confidence:** HIGH
-
-### Gaps to Address
-
-- **Exact breakpoint for nav layout switch:** 768px (`md:`) is the standard recommendation, but actual bedside device widths (iPads in NICU mounts, specific Android tablets) may warrant adjustment. Validate during Phase 3 on real or representative hardware.
-- **Calculator context preservation implementation detail:** Conditional rendering with `display: none` vs. SvelteKit snapshot API are both viable. The `display: none` approach is simpler but keeps both calculator component trees in memory simultaneously. Confirm the chosen approach during Phase 3 planning.
-- **Stale-update strategy choice:** `registerType: 'prompt'` (user-triggered reload) vs. `skipWaiting: true` + forced `location.reload()` (immediate takeover). Both are documented; the right choice depends on clinical stakeholder input about acceptable disruption during active use. Flag for decision before Phase 6.
-- **Disclaimer text scope:** The unified disclaimer must cover both PERT (weight-based enzyme dosing) and formula (recipe volume calculations) in a single statement. This requires clinical stakeholder review before Phase 2 ships.
+**Open questions for requirements step:**
+1. Confirm with source clinician whether the 6-bucket protocol is local-institutional (shapes AboutSheet citation).
+2. Lock mmol/L toggle as deferred (recommendation: yes, defer).
+3. Population reference card inline or behind info affordance?
 
 ---
 
-## Sources
+## Next Steps
 
-### Primary (HIGH confidence)
-- Direct inspection of `/mnt/data/src/pert-calculator/src/` and `/mnt/data/src/formula-calculator/src/` — component architectures, prop shapes, localStorage keys, existing patterns
-- Tailwind CSS v4 dark mode docs: https://tailwindcss.com/docs/dark-mode — `@custom-variant` approach
-- `@lucide/svelte` official guide: https://lucide.dev/guide/packages/lucide-svelte — Svelte 5-native package
-- Svelte 5 `Component` type and `.svelte.ts` rune files: https://svelte.dev/docs/svelte/typescript
-- SvelteKit `$lib` alias, routing, state management: https://svelte.dev/docs/kit/$lib
-- `@vite-pwa/sveltekit` precache `client/` prefix requirement: https://vite-pwa-org.netlify.app/frameworks/sveltekit
-- `@vite-pwa/sveltekit` prompt-for-update guide: https://vite-pwa-org.netlify.app/guide/prompt-for-update
-
-### Secondary (MEDIUM confidence)
-- Global state in Svelte 5 getter/setter pattern: https://mainmatter.com/blog/2025/03/11/global-state-in-svelte-5/
-- Clinical calculator input validation research (PMC4433091): https://pmc.ncbi.nlm.nih.gov/articles/PMC4433091/ — 91% lack validation, 59% allow calculation with missing values
-- iOS safe-area insets for PWA: https://dev.to/karmasakshi/make-your-pwas-look-handsome-on-ios-1o08
-- Bottom navigation UX research: https://www.smashingmagazine.com/2019/08/bottom-navigation-pattern-mobile-web-pages/ — labeled tabs 75% higher engagement
-- iOS 100vh bottom nav overlap: https://dev-tips.com/css/overlapping-bottom-navigation-bar-despite-100vh-in-ios-safari
-
-### Tertiary (LOW confidence)
-- Specific bedside device viewport widths — not researched; validate on real hardware during Phase 3
-- Clinical stakeholder acceptance of forced-reload vs. prompt-based SW update strategy — requires stakeholder input, not researchable from technical sources
-
----
-*Research completed: 2026-03-31*
-*Ready for roadmap: yes*
+Research phase is complete and ready for requirements definition. Roadmapper should produce exactly 3 phases (A Foundation / B UI+identity / C A11y+E2E). Phase B is the only phase that likely benefits from a `/gsd-research-phase` pass (titration grid interaction design + mobile card layout); Phase A and Phase C follow well-established patterns from v1.1/v1.3/v1.5/v1.6 and do not need additional research.
