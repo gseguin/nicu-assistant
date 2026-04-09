@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.7
-milestone_name: Formula Micro-Polish
+milestone: v1.8
+milestone_name: GIR Calculator
 current_phase: null
-status: shipped
-stopped_at: v1.7 archived 2026-04-08; ready for /gsd-new-milestone
-last_updated: "2026-04-08T00:00:00.000Z"
-last_activity: 2026-04-08
+status: defining_requirements
+stopped_at: v1.8 started 2026-04-09; gathering requirements
+last_updated: "2026-04-09T00:00:00.000Z"
+last_activity: 2026-04-09
 progress:
-  total_phases: 1
-  completed_phases: 1
-  total_plans: 1
-  completed_plans: 1
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -22,16 +22,17 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-07)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** None — v1.7 shipped, awaiting next milestone
+**Current focus:** v1.8 GIR Calculator — defining requirements
 
 ## Current Position
 
-Milestone: v1.7 — Formula Micro-Polish (SHIPPED 2026-04-08)
-Status: Shipped & archived
-Current phase: None
-Last activity: 2026-04-08
+Milestone: v1.8 — GIR Calculator
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-09 — Milestone v1.8 started
 
-Progress: [██████████] 100% (1/1 phase)
+Progress: [          ] 0% (0/0 phases)
 
 ## Performance Metrics
 

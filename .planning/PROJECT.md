@@ -69,7 +69,16 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-(None — v1.7 shipped 2026-04-08; planning next milestone)
+## Current Milestone: v1.8 GIR Calculator
+
+**Goal:** Add a third clinical calculator — Glucose Infusion Rate (GIR) with interactive glucose-driven titration — verified against authoritative clinical sources.
+
+**Target features:**
+- Core GIR calc: Weight (kg), Dextrose %, ml/kg/day → Current GIR (mg/kg/min) + Initial rate (ml/hr) hero output
+- Interactive glucose titration table (6 ranges: severe neuro, <40, 40–50, 50–60, 60–70, >70) with clinician-selected bucket highlighting Target GIR / Target Fluids / Target rate / Δ rate
+- Spreadsheet-parity unit tests against `GIR-Wean-Calculator.xlsx` (CALC tab)
+- New per-tab identity hue (third accent color extending v1.5 identity pattern)
+- GIR formulas cross-verified against authoritative neonatal sources during research phase
 
 ### Out of Scope
 
@@ -138,4 +147,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-08 — v1.7 Formula Micro-Polish shipped and archived*
+*Last updated: 2026-04-09 — v1.8 GIR Calculator milestone started*
