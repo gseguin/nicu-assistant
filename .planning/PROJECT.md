@@ -151,6 +151,7 @@ Tech stack: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS 4 + Vite + pnpm.
 | Research before PR for new identity hues | Axe-core tuning costs more than upfront OKLCH audit (v1.5 Phase 20 Morphine pain) | ✓ Good — v1.8 GIR hue 145 passed on first sweep |
 | Wave 0 latent-bug fixes before feature work | Type unions and route branches must extend cleanly before downstream phases can compile | ✓ Good — v1.8 caught `CalculatorId` + `NavShell.activeCalculatorId` gaps before DOC-01 |
 | Spreadsheet-parity tests with ~1% epsilon | Clinical calculators must match source authority, with tolerance for truncated spreadsheet constants | ✓ Good — v1.8 GIR all 6 buckets pass |
+| Drop ESLint from DEBT-03 in favor of `svelte-check` + Prettier only | eslint was never installed (Phase 29 noted `pnpm lint` fails with "eslint not installed"). `svelte-check` already covers TS + Svelte semantic errors, accessibility warnings, and untyped-prop lint. Prettier covers formatting. Adding ESLint + a plugin stack (typescript-eslint + svelte-eslint-parser + eslint-plugin-svelte) would introduce ~6 devDeps and a second overlapping rule source for zero additional signal on a 3-calculator PWA. The stale `"lint": "eslint ."` script will be removed. (2026-04-09 / Phase 30-02) | ✓ Good — zero-dep decision |
 
 ## Evolution
 
