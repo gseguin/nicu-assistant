@@ -85,7 +85,19 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-_No active requirements — v1.8 shipped. Run `/gsd-new-milestone` to define v1.9._
+## Current Milestone: v1.9 GIR Titration Hero Swap + Polish
+
+**Goal:** Act on first clinical field feedback by making the actionable Δ rate the hero on every GIR titration bucket, and take a polish + tech-debt pass across the app.
+
+**Target features:**
+- GIR bucket layout swap — Δ rate (▲/▼ ml/hr with increase/decrease label) becomes the hero on all 6 titration buckets; GIR `mg/kg/min` moves into the secondary row, taking the slot Δ rate vacated (Fluids | Rate | GIR)
+- Preserve all v1.8 a11y guarantees — identity color, focus rings, roving tabindex, radiogroup semantics, `aria-live`, reduced-motion; 16/16 axe sweeps stay green; component + E2E tests updated for the new hero
+- Impeccable polish pass across the three calculators (critique → normalize/arrange/typeset/polish) with P1/P2 findings fixed
+- Tech debt sweep — dependency updates, dead code, lint/type cleanup, deferred cleanups from v1.5–v1.8
+
+**Key context:** First real clinician field feedback on v1.8 GIR — bedside priority is the *action* ("increase drip by 0.9 ml/hr"), not the recalculated GIR value. Swap applies to the "current state" bucket too. No new calculators this milestone.
+
+_No active requirements yet — defined in REQUIREMENTS.md when roadmap is created._
 
 ### Out of Scope
 
@@ -158,4 +170,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.8 GIR Calculator milestone shipped*
+*Last updated: 2026-04-09 — v1.9 GIR Titration Hero Swap + Polish milestone started*
