@@ -1,0 +1,19 @@
+{
+  "input": {
+    "weightKg": 3.93,
+    "dextrosePct": 12.5,
+    "mlPerKgPerDay": 65
+  },
+  "expected": {
+    "currentGirMgKgMin": 5.653645833,
+    "initialRateMlHr": 10.64375,
+    "titration": [
+      { "bucketId": "severe-neuro", "targetGirMgKgMin": 7.153645833, "targetFluidsMlKgDay": 82.94082126, "targetRateMlHr": 13.58155948, "deltaRateMlHr":  2.937809481 },
+      { "bucketId": "lt40",         "targetGirMgKgMin": 6.653645833, "targetFluidsMlKgDay": 77.14371981, "targetRateMlHr": 12.63228412, "deltaRateMlHr":  1.988534118 },
+      { "bucketId": "40-50",        "targetGirMgKgMin": 6.153645833, "targetFluidsMlKgDay": 71.34661836, "targetRateMlHr": 11.68300876, "deltaRateMlHr":  1.039258756 },
+      { "bucketId": "50-60",        "targetGirMgKgMin": 5.153645833, "targetFluidsMlKgDay": 59.75241546, "targetRateMlHr":  9.784458031, "deltaRateMlHr": -0.8592919686 },
+      { "bucketId": "60-70",        "targetGirMgKgMin": 4.653645833, "targetFluidsMlKgDay": 53.95531401, "targetRateMlHr":  8.835182669, "deltaRateMlHr": -1.808567331 },
+      { "bucketId": "gt70",         "targetGirMgKgMin": 4.153645833, "targetFluidsMlKgDay": 48.15821256, "targetRateMlHr":  7.885907307, "deltaRateMlHr": -2.757842693 }
+    ]
+  }
+}
