@@ -27,7 +27,7 @@
 
 ### Tech Debt Sweep
 
-- [ ] **DEBT-01**: Dependency audit and update — SvelteKit, Svelte, Vite, Tailwind, Vitest, Playwright, `@lucide/svelte`, bits-ui; update within current major versions; run full test suite after each group.
+- [ ] **DEBT-01**: Dependency audit and update — SvelteKit, Svelte, Vite, Tailwind, Vitest, Playwright, `@lucide/svelte`, bits-ui; update within current majors; run full test suite after each group.
 - [ ] **DEBT-02**: Dead code sweep — remove unused exports, unreferenced files, commented-out blocks deferred from v1.5–v1.8.
 - [ ] **DEBT-03**: Lint + TypeScript strict cleanup — zero warnings from `svelte-check` and ESLint across `src/`.
 - [ ] **DEBT-04**: Deferred cleanups from prior milestones addressed or explicitly re-deferred with rationale in PROJECT.md Key Decisions.
@@ -56,7 +56,28 @@
 
 ## Traceability
 
-_Populated by roadmapper — maps each REQ-ID to its owning phase._
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| GIR-SWAP-01 | Phase 29 | Pending |
+| GIR-SWAP-02 | Phase 29 | Pending |
+| GIR-SWAP-03 | Phase 29 | Pending |
+| GIR-SWAP-04 | Phase 29 | Pending |
+| GIR-SWAP-05 | Phase 29 | Pending |
+| GIR-SWAP-06 | Phase 29 | Pending |
+| GIR-SWAP-07 | Phase 29 | Pending |
+| POLISH-01 | Phase 30 | Pending |
+| POLISH-02 | Phase 30 | Pending |
+| POLISH-03 | Phase 30 | Pending |
+| POLISH-04 | Phase 30 | Pending |
+| DEBT-01 | Phase 30 | Pending |
+| DEBT-02 | Phase 30 | Pending |
+| DEBT-03 | Phase 30 | Pending |
+| DEBT-04 | Phase 30 | Pending |
+| REL-01 | Phase 31 | Pending |
+| REL-02 | Phase 31 | Pending |
+| REL-03 | Phase 31 | Pending |
+
+**Coverage:** 17/17 v1.9 requirements mapped. No orphans.
 
 ---
-*Last updated: 2026-04-09 — v1.9 milestone requirements drafted*
+*Last updated: 2026-04-09 — v1.9 traceability populated by roadmapper*

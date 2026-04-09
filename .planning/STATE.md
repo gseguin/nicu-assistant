@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.9
 milestone_name: GIR Titration Hero Swap + Polish
-status: defining_requirements
+status: roadmap_ready
 stopped_at: ""
 last_updated: "2026-04-09T00:00:00.000Z"
 last_activity: 2026-04-09
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,24 +21,24 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-09)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.9 — defining requirements
+**Current focus:** v1.9 — Phase 29 (GIR Titration Hero Swap)
 
 ## Current Position
 
 Milestone: v1.9 — GIR Titration Hero Swap + Polish
-Phase: Not started (defining requirements)
+Phase: 29 — GIR Titration Hero Swap (not started)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-09 — Milestone v1.9 started
+Status: Roadmap ready, awaiting `/gsd-plan-phase 29`
+Last activity: 2026-04-09 — v1.9 roadmap created (3 phases, 17/17 requirements mapped)
 
 ## Performance Metrics
 
 **Velocity:**
 
 - Total plans completed (all milestones): 34
+- v1.8: 9 plans across 3 phases (26-28), 13 commits
 - v1.7: 1 plan (Phase 25), 8 commits, +313/-95
 - v1.6: 5 plans across 4 phases, 20 commits
-- v1.5: 5 plans across 3 phases, 18 commits, +3030/-47
 
 ## Accumulated Context
 
@@ -50,11 +50,12 @@ Last activity: 2026-04-09 — Milestone v1.9 started
 - [v1.5]: Tab identity scoped to exactly 4 surfaces; shell chrome neutral; BMF Amber scoped to fortifier mode
 - [v1.6]: SegmentedToggle is for 2-4 option choices only; SelectPicker stays for N-of-many
 - [v1.6]: NumericInput min/max is advisory only — never auto-clamp
-- [v1.8]: GIR titration uses `role="radiogroup"` NOT SegmentedToggle (6 rows, single-select, per-row data)
+- [v1.8]: GIR titration uses `role="radiogroup"` NOT SegmentedToggle (6 rows, single-select, per-row data) — LOCKED for v1.9
 - [v1.8]: Exact constants `10/60` and `1/144` in code — spreadsheet parity tests allow ~1% epsilon
 - [v1.8]: Identity hue ~145 dextrose green, literal `oklch(95% 0.04 145)` pattern — axe BEFORE PR to avoid Phase 20 Morphine repeat
 - [v1.8]: GIR appended to end of registry (preserves muscle memory)
 - [v1.8]: Glucose mg/dL only; dextrose as percent literal; zero new runtime deps
+- [v1.9]: Δ rate is the bedside hero — GIR mg/kg/min is context, not the headline (first clinician field feedback)
 
 ### Pending Todos
 
@@ -66,6 +67,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-09T15:18:24.767Z
-Stopped at: Completed 27-01-PLAN.md
+Last session: 2026-04-09
+Stopped at: v1.9 roadmap created
 Resume file: None
