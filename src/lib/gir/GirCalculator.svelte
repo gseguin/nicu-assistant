@@ -18,7 +18,7 @@
   let initialRate = $derived(result?.initialRateMlHr ?? null);
 
   let pulseKey = $derived(
-    result ? `${currentGir!.toFixed(1)}-${initialRate!.toFixed(1)}` : ''
+    result ? `${result.currentGirMgKgMin.toFixed(1)}-${result.initialRateMlHr.toFixed(1)}` : ''
   );
 
   let selectedRow = $derived(
@@ -130,7 +130,7 @@
               CURRENT GIR
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-display font-black num text-[var(--color-text-primary)]">{currentGir!.toFixed(1)}</span>
+              <span class="text-display font-black num text-[var(--color-text-primary)]">{result.currentGirMgKgMin.toFixed(1)}</span>
               <span class="text-ui text-[var(--color-text-secondary)]">mg/kg/min</span>
             </div>
           </div>
@@ -139,7 +139,7 @@
               INITIAL RATE
             </div>
             <div class="flex items-baseline gap-2">
-              <span class="text-title font-bold num text-[var(--color-text-primary)]">{initialRate!.toFixed(1)}</span>
+              <span class="text-title font-bold num text-[var(--color-text-primary)]">{result.initialRateMlHr.toFixed(1)}</span>
               <span class="text-ui text-[var(--color-text-secondary)]">ml/hr</span>
             </div>
           </div>
