@@ -110,10 +110,10 @@ See individual milestone archives for phase details.
   4. All three `NumericInput` fields carry `inputmode="decimal"` (not `"numeric"`), asserted by a Playwright test for iOS decimal-keyboard compatibility
   5. `AboutSheet` gains a GIR entry citing `GIR-Wean-Calculator.xlsx` plus at least one authoritative source (MDCalc or Hawkes *J Perinatol* PMC7286731), explicitly noting the titration protocol is institutional; `package.json` is bumped to `1.8.0` and the About dialog reflects it; `.planning/PROJECT.md` Validated list is updated with v1.8 entries
 **Plans**: 4 plans
-- [ ] 28-01-PLAN.md — Wave 0 blockers: CalculatorId type + NavShell /gir branch + Playwright env verify
-- [ ] 28-02-PLAN.md — Extended component tests + e2e/gir.spec.ts happy path + inputmode assertion (TEST-02, TEST-04, TEST-06)
-- [ ] 28-03-PLAN.md — e2e/gir-a11y.spec.ts 6 axe sweeps + contingent OKLCH tuning (TEST-05)
-- [ ] 28-04-PLAN.md — AboutSheet GIR entry + version bump 1.8.0 + PROJECT.md Validated list (DOC-01, DOC-02, DOC-03)
+- [x] 28-01-PLAN.md — Wave 0 blockers: CalculatorId type + NavShell /gir branch + Playwright env verify
+- [x] 28-02-PLAN.md — Extended component tests + e2e/gir.spec.ts happy path + inputmode assertion (TEST-02, TEST-04, TEST-06)
+- [x] 28-03-PLAN.md — e2e/gir-a11y.spec.ts 6 axe sweeps + contingent OKLCH tuning (TEST-05)
+- [x] 28-04-PLAN.md — AboutSheet GIR entry + version bump 1.8.0 + PROJECT.md Validated list (DOC-01, DOC-02, DOC-03)
 
 
 ## Progress
@@ -131,4 +131,4 @@ Phases execute in numeric order. v1.8 begins at Phase 26.
 | 25 | v1.7 | 1/1 | Complete | 2026-04-08 |
 | 26. GIR Foundation | v1.8 | 2/2 | Complete   | 2026-04-09 |
 | 27. GIR UI, Identity & Registration | v1.8 | 3/3 | Complete   | 2026-04-09 |
-| 28. GIR A11y, E2E & Ship | v1.8 | 0/? | Not started | - |
+| 28. GIR A11y, E2E & Ship | v1.8 | 4/4 | Complete    | 2026-04-09 |
