@@ -71,7 +71,9 @@ See [milestones/v1.8-ROADMAP.md](milestones/v1.8-ROADMAP.md) for full phase deta
   3. Axe-core reports zero WCAG 2.1 AA regressions after polish — 16/16 sweeps remain green in both themes.
   4. Dependencies (SvelteKit, Svelte, Vite, Tailwind, Vitest, Playwright, @lucide/svelte, bits-ui) are updated within current majors and the full test suite passes.
   5. `svelte-check` and ESLint report zero warnings across `src/`; dead code and deferred cleanups from v1.5–v1.8 are removed or re-deferred with rationale in PROJECT.md Key Decisions.
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 30-01-PLAN.md — Impeccable critique + P1/P2 fix loop (POLISH-01..04)
+- [ ] 30-02-PLAN.md — Tech debt sweep: deps, dead code, lint/TS, Phase 29 deferred pickup (DEBT-01..04)
 **UI hint**: yes
 
 ### Phase 31: Release v1.9
