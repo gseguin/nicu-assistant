@@ -109,7 +109,12 @@ See individual milestone archives for phase details.
   3. `tests/e2e/gir-a11y.spec.ts` runs axe-core in light and dark modes with focus-ring-visible, advisory-message, and selected-bucket variants; the overall project a11y sweep count is updated and all sweeps are green — with OKLCH values tuned literally in `src/app.css` if axe flags contrast (pre-empting the v1.5 Phase 20 Morphine repeat)
   4. All three `NumericInput` fields carry `inputmode="decimal"` (not `"numeric"`), asserted by a Playwright test for iOS decimal-keyboard compatibility
   5. `AboutSheet` gains a GIR entry citing `GIR-Wean-Calculator.xlsx` plus at least one authoritative source (MDCalc or Hawkes *J Perinatol* PMC7286731), explicitly noting the titration protocol is institutional; `package.json` is bumped to `1.8.0` and the About dialog reflects it; `.planning/PROJECT.md` Validated list is updated with v1.8 entries
-**Plans**: TBD
+**Plans**: 4 plans
+- [ ] 28-01-PLAN.md — Wave 0 blockers: CalculatorId type + NavShell /gir branch + Playwright env verify
+- [ ] 28-02-PLAN.md — Extended component tests + e2e/gir.spec.ts happy path + inputmode assertion (TEST-02, TEST-04, TEST-06)
+- [ ] 28-03-PLAN.md — e2e/gir-a11y.spec.ts 6 axe sweeps + contingent OKLCH tuning (TEST-05)
+- [ ] 28-04-PLAN.md — AboutSheet GIR entry + version bump 1.8.0 + PROJECT.md Validated list (DOC-01, DOC-02, DOC-03)
+
 
 ## Progress
 
