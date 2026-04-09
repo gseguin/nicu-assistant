@@ -37,6 +37,10 @@ for (const viewport of [
 
       // Target hero populated
       await expect(page.getByText('TARGET GIR', { exact: true })).toBeVisible();
+
+      // Phase 29: Δ rate is the titration-row hero — at least one visible direction word + ml/hr unit on a populated bucket
+      await expect(page.getByText(/\((increase|decrease)\)/).locator('visible=true').first()).toBeVisible();
+      await expect(page.getByText('ml/hr').locator('visible=true').first()).toBeVisible();
     });
 
     test('empty-state hero renders when inputs null', async ({ page }) => {
