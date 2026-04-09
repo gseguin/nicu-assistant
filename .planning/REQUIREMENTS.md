@@ -51,17 +51,17 @@
 ### Testing & Quality (TEST)
 
 - [x] **TEST-01**: Spreadsheet-parity unit tests (`calculations.test.ts`) cover all 6 titration buckets × all formula columns (Current GIR, Target GIR, Target Fluids, Target rate, Δ rate) using frozen JSON fixtures extracted from the CALC tab (no live xlsx reads at test time); assertion tolerance ~1% epsilon to accommodate spreadsheet constant truncation
-- [ ] **TEST-02**: Component tests (`GirCalculator.test.ts`, `GlucoseTitrationGrid.test.ts`) cover empty-state, valid-input flow, bucket selection, keyboard navigation (↑/↓/Home/End/Space/Enter), and Δ-rate glyph rendering
+- [x] **TEST-02**: Component tests (`GirCalculator.test.ts`, `GlucoseTitrationGrid.test.ts`) cover empty-state, valid-input flow, bucket selection, keyboard navigation (↑/↓/Home/End/Space/Enter), and Δ-rate glyph rendering
 - [x] **TEST-03**: Config shape tests (`gir-config.test.ts`) lock the JSON structure and range values
-- [ ] **TEST-04**: Playwright E2E (`gir.spec.ts`) covers the happy-path flow (enter inputs → hero updates → select bucket → target hero updates)
-- [ ] **TEST-05**: Playwright a11y sweeps (`gir-a11y.spec.ts`) assert axe-core clean in light + dark modes, with focus-ring visible variant, advisory-message variant, and selected-bucket variant; overall project a11y sweep count updated in the assertion (12/12 → expected new count)
-- [ ] **TEST-06**: All three `NumericInput` fields have `inputmode="decimal"` (not `"numeric"`) — asserted in a Playwright test for iOS decimal-keyboard compatibility
+- [x] **TEST-04**: Playwright E2E (`gir.spec.ts`) covers the happy-path flow (enter inputs → hero updates → select bucket → target hero updates)
+- [x] **TEST-05**: Playwright a11y sweeps (`gir-a11y.spec.ts`) assert axe-core clean in light + dark modes, with focus-ring visible variant, advisory-message variant, and selected-bucket variant; overall project a11y sweep count updated in the assertion (12/12 → expected new count)
+- [x] **TEST-06**: All three `NumericInput` fields have `inputmode="decimal"` (not `"numeric"`) — asserted in a Playwright test for iOS decimal-keyboard compatibility
 
 ### Documentation & Trust (DOC)
 
-- [ ] **DOC-01**: `AboutSheet` updated with a GIR entry citing the source spreadsheet + at least one authoritative formula source (MDCalc or Hawkes J Perinatol)
-- [ ] **DOC-02**: `package.json` version bumped to `1.8.0`; About dialog reflects the new version via existing Vite define
-- [ ] **DOC-03**: `.planning/PROJECT.md` Validated requirements list updated with v1.8 entries at milestone completion
+- [x] **DOC-01**: `AboutSheet` updated with a GIR entry citing the source spreadsheet + at least one authoritative formula source (MDCalc or Hawkes J Perinatol)
+- [x] **DOC-02**: `package.json` version bumped to `1.8.0`; About dialog reflects the new version via existing Vite define
+- [x] **DOC-03**: `.planning/PROJECT.md` Validated requirements list updated with v1.8 entries at milestone completion
 
 ---
 
@@ -118,13 +118,13 @@
 | ARCH-05 | Phase 27 | Complete |
 | ARCH-06 | Phase 27 | Complete |
 | TEST-01 | Phase 26 | Complete |
-| TEST-02 | Phase 28 | Pending |
+| TEST-02 | Phase 28 | Complete |
 | TEST-03 | Phase 26 | Complete |
-| TEST-04 | Phase 28 | Pending |
-| TEST-05 | Phase 28 | Pending |
-| TEST-06 | Phase 28 | Pending |
-| DOC-01  | Phase 28 | Pending |
-| DOC-02  | Phase 28 | Pending |
-| DOC-03  | Phase 28 | Pending |
+| TEST-04 | Phase 28 | Complete |
+| TEST-05 | Phase 28 | Complete |
+| TEST-06 | Phase 28 | Complete |
+| DOC-01  | Phase 28 | Complete |
+| DOC-02  | Phase 28 | Complete |
+| DOC-03  | Phase 28 | Complete |
 
 **Coverage:** 34/34 requirements mapped ✓
