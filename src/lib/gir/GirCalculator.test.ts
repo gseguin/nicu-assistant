@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/svelte';
+import { render, screen, fireEvent } from '@testing-library/svelte';
 import GirCalculator from './GirCalculator.svelte';
 import { girState } from './state.svelte.js';
 
@@ -49,5 +49,39 @@ describe('GirCalculator', () => {
   it('shows target-guidance empty state until bucket selected', () => {
     render(GirCalculator);
     expect(screen.getByText('Select a glucose range to see target rate')).toBeTruthy();
+  });
+
+  it('valid inputs render non-null Current GIR and Initial rate numbers', () => {
+    girState.current.weightKg = 3.1;
+    girState.current.dextrosePct = 12.5;
+    girState.current.mlPerKgPerDay = 80;
+    render(GirCalculator);
+    expect(screen.getAllByText('mg/kg/min').length).toBeGreaterThan(0);
+  });
+
+  it('selecting a bucket updates target-guidance hero', async () => {
+    girState.current.weightKg = 3.1;
+    girState.current.dextrosePct = 12.5;
+    girState.current.mlPerKgPerDay = 80;
+    render(GirCalculator);
+    const radios = screen.getAllByRole('radio');
+    await fireEvent.click(radios[2]); // 40-50 bucket (first-rendered layout)
+    expect(screen.getByText('TARGET GIR')).toBeTruthy();
+  });
+
+  it('GIR >12 advisory surfaces when computed GIR is high', () => {
+    girState.current.weightKg = 1;
+    girState.current.dextrosePct = 20;
+    girState.current.mlPerKgPerDay = 150;
+    render(GirCalculator);
+    expect(screen.getByText(/GIR >12.*hyperinsulinism/)).toBeTruthy();
+  });
+
+  it('GIR <4 advisory surfaces when computed GIR is low', () => {
+    girState.current.weightKg = 3.1;
+    girState.current.dextrosePct = 5;
+    girState.current.mlPerKgPerDay = 40;
+    render(GirCalculator);
+    expect(screen.getByText(/Below basal glucose utilization/)).toBeTruthy();
   });
 });
