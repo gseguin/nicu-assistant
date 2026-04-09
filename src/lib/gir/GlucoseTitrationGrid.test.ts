@@ -91,4 +91,42 @@ describe('GlucoseTitrationGrid', () => {
     render(GlucoseTitrationGrid, { rows, selectedBucketId: null, onselect: () => {} });
     expect(screen.getAllByText(/\(no change\)/).length).toBeGreaterThan(0);
   });
+
+  it('ArrowUp moves selection backward (wraps to end from first)', async () => {
+    const onselect = vi.fn();
+    render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect });
+    const radios = screen.getAllByRole('radio');
+    await fireEvent.keyDown(radios[0], { key: 'ArrowUp' });
+    expect(onselect).toHaveBeenCalledWith('gt70'); // wraps
+  });
+
+  it('ArrowRight advances selection (same as ArrowDown)', async () => {
+    const onselect = vi.fn();
+    render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect });
+    await fireEvent.keyDown(screen.getAllByRole('radio')[0], { key: 'ArrowRight' });
+    expect(onselect).toHaveBeenCalledWith('lt40');
+  });
+
+  it('ArrowLeft moves selection backward (same as ArrowUp)', async () => {
+    const onselect = vi.fn();
+    render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: 'lt40', onselect });
+    const radios = screen.getAllByRole('radio');
+    const selected = radios.find((r) => r.getAttribute('aria-checked') === 'true')!;
+    await fireEvent.keyDown(selected, { key: 'ArrowLeft' });
+    expect(onselect).toHaveBeenCalledWith('severe-neuro');
+  });
+
+  it('Space selects the focused row without moving', async () => {
+    const onselect = vi.fn();
+    render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect });
+    await fireEvent.keyDown(screen.getAllByRole('radio')[2], { key: ' ' });
+    expect(onselect).toHaveBeenCalledWith('40-50');
+  });
+
+  it('Enter selects the focused row without moving', async () => {
+    const onselect = vi.fn();
+    render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect });
+    await fireEvent.keyDown(screen.getAllByRole('radio')[2], { key: 'Enter' });
+    expect(onselect).toHaveBeenCalledWith('40-50');
+  });
 });
