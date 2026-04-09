@@ -79,7 +79,7 @@ See individual milestone archives for phase details.
   4. Input normalization (trim whitespace, locale comma → decimal point) is implemented and unit-tested for EPIC paste tolerance
   5. `pnpm test` is green; no Svelte component or route code exists yet (pure headless gate)
 **Plans**: 2 plans
-- [ ] 26-01-PLAN.md — Types, config, parity fixtures, pure calculations (CORE-02, CORE-03, SAFE-05, ARCH-04, TEST-01, TEST-03)
+- [x] 26-01-PLAN.md — Types, config, parity fixtures, pure calculations (CORE-02, CORE-03, SAFE-05, ARCH-04, TEST-01, TEST-03)
 - [ ] 26-02-PLAN.md — Input normalization helper + girState rune singleton (ARCH-04, SAFE-05, TEST-01)
 
 ### Phase 27: GIR UI, Identity & Registration
@@ -121,6 +121,6 @@ Phases execute in numeric order. v1.8 begins at Phase 26.
 | 18-20 | v1.5 | 5/5 | Complete | 2026-04-07 |
 | 21-24 | v1.6 | 5/5 | Complete | 2026-04-08 |
 | 25 | v1.7 | 1/1 | Complete | 2026-04-08 |
-| 26. GIR Foundation | v1.8 | 0/? | Not started | - |
+| 26. GIR Foundation | v1.8 | 1/2 | In Progress|  |
 | 27. GIR UI, Identity & Registration | v1.8 | 0/? | Not started | - |
 | 28. GIR A11y, E2E & Ship | v1.8 | 0/? | Not started | - |
