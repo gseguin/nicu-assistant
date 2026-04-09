@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.9
 milestone_name: GIR Titration Hero Swap + Polish
-status: Roadmap ready, awaiting `/gsd-plan-phase 29`
-stopped_at: Completed 29-01-PLAN.md
-last_updated: "2026-04-09T19:48:02.788Z"
-last_activity: 2026-04-09 — v1.9 roadmap created (3 phases, 17/17 requirements mapped)
+status: phase_complete
+stopped_at: Phase 29 complete (verification PASS 7/7)
+last_updated: "2026-04-09T20:00:00.000Z"
+last_activity: 2026-04-09 — Phase 29 shipped; GIR Δ rate hero swap verified
 progress:
-  total_phases: 2
+  total_phases: 3
   completed_phases: 1
   total_plans: 1
   completed_plans: 1
-  percent: 100
+  percent: 33
 ---
 
 # Project State
@@ -21,15 +21,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-09)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.9 — Phase 29 (GIR Titration Hero Swap)
+**Current focus:** v1.9 — Phase 30 (Impeccable Polish + Tech Debt Sweep) next
 
 ## Current Position
 
 Milestone: v1.9 — GIR Titration Hero Swap + Polish
-Phase: 29 — GIR Titration Hero Swap (not started)
-Plan: —
-Status: Roadmap ready, awaiting `/gsd-plan-phase 29`
-Last activity: 2026-04-09 — v1.9 roadmap created (3 phases, 17/17 requirements mapped)
+Phase: 29 — GIR Titration Hero Swap ✓ complete (verification PASS 7/7)
+Plan: 29-01-PLAN.md done
+Status: Awaiting `/gsd-plan-phase 30`
+Last activity: 2026-04-09 — Phase 29 shipped; Δ rate hero swap + STOP card + em-dash Δ=0 + action-first aria-label; 16/16 axe green; GIR-SWAP-01..07 closed
 
 ## Performance Metrics
 
