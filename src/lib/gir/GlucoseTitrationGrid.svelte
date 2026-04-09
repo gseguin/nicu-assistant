@@ -190,7 +190,7 @@
         <div class="text-base num text-[var(--color-text-primary)]">{row.targetRateMlHr.toFixed(1)} ml/hr</div>
         <div class="text-base num text-[var(--color-text-primary)]">{row.targetGirMgKgMin.toFixed(1)} mg/kg/min</div>
       {:else}
-        <div class="text-base font-semibold num text-[var(--color-text-primary)]"><span aria-hidden="true">{d.glyph}</span> {d.abs} ml/hr <span class="text-[var(--color-text-tertiary)]">{d.word}</span></div>
+        <div class="text-base font-semibold num text-[var(--color-text-primary)]"><span aria-hidden="true">{d.glyph}</span> {d.abs} ml/hr <span class="text-[var(--color-text-secondary)]">{d.word}</span></div>
         <div class="text-base num text-[var(--color-text-primary)]">{row.targetFluidsMlKgDay.toFixed(0)} ml/kg/d</div>
         <div class="text-base num text-[var(--color-text-primary)]">{row.targetRateMlHr.toFixed(1)} ml/hr</div>
         <div class="text-base num text-[var(--color-text-primary)]">{row.targetGirMgKgMin.toFixed(1)} mg/kg/min</div>
