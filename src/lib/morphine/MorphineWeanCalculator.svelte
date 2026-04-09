@@ -194,16 +194,16 @@
     {#key calcKey}
     <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-identity-hero)] animate-result-pulse" aria-live="polite" aria-atomic="true">
       <div class="flex flex-col">
-        <span class="text-2xs font-medium text-[var(--color-identity)]">Start</span>
+        <span class="text-2xs font-semibold text-[var(--color-identity)]">Start</span>
         <span class="text-base font-bold num text-[var(--color-text-primary)]">{first.doseMg.toFixed(4)} mg</span>
       </div>
       <div class="text-[var(--color-text-tertiary)] text-lg">→</div>
       <div class="flex flex-col items-end">
-        <span class="text-2xs font-medium text-[var(--color-identity)]">Step {last.step}</span>
+        <span class="text-2xs font-semibold text-[var(--color-identity)]">Step {last.step}</span>
         <span class="text-base font-bold num text-[var(--color-text-primary)]">{last.doseMg.toFixed(4)} mg</span>
       </div>
       <div class="flex flex-col items-end pl-3 border-l border-[var(--color-border)]">
-        <span class="text-2xs font-medium text-[var(--color-identity)]">Total reduction</span>
+        <span class="text-2xs font-semibold text-[var(--color-identity)]">Total reduction</span>
         <span class="text-sm font-semibold num text-[var(--color-text-primary)]">{(totalReduction / first.doseMg * 100).toFixed(1)}%</span>
       </div>
     </div>
@@ -223,7 +223,7 @@
                 {isFirst ? 'Step 1 — Starting dose' : `Step ${step.step}`}
               </span>
               {#if step.reductionMg > 0}
-                <span class="text-2xs font-medium text-[var(--color-text-tertiary)]">-{step.reductionMg.toFixed(4)} mg ({reductionPct.toFixed(1)}%)</span>
+                <span class="text-2xs font-medium text-[var(--color-text-tertiary)] pr-1">-{step.reductionMg.toFixed(4)} mg ({reductionPct.toFixed(1)}%)</span>
               {/if}
             </div>
             <div class="flex items-baseline gap-2">
