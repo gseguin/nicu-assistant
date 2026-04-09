@@ -26,10 +26,7 @@
       : false;
     const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
-    // Expose magnification trigger for mode-switch re-initialization
-  let triggerMagnification: (() => void) | null = null;
-
-  // Dock-style magnification: continuous floating index driven by scroll progress.
+    // Dock-style magnification: continuous floating index driven by scroll progress.
     // Maps total scroll position to a floating index (0.0 → 9.0) so the magnification
     // slides smoothly through cards in the scroll direction, like the macOS Dock.
     const MAX_SCALE = 1.06;
@@ -90,8 +87,6 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     // Initial pass
     updateMagnification();
-    // Expose for mode-switch re-trigger
-    triggerMagnification = updateMagnification;
 
     // Re-run when cards change (mode switch)
     const mutObserver = new MutationObserver(() => updateMagnification());
@@ -101,7 +96,6 @@
       window.removeEventListener('scroll', onScroll);
       if (rafId !== null) cancelAnimationFrame(rafId);
       mutObserver.disconnect();
-      triggerMagnification = null;
     };
   });
 
@@ -192,7 +186,7 @@
     {@const last = schedule[schedule.length - 1]}
     {@const totalReduction = first.doseMg - last.doseMg}
     {#key calcKey}
-    <div class="card px-4 py-3 flex items-center justify-between bg-[var(--color-identity-hero)] animate-result-pulse" aria-live="polite" aria-atomic="true">
+    <div data-testid="morphine-summary" class="card px-4 py-3 flex items-center justify-between bg-[var(--color-identity-hero)] animate-result-pulse" aria-live="polite" aria-atomic="true">
       <div class="flex flex-col">
         <span class="text-2xs font-semibold text-[var(--color-identity)]">Start</span>
         <span class="text-base font-bold num text-[var(--color-text-primary)]">{first.doseMg.toFixed(4)} mg</span>
