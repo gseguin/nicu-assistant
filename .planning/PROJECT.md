@@ -66,6 +66,18 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ Auto-select packets when picking a packets-capable formula; data-driven via new `packetsSupported?: boolean` field + `formulaSupportsPackets(id)` helper — v1.7
 - ✓ `showRangeError` opt-out prop on NumericInput (complement to v1.6 `showRangeHint`); Formula Starting Volume opts out of both — v1.7
 - ✓ `package.json` version bumped to 1.7.0 — v1.7
+- ✓ Third clinical calculator: Glucose Infusion Rate (GIR) with Weight/Dextrose%/Fluid-order inputs, Current GIR + Initial rate hero outputs (CORE-01..05) — v1.8
+- ✓ Interactive 6-bucket glucose-driven titration grid with keyboard nav, roving tabindex, radiogroup semantics, identity highlighting, ▲/▼ Δ-rate glyphs, institutional-protocol disclaimer (TITR-01..08) — v1.8
+- ✓ GIR safety advisories: Dex>12.5% central-access, GIR>12 hyperinsulinism, GIR<4 below-basal, config-driven NumericInput ranges, EPIC paste normalization (SAFE-01..05) — v1.8
+- ✓ GIR population reference card: IDM/LGA, IUGR, Preterm/NPO starting ranges (REF-01) — v1.8
+- ✓ GIR architecture: registry entry, `.identity-gir` OKLCH tokens, `src/lib/gir/` module, `/gir` route, zero shared-component modifications (ARCH-01..06) — v1.8
+- ✓ Spreadsheet-parity unit tests for GIR (all 6 buckets × all formula columns) and config shape tests (TEST-01, TEST-03) — v1.8
+- ✓ Component tests for GirCalculator + GlucoseTitrationGrid: empty-state, valid-flow, bucket selection, full keyboard matrix, advisory rendering (TEST-02) — v1.8
+- ✓ Playwright E2E happy-path at mobile 375 + desktop 1280, with `inputmode="decimal"` regression (TEST-04, TEST-06) — v1.8
+- ✓ Playwright a11y suite extended with 6 GIR axe sweeps (light/dark/focus/advisory/selected-bucket); 16/16 axe sweeps green (morphine 6 + fortification 4 + gir 6) with zero OKLCH tuning (TEST-05) — v1.8
+- ✓ AboutSheet updated with GIR entry citing `GIR-Wean-Calculator.xlsx` + MDCalc/Hawkes *J Perinatol* 2020 (PMC7286731), institutional-protocol disclaimer (DOC-01) — v1.8
+- ✓ `package.json` version bumped to 1.8.0 (DOC-02) — v1.8
+- ✓ PROJECT.md Validated list updated with v1.8 entries at milestone completion (DOC-03) — v1.8
 
 ### Active
 
