@@ -96,7 +96,7 @@ See individual milestone archives for phase details.
 **Plans**: 3 plans
 - [x] 27-01-PLAN.md — Identity OKLCH block + registry entry + /gir route wrapper (ARCH-01, ARCH-02, ARCH-03, ARCH-05)
 - [x] 27-02-PLAN.md — GlucoseTitrationGrid radiogroup component + tests (TITR-01..08, CORE-05)
-- [ ] 27-03-PLAN.md — GirCalculator composition + advisories + reference card + route wiring (CORE-01, CORE-04, CORE-05, SAFE-01..04, REF-01, ARCH-04, ARCH-06)
+- [x] 27-03-PLAN.md — GirCalculator composition + advisories + reference card + route wiring (CORE-01, CORE-04, CORE-05, SAFE-01..04, REF-01, ARCH-04, ARCH-06)
 **UI hint**: yes
 
 ### Phase 28: GIR A11y, E2E & Ship
@@ -125,5 +125,5 @@ Phases execute in numeric order. v1.8 begins at Phase 26.
 | 21-24 | v1.6 | 5/5 | Complete | 2026-04-08 |
 | 25 | v1.7 | 1/1 | Complete | 2026-04-08 |
 | 26. GIR Foundation | v1.8 | 2/2 | Complete   | 2026-04-09 |
-| 27. GIR UI, Identity & Registration | v1.8 | 2/3 | In Progress|  |
+| 27. GIR UI, Identity & Registration | v1.8 | 3/3 | Complete   | 2026-04-09 |
 | 28. GIR A11y, E2E & Ship | v1.8 | 0/? | Not started | - |

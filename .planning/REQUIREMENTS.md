@@ -10,10 +10,10 @@
 
 ### GIR Calculator — Core Calculation (CORE)
 
-- [ ] **CORE-01**: User can enter Weight (kg), Dextrose %, and Fluid order (ml/kg/day) as the three calculator inputs
+- [x] **CORE-01**: User can enter Weight (kg), Dextrose %, and Fluid order (ml/kg/day) as the three calculator inputs
 - [x] **CORE-02**: User sees **Current GIR (mg/kg/min)** computed as `(Dex% × Initial rate ml/hr × 10) / (Weight × 60)` using exact constants (not spreadsheet's truncated `0.167`)
 - [x] **CORE-03**: User sees **Initial rate (ml/hr)** computed as `(Weight × ml/kg/day) / 24` as a secondary hero value
-- [ ] **CORE-04**: User sees an empty-state hero message until all three inputs are valid (no `NaN`, no `∞`, no ghost zeros)
+- [x] **CORE-04**: User sees an empty-state hero message until all three inputs are valid (no `NaN`, no `∞`, no ghost zeros)
 - [x] **CORE-05**: Result hero uses `aria-live="polite"` + `aria-atomic="true"` and triggers the shared `.animate-result-pulse` on change (v1.6 pattern)
 
 ### GIR Calculator — Glucose Titration (TITR)
@@ -29,15 +29,15 @@
 
 ### GIR Calculator — Clinical Safety Rails (SAFE)
 
-- [ ] **SAFE-01**: `NumericInput` advisory ranges (min/max) for Weight, Dextrose %, ml/kg/day are sourced from `gir-config.json` `inputs` block (no magic numbers), with `showRangeHint=true` and `showRangeError=true` for all three fields (advisory-only, no clamp — v1.6 contract)
-- [ ] **SAFE-02**: When Dextrose % > 12.5, user sees a prominent amber-toned advisory **"Dextrose >12.5% requires central venous access"** (visually stronger than the standard grey range hint)
-- [ ] **SAFE-03**: When Current GIR > 12 mg/kg/min, user sees an advisory **"GIR >12 mg/kg/min — consider hyperinsulinism workup / central access"**
-- [ ] **SAFE-04**: When Current GIR < 4 mg/kg/min, user sees an advisory **"Below basal glucose utilization (≈4–6 mg/kg/min)"**
+- [x] **SAFE-01**: `NumericInput` advisory ranges (min/max) for Weight, Dextrose %, ml/kg/day are sourced from `gir-config.json` `inputs` block (no magic numbers), with `showRangeHint=true` and `showRangeError=true` for all three fields (advisory-only, no clamp — v1.6 contract)
+- [x] **SAFE-02**: When Dextrose % > 12.5, user sees a prominent amber-toned advisory **"Dextrose >12.5% requires central venous access"** (visually stronger than the standard grey range hint)
+- [x] **SAFE-03**: When Current GIR > 12 mg/kg/min, user sees an advisory **"GIR >12 mg/kg/min — consider hyperinsulinism workup / central access"**
+- [x] **SAFE-04**: When Current GIR < 4 mg/kg/min, user sees an advisory **"Below basal glucose utilization (≈4–6 mg/kg/min)"**
 - [x] **SAFE-05**: Input values are normalized on entry to tolerate EPIC paste: trim whitespace, convert locale comma to decimal point
 
 ### GIR Calculator — Population Reference (REF)
 
-- [ ] **REF-01**: User sees a static inline reference card showing starting GIR ranges by population: IDM/LGA 3–5, IUGR 5–7, Preterm or NPO 4–6 mg/kg/min
+- [x] **REF-01**: User sees a static inline reference card showing starting GIR ranges by population: IDM/LGA 3–5, IUGR 5–7, Preterm or NPO 4–6 mg/kg/min
 
 ### Architecture & Integration (ARCH)
 
@@ -46,7 +46,7 @@
 - [x] **ARCH-03**: `identityClass` union in the registry extended to include `'identity-gir'`
 - [x] **ARCH-04**: New `src/lib/gir/` module contains `types.ts`, `gir-config.json`, `gir-config.ts` (typed wrapper), `calculations.ts` (pure functions), `state.svelte.ts` (rune singleton with dedicated `nicu_gir_state` sessionStorage key), `GirCalculator.svelte`, `GlucoseTitrationGrid.svelte`
 - [x] **ARCH-05**: New route `src/routes/gir/+page.svelte` composes `<GirCalculator />` with `identity-gir` wrapper and calls `girState.init()` on mount
-- [ ] **ARCH-06**: Existing shared components (`NumericInput`, `ResultsDisplay`, `DisclaimerModal`, `AboutSheet`, `NavShell`, `.animate-result-pulse`) are reused with **zero modifications** — no new props added to any shared component for v1.8
+- [x] **ARCH-06**: Existing shared components (`NumericInput`, `ResultsDisplay`, `DisclaimerModal`, `AboutSheet`, `NavShell`, `.animate-result-pulse`) are reused with **zero modifications** — no new props added to any shared component for v1.8
 
 ### Testing & Quality (TEST)
 
@@ -92,10 +92,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CORE-01 | Phase 27 | Pending |
+| CORE-01 | Phase 27 | Complete |
 | CORE-02 | Phase 26 | Complete |
 | CORE-03 | Phase 26 | Complete |
-| CORE-04 | Phase 27 | Pending |
+| CORE-04 | Phase 27 | Complete |
 | CORE-05 | Phase 27 | Complete |
 | TITR-01 | Phase 27 | Complete |
 | TITR-02 | Phase 27 | Complete |
@@ -105,18 +105,18 @@
 | TITR-06 | Phase 27 | Complete |
 | TITR-07 | Phase 27 | Complete |
 | TITR-08 | Phase 27 | Complete |
-| SAFE-01 | Phase 27 | Pending |
-| SAFE-02 | Phase 27 | Pending |
-| SAFE-03 | Phase 27 | Pending |
-| SAFE-04 | Phase 27 | Pending |
+| SAFE-01 | Phase 27 | Complete |
+| SAFE-02 | Phase 27 | Complete |
+| SAFE-03 | Phase 27 | Complete |
+| SAFE-04 | Phase 27 | Complete |
 | SAFE-05 | Phase 26 | Complete |
-| REF-01  | Phase 27 | Pending |
+| REF-01  | Phase 27 | Complete |
 | ARCH-01 | Phase 27 | Complete |
 | ARCH-02 | Phase 27 | Complete |
 | ARCH-03 | Phase 27 | Complete |
 | ARCH-04 | Phase 26 + 27 (module scaffolded in 26, UI files added in 27) | Complete |
 | ARCH-05 | Phase 27 | Complete |
-| ARCH-06 | Phase 27 | Pending |
+| ARCH-06 | Phase 27 | Complete |
 | TEST-01 | Phase 26 | Complete |
 | TEST-02 | Phase 28 | Pending |
 | TEST-03 | Phase 26 | Complete |
