@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { setCalculatorContext } from '$lib/shared/context.js';
   import { girState } from '$lib/gir/state.svelte.js';
+  import GirCalculator from '$lib/gir/GirCalculator.svelte';
   import { Droplet } from '@lucide/svelte';
 
   onMount(() => {
@@ -26,6 +27,5 @@
     </div>
   </header>
 
-  <!-- GirCalculator composition lands in Plan 03 -->
-  <p class="text-ui text-[var(--color-text-tertiary)]">GIR calculator coming online…</p>
+  <GirCalculator />
 </div>
