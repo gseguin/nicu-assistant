@@ -14,18 +14,18 @@
 - [x] **CORE-02**: User sees **Current GIR (mg/kg/min)** computed as `(Dex% × Initial rate ml/hr × 10) / (Weight × 60)` using exact constants (not spreadsheet's truncated `0.167`)
 - [x] **CORE-03**: User sees **Initial rate (ml/hr)** computed as `(Weight × ml/kg/day) / 24` as a secondary hero value
 - [ ] **CORE-04**: User sees an empty-state hero message until all three inputs are valid (no `NaN`, no `∞`, no ghost zeros)
-- [ ] **CORE-05**: Result hero uses `aria-live="polite"` + `aria-atomic="true"` and triggers the shared `.animate-result-pulse` on change (v1.6 pattern)
+- [x] **CORE-05**: Result hero uses `aria-live="polite"` + `aria-atomic="true"` and triggers the shared `.animate-result-pulse` on change (v1.6 pattern)
 
 ### GIR Calculator — Glucose Titration (TITR)
 
-- [ ] **TITR-01**: User sees 6 glucose-range buckets (Severe neurologic signs, <40, 40–50, 50–60, 60–70, >70 mg/dL) each showing Target GIR, Target Fluids (ml/kg/day), Target rate (ml/hr), and Δ rate from the initial rate
-- [ ] **TITR-02**: User can select a glucose bucket by click/tap or keyboard (arrow keys, Home/End, Space/Enter) with roving tabindex and `role="radiogroup"` + `role="radio"` semantics
-- [ ] **TITR-03**: Selected bucket is highlighted using the new `--color-identity` token (not opacity alone) and updates a target-guidance hero below the grid
-- [ ] **TITR-04**: No bucket is selected by default; the target-guidance hero shows `"Select a glucose range to see target rate"` until the clinician picks one
-- [ ] **TITR-05**: Grid header copy frames the table as **"If current glucose is…"** (not "Recommended for…") and includes an "institutional titration helper — verify against your protocol" disclaimer
-- [ ] **TITR-06**: Δ rate sign carries a ▲/▼ glyph + explicit "(increase)"/"(decrease)" label (never color-alone, per WCAG 1.4.1)
-- [ ] **TITR-07**: If Target GIR computes to ≤ 0 (aggressive wean from high baseline), display shows `"0 mg/kg/min — consider stopping infusion"` (display-layer guidance only; raw value preserved for tests)
-- [ ] **TITR-08**: On viewports <480px, the 6-row grid renders as a vertical stack of 88px+ tappable cards (eyebrow + Target GIR hero + 3-column footer); ≥480px renders as a table with 48px+ row height; all 6 rows always visible (no collapse, no horizontal scroll)
+- [x] **TITR-01**: User sees 6 glucose-range buckets (Severe neurologic signs, <40, 40–50, 50–60, 60–70, >70 mg/dL) each showing Target GIR, Target Fluids (ml/kg/day), Target rate (ml/hr), and Δ rate from the initial rate
+- [x] **TITR-02**: User can select a glucose bucket by click/tap or keyboard (arrow keys, Home/End, Space/Enter) with roving tabindex and `role="radiogroup"` + `role="radio"` semantics
+- [x] **TITR-03**: Selected bucket is highlighted using the new `--color-identity` token (not opacity alone) and updates a target-guidance hero below the grid
+- [x] **TITR-04**: No bucket is selected by default; the target-guidance hero shows `"Select a glucose range to see target rate"` until the clinician picks one
+- [x] **TITR-05**: Grid header copy frames the table as **"If current glucose is…"** (not "Recommended for…") and includes an "institutional titration helper — verify against your protocol" disclaimer
+- [x] **TITR-06**: Δ rate sign carries a ▲/▼ glyph + explicit "(increase)"/"(decrease)" label (never color-alone, per WCAG 1.4.1)
+- [x] **TITR-07**: If Target GIR computes to ≤ 0 (aggressive wean from high baseline), display shows `"0 mg/kg/min — consider stopping infusion"` (display-layer guidance only; raw value preserved for tests)
+- [x] **TITR-08**: On viewports <480px, the 6-row grid renders as a vertical stack of 88px+ tappable cards (eyebrow + Target GIR hero + 3-column footer); ≥480px renders as a table with 48px+ row height; all 6 rows always visible (no collapse, no horizontal scroll)
 
 ### GIR Calculator — Clinical Safety Rails (SAFE)
 
@@ -96,15 +96,15 @@
 | CORE-02 | Phase 26 | Complete |
 | CORE-03 | Phase 26 | Complete |
 | CORE-04 | Phase 27 | Pending |
-| CORE-05 | Phase 27 | Pending |
-| TITR-01 | Phase 27 | Pending |
-| TITR-02 | Phase 27 | Pending |
-| TITR-03 | Phase 27 | Pending |
-| TITR-04 | Phase 27 | Pending |
-| TITR-05 | Phase 27 | Pending |
-| TITR-06 | Phase 27 | Pending |
-| TITR-07 | Phase 27 | Pending |
-| TITR-08 | Phase 27 | Pending |
+| CORE-05 | Phase 27 | Complete |
+| TITR-01 | Phase 27 | Complete |
+| TITR-02 | Phase 27 | Complete |
+| TITR-03 | Phase 27 | Complete |
+| TITR-04 | Phase 27 | Complete |
+| TITR-05 | Phase 27 | Complete |
+| TITR-06 | Phase 27 | Complete |
+| TITR-07 | Phase 27 | Complete |
+| TITR-08 | Phase 27 | Complete |
 | SAFE-01 | Phase 27 | Pending |
 | SAFE-02 | Phase 27 | Pending |
 | SAFE-03 | Phase 27 | Pending |
