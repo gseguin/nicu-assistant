@@ -6,7 +6,7 @@ A PWA that unifies clinical calculators into a single tool for NICU staff. Curre
 
 ## Current State
 
-**Shipped:** v1.8 GIR Calculator (2026-04-09) — three clinical calculators in production, 16/16 axe sweeps green across both themes, PWA at version 1.8.0.
+**Shipped:** v1.9 GIR Titration Hero Swap + Polish (2026-04-09) — three clinical calculators in production with Δ rate as the bedside hero on GIR titration buckets, impeccable polish pass across all three calculators in both themes, dependency + lint/TS sweep (svelte-check 0/0), 16/16 axe sweeps green, PWA at version 1.9.0.
 
 ## Core Value
 
@@ -94,19 +94,7 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-## Current Milestone: v1.9 GIR Titration Hero Swap + Polish
-
-**Goal:** Act on first clinical field feedback by making the actionable Δ rate the hero on every GIR titration bucket, and take a polish + tech-debt pass across the app.
-
-**Target features:**
-- GIR bucket layout swap — Δ rate (▲/▼ ml/hr with increase/decrease label) becomes the hero on all 6 titration buckets; GIR `mg/kg/min` moves into the secondary row, taking the slot Δ rate vacated (Fluids | Rate | GIR)
-- Preserve all v1.8 a11y guarantees — identity color, focus rings, roving tabindex, radiogroup semantics, `aria-live`, reduced-motion; 16/16 axe sweeps stay green; component + E2E tests updated for the new hero
-- Impeccable polish pass across the three calculators (critique → normalize/arrange/typeset/polish) with P1/P2 findings fixed
-- Tech debt sweep — dependency updates, dead code, lint/type cleanup, deferred cleanups from v1.5–v1.8
-
-**Key context:** First real clinician field feedback on v1.8 GIR — bedside priority is the *action* ("increase drip by 0.9 ml/hr"), not the recalculated GIR value. Swap applies to the "current state" bucket too. No new calculators this milestone.
-
-_No active requirements yet — defined in REQUIREMENTS.md when roadmap is created._
+_No active requirements — next milestone to be defined via `/gsd-new-milestone`._
 
 ### Out of Scope
 
@@ -117,8 +105,8 @@ _No active requirements yet — defined in REQUIREMENTS.md when roadmap is creat
 
 ## Context
 
-**Shipped v1.8** with three clinical calculators, comprehensive a11y coverage (16/16 axe sweeps), and co-located Vitest + Playwright suites.
-Tech stack: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS 4 + Vite + pnpm.
+**Shipped v1.9** with three clinical calculators, GIR titration Δ rate hero swap (bedside action-first), impeccable polish pass in both themes, dependency + lint/TS sweep (svelte-check 0/0, ESLint dropped), comprehensive a11y coverage (16/16 axe sweeps), and co-located Vitest (205/205) + Playwright suites.
+Tech stack: SvelteKit 2.57 + Svelte 5.55 (runes) + Tailwind CSS 4 + Vite 8.0 + pnpm 10.33.
 
 **Current calculators:**
 - Morphine Wean: linear/compounding modes, config-driven defaults, dock magnification, summary card
@@ -180,4 +168,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.9 GIR Titration Hero Swap + Polish milestone started*
+*Last updated: 2026-04-09 — v1.9 GIR Titration Hero Swap + Polish milestone shipped*

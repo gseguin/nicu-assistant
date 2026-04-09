@@ -1,5 +1,23 @@
 # Milestones
 
+## v1.9 GIR Titration Hero Swap + Polish (Shipped: 2026-04-09)
+
+**Phases completed:** 3 phases (29, 30, 31), 4 plans
+
+**Tag:** `v1.9.0`
+
+**Key accomplishments:**
+
+- **GIR titration hero swap** — Δ rate (ml/hr ▲/▼ with increase/decrease label) is now the bedside hero on every bucket card; GIR mg/kg/min demoted to the secondary row; neutral STOP-card treatment for the Δ=0 "current state" bucket. All v1.8 a11y guarantees preserved (radiogroup, roving tabindex, aria-live, reduced-motion, focus rings); 16/16 axe sweeps green in both themes (GIR-SWAP-01..07).
+- **Impeccable polish pass** — Critique-driven fixes across Morphine, Formula, GIR in both themes at mobile 375 + desktop 1280. Dark identity-hero retuned to `oklch(22% 0.045 145)` to preserve 4.5:1 against new tertiary ml/hr text; SegmentedToggle inactive text lifted to primary token (reads "unselected" not "disabled"); summary-card label weight + delta padding refined; bucket range labels normalized to en-dash typography. Zero WCAG regressions (POLISH-01..04).
+- **Dependency + dead code sweep** — 4 dep groups bumped within current majors (Svelte 5.55.2, SvelteKit 2.57.0, Vite 8.0.8, Vitest 4.1.4, Playwright 1.59.1, @lucide/svelte 1.8.0, bits-ui 2.17.3), full test suite re-verified after each group. `ResultsDisplay.svelte` + `$lib/shared` barrel removed (confirmed zero importers) (DEBT-01, -02).
+- **Lint + TS hygiene** — svelte-check cleaned to 0 errors / 0 warnings across 4493 files. ESLint explicitly dropped in favor of svelte-check + Prettier per PROJECT.md Key Decisions. 8 stale e2e assertions from v1.5–v1.8 drift closed; Phase 29 deferred items cleared (DEBT-03, -04).
+- **Release v1.9.0** — `package.json` bumped 1.8.0 → 1.9.0. AboutSheet automatically reflects v1.9.0 via the `__APP_VERSION__` build-time constant (`vite.config.ts` → `pkg.version` → `about-content.ts`, zero hardcoded version strings in any of the 3 AboutSheet entries). PROJECT.md Validated list updated with 9 v1.9 entries covering all 18 milestone requirements (REL-01..03).
+- **Code review pass** — 0 critical, 3 warnings — all fixed (fragile non-null assertions removed from `GirCalculator.svelte`, `data-testid="morphine-summary"` replaces Tailwind arbitrary-value class coupling in e2e selectors, dead `triggerMagnification` removed from `MorphineWeanCalculator.svelte`).
+- **Final gates** — vitest 205/205, svelte-check 0/0, `pnpm build` ✓ (PWA v1.2.0, 35 precache entries, 325.23 KiB), Playwright axe 16/16, e2e 48p/3s/0f. Phase 29 verification 7/7, Phase 30 verification 12/12, Phase 31 verification 3/3, milestone audit 18/18.
+
+---
+
 ## v1.8 GIR Calculator (Shipped: 2026-04-09)
 
 **Phases completed:** 3 phases (26, 27, 28), 9 plans, 13 commits
