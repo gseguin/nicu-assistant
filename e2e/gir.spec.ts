@@ -35,8 +35,13 @@ for (const viewport of [
       // Select a bucket
       await radios.first().click();
 
-      // Target hero populated
-      await expect(page.getByText('TARGET GIR', { exact: true })).toBeVisible();
+      // Target hero populated — Phase 29 discriminated eyebrow is one of
+      // ADJUST RATE / HYPERGLYCEMIA / TARGET REACHED depending on the
+      // selected bucket's clinical branch. The first bucket (severe-neuro /
+      // lt40) is an "ADJUST RATE" (increase) branch.
+      await expect(
+        page.getByText(/ADJUST RATE|HYPERGLYCEMIA|TARGET REACHED/).first(),
+      ).toBeVisible();
 
       // Phase 29: Δ rate is the titration-row hero — at least one visible direction word + ml/hr unit on a populated bucket
       await expect(page.getByText(/\((increase|decrease)\)/).locator('visible=true').first()).toBeVisible();

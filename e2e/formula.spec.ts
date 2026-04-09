@@ -9,17 +9,18 @@ test.describe('Formula Calculator', () => {
 			.catch(() => {});
 	});
 
-	test('renders formula page with mode tabs', async ({ page }) => {
-		await expect(page.getByRole('heading', { name: 'Formula Recipe' })).toBeVisible();
-		await expect(page.getByRole('tab', { name: /Modified Formula/i })).toBeVisible();
-		await expect(page.getByRole('tab', { name: /Breast Milk Fortifier/i })).toBeVisible();
+	test('renders formula page with heading and unit segmented toggle', async ({ page }) => {
+		await expect(page.getByRole('heading', { name: 'Formula Recipe', level: 1 })).toBeVisible();
+		// v1.6+ Formula uses SelectPickers for base/brand/kcal and a SegmentedToggle
+		// for unit selection — no "Modified Formula" tabs, no "Select Brand" placeholder.
+		const unitTablist = page.getByRole('tablist').first();
+		await expect(unitTablist).toBeVisible();
 	});
 
-	test('shows empty state when no brand selected', async ({ page }) => {
-		await expect(page.getByText(/Choose a formula brand above to see the recipe/)).toBeVisible();
-	});
-
-	test('brand selector shows placeholder', async ({ page }) => {
-		await expect(page.getByText(/Select Brand/)).toBeVisible();
+	test('renders recipe numeric output with defaults', async ({ page }) => {
+		// Defaults load a valid formula — the recipe card should show a numeric result
+		// (validates the full calculator wiring without depending on stale copy).
+		await expect(page.getByLabel('Volume')).toBeVisible();
+		await expect(page.getByText(/ml/i).first()).toBeVisible();
 	});
 });

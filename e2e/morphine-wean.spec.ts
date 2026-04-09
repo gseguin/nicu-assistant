@@ -24,7 +24,7 @@ test.describe('Morphine Wean Calculator', () => {
 
 	test('summary card shows total reduction percentage', async ({ page }) => {
 		// Linear mode with defaults: 90% total reduction
-		const summary = page.locator('.bg-\\[var\\(--color-accent-light\\)\\]');
+		const summary = page.locator('.bg-\\[var\\(--color-identity-hero\\)\\]');
 		await expect(summary).toBeVisible();
 		await expect(summary).toContainText('90.0%');
 		await expect(summary).toContainText('Total reduction');
@@ -46,7 +46,7 @@ test.describe('Morphine Wean Calculator', () => {
 		await page.getByRole('tab', { name: 'Compounding' }).click();
 		await page.waitForTimeout(300);
 		// Compounding total reduction is ~61.3%
-		const summary = page.locator('.bg-\\[var\\(--color-accent-light\\)\\]');
+		const summary = page.locator('.bg-\\[var\\(--color-identity-hero\\)\\]');
 		await expect(summary).toContainText(/6[0-2]\.\d%/);
 	});
 
