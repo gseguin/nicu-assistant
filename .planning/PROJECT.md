@@ -82,6 +82,15 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ AboutSheet updated with GIR entry citing `GIR-Wean-Calculator.xlsx` + MDCalc/Hawkes *J Perinatol* 2020 (PMC7286731), institutional-protocol disclaimer (DOC-01) — v1.8
 - ✓ `package.json` version bumped to 1.8.0 (DOC-02) — v1.8
 - ✓ PROJECT.md Validated list updated with v1.8 entries at milestone completion (DOC-03) — v1.8
+- ✓ GIR titration hero swap: Δ rate (ml/hr ▲/▼ with increase/decrease label) is the bedside hero on every bucket card; GIR mg/kg/min demoted to the secondary row; neutral STOP-card treatment for the Δ=0 "current state" bucket (GIR-SWAP-01..03) — v1.9
+- ✓ v1.8 GIR a11y guarantees preserved through the swap: radiogroup semantics, roving tabindex, aria-live, prefers-reduced-motion, focus rings; component + E2E + 16/16 axe sweeps updated for the new layout and remain green (GIR-SWAP-04..07) — v1.9
+- ✓ Impeccable critique pass across Morphine, Formula, and GIR in both themes at mobile 375 + desktop 1280 with all P1 and addressable P2/P3 findings fixed; dark identity-hero retuned to `oklch(22% 0.045 145)` to preserve 4.5:1 against new tertiary ml/hr text; SegmentedToggle inactive text lifted to primary token; bucket labels normalized to en-dash typography (POLISH-01..04) — v1.9
+- ✓ Dependency sweep within current majors — Svelte 5.55.2, SvelteKit 2.57.0, Vite 8.0.8, Vitest 4.1.4, Playwright 1.59.1, @lucide/svelte 1.8.0, bits-ui 2.17.3 — full test suite re-verified after each group (DEBT-01) — v1.9
+- ✓ Dead code removal: `ResultsDisplay.svelte` + `$lib/shared` barrel deleted (zero src/ importers confirmed) (DEBT-02) — v1.9
+- ✓ svelte-check cleaned to 0 errors / 0 warnings across 4493 files; ESLint explicitly dropped in favor of svelte-check + Prettier (DEBT-03) — v1.9
+- ✓ Prior-milestone deferred cleanups closed: Phase 29 deferred items (6) + 8 pre-existing e2e assertion drifts from v1.5–v1.8 (DEBT-04) — v1.9
+- ✓ `package.json` version bumped to 1.9.0; AboutSheet reflects v1.9.0 via the `__APP_VERSION__` build-time constant sourced from `package.json` (REL-01, REL-02) — v1.9
+- ✓ PROJECT.md Validated list updated with v1.9 entries at milestone completion (REL-03) — v1.9
 
 ### Active
 
