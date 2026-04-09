@@ -57,7 +57,8 @@ See [milestones/v1.8-ROADMAP.md](milestones/v1.8-ROADMAP.md) for full phase deta
   3. The Δ=0 "current state" card shows a neutral/placeholder treatment — no ▲/▼ and no misleading "increase" label.
   4. Keyboard nav, roving tabindex, `role="radiogroup"`, `aria-live` announcements, identity color, focus rings, and `prefers-reduced-motion` behave identically to v1.8 (component tests + E2E pass).
   5. All 16 axe sweeps (morphine 6 + fortification 4 + gir 6) are green in light + dark on the new layout, audited BEFORE PR.
-**Plans**: TBD
+**Plans**: 1 plan
+- [ ] 29-01-PLAN.md — Hero swap + em-dash Δ=0 + STOP card + action-first aria-label + tests + axe gate
 **UI hint**: yes
 
 ### Phase 30: Impeccable Polish + Tech Debt Sweep
