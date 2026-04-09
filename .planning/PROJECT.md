@@ -2,7 +2,11 @@
 
 ## What This Is
 
-A PWA that unifies clinical calculators into a single tool for NICU staff. Currently includes an infant formula recipe calculator and a morphine weaning schedule calculator. Built with a shared component library, responsive navigation, and a plugin-like architecture that makes adding new calculators straightforward.
+A PWA that unifies clinical calculators into a single tool for NICU staff. Currently includes an infant formula recipe calculator, a morphine weaning schedule calculator, and a glucose infusion rate (GIR) calculator with interactive glucose-driven titration. Built with a shared component library, responsive navigation, and a plugin-like architecture that makes adding new calculators straightforward.
+
+## Current State
+
+**Shipped:** v1.8 GIR Calculator (2026-04-09) — three clinical calculators in production, 16/16 axe sweeps green across both themes, PWA at version 1.8.0.
 
 ## Core Value
 
@@ -81,16 +85,7 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-## Current Milestone: v1.8 GIR Calculator
-
-**Goal:** Add a third clinical calculator — Glucose Infusion Rate (GIR) with interactive glucose-driven titration — verified against authoritative clinical sources.
-
-**Target features:**
-- Core GIR calc: Weight (kg), Dextrose %, ml/kg/day → Current GIR (mg/kg/min) + Initial rate (ml/hr) hero output
-- Interactive glucose titration table (6 ranges: severe neuro, <40, 40–50, 50–60, 60–70, >70) with clinician-selected bucket highlighting Target GIR / Target Fluids / Target rate / Δ rate
-- Spreadsheet-parity unit tests against `GIR-Wean-Calculator.xlsx` (CALC tab)
-- New per-tab identity hue (third accent color extending v1.5 identity pattern)
-- GIR formulas cross-verified against authoritative neonatal sources during research phase
+_No active requirements — v1.8 shipped. Run `/gsd-new-milestone` to define v1.9._
 
 ### Out of Scope
 
@@ -101,12 +96,13 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ## Context
 
-**Shipped v1.2** with 152 unit tests + 33 E2E tests. Design health score: 33/40.
-Tech stack: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS 4 + Vite 8 + pnpm.
+**Shipped v1.8** with three clinical calculators, comprehensive a11y coverage (16/16 axe sweeps), and co-located Vitest + Playwright suites.
+Tech stack: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS 4 + Vite + pnpm.
 
 **Current calculators:**
 - Morphine Wean: linear/compounding modes, config-driven defaults, dock magnification, summary card
 - Formula: modified/BMF modes, 40+ brands with manufacturer grouping, redesigned empty state
+- GIR: Weight/Dextrose%/Fluid-order inputs, interactive 6-bucket glucose titration, dextrose-green identity, clinical safety advisories (dextrose >12.5%, GIR >12, GIR <4)
 
 **Architecture:**
 - Calculator registry in `src/lib/shell/registry.ts` — add new calculators with one entry + one route
@@ -140,6 +136,9 @@ Tech stack: SvelteKit 2 + Svelte 5 (runes) + Tailwind CSS 4 + Vite 8 + pnpm.
 | Title bar for info/theme buttons | Frees bottom nav for full-width tabs | ✓ Good — v1.2 |
 | Dock magnification on mobile | Scroll-driven card scaling, distinctive UX | ✓ Good — v1.2 |
 | Version from package.json | Single source of truth via Vite define | ✓ Good — v1.2 |
+| Research before PR for new identity hues | Axe-core tuning costs more than upfront OKLCH audit (v1.5 Phase 20 Morphine pain) | ✓ Good — v1.8 GIR hue 145 passed on first sweep |
+| Wave 0 latent-bug fixes before feature work | Type unions and route branches must extend cleanly before downstream phases can compile | ✓ Good — v1.8 caught `CalculatorId` + `NavShell.activeCalculatorId` gaps before DOC-01 |
+| Spreadsheet-parity tests with ~1% epsilon | Clinical calculators must match source authority, with tolerance for truncated spreadsheet constants | ✓ Good — v1.8 GIR all 6 buckets pass |
 
 ## Evolution
 
@@ -159,4 +158,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.8 GIR Calculator milestone started*
+*Last updated: 2026-04-09 — v1.8 GIR Calculator milestone shipped*

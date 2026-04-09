@@ -1,5 +1,25 @@
 # Milestones
 
+## v1.8 GIR Calculator (Shipped: 2026-04-09)
+
+**Phases completed:** 3 phases (26, 27, 28), 9 plans, 13 commits
+
+**Tag:** `v1.8.0`
+
+**Key accomplishments:**
+
+- **Headless GIR engine with spreadsheet parity** — `calculateGir` + `girState` singleton match the `GIR-Wean-Calculator.xlsx` CALC tab within ~1% epsilon across all 6 glucose buckets, using exact `10/60` and `1/144` constants (not the spreadsheet's truncated `0.167`).
+- **Accessible 6-row titration grid** — `GlucoseTitrationGrid` with `role="radiogroup"`, full keyboard nav (↑/↓/Home/End/Space/Enter), roving tabindex, ▲/▼ Δ-rate glyphs with explicit labels (never color-alone), and a responsive stack-vs-table layout that keeps all 6 rows visible without horizontal scroll.
+- **Third identity hue landed cleanly** — `.identity-gir` dextrose-green (OKLCH hue 145) passed axe-core in both light and dark on first run, pre-empting the v1.5 Phase 20 Morphine contrast repeat. No OKLCH tuning needed.
+- **16/16 axe sweeps green** — project-wide a11y coverage: morphine (6) + fortification (4) + new GIR (6) across focus-ring-visible, advisory-message, and selected-bucket variants.
+- **Clinical safety advisories wired** — dextrose >12.5% surfaces the "requires central venous access" warning; Current GIR >12 and <4 each surface range advisories sourced from `gir-config.json` (advisory-only, never clamped); ≤0 Target GIR shows "consider stopping infusion."
+- **Two latent bugs caught before ship** — Phase 28 Wave 0 fixed `CalculatorId` union (missing `'gir'`) and `NavShell.activeCalculatorId` `/gir` branch (was falling through to Morphine) before they could poison AboutSheet content routing.
+- **AboutSheet cites authoritative sources** — GIR entry references `GIR-Wean-Calculator.xlsx` + MDCalc + Hawkes *J Perinatol* PMC7286731, with explicit institutional-protocol disclaimer and central-venous access note.
+
+See [milestones/v1.8-ROADMAP.md](milestones/v1.8-ROADMAP.md) and [milestones/v1.8-REQUIREMENTS.md](milestones/v1.8-REQUIREMENTS.md) for full archive.
+
+---
+
 ## v1.7 Formula Micro-Polish (Shipped: 2026-04-08)
 
 **Phases completed:** 1 phase (25), 8 commits, +313/-95 diff across 13 files
