@@ -4,11 +4,13 @@
   import GlucoseTitrationGrid from './GlucoseTitrationGrid.svelte';
   import NumericInput from '$lib/shared/components/NumericInput.svelte';
   import config from './gir-config.json';
-  import type { GirInputRanges } from './types.js';
+  import type { GirInputRanges, GlucoseBucket } from './types.js';
   import { AlertTriangle, Info } from '@lucide/svelte';
 
   const inputs = config.inputs as GirInputRanges;
-  const buckets = config.glucoseBuckets;
+  // JSON import is inferred as `string` for `id`; re-narrow to the discriminated
+  // union on the type side. Runtime shape is identical — this is type-only.
+  const buckets = config.glucoseBuckets as unknown as GlucoseBucket[];
 
   let result = $derived(calculateGir(girState.current, buckets));
 
