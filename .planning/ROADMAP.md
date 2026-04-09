@@ -78,7 +78,9 @@ See individual milestone archives for phase details.
   3. `girState` singleton persists `weightKg`, `dextrosePct`, `mlPerKgPerDay`, and `selectedBucketId` to sessionStorage under key `nicu_gir_state` with `init/persist/reset` matching the Morphine pattern
   4. Input normalization (trim whitespace, locale comma → decimal point) is implemented and unit-tested for EPIC paste tolerance
   5. `pnpm test` is green; no Svelte component or route code exists yet (pure headless gate)
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 26-01-PLAN.md — Types, config, parity fixtures, pure calculations (CORE-02, CORE-03, SAFE-05, ARCH-04, TEST-01, TEST-03)
+- [ ] 26-02-PLAN.md — Input normalization helper + girState rune singleton (ARCH-04, SAFE-05, TEST-01)
 
 ### Phase 27: GIR UI, Identity & Registration
 **Goal**: A clinician can navigate to the GIR tab, enter weight / dextrose % / ml/kg/day, see the Current GIR + Initial rate hero update live, and select a glucose range from an accessible 6-row titration grid that drives a target-guidance hero — all wearing a distinct third identity hue.
