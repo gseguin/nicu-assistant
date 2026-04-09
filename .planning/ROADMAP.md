@@ -10,6 +10,7 @@
 - [v1.5 Tab Identity & Search](milestones/v1.5-ROADMAP.md) - Phases 18-20 (shipped 2026-04-07)
 - [v1.6 Toggle & Harden](milestones/v1.6-ROADMAP.md) - Phases 21-24 (shipped 2026-04-08)
 - [v1.7 Formula Micro-Polish](milestones/v1.7-ROADMAP.md) - Phase 25 (shipped 2026-04-08)
+- **v1.8 GIR Calculator — Phases 26-28 (active, started 2026-04-09)**
 
 ## Phases
 
@@ -22,231 +23,102 @@ Decimal phases appear between their surrounding integers in numeric order.
 <details>
 <summary>v1.0 MVP (Phases 1-4) - SHIPPED 2026-04-01</summary>
 
-- [x] **Phase 1: Foundation** - SvelteKit scaffold, design system tokens, theme system, and responsive navigation shell
-- [x] **Phase 2: Shared Components** - Unified SelectPicker, NumericInput, ResultsDisplay, DisclaimerModal, and AboutSheet
-- [x] **Phase 3: Calculators** - PERT and formula calculators ported into the unified shell with cross-calculator state behavior
-- [x] **Phase 4: PWA & Offline** - Service worker, manifest, offline validation, update notifications, and install prompt
+- [x] **Phase 1: Foundation**
+- [x] **Phase 2: Shared Components**
+- [x] **Phase 3: Calculators**
+- [x] **Phase 4: PWA & Offline**
 
 </details>
 
 <details>
 <summary>v1.1 Morphine Wean Calculator (Phases 5-6) - SHIPPED 2026-04-02</summary>
 
-- [x] **Phase 5: Morphine Wean Calculator** - Remove PERT calculator and build morphine wean calculator with linear and compounding modes
-- [x] **Phase 6: Quality & Accessibility** - Unit tests for both calculation modes and accessibility validation
+- [x] **Phase 5: Morphine Wean Calculator**
+- [x] **Phase 6: Quality & Accessibility**
 
 </details>
 
 <details>
 <summary>v1.2 UI Polish (Phases 7-8) - SHIPPED 2026-04-07</summary>
 
-- [x] **Phase 7: Navigation Restructure** - Move info and theme buttons to title bar; calculator tabs fill full mobile width
-- [x] **Phase 8: Impeccable Critique & Polish** - Visual assessment via Impeccable commands and implementation of all recommendations
+- [x] **Phase 7: Navigation Restructure**
+- [x] **Phase 8: Impeccable Critique & Polish**
 
 </details>
 
 <details>
-<summary>v1.3 Fortification Calculator Refactor (Phases 9-11) - SHIPPED 2026-04-07</summary>
+<summary>v1.3-v1.7 (Phases 9-25) - SHIPPED</summary>
 
-See [milestones/v1.3-ROADMAP.md](milestones/v1.3-ROADMAP.md) for full archive.
-
-</details>
-
-<details>
-<summary>v1.4 UI Polish (Phases 12-17) - SHIPPED 2026-04-07</summary>
-
-See [milestones/v1.4-ROADMAP.md](milestones/v1.4-ROADMAP.md) for full archive.
+See individual milestone archives under `milestones/`.
 
 </details>
 
-### v1.5 Tab Identity & Search (Phases 18-20)
+### v1.8 GIR Calculator (Phases 26-28)
 
-- [x] **v1.5 shipped 2026-04-07** — see [milestones/v1.5-ROADMAP.md](milestones/v1.5-ROADMAP.md)
+- [ ] **Phase 26: GIR Foundation** — Types, config JSON, pure calculations, state singleton with spreadsheet-parity tests (headless, zero UI)
+- [ ] **Phase 27: GIR UI, Identity & Registration** — GlucoseTitrationGrid radiogroup, GirCalculator composition, `/gir` route, registry entry, `.identity-gir` OKLCH block
+- [ ] **Phase 28: GIR A11y, E2E & Ship** — Playwright E2E + axe sweeps (light/dark/focus/advisory/selected), OKLCH tuning, AboutSheet entry, 1.8.0 bump
 
 ## Phase Details
 
 <details>
-<summary>v1.0 MVP (Phases 1-4) - SHIPPED 2026-04-01</summary>
+<summary>v1.0-v1.7 — Phases 1-25 (shipped)</summary>
 
-### Phase 1: Foundation
-**Goal**: Clinicians can open the app, see a responsive nav shell, toggle dark/light theme without a flash, and navigate between placeholder calculator routes
-**Depends on**: Nothing (first phase)
-**Requirements**: DS-01, DS-02, DS-03, DS-04, DS-05, NAV-01, NAV-02, NAV-03, NAV-04, NAV-05
-**Success Criteria** (what must be TRUE):
-  1. The app loads with the correct theme (dark or light) on first paint — no white flash in dark mode
-  2. On a mobile viewport the bottom tab bar is visible with icon and text label per calculator; on desktop a top nav bar appears instead
-  3. Active tab is visually distinct and screen-reader-announced when the user navigates between routes
-  4. The dark/light theme toggle persists across page reloads
-  5. The design token file defines Clinical Blue, BMF Amber, and slate neutrals; Plus Jakarta Sans is loaded; all interactive elements meet 48px touch target and WCAG 2.1 AA contrast in both themes
-**Plans**: 3 plans
-
-Plans:
-- [x] 01-01-PLAN.md — SvelteKit scaffold + dependency installation + build config
-- [x] 01-02-PLAN.md — Unified design token system (app.html FOUC script + app.css OKLCH tokens)
-- [x] 01-03-PLAN.md — Responsive nav shell (theme module, registry, NavShell, layout, placeholder routes)
-
-### Phase 2: Shared Components
-**Goal**: A complete, tested shared component library is available for both calculators to consume without duplication or component divergence
-**Depends on**: Phase 1
-**Requirements**: SC-01, SC-02, SC-03, SC-04, SC-05, SC-06
-**Success Criteria** (what must be TRUE):
-  1. The medical disclaimer modal appears on first load, cannot be dismissed without acknowledgment, and does not reappear on subsequent visits
-  2. SelectPicker opens via keyboard and touch, supports grouped options, and navigates options with arrow keys; scroll does not leak to the page behind it
-  3. NumericInput accepts decimal values, enforces min/max bounds, and surfaces an inline error rather than silently accepting invalid input
-  4. ResultsDisplay announces updated values to screen readers via an aria-live region
-  5. All shared components render correctly in both dark and light themes without hardcoded color values
-**Plans**: 5 plans
-
-Plans:
-- [x] 02-01-PLAN.md — Install bits-ui + dev deps; foundation files (disclaimer singleton, types, context helpers, barrel index)
-- [x] 02-02-PLAN.md — SelectPicker.svelte (bits-ui Select, grouped/flat options, keyboard nav, scroll lock)
-- [x] 02-03-PLAN.md — DisclaimerModal.svelte (bits-ui Dialog, non-dismissable) + wire +layout.svelte
-- [x] 02-04-PLAN.md — NumericInput.svelte + ResultsDisplay.svelte (ports from formula-calculator with token migration)
-- [x] 02-05-PLAN.md — AboutSheet.svelte + integration tests + visual checkpoint
-
-### Phase 3: Calculators
-**Goal**: Both PERT and formula calculators are fully functional inside the unified app with feature parity to their standalone predecessors and isolated, preserved state across tab switches
-**Depends on**: Phase 2
-**Requirements**: PERT-01, PERT-02, PERT-03, PERT-04, PERT-05, FORM-01, FORM-02, FORM-03, FORM-04, FORM-05, CC-01, CC-02, CC-03
-**Success Criteria** (what must be TRUE):
-  1. PERT meal mode and tube-feed mode each produce correct capsule counts for all FDA medication brands; switching between modes preserves both states
-  2. Formula modified mode and BMF mode each produce correct water mL and powder gram outputs; dispensing measures appear when available
-  3. Switching from PERT to formula (or back) via the nav bar does not clear or corrupt the calculator the user left
-  4. Entering an invalid or empty value in any numeric field blocks calculation and shows an inline error — no silent zero-substitution
-  5. Formula components render correctly in dark mode (BMF Amber and Clinical Blue tokens, no hardcoded OKLCH literals)
-**Plans**: 4 plans
-
-Plans:
-- [x] 03-01-PLAN.md — Copy PERT + formula business logic into src/lib/pert/ and src/lib/formula/; create pertState and formulaState sessionStorage singletons
-- [x] 03-02-PLAN.md — Port PERT DosingCalculator.svelte (meal + tube-feed modes, shared components, state wiring); wire /pert route
-- [x] 03-03-PLAN.md — Port formula FormulaCalculator + ModifiedFormulaCalculator + BreastMilkFortifierCalculator (dark mode tokens, shared components, state wiring); wire /formula route
-- [x] 03-04-PLAN.md — Unit tests for PERT and formula calculation functions; visual checkpoint
-
-### Phase 4: PWA & Offline
-**Goal**: The app installs to the home screen, operates fully offline, and notifies clinicians when a new version with updated clinical data is available
-**Depends on**: Phase 3
-**Requirements**: PWA-01, PWA-02, PWA-03, PWA-04
-**Success Criteria** (what must be TRUE):
-  1. The app loads and all calculations work with DevTools network set to Offline after first visit
-  2. The app is installable (Add to Home Screen / browser install prompt available) and launches in standalone mode without browser chrome
-  3. When a new service worker is detected, a visible update banner appears; the app does not silently reload during an active calculation session
-  4. The web app manifest includes correct icons (192px, 512px, 180px apple-touch), standalone display mode, and correct start URL
-**Plans**: 2 plans
-
-Plans:
-- [x] 04-01-PLAN.md — Install @vite-pwa/sveltekit; SvelteKitPWA plugin config (Workbox precaching, manifest, icons); pwa.svelte.ts singleton; placeholder icons
-- [x] 04-02-PLAN.md — UpdateBanner.svelte + +layout.svelte wiring (SW registration, idle detection, auto-reload)
+See individual milestone archives for phase details.
 
 </details>
 
-<details>
-<summary>v1.1 Morphine Wean Calculator (Phases 5-6) - SHIPPED 2026-04-02</summary>
-
-### Phase 5: Morphine Wean Calculator
-**Goal**: Clinicians can access a morphine weaning calculator from the app nav, enter patient parameters, choose a weaning mode, and see a complete step-by-step dose reduction schedule
-**Depends on**: Phase 4
-**Requirements**: MORPH-01, MORPH-02, MORPH-03, MORPH-04, MORPH-05, INT-01, INT-02, INT-03
+### Phase 26: GIR Foundation
+**Goal**: Spreadsheet parity is locked for the GIR calculation engine before any UI is built — types, config, pure functions, and state singleton are headless, tested, and ready for composition.
+**Depends on**: Phase 25 (v1.7 shipped)
+**Requirements**: CORE-02, CORE-03, SAFE-05, ARCH-04 (module scaffolding for `types.ts`, `gir-config.json`, `gir-config.ts`, `calculations.ts`, `state.svelte.ts`), TEST-01, TEST-03
 **Success Criteria** (what must be TRUE):
-  1. PERT calculator is completely removed — no PERT route, no PERT nav entry, no PERT business logic remains in the codebase
-  2. Morphine wean calculator appears in the nav bar and navigates to a functional calculator page
-  3. User can enter dosing weight (kg), max morphine dose (mg/kg/dose), and % decrease per step using the existing NumericInput components
-  4. User can switch between Linear and Compounding weaning modes; Linear subtracts a fixed mg amount each step, Compounding multiplies the previous dose by (1 - decreasePct) each step
-  5. A step-by-step weaning schedule table displays step number, dose (mg), dose (mg/kg/dose), and reduction amount (mg) for all steps until the dose reaches zero or near-zero
-**Plans**: 2 plans
+  1. `calculateCurrentGir` and `calculateInitialRateMlHr` return values matching the `GIR-Wean-Calculator.xlsx` CALC tab within ~1% epsilon across all 6 glucose buckets × all formula columns, using exact `10/60` and `1/144` constants (not spreadsheet's truncated `0.167`/`0.0069`)
+  2. `gir-config.json` defines defaults, `inputs` ranges (weightKg, dextrosePct, mlPerKgPerDay), and 6 `glucoseBuckets` with `targetGirDelta` values; a config shape test locks the structure
+  3. `girState` singleton persists `weightKg`, `dextrosePct`, `mlPerKgPerDay`, and `selectedBucketId` to sessionStorage under key `nicu_gir_state` with `init/persist/reset` matching the Morphine pattern
+  4. Input normalization (trim whitespace, locale comma → decimal point) is implemented and unit-tested for EPIC paste tolerance
+  5. `pnpm test` is green; no Svelte component or route code exists yet (pure headless gate)
+**Plans**: TBD
 
-Plans:
-- [x] 05-01-PLAN.md — Remove PERT calculator; create morphine wean business logic, types, state, and update registry/about/types
-- [x] 05-02-PLAN.md — Build MorphineWeanCalculator UI component with mode tabs, NumericInput fields, schedule display, and route page
-
-### Phase 6: Quality & Accessibility
-**Goal**: The morphine wean calculator is verified against known spreadsheet values and meets the app's established accessibility standards
-**Depends on**: Phase 5
-**Requirements**: QA-01, QA-02
+### Phase 27: GIR UI, Identity & Registration
+**Goal**: A clinician can navigate to the GIR tab, enter weight / dextrose % / ml/kg/day, see the Current GIR + Initial rate hero update live, and select a glucose range from an accessible 6-row titration grid that drives a target-guidance hero — all wearing a distinct third identity hue.
+**Depends on**: Phase 26
+**Requirements**: CORE-01, CORE-04, CORE-05, TITR-01, TITR-02, TITR-03, TITR-04, TITR-05, TITR-06, TITR-07, TITR-08, SAFE-01, SAFE-02, SAFE-03, SAFE-04, REF-01, ARCH-01, ARCH-02, ARCH-03, ARCH-04 (UI surfaces `GirCalculator.svelte`, `GlucoseTitrationGrid.svelte`), ARCH-05, ARCH-06
 **Success Criteria** (what must be TRUE):
-  1. Unit tests pass for both linear and compounding calculation functions using known input/output pairs from the reference spreadsheet
-  2. All morphine wean calculator inputs and the schedule table are keyboard-navigable, have appropriate ARIA labels, and meet WCAG 2.1 AA contrast in both themes
-  3. Touch targets on the morphine wean calculator are at least 48px and the interface is usable one-handed on mobile
-**Plans**: 2 plans
-
-Plans:
-- [x] 06-01-PLAN.md — Spreadsheet parity unit tests + MorphineWeanCalculator component tests
-- [x] 06-02-PLAN.md — Playwright axe-core WCAG 2.1 AA accessibility audit (light + dark themes)
-
-</details>
-
-<details>
-<summary>v1.2 UI Polish (Phases 7-8) - SHIPPED 2026-04-07</summary>
-
-### Phase 7: Navigation Restructure
-**Goal**: Calculator tab buttons occupy the full width of the bottom nav on mobile, because info and theme controls have moved to the top title bar
-**Depends on**: Phase 6
-**Requirements**: NAV-06, NAV-07, NAV-08, NAV-09
-**Success Criteria** (what must be TRUE):
-  1. On mobile, the bottom tab bar contains only calculator tabs (Morphine Wean, Formula) and they stretch to fill the full viewport width
-  2. The top title bar displays the app name, an info (about) button, and a theme toggle button on both mobile and desktop viewports
-  3. Info button in the title bar opens the AboutSheet and theme toggle switches between dark and light mode — same behavior as before, new location
-  4. On desktop, the top nav bar contains the app name, calculator tabs, info button, and theme toggle — all accessible and functional
-**Plans**: 1 plan
-
-Plans:
-- [x] 07-01-PLAN.md — Restructure NavShell: top title bar with app name + info + theme; tab-only bottom nav on mobile; desktop tabs in top bar
-
-### Phase 8: Impeccable Critique & Polish
-**Goal**: The app's visual hierarchy, layout, and UX quality meet professional standards validated by systematic critique and iterative polish
-**Depends on**: Phase 7
-**Requirements**: UX-01, UX-02, UX-03
-**Success Criteria** (what must be TRUE):
-  1. An Impeccable /critique assessment has been run against the live dev server and all findings are documented
-  2. All actionable recommendations from the critique are implemented in the codebase
-  3. All suggested follow-up Impeccable commands (e.g., /polish, /typeset, /arrange) have been run and their recommendations implemented
-  4. The app visually passes a final inspection — consistent spacing, clear visual hierarchy, and no layout issues across mobile and desktop
-**Plans**: 2 plans
+  1. GIR appears as the third tab (appended after Morphine and Formula) in both mobile and desktop nav; route `/gir` composes `<GirCalculator />` inside an `identity-gir` wrapper and initializes `girState` on mount
+  2. With valid inputs, the hero displays Current GIR in mg/kg/min and Initial rate in mL/hr, triggers `.animate-result-pulse` on change, and carries `aria-live="polite"` + `aria-atomic="true"`; with any invalid/empty input, the hero shows an empty-state message (no NaN/∞/ghost zeros)
+  3. `GlucoseTitrationGrid` renders 6 rows with `role="radiogroup"` + per-row `role="radio"` semantics, roving tabindex, arrow/Home/End/Space/Enter keyboard nav, no default selection, "If current glucose is…" framing, an institutional-helper disclaimer, and ▲/▼ glyphs + explicit "(increase)"/"(decrease)" labels on Δ rate (never color alone); ≤0 Target GIR displays "0 mg/kg/min — consider stopping infusion"
+  4. Selected bucket is highlighted via `--color-identity-hero` (not opacity) and drives a target-guidance hero below the grid; at <480px the grid stacks as 88px+ tappable cards, at ≥480px as a table with 48px+ rows — all 6 rows always visible, no horizontal scroll
+  5. Dextrose % > 12.5 shows a prominent amber-toned "requires central venous access" advisory (visually stronger than the grey range hint); Current GIR > 12 and < 4 each surface their respective advisories; all three inputs source advisory min/max from `gir-config.json` with both `showRangeHint` and `showRangeError` enabled (advisory-only, no clamp); a static population reference card (IDM/LGA 3–5, IUGR 5–7, Preterm/NPO 4–6) is visible inline
+  6. `.identity-gir` is added to `src/app.css` with literal `oklch(...)` values (hue ~145 dextrose green) for both light and dark, the `identityClass` union is extended to include `'identity-gir'`, and no shared component (`NumericInput`, `ResultsDisplay`, `NavShell`, `AboutSheet`, `DisclaimerModal`, `SegmentedToggle`) receives any new prop for v1.8
+**Plans**: TBD
 **UI hint**: yes
 
-Plans:
-- [x] 08-01-PLAN.md — Run Impeccable /critique, document findings, implement all P0/P1/P2 recommendations
-- [x] 08-02-PLAN.md — Run follow-up Impeccable commands (/polish, /typeset, /arrange, etc.) and implement their recommendations
-
-</details>
-
-<details>
-<summary>v1.5 — Phases 18-20 (shipped 2026-04-07)</summary>
-
-See [milestones/v1.5-ROADMAP.md](milestones/v1.5-ROADMAP.md) for full phase details, accomplishments, and commits.
-
-</details>
+### Phase 28: GIR A11y, E2E & Ship
+**Goal**: GIR ships clinical-grade — Playwright covers the happy-path flow and every axe variant passes in both themes, identity OKLCH is tuned if needed, AboutSheet cites authoritative sources, and the app version reflects the shipped milestone.
+**Depends on**: Phase 27
+**Requirements**: TEST-02, TEST-04, TEST-05, TEST-06, DOC-01, DOC-02, DOC-03
+**Success Criteria** (what must be TRUE):
+  1. Component tests for `GirCalculator` and `GlucoseTitrationGrid` cover empty-state, valid-input flow, bucket selection, full keyboard navigation (↑/↓/Home/End/Space/Enter), and Δ-rate glyph rendering
+  2. `tests/e2e/gir.spec.ts` covers the happy-path flow (enter inputs → hero updates → select bucket → target hero updates) on both mobile and desktop viewports
+  3. `tests/e2e/gir-a11y.spec.ts` runs axe-core in light and dark modes with focus-ring-visible, advisory-message, and selected-bucket variants; the overall project a11y sweep count is updated and all sweeps are green — with OKLCH values tuned literally in `src/app.css` if axe flags contrast (pre-empting the v1.5 Phase 20 Morphine repeat)
+  4. All three `NumericInput` fields carry `inputmode="decimal"` (not `"numeric"`), asserted by a Playwright test for iOS decimal-keyboard compatibility
+  5. `AboutSheet` gains a GIR entry citing `GIR-Wean-Calculator.xlsx` plus at least one authoritative source (MDCalc or Hawkes *J Perinatol* PMC7286731), explicitly noting the titration protocol is institutional; `package.json` is bumped to `1.8.0` and the About dialog reflects it; `.planning/PROJECT.md` Validated list is updated with v1.8 entries
+**Plans**: TBD
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order. v1.5 begins at Phase 18.
+Phases execute in numeric order. v1.8 begins at Phase 26.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 1. Foundation | v1.0 | 3/3 | Complete | 2026-04-01 |
-| 2. Shared Components | v1.0 | 5/5 | Complete | 2026-04-01 |
-| 3. Calculators | v1.0 | 4/4 | Complete | 2026-04-01 |
-| 4. PWA & Offline | v1.0 | 2/2 | Complete | 2026-04-01 |
-| 5. Morphine Wean Calculator | v1.1 | 2/2 | Complete | 2026-04-02 |
-| 6. Quality & Accessibility | v1.1 | 2/2 | Complete | 2026-04-02 |
-| 7. Navigation Restructure | v1.2 | 1/1 | Complete   | 2026-04-02 |
-| 8. Impeccable Critique & Polish | v1.2 | 2/2 | Complete | 2026-04-07 |
-| 9-11. v1.3 Fortification Refactor | v1.3 | — | Complete | 2026-04-07 |
-| 12-17. v1.4 UI Polish | v1.4 | — | Complete | 2026-04-07 |
-| 18-20. v1.5 Tab Identity & Search | v1.5 | 5/5 | Complete | 2026-04-07 |
-| 21-24. v1.6 Toggle & Harden | v1.6 | 5/5 | Complete | 2026-04-08 |
-| 25. v1.7 Formula Micro-Polish | v1.7 | 1/1 | Complete | 2026-04-08 |
-
-<details>
-<summary>v1.7 — Phase 25 (shipped 2026-04-08)</summary>
-
-See [milestones/v1.7-ROADMAP.md](milestones/v1.7-ROADMAP.md) for full details.
-
-</details>
-
-<details>
-<summary>v1.6 — Phases 21-24 (shipped 2026-04-08)</summary>
-
-See [milestones/v1.6-ROADMAP.md](milestones/v1.6-ROADMAP.md) for full phase details, accomplishments, and commits.
-
-</details>
+| 1-8 | v1.0-v1.2 | — | Complete | 2026-04-07 |
+| 9-11 | v1.3 | — | Complete | 2026-04-07 |
+| 12-17 | v1.4 | — | Complete | 2026-04-07 |
+| 18-20 | v1.5 | 5/5 | Complete | 2026-04-07 |
+| 21-24 | v1.6 | 5/5 | Complete | 2026-04-08 |
+| 25 | v1.7 | 1/1 | Complete | 2026-04-08 |
+| 26. GIR Foundation | v1.8 | 0/? | Not started | - |
+| 27. GIR UI, Identity & Registration | v1.8 | 0/? | Not started | - |
+| 28. GIR A11y, E2E & Ship | v1.8 | 0/? | Not started | - |

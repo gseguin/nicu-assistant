@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.8
 milestone_name: GIR Calculator
-current_phase: null
-status: defining_requirements
-stopped_at: v1.8 started 2026-04-09; gathering requirements
+current_phase: 26
+status: roadmap_ready
+stopped_at: v1.8 roadmap created 2026-04-09; ready to plan Phase 26
 last_updated: "2026-04-09T00:00:00.000Z"
 last_activity: 2026-04-09
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -19,27 +19,29 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-07)
+See: .planning/PROJECT.md (updated 2026-04-09)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.8 GIR Calculator — defining requirements
+**Current focus:** v1.8 GIR Calculator — roadmap ready, Phase 26 next
 
 ## Current Position
 
 Milestone: v1.8 — GIR Calculator
-Phase: Not started (defining requirements)
+Phase: 26 — GIR Foundation (not started)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-09 — Milestone v1.8 started
+Status: Roadmap ready, awaiting `/gsd-plan-phase 26`
+Last activity: 2026-04-09 — Roadmap drafted (3 phases, 27 reqs, 100% coverage)
 
-Progress: [          ] 0% (0/0 phases)
+Progress: [          ] 0% (0/3 phases)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed (all milestones): 33
-- v1.5: 5 plans across 3 phases, 18 commits, +3030/-47 diff
+- Total plans completed (all milestones): 34
+- v1.7: 1 plan (Phase 25), 8 commits, +313/-95
+- v1.6: 5 plans across 4 phases, 20 commits
+- v1.5: 5 plans across 3 phases, 18 commits, +3030/-47
 
 ## Accumulated Context
 
@@ -48,12 +50,14 @@ Progress: [          ] 0% (0/0 phases)
 - [v1.4]: `.impeccable.md` is the design contract authority for all polish work
 - [v1.4]: SelectPicker rewritten to native `<dialog>` with custom Svelte 5 component (not bits-ui)
 - [v1.4]: Dark-mode OKLCH token bumps for WCAG 2.1 AA contrast
-- [v1.4]: NumericInput `transition:slide` guarded via PREFERS_REDUCED_MOTION constant read at module load
-- [v1.5]: Tab identity scoped to exactly 4 surfaces; shell chrome neutral; BMF Amber stays scoped to fortifier mode
-- [v1.6]: SegmentedToggle is for 2-4 option choices only; SelectPicker stays for N-of-many. No replacement of SelectPicker itself.
-- [v1.6]: NumericInput min/max is advisory only — never auto-clamp the user's input.
-- [Phase 23]: Shared .animate-result-pulse lives in src/app.css; untrack() guards the Formula calcKey write
-- [Phase 24]: No OKLCH tuning required — all v1.6 surfaces passed AA on first sweep
+- [v1.5]: Tab identity scoped to exactly 4 surfaces; shell chrome neutral; BMF Amber scoped to fortifier mode
+- [v1.6]: SegmentedToggle is for 2-4 option choices only; SelectPicker stays for N-of-many
+- [v1.6]: NumericInput min/max is advisory only — never auto-clamp
+- [v1.8]: GIR titration uses `role="radiogroup"` NOT SegmentedToggle (6 rows, single-select, per-row data)
+- [v1.8]: Exact constants `10/60` and `1/144` in code — spreadsheet parity tests allow ~1% epsilon
+- [v1.8]: Identity hue ~145 dextrose green, literal `oklch(95% 0.04 145)` pattern — axe BEFORE PR to avoid Phase 20 Morphine repeat
+- [v1.8]: GIR appended to end of registry (preserves muscle memory)
+- [v1.8]: Glucose mg/dL only; dextrose as percent literal; zero new runtime deps
 
 ### Pending Todos
 
@@ -65,6 +69,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-08T15:52:42.109Z
-Stopped at: Completed 24-01-PLAN.md
-Resume file: None
+Last session: 2026-04-09
+Stopped at: v1.8 ROADMAP.md written; next step `/gsd-plan-phase 26`
+Resume file: .planning/ROADMAP.md

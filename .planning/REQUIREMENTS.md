@@ -90,4 +90,41 @@
 
 ## Traceability
 
-Populated by the roadmapper in ROADMAP.md. Each requirement above will map to exactly one phase.
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| CORE-01 | Phase 27 | Pending |
+| CORE-02 | Phase 26 | Pending |
+| CORE-03 | Phase 26 | Pending |
+| CORE-04 | Phase 27 | Pending |
+| CORE-05 | Phase 27 | Pending |
+| TITR-01 | Phase 27 | Pending |
+| TITR-02 | Phase 27 | Pending |
+| TITR-03 | Phase 27 | Pending |
+| TITR-04 | Phase 27 | Pending |
+| TITR-05 | Phase 27 | Pending |
+| TITR-06 | Phase 27 | Pending |
+| TITR-07 | Phase 27 | Pending |
+| TITR-08 | Phase 27 | Pending |
+| SAFE-01 | Phase 27 | Pending |
+| SAFE-02 | Phase 27 | Pending |
+| SAFE-03 | Phase 27 | Pending |
+| SAFE-04 | Phase 27 | Pending |
+| SAFE-05 | Phase 26 | Pending |
+| REF-01  | Phase 27 | Pending |
+| ARCH-01 | Phase 27 | Pending |
+| ARCH-02 | Phase 27 | Pending |
+| ARCH-03 | Phase 27 | Pending |
+| ARCH-04 | Phase 26 + 27 (module scaffolded in 26, UI files added in 27) | Pending |
+| ARCH-05 | Phase 27 | Pending |
+| ARCH-06 | Phase 27 | Pending |
+| TEST-01 | Phase 26 | Pending |
+| TEST-02 | Phase 28 | Pending |
+| TEST-03 | Phase 26 | Pending |
+| TEST-04 | Phase 28 | Pending |
+| TEST-05 | Phase 28 | Pending |
+| TEST-06 | Phase 28 | Pending |
+| DOC-01  | Phase 28 | Pending |
+| DOC-02  | Phase 28 | Pending |
+| DOC-03  | Phase 28 | Pending |
+
+**Coverage:** 34/34 requirements mapped ✓
