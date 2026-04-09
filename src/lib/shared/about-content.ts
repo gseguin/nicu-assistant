@@ -34,4 +34,16 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       "Results must be verified against your institution's feeding protocol.",
     ],
   },
+  gir: {
+    title: 'Glucose Infusion Rate',
+    version: appVersion,
+    description:
+      'Calculates Current GIR (mg/kg/min) and Initial infusion rate (ml/hr) from Weight, Dextrose %, and Fluid order, with a 6-bucket glucose-driven titration helper (Target GIR / Target rate / Δ rate).',
+    notes: [
+      'Formula: Current GIR = (Dex% × rate ml/hr × 10) / (Weight × 60); Initial rate = (Weight × ml/kg/day) / 24.',
+      'Source spreadsheet: GIR-Wean-Calculator.xlsx (CALC tab). Formula validated against MDCalc and Hawkes et al., J Perinatol 2020 (PMC7286731).',
+      "The 6-bucket titration adjustment values are an institutional protocol — verify against your unit's own protocol before acting.",
+      'Dextrose >12.5% requires central venous access. GIR >12 mg/kg/min warrants hyperinsulinism workup.',
+    ],
+  },
 };
