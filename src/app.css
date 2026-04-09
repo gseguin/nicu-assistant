@@ -213,6 +213,6 @@
   .dark .identity-gir,
   [data-theme="dark"] .identity-gir {
     --color-identity:      oklch(82% 0.10 145);
-    --color-identity-hero: oklch(28% 0.05 145);
+    --color-identity-hero: oklch(22% 0.045 145);
   }
 }
