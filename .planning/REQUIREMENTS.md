@@ -1,0 +1,57 @@
+# Requirements: NICU Assistant — v1.11 Morphine Mode Removal
+
+**Milestone goal:** Remove the linear/compounding mode toggle from the Morphine Wean calculator. The xlsx Sheet1 (`morphine-wean-calculator.xlsx`) is the single source of truth and uses only the linear formula.
+
+## Source-of-truth audit (2026-04-09)
+
+Inspected `morphine-wean-calculator.xlsx` Sheet1. Inputs: dosing weight (B3), max dose mg/kg/dose (B4), % decrease per step (B5). Schedule rows 15–24 (10 steps).
+
+**Authoritative formula (B15..B24):**
+- Step 1: `B15 = D15 * $B$4` → initial dose = weight × maxDose
+- Step N>1: `B[n] = B[n-1] - ($D$15 * $B$4 * $B$5)` → previous − (weight × maxDose × decreasePct)
+
+Calculated values verified for weight=3.1, max=0.04, dec=0.1: every step drops by exactly 0.0124 mg (= 3.1 × 0.04 × 0.1) — **fixed reduction = linear weaning**.
+
+**Conclusion:**
+- The spreadsheet does **not** implement compounding (% of current dose). Compounding is a code-only divergence from the source of truth and must be removed.
+- Current `calculateLinearSchedule()` in `src/lib/morphine/calculations.ts` already matches the spreadsheet formula exactly. **No math changes required** — this is a deletion + simplification milestone.
+
+## v1.11 Requirements
+
+### Calculator simplification
+
+- [ ] **MORPH-01**: User no longer sees a Linear/Compounding mode toggle in the Morphine Wean calculator UI.
+- [ ] **MORPH-02**: User sees a single weaning schedule that matches `morphine-wean-calculator.xlsx` Sheet1 row-by-row (linear formula).
+
+### Code cleanup
+
+- [ ] **MORPH-03**: `WeanMode` type, `mode` state field, and `compounding` config block are removed from `src/lib/morphine/`.
+- [ ] **MORPH-04**: `calculateCompoundingSchedule()` and its tests are deleted.
+- [ ] **MORPH-05**: `MorphineWeanCalculator.svelte` no longer renders the SegmentedToggle for mode; layout reflows cleanly with no dead space.
+
+### Tests + parity
+
+- [ ] **MORPH-06**: Spreadsheet-parity unit tests assert row-by-row against `morphine-wean-calculator.xlsx` Sheet1 (10 steps, ~1% epsilon consistent with prior parity tests).
+- [ ] **MORPH-07**: All existing component, E2E, and 16/16 axe sweeps remain green.
+
+### Documentation + release
+
+- [ ] **MORPH-08**: AboutSheet copy for Morphine Wean updated to remove any reference to two modes.
+- [ ] **MORPH-09**: `package.json` bumped to `1.11.0`; PROJECT.md Validated list updated; v1.10 GIR-DOCK retired entries unchanged.
+
+## Future Requirements
+
+_None._
+
+## Out of Scope
+
+- UI redesign of Morphine Wean beyond toggle removal (only minor reflow allowed if removal leaves dead space)
+- Changes to Formula or GIR calculators
+- Any new clinical data, ranges, or advisories
+- New dependencies
+
+## Traceability
+
+| REQ-ID | Phase |
+|--------|-------|
+| MORPH-01..09 | Phase 35 |

@@ -98,7 +98,17 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-_No active requirements — next milestone to be defined via `/gsd-new-milestone`._
+**Milestone v1.11: Morphine Mode Removal — Single Source of Truth**
+
+Goal: Remove the linear/compounding mode toggle from the Morphine Wean calculator. The xlsx Sheet1 (`morphine-wean-calculator.xlsx`) is the single source of truth and uses only the linear formula (verified: step N = previous − weight×maxDose×decreasePct).
+
+Target features:
+- Remove `WeanMode` type, mode toggle UI, and `compounding` mode from `morphine-config.json`
+- Delete `calculateCompoundingSchedule()` and its tests
+- Simplify state singleton (drop `mode` field)
+- Lock spreadsheet-parity tests against xlsx Sheet1 row-by-row
+- Update AboutSheet copy if it mentions modes
+- Maintain 16/16 axe sweeps green; bump to v1.11.0
 
 ### Out of Scope
 
@@ -172,4 +182,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 — v1.10 GIR Simplification + Dock + Tech Debt milestone shipped*
+*Last updated: 2026-04-09 — v1.11 Morphine Mode Removal milestone started*

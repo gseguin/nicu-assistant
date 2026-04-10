@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.10
-milestone_name: GIR Simplification + Dock + Tech Debt
-status: Awaiting `/gsd-plan-phase 30`
-stopped_at: Completed 29-01-PLAN.md
-last_updated: "2026-04-10T00:50:53.123Z"
-last_activity: 2026-04-10
+milestone: v1.11
+milestone_name: Morphine Mode Removal — Single Source of Truth
+status: Defining requirements
+stopped_at: Milestone v1.11 started
+last_updated: "2026-04-09T00:00:00.000Z"
+last_activity: 2026-04-09
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 3
-  completed_plans: 3
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-04-09)
 
 ## Current Position
 
-Milestone: v1.9 — GIR Titration Hero Swap + Polish
-Phase: 29 — GIR Titration Hero Swap ✓ complete (verification PASS 7/7)
-Plan: 29-01-PLAN.md done
-Status: Awaiting `/gsd-plan-phase 30`
-Last activity: 2026-04-10
+Milestone: v1.11 — Morphine Mode Removal — Single Source of Truth
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-09 — Milestone v1.11 started
 
 ## Performance Metrics
 
