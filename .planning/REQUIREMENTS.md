@@ -106,7 +106,59 @@
 
 ## Traceability
 
-_Phase mapping populated by roadmap step._
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| CORE-01 | Phase 38 | Pending |
+| CORE-02 | Phase 38 | Pending |
+| CORE-03 | Phase 38 | Pending |
+| CORE-04 | Phase 38 | Pending |
+| CORE-05 | Phase 38 | Pending |
+| CORE-06 | Phase 38 | Pending |
+| CORE-07 | Phase 38 | Pending |
+| CORE-08 | Phase 38 | Pending |
+| CORE-09 | Phase 37 | Pending |
+| FREQ-01 | Phase 38 | Pending |
+| FREQ-02 | Phase 38 | Pending |
+| FREQ-03 | Phase 38 | Pending |
+| FREQ-04 | Phase 37 | Pending |
+| FREQ-05 | Phase 38 | Pending |
+| IV-01 | Phase 38 | Pending |
+| IV-02 | Phase 38 | Pending |
+| IV-03 | Phase 38 | Pending |
+| FULL-01 | Phase 38 | Pending |
+| FULL-02 | Phase 38 | Pending |
+| FULL-03 | Phase 38 | Pending |
+| FULL-04 | Phase 37 | Pending |
+| FULL-05 | Phase 37 | Pending |
+| FULL-06 | Phase 37 | Pending |
+| FULL-07 | Phase 37 | Pending |
+| SAFE-01 | Phase 38 | Pending |
+| SAFE-02 | Phase 38 | Pending |
+| SAFE-03 | Phase 38 | Pending |
+| SAFE-04 | Phase 38 | Pending |
+| SAFE-05 | Phase 38 | Pending |
+| SAFE-06 | Phase 37 | Pending |
+| ARCH-01 | Phase 36 | Pending |
+| ARCH-02 | Phase 36 | Pending |
+| ARCH-03 | Phase 36 | Pending |
+| ARCH-04 | Phase 36 | Pending |
+| ARCH-05 | Phase 36 | Pending |
+| ARCH-06 | Phase 36 | Pending |
+| ARCH-07 | Phase 36 | Pending |
+| HUE-01 | Phase 36 | Pending |
+| HUE-02 | Phase 36 | Pending |
+| HUE-03 | Phase 36 | Pending |
+| TEST-01 | Phase 37 | Pending |
+| TEST-02 | Phase 37 | Pending |
+| TEST-03 | Phase 37 | Pending |
+| TEST-04 | Phase 37 | Pending |
+| TEST-05 | Phase 38 | Pending |
+| TEST-06 | Phase 38 | Pending |
+| TEST-07 | Phase 38 | Pending |
+| REL-01 | Phase 39 | Pending |
+| REL-02 | Phase 39 | Pending |
+| REL-03 | Phase 39 | Pending |
+| REL-04 | Phase 39 | Pending |
 
 ---
 
