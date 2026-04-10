@@ -21,7 +21,7 @@ const groupedOptions = [
 ];
 
 function getTrigger(label: string): HTMLButtonElement {
-  return screen.getByRole('button', { name: label }) as HTMLButtonElement;
+  return screen.getByRole('button', { name: new RegExp(`^${label}`) }) as HTMLButtonElement;
 }
 
 describe('SelectPicker', () => {
@@ -35,9 +35,12 @@ describe('SelectPicker', () => {
     render(SelectPicker, { props: { label: 'Fruit', value: 'a', options: flatOptions } });
     const trigger = getTrigger('Fruit');
     expect(trigger.hasAttribute('data-select-trigger')).toBe(true);
-    const labelId = trigger.getAttribute('aria-labelledby');
-    expect(labelId).toBeTruthy();
-    expect(document.getElementById(labelId!)?.textContent).toBe('Fruit');
+    const labelledBy = trigger.getAttribute('aria-labelledby');
+    expect(labelledBy).toBeTruthy();
+    const ids = labelledBy!.split(' ');
+    expect(ids.length).toBe(2);
+    expect(document.getElementById(ids[0])?.textContent).toBe('Fruit');
+    expect(document.getElementById(ids[1])?.textContent).toBe('Apple');
   });
 
   it('T-03 closed state has zero [role="option"] in DOM', () => {

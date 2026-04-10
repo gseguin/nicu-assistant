@@ -25,6 +25,7 @@
 
   const uid = crypto.randomUUID();
   const labelId = `select-${uid}-label`;
+  const valueId = `select-${uid}-value`;
   const dialogTitleId = `${labelId}-title`;
   const listboxId = `select-${uid}-listbox`;
 
@@ -168,7 +169,7 @@
       bind:this={triggerBtn}
       type="button"
       data-select-trigger
-      aria-labelledby={labelId}
+      aria-labelledby="{labelId} {valueId}"
       aria-haspopup={searchable ? 'listbox' : 'dialog'}
       aria-controls={searchable ? listboxId : undefined}
       role={searchable ? 'combobox' : undefined}
@@ -176,7 +177,7 @@
       class="flex min-h-12 w-full items-center justify-between rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-card)] px-3.5 py-2.5 text-left text-[0.9375rem] font-medium text-[var(--color-text-primary)] transition hover:border-[var(--color-identity)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-identity)]"
       onclick={openPicker}
     >
-      <span class="flex-1 truncate">{selectedLabel}</span>
+      <span id={valueId} class="flex-1 truncate">{selectedLabel}</span>
       <ChevronDown
         class="h-4 w-4 shrink-0 text-[var(--color-text-tertiary)]"
         aria-hidden="true"
