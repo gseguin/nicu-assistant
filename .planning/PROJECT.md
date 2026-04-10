@@ -101,7 +101,23 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-_No active requirements — next milestone to be defined via `/gsd-new-milestone`._
+## Current Milestone: v1.12 Feed Advance Calculator
+
+**Goal:** Add a fourth clinical calculator — the Feed Advance Calculator — covering both the bedside feeding advancement view (Sheet2) and the full TPN + enteral total-kcal/kg view (Sheet1) from `nutrition-calculator.xlsx`, with spreadsheet-parity tests locked to both sheets.
+
+**Target features:**
+- Bedside feeding advancement (Sheet2): weight + trophic/advance/goal ml/kg/d inputs → per-feed volumes; trophic frequency dropdown (q4h ÷6 / q3h ÷8, default q4h); advance cadence dropdown (every feed / every other feed / every 3rd feed / twice daily / once daily, default twice daily = ÷2); IV backfill block (total fluids ml/hr − enteral/3 → IV rate)
+- Full nutrition / TPN mode (Sheet1): TPN dextrose + SMOF + enteral → dextrose kcal, IL kcal, enteral kcal, ml/kg, total kcal/kg, auto-advance
+- Registry entry, new `/feeds` route, 4th nav tab, 4th `--color-identity` OKLCH hue (4.5:1 light + dark)
+- Embedded JSON config for clinical input ranges
+- Spreadsheet-parity tests locked row-by-row to Sheet1 AND Sheet2
+- Component + Playwright happy-path + axe-core sweeps light + dark
+- Release v1.12.0
+
+**Key context:**
+- `nutrition-calculator.xlsx` is the sole authoritative source (same pattern as Morphine xlsx Sheet1)
+- Sheet1 and Sheet2 likely become two modes of the calculator via SegmentedToggle — exact UX locked in `/gsd-discuss-phase`
+- Trophic `/6` vs `/8` and advance `/2` in the xlsx become user-selectable dropdowns, not hardcoded
 
 ### Out of Scope
 
@@ -175,4 +191,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.11 Morphine Mode Removal milestone shipped*
+*Last updated: 2026-04-09 — v1.12 Feed Advance Calculator milestone started*

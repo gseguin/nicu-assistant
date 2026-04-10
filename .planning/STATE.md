@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.11
-milestone_name: Morphine Mode Removal — Single Source of Truth
-status: Shipped
-stopped_at: Milestone v1.11 archived
+milestone: v1.12
+milestone_name: Feed Advance Calculator
+status: Defining requirements
+stopped_at: Milestone v1.12 started
 last_updated: "2026-04-09T00:00:00.000Z"
 last_activity: 2026-04-09
 progress:
-  total_phases: 1
-  completed_phases: 1
-  total_plans: 1
-  completed_plans: 1
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -21,15 +21,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-09)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.9 — Phase 30 (Impeccable Polish + Tech Debt Sweep) next
+**Current focus:** v1.12 — Feed Advance Calculator (defining requirements)
 
 ## Current Position
 
-Milestone: v1.11 — Morphine Mode Removal — Single Source of Truth ✓ SHIPPED
-Phase: 35 complete
-Plan: 35-01-PLAN.md done
-Status: Shipped — ready for next milestone via `/gsd-new-milestone`
-Last activity: 2026-04-09 — Milestone v1.11 archived
+Milestone: v1.12 — Feed Advance Calculator
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-09 — Milestone v1.12 started
 
 ## Performance Metrics
 
