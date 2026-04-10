@@ -133,36 +133,19 @@
           <span class="text-ui text-[var(--color-text-tertiary)]">{d.word}</span>
         </div>
       {/if}
-      <div class="grid grid-cols-3 gap-2 text-ui border-t border-[var(--color-border)] pt-2 mt-2">
-        <div>
-          <div class="text-2xs text-[var(--color-text-tertiary)]">Fluids</div>
-          <div class="num text-[var(--color-text-primary)]">{row.targetFluidsMlKgDay.toFixed(0)} ml/kg/d</div>
-        </div>
-        <div>
-          <div class="text-2xs text-[var(--color-text-tertiary)]">Rate</div>
-          <div class="num text-[var(--color-text-primary)]">{row.targetRateMlHr.toFixed(1)} ml/hr</div>
-        </div>
-        <div>
-          <div class="text-2xs text-[var(--color-text-tertiary)]">GIR</div>
-          <div class="num text-[var(--color-text-primary)]">{row.targetGirMgKgMin.toFixed(1)} mg/kg/min</div>
-        </div>
-      </div>
     </div>
   {/each}
 </div>
 
 <!-- Desktop: table grid (≥480px) -->
 <div
-  class="hidden sm:grid grid-cols-[minmax(140px,1.4fr)_1fr_1fr_1fr_1.2fr] gap-x-3 gap-y-1"
+  class="hidden sm:grid grid-cols-[minmax(140px,1.4fr)_1fr] gap-x-3 gap-y-1"
   role="radiogroup"
   aria-label="Glucose range titration helper"
 >
   <!-- Header row (non-interactive) -->
   <div class="text-ui font-semibold text-[var(--color-text-secondary)] px-3 py-2">Range</div>
   <div class="text-ui font-semibold text-[var(--color-text-secondary)] px-3 py-2">Δ rate</div>
-  <div class="text-ui font-semibold text-[var(--color-text-secondary)] px-3 py-2">Target fluids</div>
-  <div class="text-ui font-semibold text-[var(--color-text-secondary)] px-3 py-2">Target rate</div>
-  <div class="text-ui font-semibold text-[var(--color-text-secondary)] px-3 py-2">Target GIR</div>
 
   {#each rows as row, i (row.bucketId)}
     {@const selected = selectedBucketId === row.bucketId}
@@ -183,17 +166,11 @@
     >
       <div class="text-base text-[var(--color-text-primary)]">{labelWithUnit(row)}</div>
       {#if stopInfusion}
-        <div class="col-span-4 text-base font-semibold uppercase tracking-wider text-[var(--color-text-primary)]">STOP <span class="font-normal normal-case tracking-normal text-[var(--color-text-tertiary)]">dextrose infusion</span></div>
+        <div class="col-span-1 text-base font-semibold uppercase tracking-wider text-[var(--color-text-primary)]">STOP <span class="font-normal normal-case tracking-normal text-[var(--color-text-tertiary)]">dextrose infusion</span></div>
       {:else if row.deltaRateMlHr === 0}
         <div class="text-base font-semibold num text-[var(--color-text-tertiary)]" aria-hidden="true">—</div>
-        <div class="text-base num text-[var(--color-text-primary)]">{row.targetFluidsMlKgDay.toFixed(0)} ml/kg/d</div>
-        <div class="text-base num text-[var(--color-text-primary)]">{row.targetRateMlHr.toFixed(1)} ml/hr</div>
-        <div class="text-base num text-[var(--color-text-primary)]">{row.targetGirMgKgMin.toFixed(1)} mg/kg/min</div>
       {:else}
         <div class="text-base font-semibold num text-[var(--color-text-primary)]"><span aria-hidden="true">{d.glyph}</span> {d.abs} ml/hr <span class="text-[var(--color-text-secondary)]">{d.word}</span></div>
-        <div class="text-base num text-[var(--color-text-primary)]">{row.targetFluidsMlKgDay.toFixed(0)} ml/kg/d</div>
-        <div class="text-base num text-[var(--color-text-primary)]">{row.targetRateMlHr.toFixed(1)} ml/hr</div>
-        <div class="text-base num text-[var(--color-text-primary)]">{row.targetGirMgKgMin.toFixed(1)} mg/kg/min</div>
       {/if}
     </div>
   {/each}
