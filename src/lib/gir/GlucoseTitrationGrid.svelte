@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import type { GirTitrationRow } from './types.js';
 
   interface Props {
@@ -19,6 +20,7 @@
   });
 
   let rowRefs: (HTMLDivElement | null)[] = $state([]);
+  let gridContainer: HTMLElement | undefined = $state();
 
   function formatDelta(delta: number): { glyph: string; abs: string; word: string } {
     if (delta > 0) return { glyph: '▲', abs: delta.toFixed(1), word: '(increase)' };
@@ -92,6 +94,7 @@
 
 <!-- Mobile: vertical card stack (<480px) -->
 <div
+  bind:this={gridContainer}
   class="flex flex-col gap-3 sm:hidden"
   role="radiogroup"
   aria-label="Glucose range titration helper"
@@ -102,11 +105,12 @@
     {@const d = formatDelta(row.deltaRateMlHr)}
     <div
       bind:this={rowRefs[i]}
+      data-bucket-index={i}
       role="radio"
       aria-checked={selected}
       aria-label={ariaLabelFor(row)}
       tabindex={i === focusIndex ? 0 : -1}
-      class="card px-4 py-4 min-h-[88px] cursor-pointer outline-none transition-colors
+      class="card px-4 py-4 min-h-[88px] cursor-pointer outline-none transition-colors transition-transform
              focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]
              {row.bucketId === 'severe-neuro' && !selected ? 'border-l-2 border-l-[var(--color-text-tertiary)]' : ''}
              {selected ? 'border-l-4 border-l-[var(--color-identity)] bg-[var(--color-identity-hero)]' : ''}"
