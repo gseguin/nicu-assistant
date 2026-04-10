@@ -55,7 +55,7 @@ See [milestones/v1.11-ROADMAP.md](milestones/v1.11-ROADMAP.md) for full phase de
 
 - [x] **Phase 36: Wave 0 — Scaffolding + Identity Hue** — Extend `CalculatorId` union, registry entry, NavShell ternary, AboutSheet stub, `.identity-feeds` OKLCH token pair, `/feeds` placeholder route. Must compile before anything downstream. (completed 2026-04-10)
 - [x] **Phase 37: Pure Logic + Config + Parity Tests** — Types, `feeds-config.json`, `calculations.ts` with named constants, locked spreadsheet-parity fixtures for Sheet1 (full nutrition) and Sheet2 (bedside advancement), parameter-matrix tests, config shape tests. Gate: vitest green before UI. (completed 2026-04-10)
-- [ ] **Phase 38: UI + State + Component Tests + Route + E2E + A11y** — `FeedAdvanceCalculator.svelte` with SegmentedToggle (Bedside Advancement + Full Nutrition modes), all inputs/dropdowns/outputs, safety advisories, `state.svelte.ts`, component tests, Playwright happy-path E2E, axe-core sweeps (20/20).
+- [x] **Phase 38: UI + State + Component Tests + Route + E2E + A11y** — `FeedAdvanceCalculator.svelte` with SegmentedToggle (Bedside Advancement + Full Nutrition modes), all inputs/dropdowns/outputs, safety advisories, `state.svelte.ts`, component tests, Playwright happy-path E2E, axe-core sweeps (20/20). (completed 2026-04-10)
 - [ ] **Phase 39: Release v1.12.0** — Version bump, PROJECT.md Validated list, app favicon, final gates green.
 
 ## Phase Details
@@ -99,10 +99,10 @@ Plans:
   4. Full Nutrition mode accepts TPN dextrose (two parallel lines), SMOF ml, enteral volume + kcal/oz and shows total kcal/kg/d as the hero value
   5. Safety advisories appear when thresholds are crossed (trophic > advance, dextrose > 12.5%, total kcal/kg/d out of range) without blocking input
   6. Playwright happy-path passes at mobile 375 + desktop 1280 for both modes; axe-core sweeps bring total suite to 20/20 green
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 Plans:
-- [ ] 38-01-PLAN.md — Config extensions + state module + FeedAdvanceCalculator component + route + about-content
-- [ ] 38-02-PLAN.md — Component tests + Playwright E2E + axe-core a11y sweeps
+- [x] 38-01-PLAN.md — Config extensions + state module + FeedAdvanceCalculator component + route + about-content
+- [x] 38-02-PLAN.md — Component tests + Playwright E2E + axe-core a11y sweeps
 **UI hint**: yes
 
 ### Phase 39: Release v1.12.0
@@ -127,5 +127,5 @@ Plans:
 | 35    | v1.11 | 1/1 | Complete    | 2026-04-09 |
 | 36. Wave 0 | v1.12 | 2/2 | Complete    | 2026-04-10 |
 | 37. Pure Logic | v1.12 | 2/2 | Complete    | 2026-04-10 |
-| 38. UI + E2E | v1.12 | 0/2 | Not started | - |
+| 38. UI + E2E | v1.12 | 2/2 | Complete    | 2026-04-10 |
 | 39. Release | v1.12 | 0/? | Not started | - |
