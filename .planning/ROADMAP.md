@@ -56,7 +56,7 @@ See [milestones/v1.11-ROADMAP.md](milestones/v1.11-ROADMAP.md) for full phase de
 - [x] **Phase 36: Wave 0 — Scaffolding + Identity Hue** — Extend `CalculatorId` union, registry entry, NavShell ternary, AboutSheet stub, `.identity-feeds` OKLCH token pair, `/feeds` placeholder route. Must compile before anything downstream. (completed 2026-04-10)
 - [x] **Phase 37: Pure Logic + Config + Parity Tests** — Types, `feeds-config.json`, `calculations.ts` with named constants, locked spreadsheet-parity fixtures for Sheet1 (full nutrition) and Sheet2 (bedside advancement), parameter-matrix tests, config shape tests. Gate: vitest green before UI. (completed 2026-04-10)
 - [x] **Phase 38: UI + State + Component Tests + Route + E2E + A11y** — `FeedAdvanceCalculator.svelte` with SegmentedToggle (Bedside Advancement + Full Nutrition modes), all inputs/dropdowns/outputs, safety advisories, `state.svelte.ts`, component tests, Playwright happy-path E2E, axe-core sweeps (20/20). (completed 2026-04-10)
-- [ ] **Phase 39: Release v1.12.0** — Version bump, PROJECT.md Validated list, app favicon, final gates green.
+- [x] **Phase 39: Release v1.12.0** — Version bump, PROJECT.md Validated list, app favicon, final gates green. (completed 2026-04-10)
 
 ## Phase Details
 
@@ -114,9 +114,9 @@ Plans:
   2. PROJECT.md Validated list includes all v1.12 entries
   3. App has a distinct, recognizable favicon at all standard sizes (16x16 through 512x512)
   4. Final gates pass: svelte-check 0/0, vitest all green, Playwright all green, axe 20/20, `pnpm build` succeeds
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 39-01-PLAN.md — Version bump to 1.12.0, PROJECT.md validated list update, favicon generation, final gates
+- [x] 39-01-PLAN.md — Version bump to 1.12.0, PROJECT.md validated list update, favicon generation, final gates
 
 ## Progress
 
@@ -130,4 +130,4 @@ Plans:
 | 36. Wave 0 | v1.12 | 2/2 | Complete    | 2026-04-10 |
 | 37. Pure Logic | v1.12 | 2/2 | Complete    | 2026-04-10 |
 | 38. UI + E2E | v1.12 | 2/2 | Complete    | 2026-04-10 |
-| 39. Release | v1.12 | 0/1 | Not started | - |
+| 39. Release | v1.12 | 1/1 | Complete    | 2026-04-10 |
