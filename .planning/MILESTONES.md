@@ -1,5 +1,24 @@
 # Milestones
 
+## v1.10 GIR Simplification + Dock + Tech Debt (Shipped: 2026-04-10)
+
+**Phases completed:** 3 phases (32, 33, 34), 3 plans
+
+**Tag:** `v1.10.0`
+
+**Key accomplishments:**
+
+- **GIR calculator stripped to its essentials** — Target GIR summary hero card removed; per-card Fluids|Rate|GIR secondary metrics row removed; "Starting GIR by population" reference card removed. The bucket grid is now the sole focal point below the inputs + current GIR hero. Cards display only the bucket range label and the Δ rate hero (▲/▼ ml/hr increase/decrease, or STOP for hyperglycemia, or em-dash for no-change). `GirCalculator.svelte` shrunk from 249 → 166 lines (GIR-SIMP-01..03).
+- **Click/tap visual treatment preserved with all a11y intact** — `border-l-4` + `--color-identity-hero` fill on selection, `role="radiogroup"` / `role="radio"` / roving tabindex / keyboard nav / focus rings retained. `selectedBucketId` state retained for visual continuity across navigation, even though nothing downstream consumes it. `aria-live` selection announcements dropped (redundant — Δ rate is already visible on every card) (GIR-SIMP-04, GIR-SIMP-05).
+- **Stale GIR test assertions cleaned up** — all e2e and component test assertions referencing the removed chrome (ADJUST RATE / HYPERGLYCEMIA / TARGET REACHED eyebrow, per-card secondary row, population reference card) deleted (GIR-SIMP-07).
+- **Morphine-style dock magnification ported to GIR mobile bucket list** — inline clone of `MorphineWeanCalculator.svelte`'s scroll-driven dock pattern: floating index `scrollY/scrollMax*(n-1)`, `MAX_SCALE = 1.06`, `MAX_SHADOW_BOOST = 4`, radius 2.5 (3 cards visibly magnified at once), rAF-throttled scroll handler, `MutationObserver` on grid container, full cleanup teardown. Mobile-only (`window.innerWidth < 768`) AND `!prefers-reduced-motion` guards. `transition-transform` added alongside existing `transition-colors` so scale animates smoothly. Click/tap selection coexists cleanly with inline transform on the same wrapper (GIR-DOCK-01..04).
+- **Tech debt majors closed** — `@types/node` 22 → 25 and `typescript` 5 → 6. Both deferred from v1.9. TS 6 sailed through with **zero source edits, zero tsconfig edits, zero NOTES.md deferrals** — the explicit Pause Criteria never fired. svelte-check 0/0 across **4521 files** under TS 6 (DEBT-MAJ-01, DEBT-MAJ-02).
+- **Release v1.10.0** — `package.json` bumped 1.9.0 → 1.10.0. AboutSheet automatically reflects v1.10.0 via the `__APP_VERSION__` build-time constant (Phase 31's Vite `define` chain — no source change to `about-content.ts`). PROJECT.md Validated list updated with 4 new v1.10 entries; retired entries struck through with "retired in v1.10" notes: REF-01 (v1.8 population reference card) and the Target GIR summary hero portion of GIR-SWAP-01..03 (grid-level Δ rate hero retained) (REL-01..03).
+- **GIR-SIMP-06 dropped mid-flight** — User decided after the plan was drafted to leave the severe-neuro card unchanged. The deferred clinical bolus copy question from v1.9 NOTES.md remains deferred. The intermediate severe-neuro work + revert is preserved on `main` as honest audit trail (commits `6d59b9e`, `7d6da92`, `e5b1f72`).
+- **Final gates** — vitest 203/203, svelte-check 0/0 (4521 files, TS 6), Playwright axe 16/16 (GIR-6 + Fortification-4 + Morphine-6, light + dark), Playwright e2e 48 passed / 3 skipped / 0 failed, `pnpm build` ✓ (PWA v1.2.0, 35 precache entries, 1.10.0). Phase 32 verification 6/6, Phase 33 verification 4/4, Phase 34 verification 5/5, milestone audit 15/15.
+
+---
+
 ## v1.9 GIR Titration Hero Swap + Polish (Shipped: 2026-04-09)
 
 **Phases completed:** 3 phases (29, 30, 31), 4 plans

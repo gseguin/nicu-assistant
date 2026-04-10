@@ -6,7 +6,7 @@ A PWA that unifies clinical calculators into a single tool for NICU staff. Curre
 
 ## Current State
 
-**Shipped:** v1.9 GIR Titration Hero Swap + Polish (2026-04-09) — three clinical calculators in production with Δ rate as the bedside hero on GIR titration buckets, impeccable polish pass across all three calculators in both themes, dependency + lint/TS sweep (svelte-check 0/0), 16/16 axe sweeps green, PWA at version 1.9.0.
+**Shipped:** v1.10 GIR Simplification + Dock + Tech Debt (2026-04-10) — GIR calculator stripped to essentials (summary hero card, per-card secondary metrics row, and population reference card removed; bucket grid is the sole focal point), morphine-wean dock magnification ported to the GIR bucket list on mobile, TypeScript 6 + @types/node 25 majors closed (zero source edits required), 16/16 axe sweeps green, svelte-check 0/0 across 4521 files, PWA at version 1.10.0.
 
 ## Core Value
 
@@ -98,18 +98,7 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-## Current Milestone: v1.10 GIR Simplification + Dock + Tech Debt
-
-**Goal:** Strip the GIR calculator to its essentials — the bucket grid is the sole focal point. Remove the summary hero card, per-card secondary metrics row, and bottom reference card. Preserve click/tap visual feedback on bucket cards (no downstream consumer). Port morphine-wean dock magnification to the now-thinner GIR bucket list. Resolve v1.9's deferred severe-neuro clinical bolus correctness fix. Close v1.9's two deferred dep majors (`@types/node` 22→25, `typescript` 5→6).
-
-**Target features:**
-- **GIR Simplification (Phase 32)** — drop Target GIR summary hero card, drop per-card Fluids|Rate|GIR secondary row, drop "Starting GIR by population" reference card; keep click/tap visual treatment + radiogroup a11y; drop `aria-live` (redundant); fix severe-neuro STOP gating unconditionally
-- **GIR Dock Magnification (Phase 33)** — port morphine-wean scroll-driven dock magnification to `GlucoseTitrationGrid` with mobile-only + reduced-motion guards; 16/16 axe re-verify
-- **Tech Debt Majors + Release (Phase 34)** — upgrade `@types/node` 22→25, `typescript` 5→6; bump `package.json` to 1.10.0; update PROJECT.md Validated list with retired-entry strikethroughs
-
-**Key context:** Follow-up clinician feedback after v1.9 shipped. The Δ rate hero swap was the right move, but the summary card + per-card secondary row + reference card are all noise around the actual bedside artifact (the bucket grid). Simpler = faster to read = safer at bedside.
-
-_Active requirements defined in REQUIREMENTS.md._
+_No active requirements — next milestone to be defined via `/gsd-new-milestone`._
 
 ### Out of Scope
 
@@ -120,8 +109,8 @@ _Active requirements defined in REQUIREMENTS.md._
 
 ## Context
 
-**Shipped v1.9** with three clinical calculators, GIR titration Δ rate hero swap (bedside action-first), impeccable polish pass in both themes, dependency + lint/TS sweep (svelte-check 0/0, ESLint dropped), comprehensive a11y coverage (16/16 axe sweeps), and co-located Vitest (205/205) + Playwright suites.
-Tech stack: SvelteKit 2.57 + Svelte 5.55 (runes) + Tailwind CSS 4 + Vite 8.0 + pnpm 10.33.
+**Shipped v1.10** with three clinical calculators, GIR calculator stripped to its essentials (bucket grid is the sole focal point — summary hero, per-card secondary row, and population reference card all retired), morphine-style scroll-driven dock magnification on the GIR mobile bucket list, TypeScript 6 + @types/node 25 majors closed (zero source edits required), comprehensive a11y coverage (16/16 axe sweeps), and co-located Vitest (203/203) + Playwright suites.
+Tech stack: SvelteKit 2.57 + Svelte 5.55 (runes) + Tailwind CSS 4 + Vite 8.0 + TypeScript 6.0 + pnpm 10.33.
 
 **Current calculators:**
 - Morphine Wean: linear/compounding modes, config-driven defaults, dock magnification, summary card
@@ -183,4 +172,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.10 GIR Simplification + Dock + Tech Debt milestone shipped*
+*Last updated: 2026-04-10 — v1.10 GIR Simplification + Dock + Tech Debt milestone shipped*
