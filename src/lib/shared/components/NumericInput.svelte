@@ -104,7 +104,8 @@
       const lowerBound = min ?? Number.NEGATIVE_INFINITY;
       const upperBound = max ?? Number.POSITIVE_INFINITY;
       const current = value ?? (direction > 0 ? lowerBound - step : upperBound + step);
-      const next = parseFloat((current + direction * step).toFixed(1));
+      const precision = Math.max(0, -Math.floor(Math.log10(step)));
+      const next = parseFloat((current + direction * step).toFixed(precision));
       if (!Number.isFinite(next)) return;
       if (next >= lowerBound && next <= upperBound) {
         value = next;
