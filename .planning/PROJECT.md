@@ -6,9 +6,7 @@ A PWA that unifies clinical calculators into a single tool for NICU staff. Curre
 
 ## Current State
 
-**Shipped:** v1.11 Morphine Mode Removal — Single Source of Truth (2026-04-09) — Morphine Wean linear/compounding mode toggle removed; `morphine-wean-calculator.xlsx` Sheet1 is the sole authoritative formula (linear: previous − weight × maxDose × decreasePct); `calculateCompoundingSchedule`, `WeanMode` type, `modes` config block, and SegmentedToggle usage in Morphine all deleted; spreadsheet-parity tests locked row-by-row against Sheet1 (10 steps); AboutSheet copy rewritten; PWA at version 1.11.0; svelte-check 0/0, vitest 185/185, Playwright 47 passed / 3 skipped, 16/16 axe sweeps green.
-
-**In progress:** v1.12 Feed Advance Calculator — Phase 38 (UI + State + Component Tests + Route + E2E + A11y) complete: `FeedAdvanceCalculator.svelte` (504 lines) with SegmentedToggle for Bedside Advancement / Full Nutrition modes, shared weight input, bedside mode with three equally-prominent per-feed outputs (trophic/advance/goal) + IV backfill, full nutrition mode with dual TPN dextrose lines + total kcal/kg/d hero value, 9 data-driven advisory banners, sessionStorage state persistence. TrophicFrequency extended to q2h/q3h/q4h/q6h. Route wired, about-content updated. 13 component tests + 5 E2E tests + 6 axe-core sweeps. svelte-check 0/0, vitest 228/228. 4 human verification items pending.
+**Shipped:** v1.12.0 Feed Advance Calculator (2026-04-10) — Fourth clinical calculator added: Feed Advance Calculator with two modes (Bedside Advancement matching `nutrition-calculator.xlsx` Sheet2, Full Nutrition matching Sheet1). Bedside mode: weight + trophic/advance/goal ml/kg/d inputs with trophic frequency (q2h/q3h/q4h/q6h) and advance cadence dropdowns, three per-feed outputs + IV backfill. Full Nutrition mode: dual TPN dextrose lines + SMOF + enteral inputs, total kcal/kg/d hero value. 9 data-driven advisory banners, sessionStorage persistence. Identity hue ~30 terracotta with 4.5:1 contrast. App favicon generated at all standard sizes. PWA at version 1.12.0; svelte-check 0/0, vitest 228+, Playwright all green, 20/20 axe sweeps.
 
 ## Core Value
 
@@ -100,26 +98,17 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ Morphine Wean linear/compounding mode toggle removed; `morphine-wean-calculator.xlsx` Sheet1 is the single source of truth; `calculateCompoundingSchedule` function, `WeanMode` type, `modes` config block, and SegmentedToggle usage in `MorphineWeanCalculator.svelte` all deleted; `activeMode` dropped from `MorphineStateData` (stale sessionStorage keys silently ignored); spreadsheet-parity tests locked row-by-row against Sheet1 for weight 3.1, maxDose 0.04, decreasePct 0.10 (10 steps × 3 fields); Sheet2 compounding parity block removed (MORPH-01..07) — v1.11
 - ✓ AboutSheet Morphine copy rewritten to describe a single fixed-reduction formula and cite `morphine-wean-calculator.xlsx` Sheet1 (MORPH-08) — v1.11
 - ✓ `package.json` version bumped to 1.11.0; AboutSheet reflects v1.11.0 via the `__APP_VERSION__` build-time constant; PROJECT.md Validated list updated with v1.11 entries (MORPH-09) — v1.11
+- ✓ Feed Advance Calculator: `CalculatorId` union extended with `'feeds'`, registry entry with `identityClass: 'identity-feeds'` and Baby icon, NavShell ternary extended for `/feeds`, AboutSheet `feeds` entry citing `nutrition-calculator.xlsx` Sheet1 + Sheet2, new `src/lib/feeds/` module, `/feeds` route, zero new dependencies (ARCH-01..07) — v1.12
+- ✓ Feed Advance Calculator identity hue: `.identity-feeds` OKLCH token pair (hue ~30 terracotta), hand-computed for 4.5:1 contrast on all 4 identity surfaces in both themes, pre-PR axe-core sweep passed (HUE-01..03) — v1.12
+- ✓ Feed Advance calculations: bedside advancement (Sheet2 parity within ~1% epsilon, weight 1.94 fixture) and full nutrition (Sheet1 parity within ~1% epsilon, weight 1.74 fixture); named constants (3.4 kcal/g dextrose, 2 kcal/ml lipid, 30 ml/oz); `feeds-config.json` with typed wrapper; parameter-matrix tests covering every frequency x cadence combination (CORE-09, FREQ-04, FULL-04..07, SAFE-06, TEST-01..04) — v1.12
+- ✓ Feed Advance Calculator UI: `FeedAdvanceCalculator.svelte` with SegmentedToggle (Bedside Advancement / Full Nutrition modes), shared weight input, bedside mode with three per-feed outputs (trophic/advance/goal) + IV backfill, full nutrition mode with dual TPN dextrose lines + total kcal/kg/d hero, 9 advisory banners, sessionStorage persistence; trophic frequency (q2h/q3h/q4h/q6h) and advance cadence dropdowns; component tests + Playwright E2E + axe-core sweeps (CORE-01..08, FREQ-01..03/05, IV-01..03, FULL-01..03, SAFE-01..05, TEST-05..07) — v1.12
+- ✓ `package.json` version bumped to 1.12.0; AboutSheet reflects v1.12.0 via the `__APP_VERSION__` build-time constant; PROJECT.md Validated list updated with v1.12 entries; app favicon generated at all standard sizes (REL-01..04) — v1.12
 
 ### Active
 
-## Current Milestone: v1.12 Feed Advance Calculator
+## Current Milestone: v1.12 Feed Advance Calculator (Shipped)
 
-**Goal:** Add a fourth clinical calculator — the Feed Advance Calculator — covering both the bedside feeding advancement view (Sheet2) and the full TPN + enteral total-kcal/kg view (Sheet1) from `nutrition-calculator.xlsx`, with spreadsheet-parity tests locked to both sheets.
-
-**Target features:**
-- Bedside feeding advancement (Sheet2): weight + trophic/advance/goal ml/kg/d inputs → per-feed volumes; trophic frequency dropdown (q4h ÷6 / q3h ÷8, default q4h); advance cadence dropdown (every feed / every other feed / every 3rd feed / twice daily / once daily, default twice daily = ÷2); IV backfill block (total fluids ml/hr − enteral/3 → IV rate)
-- Full nutrition / TPN mode (Sheet1): TPN dextrose + SMOF + enteral → dextrose kcal, IL kcal, enteral kcal, ml/kg, total kcal/kg, auto-advance
-- Registry entry, new `/feeds` route, 4th nav tab, 4th `--color-identity` OKLCH hue (4.5:1 light + dark)
-- Embedded JSON config for clinical input ranges
-- Spreadsheet-parity tests locked row-by-row to Sheet1 AND Sheet2
-- Component + Playwright happy-path + axe-core sweeps light + dark
-- Release v1.12.0
-
-**Key context:**
-- `nutrition-calculator.xlsx` is the sole authoritative source (same pattern as Morphine xlsx Sheet1)
-- Sheet1 and Sheet2 likely become two modes of the calculator via SegmentedToggle — exact UX locked in `/gsd-discuss-phase`
-- Trophic `/6` vs `/8` and advance `/2` in the xlsx become user-selectable dropdowns, not hardcoded
+**Shipped.** Fourth clinical calculator delivered: Feed Advance Calculator with Bedside Advancement (Sheet2) and Full Nutrition (Sheet1) modes from `nutrition-calculator.xlsx`. Spreadsheet-parity tests locked to both sheets. Identity hue, favicon, all quality gates green. Released as v1.12.0.
 
 ### Out of Scope
 
@@ -130,13 +119,14 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ## Context
 
-**Shipped v1.11** with three clinical calculators. Morphine Wean is now a single-formula calculator matching `morphine-wean-calculator.xlsx` Sheet1 exactly (linear mg reduction per step); the linear/compounding mode toggle has been removed along with all supporting code (`WeanMode`, `calculateCompoundingSchedule`, `modes` config block). GIR calculator remains stripped to its essentials (bucket grid is the sole focal point), morphine-style scroll-driven dock magnification on the GIR mobile bucket list, TypeScript 6 + @types/node 25, comprehensive a11y coverage (16/16 axe sweeps), and co-located Vitest (185/185) + Playwright (47 passed / 3 skipped) suites.
+**Shipped v1.12** with four clinical calculators. Feed Advance Calculator is the fourth, with two modes: Bedside Advancement (Sheet2 parity) for trophic/advance/goal per-feed volumes with frequency and cadence dropdowns + IV backfill, and Full Nutrition (Sheet1 parity) for dual TPN dextrose lines + SMOF + enteral with total kcal/kg/d hero. Morphine Wean is a single-formula calculator matching `morphine-wean-calculator.xlsx` Sheet1 exactly. GIR calculator with bucket grid and dock magnification. App favicon generated at all standard sizes. TypeScript 6 + @types/node 25, comprehensive a11y coverage (20/20 axe sweeps), and co-located Vitest (228+) + Playwright suites.
 Tech stack: SvelteKit 2.57 + Svelte 5.55 (runes) + Tailwind CSS 4 + Vite 8.0 + TypeScript 6.0 + pnpm 10.33.
 
 **Current calculators:**
 - Morphine Wean: single linear formula (xlsx Sheet1 parity), config-driven defaults, dock magnification, summary card
 - Formula: modified/BMF modes, 40+ brands with manufacturer grouping, redesigned empty state
 - GIR: Weight/Dextrose%/Fluid-order inputs, interactive 6-bucket glucose titration, dextrose-green identity, clinical safety advisories (dextrose >12.5%, GIR >12, GIR <4)
+- Feed Advance: bedside advancement (Sheet2) + full nutrition (Sheet1) modes, trophic frequency + advance cadence dropdowns, IV backfill, dual TPN dextrose lines, total kcal/kg/d hero, 9 advisory banners
 
 **Architecture:**
 - Calculator registry in `src/lib/shell/registry.ts` — add new calculators with one entry + one route
@@ -193,4 +183,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 — v1.12 Phase 38 complete (UI + state + tests + E2E + a11y)*
+*Last updated: 2026-04-10 — v1.12.0 Phase 39 complete (release — version bump, PROJECT.md, favicon, gates)*
