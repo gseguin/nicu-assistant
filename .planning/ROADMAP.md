@@ -71,8 +71,5 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
 | 26-28 | v1.8 | 9/9 | Complete | 2026-04-09 |
 | 29-31 | v1.9 | 4/4 | Complete | 2026-04-09 |
 | 32-34 | v1.10 | 3/3 | Complete | 2026-04-10 |
-| 35    | v1.11 | 1/1 | Complete    | 2026-04-09 |
-| 36. Wave 0 | v1.12 | 2/2 | Complete    | 2026-04-10 |
-| 37. Pure Logic | v1.12 | 2/2 | Complete    | 2026-04-10 |
-| 38. UI + E2E | v1.12 | 2/2 | Complete    | 2026-04-10 |
-| 39. Release | v1.12 | 1/1 | Complete    | 2026-04-10 |
+| 35 | v1.11 | 1/1 | Complete | 2026-04-09 |
+| 36-39 | v1.12 | 7/7 | Complete | 2026-04-10 |

@@ -2,6 +2,20 @@
 
 ## v1.12 Feed Advance Calculator (Shipped: 2026-04-10)
 
+**Phases completed:** 4 phases, 7 plans, 12 tasks
+
+**Key accomplishments:**
+
+- 1. [Rule 1 - Bug] Updated registry test to include 'feeds' in expected IDs
+- Axe-core a11y sweeps for /feeds route confirming identity-feeds OKLCH tokens (hue 30) pass 4.5:1 contrast in light mode, dark mode, and focus-visible states
+- 1. [Rule 1 - Bug] SelectPicker onchange prop does not exist
+- e2e/feeds.spec.ts
+- 1. [Rule 1 - Bug] Fixed navigation tab count test
+
+---
+
+## v1.12 Feed Advance Calculator (Shipped: 2026-04-10)
+
 **Phases completed:** 3 phases, 6 plans, 9 tasks
 
 **Key accomplishments:**

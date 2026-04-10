@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.12
 milestone_name: Feed Advance Calculator
-status: executing
-stopped_at: Phase 36 context gathered
-last_updated: "2026-04-10T13:59:03.285Z"
+status: Archived
+stopped_at: v1.12 archived
+last_updated: "2026-04-10T15:00:00.000Z"
 last_activity: 2026-04-10
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
+  total_phases: 4
+  completed_phases: 4
+  total_plans: 7
+  completed_plans: 7
   percent: 100
 ---
 
@@ -18,27 +18,24 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-09)
+See: .planning/PROJECT.md (updated 2026-04-10)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.12 — Feed Advance Calculator (Phase 36: Wave 0 — Scaffolding + Identity Hue)
+**Current focus:** v1.12 archived — ready for `/gsd-new-milestone`
 
 ## Current Position
 
-Milestone: v1.12 — Feed Advance Calculator
-Phase: 39 of 39 (ui + state + component tests + route + e2e + a11y)
-Plan: Not started
-Status: Ready to execute
+Milestone: v1.12 — Feed Advance Calculator (Archived)
+Status: Archived
 Last activity: 2026-04-10
-
-Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed (all milestones): 34
-- v1.11: 1 plan (Phase 35), 1 commit
+- Total plans completed (all milestones): 41
+- v1.12: 7 plans across 4 phases (36-39), 52 commits
+- v1.11: 1 plan, 1 commit
 - v1.10: 3 plans across 3 phases (32-34)
 - v1.9: 4 plans across 3 phases (29-31)
 - v1.8: 9 plans across 3 phases (26-28), 13 commits
@@ -49,7 +46,7 @@ Progress: [░░░░░░░░░░] 0%
 
 - [v1.6]: SegmentedToggle is for 2-4 option choices only; SelectPicker stays for N-of-many
 - [v1.6]: NumericInput min/max is advisory only — never auto-clamp
-- [v1.8]: Identity hue research BEFORE PR to avoid Phase 20 Morphine repeat
+- [v1.8]: Identity hue research BEFORE PR to avoid repeat of earlier Morphine issues
 - [v1.8]: Spreadsheet parity tests with ~1% epsilon (clinical calculators must match source authority)
 - [v1.8]: Wave 0 latent-bug fixes before feature work (CalculatorId + NavShell + registry)
 
@@ -63,6 +60,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-10T02:53:36.584Z
-Stopped at: Phase 36 context gathered
-Resume file: .planning/phases/36-wave-0-scaffolding-identity-hue/36-CONTEXT.md
+Last session: 2026-04-10
+Stopped at: v1.12 archived
+Resume file: None

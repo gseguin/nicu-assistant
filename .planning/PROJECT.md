@@ -106,9 +106,7 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-## Current Milestone: v1.12 Feed Advance Calculator (Shipped)
-
-**Shipped.** Fourth clinical calculator delivered: Feed Advance Calculator with Bedside Advancement (Sheet2) and Full Nutrition (Sheet1) modes from `nutrition-calculator.xlsx`. Spreadsheet-parity tests locked to both sheets. Identity hue, favicon, all quality gates green. Released as v1.12.0.
+(No active milestone — v1.12 archived. Run `/gsd-new-milestone` to start next.)
 
 ### Out of Scope
 
