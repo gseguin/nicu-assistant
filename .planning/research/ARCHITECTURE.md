@@ -1,185 +1,149 @@
-# Architecture Research — v1.8 GIR Calculator
+# Architecture Research — v1.12 Feed Advance Calculator
 
-## Integration Checklist
-
-### New files
-- `src/lib/gir/types.ts` — `GirStateData`, `GirInputRanges`, `GlucoseBucket`, `GirTitrationRow`, `GirResult`
-- `src/lib/gir/gir-config.json` — defaults, `inputs` ranges, `glucoseBuckets[]`
-- `src/lib/gir/gir-config.ts` — typed wrapper exposing `inputs`, `glucoseBuckets`, `getDefaults()`
-- `src/lib/gir/gir-config.test.ts` — shape + range sanity
-- `src/lib/gir/calculations.ts` — pure calc functions
-- `src/lib/gir/calculations.test.ts` — spreadsheet-parity vs `GIR-Wean-Calculator.xlsx`
-- `src/lib/gir/state.svelte.ts` — rune singleton + sessionStorage (key `nicu_gir_state`)
-- `src/lib/gir/GirCalculator.svelte` — inputs + hero + grid composition
-- `src/lib/gir/GirCalculator.test.ts` — component smoke
-- `src/lib/gir/GlucoseTitrationGrid.svelte` — dedicated radiogroup subcomponent
-- `src/routes/gir/+page.svelte` — header + `<GirCalculator />`, `identity-gir` wrapper, `onMount → girState.init()`
-- `tests/e2e/gir.spec.ts` — E2E flow
-- `tests/e2e/gir-a11y.spec.ts` — light + dark axe sweeps + focus-ring + advisory variants
-
-### Modified files
-- `src/lib/shell/registry.ts` — extend `identityClass` union to include `'identity-gir'`; append GIR registry entry
-- `src/app.css` — add `.identity-gir { ... }` light + dark blocks with literal OKLCH values
-- `package.json` — version bump to `1.8.0`
-- `.planning/PROJECT.md` — validated requirements list at milestone completion
-
-No modifications needed to: `NumericInput`, `SegmentedToggle`, `SelectPicker`, `ResultsDisplay`, `AboutSheet`, `DisclaimerModal`, layout, theme code.
+**Project:** NICU Assistant
+**Scope:** Integration of 4th clinical calculator into existing SvelteKit 2 + Svelte 5 shell
+**Confidence:** HIGH (all file paths, line numbers, type unions, OKLCH tokens verified against current codebase)
 
 ---
 
-## State Singleton Shape (`gir/state.svelte.ts`)
+## 1. Files to CREATE
 
-Mirror `morphine/state.svelte.ts` exactly — same `_state = $state()` + `init/persist/reset` API.
+| Path | Purpose |
+|---|---|
+| `src/lib/feeds/calculations.ts` | Pure functions, xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement) parity. Exports `calculateBedsideAdvance(...)`, `calculateFullNutrition(...)`, `calculateIvBackfill(...)`. |
+| `src/lib/feeds/calculations.test.ts` | Row-by-row parity vs Sheet1 + Sheet2, ~1% epsilon (per v1.8 GIR convention). |
+| `src/lib/feeds/feeds-parity.fixtures.json` | Captured xlsx rows (both sheets) — same pattern as `gir-parity.fixtures.json`. |
+| `src/lib/feeds/feeds-config.json` | Clinical input ranges (weight, ml/kg/d trophic/advance/goal, TPN dex%, SMOF ml/hr, enteral kcal/oz), dropdown option lists (trophic frequency q4h/q3h, advance cadence every feed / every other / every 3rd / BID / QD). |
+| `src/lib/feeds/feeds-config.ts` | Typed wrapper over JSON (mirrors `gir-config.ts`). |
+| `src/lib/feeds/feeds-config.test.ts` | Config shape tests. |
+| `src/lib/feeds/types.ts` | `FeedsMode = 'bedside' \| 'full-nutrition'`, `TrophicFrequency`, `AdvanceCadence`, `FeedsStateData`. |
+| `src/lib/feeds/state.svelte.ts` | `$state` singleton + sessionStorage (mirrors `src/lib/gir/state.svelte.ts`). |
+| `src/lib/feeds/FeedAdvanceCalculator.svelte` | Main component — SegmentedToggle at top, two mode sections, shared weight. |
+| `src/lib/feeds/FeedAdvanceCalculator.test.ts` | Component tests: empty state, bedside flow, full-nutrition flow, dropdown switching, mode toggle preserves weight, advisory rendering. |
+| `src/routes/feeds/+page.svelte` | Thin route wrapper importing `FeedAdvanceCalculator`. |
+| `e2e/feeds.spec.ts` | Playwright happy-path @ mobile 375 + desktop 1280, `inputmode="decimal"` regression. |
+| `e2e/feeds-a11y.spec.ts` | Axe sweeps: light/dark × bedside/full-nutrition × focus state (≥4 sweeps, bringing suite to 20/20). |
+
+## 2. Files to MODIFY
+
+| Path | Change |
+|---|---|
+| `src/lib/shared/types.ts` (line 7) | **WAVE-0 LATENT BUG**: extend union `CalculatorId = 'morphine-wean' \| 'formula' \| 'gir' \| 'feeds'`. Unblocks downstream compile. |
+| `src/lib/shell/registry.ts` | Append `feeds` entry; extend `identityClass` string-literal union (line 11) to include `'identity-feeds'`; import new icon from `@lucide/svelte`. |
+| `src/lib/shell/NavShell.svelte` (lines 11–15) | **WAVE-0 LATENT BUG**: `activeCalculatorId` ternary chain is hardcoded — add `page.url.pathname.startsWith('/feeds') ? 'feeds'` branch. Without this, AboutSheet shows wrong content on `/feeds`. |
+| `src/app.css` | Add `.identity-feeds` light + dark blocks (see §6). |
+| `src/lib/shared/about-content.ts` | Add `feeds` entry to `aboutContent` Record — required by exhaustive `Record<CalculatorId, ...>` type (TS will error until added). |
+| `package.json` | `"version": "1.12.0"` |
+| `.planning/PROJECT.md` | Validated entries at milestone close. |
+
+**Grep verification for `CalculatorId`**: only 4 touchpoints — `types.ts` (definition), `NavShell.svelte` (ternary + type annotation), `about-content.ts` (Record), `AboutSheet.svelte` (prop type, passive — auto-propagates).
+
+## 3. Data Flow — Sheet1 + Sheet2 coexistence
+
+**Recommendation: Single component, single registry entry, SegmentedToggle at top, shared weight input.**
+
+```
+[ Weight kg ]                     ← shared, always visible, persists across mode
+[ Bedside | Full Nutrition ]      ← SegmentedToggle (identity-aware, v1.6 shared)
+---
+{#if mode === 'bedside'}
+  [Trophic ml/kg/d] [Advance ml/kg/d] [Goal ml/kg/d]
+  [Trophic freq dropdown: q4h÷6 / q3h÷8]
+  [Advance cadence dropdown: every / every-other / every-3rd / BID / QD]
+  → per-feed volume schedule
+  [Total fluids ml/hr] → IV backfill rate
+{:else}
+  [TPN dex%] [TPN ml/hr] [SMOF ml/hr] [Enteral ml/hr] [Enteral kcal/oz]
+  → Dextrose kcal, IL kcal, Enteral kcal, ml/kg, total kcal/kg
+{/if}
+```
+
+**Trade-offs:**
+
+| Option | Pro | Con | Verdict |
+|---|---|---|---|
+| **Single component + toggle** (recommended) | One nav tab; shared weight; one identity hue | Larger component file | ✓ Choose |
+| Two registry entries | Bookmarkable modes | 5 tabs cramped on mobile 375; duplicates weight; two identity hues | ✗ Reject |
+| Two components, one route, toggle | Cleaner files | Same state coupling; indirection | ✗ Reject |
+
+Morphine v1.11 removing its linear/compounding toggle is NOT a precedent against the pattern — those modes were redundant (same formula). Sheet1 and Sheet2 are *different computations*, so the toggle is justified.
+
+## 4. State Shape
 
 ```ts
-export interface GlucoseBucket {
-  id: string;             // 'severe-neuro' | 'lt40' | '40-50' | '50-60' | '60-70' | 'gt70'
-  label: string;          // "<40", "40–50", etc.
-  srLabel: string;        // "less than 40 mg/dL"
-  targetGirDelta: number; // mg/kg/min change applied to currentGir
-}
+// src/lib/feeds/types.ts
+export type FeedsMode = 'bedside' | 'full-nutrition';
+export type TrophicFrequency = 'q4h' | 'q3h';           // divisor 6 | 8
+export type AdvanceCadence = 'every' | 'every-other' | 'every-3rd' | 'bid' | 'qd';
 
-export interface GirStateData {
-  weightKg: number | null;
-  dextrosePct: number | null;     // e.g. 10 for D10W
-  mlPerKgPerDay: number | null;
-  selectedBucketId: string | null; // null = no titration row chosen yet
-}
-```
+export interface FeedsStateData {
+  mode: FeedsMode;
+  weightKg: number | null;        // shared across modes
 
-**Keystroke recomputation:** use `$derived` **inside the component**, not in the state module. State module holds raw inputs only; component calls `calculateGir(state.current)` inside `let result = $derived(...)`. Matches Morphine's pattern. Runes in module scope would require a class wrapper, which is not the established pattern.
+  // Bedside (Sheet2)
+  trophicMlKgDay: number | null;
+  advanceMlKgDay: number | null;
+  goalMlKgDay: number | null;
+  trophicFrequency: TrophicFrequency;
+  advanceCadence: AdvanceCadence;
+  totalFluidsMlHr: number | null;
 
----
-
-## Config Structure (`gir-config.json`)
-
-```jsonc
-{
-  "defaults": {
-    "weightKg": 3.1,
-    "dextrosePct": 10,
-    "mlPerKgPerDay": 80
-  },
-  "inputs": {
-    "weightKg":      { "min": 0.3,  "max": 10,  "step": 0.1 },
-    "dextrosePct":   { "min": 2.5,  "max": 25,  "step": 0.5 },
-    "mlPerKgPerDay": { "min": 40,   "max": 200, "step": 5   }
-  },
-  "glucoseBuckets": [
-    { "id": "severe-neuro", "label": "Severe neuro sx", "srLabel": "severe neurological symptoms", "targetGirDelta": 1.5 },
-    { "id": "lt40",         "label": "<40",             "srLabel": "less than 40",                  "targetGirDelta": 1.0 },
-    { "id": "40-50",        "label": "40–50",           "srLabel": "40 to 50",                      "targetGirDelta": 0.5 },
-    { "id": "50-60",        "label": "50–60",           "srLabel": "50 to 60",                      "targetGirDelta": -0.5 },
-    { "id": "60-70",        "label": "60–70",           "srLabel": "60 to 70",                      "targetGirDelta": -1.0 },
-    { "id": "gt70",         "label": ">70",             "srLabel": "greater than 70",               "targetGirDelta": -1.5 }
-  ]
+  // Full nutrition (Sheet1)
+  tpnDexPct: number | null;
+  tpnMlHr: number | null;
+  smofMlHr: number | null;
+  enteralMlHr: number | null;
+  enteralKcalPerOz: number | null;
 }
 ```
 
-**Decision: data-driven buckets.** Rationale:
-1. Consistency with v1.6 — clinical ranges moved out of magic numbers into config.
-2. Clinician-editable — stated v1.3 principle.
-3. Spreadsheet parity — JSON is a 1:1 mirror of the CALC tab.
-4. Minor cost: `gir-config.test.ts` guards shape (matches `fortification-config.test.ts`).
+Flat shape (not nested) matches `GirStateData`. Mode toggle changes which fields render, not which exist. Stale cross-mode values are harmless.
 
----
+## 5. Build Order (dependency-respecting)
 
-## Calc Module Signature (`gir/calculations.ts`)
+1. **Wave 0 — latent-bug fixes (must compile first)**: extend `CalculatorId`, add `feeds` stub to `aboutContent`, extend `NavShell` ternary, extend `identityClass` union, add `.identity-feeds` placeholder
+2. **`types.ts`** for feeds module
+3. **`feeds-config.json` + `feeds-config.ts` + config test**
+4. **`calculations.ts` + parity fixtures + `calculations.test.ts`** — row-locked to xlsx Sheet1 + Sheet2. Gate: vitest green before UI.
+5. **`state.svelte.ts`**
+6. **`FeedAdvanceCalculator.svelte` + component test**
+7. **`/feeds/+page.svelte` route**
+8. **Finalize `.identity-feeds` OKLCH + registry wiring**
+9. **AboutSheet content** — real copy citing `nutrition-calculator.xlsx` Sheet1/Sheet2
+10. **Playwright happy-path spec**
+11. **Axe-core a11y sweeps (REQUIRED BEFORE PR)** — light + dark × bedside + full-nutrition
+12. **Version bump to 1.12.0** + PROJECT.md Validated updates
 
-**Export three narrow pure functions + one aggregator.**
+## 6. Identity Hue
 
-```ts
-export function calculateCurrentGir(weightKg: number, dextrosePct: number, mlPerKgPerDay: number): number;
-export function calculateInitialRateMlHr(weightKg: number, mlPerKgPerDay: number): number;
-export function calculateTitrationRows(
-  weightKg: number,
-  dextrosePct: number,
-  mlPerKgPerDay: number,
-  buckets: GlucoseBucket[]
-): GirTitrationRow[];
+**Existing hues:** Morphine 220 (Clinical Blue), Formula 195 (Teal-cyan), GIR 145 (Dextrose Green).
 
-// Aggregator the component consumes via $derived
-export function calculateGir(state: GirStateData, buckets: GlucoseBucket[]): GirResult | null;
+**Proposed: hue 30 — Warm Terracotta / Nutrition Orange.** (Pitfalls doc alternates: ~25 terracotta or ~300 magenta — final pick deferred to discuss-phase.)
+
+Rationale: maximal hue separation (Δ≥115° from nearest), evokes "nutrition/feeds" semantically, avoids red 0–25 (error reserved).
+
+```css
+.identity-feeds {
+  --color-identity:      oklch(50% 0.13 30);
+  --color-identity-hero: oklch(94% 0.04 30);
+}
+.dark .identity-feeds,
+[data-theme="dark"] .identity-feeds {
+  --color-identity:      oklch(80% 0.10 30);
+  --color-identity-hero: oklch(24% 0.05 30);
+}
 ```
 
-**Rationale:**
-- Morphine / Fortification both expose narrow mode functions — one per spreadsheet formula column.
-- Spreadsheet parity tests want per-column assertions — narrow functions keep tests targeted.
-- Aggregator returns `null` if any input is `null` — single source for the component's `$derived`, keeps `GirCalculator.svelte` clean.
+**⚠ AXE-CORE SWEEP REQUIRED BEFORE PR.** Per v1.5 Phase 20 Morphine pain + v1.8 Key Decision.
 
-**Constants:** use exact `10/60` and `1/144` (not spreadsheet's `0.167` / `0.0069`). Parity tests use ~1% epsilon, documented.
+## 7. Wave-0 Latent Bug Summary
 
----
-
-## Interactive Titration Row Highlighting — Svelte 5 pattern
-
-**Pattern: `$state` bucket id + CSS identity-token class toggle + `role="radiogroup"` semantics.**
-
-Key points:
-1. **`role="radiogroup"`, not `tablist`** — tabs imply switching panels; the grid is single-selection driving one advisory surface. `aria-checked` on each row.
-2. **Roving tabindex**: exactly one focusable row (selected, or first if none). Copy from `SegmentedToggle.svelte`.
-3. **Identity-token highlight** — selected row uses `--color-identity-hero`, not just opacity (color-blind AA, v1.5 rule).
-4. **Arrow keys move selection + focus** (WAI-ARIA radiogroup pattern). `Home`/`End` jump. `Space`/`Enter` affirm (single-select, no toggle-off).
-5. **Selected advisory panel**: `aria-live="polite"` + `aria-atomic="true"` + `{#key selectedId}` to re-trigger `.animate-result-pulse` (v1.6 shared class).
-6. **No shared component extraction** — calculator-specific for now, lives in `src/lib/gir/`. Extract to shared if v1.9 needs similar.
-
----
-
-## Suggested Phase Split (3 phases)
-
-### Phase A — Foundation: calc + config + state (headless)
-Goal: Spreadsheet parity locked before any pixels.
-- `types.ts`, `gir-config.json`, `gir-config.ts`, `gir-config.test.ts`
-- `calculations.ts` + `calculations.test.ts` (per-column parity vs xlsx, ~1% epsilon)
-- `state.svelte.ts`
-- Gate: Vitest green, parity covers 6 buckets × all columns, zero UI coupling.
-
-### Phase B — UI + identity + registration
-Goal: GIR usable end-to-end from nav shell.
-- `GlucoseTitrationGrid.svelte` (radiogroup, keyboard nav)
-- `GirCalculator.svelte` (inputs + hero + grid, `$derived` aggregator)
-- `src/routes/gir/+page.svelte`
-- `shell/registry.ts` entry + `identityClass` union
-- `app.css` `.identity-gir` light + dark (provisional OKLCH)
-- Gate: manual flow works both themes on mobile + desktop, component test green.
-
-### Phase C — A11y + E2E + version bump
-Goal: Clinical-grade ship.
-- Playwright `gir.spec.ts` + `gir-a11y.spec.ts` (light + dark + focus + advisory variants)
-- Tune identity OKLCH to clear axe (v1.5 Morphine precedent)
-- `package.json` → 1.8.0, PROJECT.md validated list update
-- Gate: all axe sweeps green, parity suite green, manual regression of existing calcs.
-
-**Coupling:**
-- Phase A has zero component/route dependencies — fully testable headlessly.
-- Phase B consumes Phase A exports; provisional identity values OK.
-- Phase C is verification + tuning; no new production code except possibly literal OKLCH values.
-
----
-
-## Shared Component Reuse / New Props
-
-All existing shared components fit **with zero modifications**:
-
-| Component | GIR usage | Fits as-is? |
+| File | Line | Fix |
 |---|---|---|
-| `NumericInput` | Weight, Dextrose %, ml/kg/day | **Yes** — v1.6 `showRangeHint` + v1.7 `showRangeError` sufficient. Advisory-only (no clamp) is v1.6 contract. |
-| `SegmentedToggle` | **Not used** for buckets | Tablist semantics + 2–3 options is wrong fit for a 6-row clinical grid with per-row data. Use dedicated radiogroup grid. |
-| `SelectPicker` | Not needed | GIR has no enum selection beyond buckets. |
-| `ResultsDisplay` | Current GIR + initial rate hero | **Yes** — review API during Phase B; if two-value hero doesn't fit, inline a hero div using `--color-identity-hero`. |
-| `.animate-result-pulse` | Hero + selected bucket advisory | **Yes**, already in `src/app.css` (v1.6). |
-| `identityClass` pattern | New `'identity-gir'` literal | Additive union extension, not a new prop. |
+| `src/lib/shared/types.ts` | 7 | Add `\| 'feeds'` to `CalculatorId` union |
+| `src/lib/shared/about-content.ts` | 14 | Add `feeds` key to `Record<CalculatorId, AboutContent>` |
+| `src/lib/shell/NavShell.svelte` | 11–15 | Extend `activeCalculatorId` ternary chain |
+| `src/lib/shell/registry.ts` | 11 | Extend `identityClass` string-literal union |
+| `src/lib/shared/components/AboutSheet.svelte` | 5, 11 | Passive — auto-propagates from `types.ts` |
 
-**Only net-new extension in the whole milestone**: the registry's `identityClass` union gains one literal.
-
----
-
-## Sources
-- `.planning/PROJECT.md` (v1.5 identity, v1.6 NumericInput, v1.7 showRangeError)
-- `src/lib/shell/registry.ts`
-- `src/lib/morphine/state.svelte.ts`, `calculations.ts`, `morphine-config.json`, `types.ts`
-- `src/lib/fortification/fortification-config.ts`
-- `src/routes/morphine-wean/+page.svelte`
-- `src/lib/shared/components/NumericInput.svelte`
-- `src/lib/shared/components/SegmentedToggle.svelte`
-- `src/app.css` lines 188–207
+Registry uses `id: string`; tightening to `id: CalculatorId` is optional tech-debt follow-up, out of scope for v1.12.

@@ -1,125 +1,120 @@
-# Stack Research — v1.8 GIR Calculator
+# Technology Stack — v1.12 Feed Advance Calculator
 
+**Project:** NICU Assistant
+**Milestone:** v1.12 Feed Advance Calculator
 **Researched:** 2026-04-09
-**Mode:** Ecosystem (subsequent-milestone, additive)
-**Overall confidence:** HIGH — the existing validated stack was designed for exactly this case (plugin-like registration + shared components), and GIR is structurally a close sibling of Morphine Wean.
+**Scope:** Additions only. Base stack (SvelteKit 2.57 / Svelte 5.55 / Tailwind 4 / Vite 8 / TS 6 / pnpm 10.33 / @vite-pwa/sveltekit / adapter-static / Vitest 4 / Playwright 1.58 / axe-core / @lucide/svelte 1.8 / bits-ui 2.17) is frozen and NOT re-evaluated.
 
-## Verdict
+## TL;DR
 
-**No new runtime dependencies.** The GIR calculator is implementable end-to-end with the stack already in place (SvelteKit 2.55 + Svelte 5 runes + Tailwind CSS 4 + @lucide/svelte + shared `src/lib/shared/components/*`). The only additive changes are:
+**Zero new runtime dependencies. Zero new devDependencies.** The Feed Advance Calculator is a pure application of existing patterns — a fourth entry in `CALCULATOR_REGISTRY`, a new `src/lib/feeds/` module, a JSON config, spreadsheet-parity tests against `nutrition-calculator.xlsx`, and one new `--color-identity` OKLCH token pair. No new lib is justified.
 
-1. One new Lucide icon import in `registry.ts` (e.g. `Droplet` or `Droplets` — already exposed by the existing `@lucide/svelte` package, zero install cost).
-2. One new route `src/routes/gir/+page.svelte` and one new `gir-config.json` following the `morphine-config.json` / `fortification-config.json` pattern.
-3. Two new CSS custom-property blocks in `src/app.css` (`.identity-gir` + its dark variant), reusing the exact mechanism shipped in v1.5.
-4. One small additive prop on an existing shared component (see "New Component Props" below) — only if we decide the glucose range picker should visually live inside the titration table rather than above it. The default recommendation is to **reuse `SegmentedToggle` as-is** above the table and keep the table purely presentational, which requires zero component changes.
+## Recommended Stack Additions
 
-Rationale: the v1.1/v1.3/v1.6 pattern (JSON config → typed TS wrapper → state singleton with `$state` rune → shared components → spreadsheet-parity tests) already covers Weight / Dextrose% / ml/kg/day inputs, a result hero, and an advisory/tabular display. Nothing about GIR math (`GIR = (dextrose% × ml/kg/day × 10) / 1440` in mg/kg/min) or a 6-bucket titration lookup requires a new library.
+### Core Framework
+| Technology | Version | Purpose | Why |
+|------------|---------|---------|-----|
+| — | — | — | None. SvelteKit + Svelte 5 runes already carry the calculator pattern proven across Morphine, Formula, and GIR. |
 
-## Reused As-Is
+### Database
+| Technology | Version | Purpose | Why |
+|------------|---------|---------|-----|
+| — | — | — | N/A. Clinical parameters embedded at build time in `src/lib/feeds/feeds-config.json` (same pattern as `morphine-config.json`, `fortification-config.json`, `gir-config.json`). No runtime DB. |
 
-| Concern | Existing asset | Notes |
-|---|---|---|
-| Calculator registration | `src/lib/shell/registry.ts` `CalculatorEntry` + `identityClass` union | Extend union to `'identity-morphine' \| 'identity-formula' \| 'identity-gir'` and append one entry. This is the same diff shape as v1.5 teal add. |
-| Numeric inputs (Weight, Dextrose %, ml/kg/day) | `NumericInput` (v1.6 range hint + v1.7 `showRangeError` opt-out) | Already supports config-driven min/max/step, blur-gated "Outside expected range" advisory, and per-field opt-outs. GIR can use defaults. |
-| Dextrose % selection (if discrete D5/D7.5/D10/D12.5/D15) | `SelectPicker` (v1.4 native `<dialog>`, v1.5 `searchable`) | Small fixed list → non-searchable mode; drop-in. Alternative: `SegmentedToggle` if only 3–4 common strengths. |
-| Glucose range picker (6 buckets) | `SegmentedToggle` (v1.6) | `role="tablist"` + ←/→/Home/End keyboard nav + identity-aware focus ring are exactly what a 6-bucket titration picker needs. Six options fit the pattern Morphine already uses for 2. A 6-wide tablist on mobile may need `overflow-x-auto` at the parent — that's a route-level style, not a component change. |
-| Result hero (Current GIR mg/kg/min + Initial rate ml/hr) | `ResultsDisplay` + `.animate-result-pulse` + `aria-live="polite"` pattern from Morphine/Formula v1.6 | Same hero slot, same eyebrow+value+unit typography, same identity-driven background via `--color-identity-hero`. |
-| Disclaimer / About / Nav shell | `DisclaimerModal`, `AboutSheet`, `NavShell` | Zero changes. `NavShell` already consumes `identityClass` from registry (v1.5). |
-| Clinical data externalization | JSON config + typed TS wrapper pattern (`morphine-config.json`, `fortification-config.json` with `inputs` block from v1.6) | `gir-config.json` with `inputs` (weight/dextrose/mlkgday ranges) + `buckets` (6 glucose ranges with target GIR / target fluids / delta rate). Parity tests read the same JSON the UI reads — the v1.3 pattern. |
-| Spreadsheet parity | Vitest 4 + existing pattern from v1.1 (Morphine) and v1.3 (Fortification Neocate case) | `GIR-Wean-Calculator.xlsx` CALC tab → golden fixtures → `gir.test.ts` co-located next to `gir.ts`. No new test tooling. |
-| A11y sweeps | Playwright + axe-core (v1.5: 8 sweeps, v1.6: 12 sweeps) | Add 4 GIR sweeps (light+dark × default+bucket-selected). Zero new dependencies. |
-| PWA shell / offline | `@vite-pwa/sveltekit` 1.1 Workbox precache | New route picked up automatically at build time; `gir-config.json` is bundled. No config change needed. |
-| Icon | `@lucide/svelte` (already installed) | Recommended: `Droplet` or `Droplets` (glucose-as-fluid semantic). `Activity` or `Zap` are wrong — too generic/energetic for a calm clinical tone. |
+### Infrastructure
+| Technology | Version | Purpose | Why |
+|------------|---------|---------|-----|
+| — | — | — | adapter-static SPA output unchanged. PWA precache extends automatically to the new `/feeds` route. |
 
-## New Component Props (if any)
+### Supporting Libraries
+| Library | Version | Purpose | When to Use |
+|---------|---------|---------|-------------|
+| — | — | — | See per-question justifications below. |
 
-**Default recommendation: zero new props.** Place the `SegmentedToggle` glucose-range picker *above* a plain `<table>` (or semantic `role="table"` div grid) and drive a local `$state` selected-bucket variable; the table rows read that variable and apply `data-selected={bucket === selected}` with a Tailwind conditional class for the highlight. The table is presentational-only, the picker is the existing component.
+## Answers to Specific Questions
 
-**Only if route-level testing shows the "picker-above-table + highlighted row below" pattern is confusing** (P2 finding in an impeccable critique), consider this additive, opt-in prop on `SegmentedToggle`:
+### 1. xlsx parsing / test helpers for Sheet1 + Sheet2 parity?
 
-- Prop: `orientation?: 'horizontal' | 'vertical'` — default `'horizontal'`, preserves current behavior. Vertical would allow the 6-bucket picker to *be* the table's leftmost column. This is non-trivial (tablist keyboard semantics become ↑/↓ instead of ←/→, per WAI-ARIA APG) and should be deferred to a follow-up milestone unless the critique specifically demands it.
+**Verdict: NO addition. Continue hand-written fixtures.**
 
-**Do NOT** add a "table mode" or "row slot" prop to `SegmentedToggle`. A tablist is not a table; conflating them breaks ARIA semantics and the shared component's single responsibility. Keep the table as a table.
+**Rationale:**
+- Existing parity tests (`morphine-wean.test.ts`, `gir.test.ts`, `fortification.test.ts`) all use hand-transcribed row-by-row fixtures from the authoritative xlsx with an `~1%` epsilon. This pattern is documented in PROJECT.md Key Decisions and has shipped 3 calculators with zero drift.
+- Adding a runtime xlsx parser (`xlsx`/`sheetjs`, `exceljs`) would be overkill and wrong: the spreadsheet is the *source of truth at authoring time*, not a runtime input. The whole point of transcribing to fixtures is to pin the contract in the repo and survive xlsx file renames/moves.
+- A devDep parser used only in tests would add weight and indirection: humans would still need to read the xlsx to validate transcriptions, so the parser adds work, not saves it.
+- Sheet1 (full TPN + enteral) and Sheet2 (bedside advancement) are both small tables — Sheet2 in particular is a handful of rows that transcribe in minutes.
+- Hand transcription has already caught a truncated-constant class of issue on Morphine that automated xlsx parsing would have silently propagated.
 
-`NumericInput`, `SelectPicker`, `ResultsDisplay`, `DisclaimerModal`, `AboutSheet` require **no changes**.
+**Action:** In `src/lib/feeds/__tests__/feeds.test.ts`, create two locked fixture blocks: `SHEET1_CASES` (TPN + enteral full-nutrition) and `SHEET2_CASES` (bedside advancement per trophic divisor and advance cadence). Mirror the `morphine-wean.test.ts` shape.
 
-## Third Identity Hue Recommendation
+### 2. New lucide icon for the Feed Advance nav tab?
 
-### Constraints recap
-- Must be distinguishable from Clinical Blue (hue 220) and Formula Teal (hue 195) in OKLCH — a hue gap of ≥25° from both is a safe perceptual threshold.
-- Must pass WCAG 2.1 AA against surface tokens in **both** light and dark mode (same contract the v1.5 Morphine hero had to meet — recall v1.5 bumped the Morphine hero to literal `oklch(95% 0.04 220)` to clear 4.5:1).
-- Must feel semantically right for "glucose / energy / sugar" without drifting into warning/error territory (red is reserved; amber is already the BMF mode inside Formula and would collide).
-- Must stay inside the "warm clinical, calm, trustworthy" brand — no neon, no saturated consumer pops.
+**Verdict: YES — `Baby` from `@lucide/svelte` (already installed). Zero new package.**
 
-### Recommendation: **hue 145 — "Dextrose Green"**
+**Candidates considered (all in `@lucide/svelte` 1.8.0):**
+| Icon | Fit | Verdict |
+|------|-----|---------|
+| `Baby` | Clearest "infant feeding" signal; complements Milk (Formula) and Syringe (Morphine) without colliding | **Recommended** |
+| `Utensils` | Reads "adult dining," wrong register for NICU enteral feeding | Reject |
+| `CookingPot` | Too literal/kitchen | Reject |
+| `Soup` | Reads as "meal," not "advancing enteral feeds" | Reject |
+| `TrendingUp` | Captures "advance" but loses "feeding" context | Reject |
+| `Bottle` | Does not exist in lucide | N/A |
+| `Milk` | Already used by Formula tab — collision | Reject |
 
-- **Semantic fit:** Green reads as "metabolic / nutrition / vitality" in clinical contexts and is the conventional color for glucose strips and many dextrose bag labels. It is not a warning green (those sit near 130–135 at high chroma); at hue 145 with controlled chroma it reads as a cool, slightly teal-leaning green that visually pairs with (but never blurs into) the Formula teal at 195.
-- **Perceptual gap from neighbors:** 220 (Morphine) → 195 (Formula) → 145 (GIR). Gaps of 25° and 50° — both above the ~20° threshold where OKLCH hues become easily confusable at moderate chroma. Importantly, 145 is on the opposite side of 195 from 220, so GIR will never be mistaken for Formula even under blue-light filters.
-- **Anti-collision with semantics:** Error stays at hue 25 (red). BMF amber stays at hue 55–65. Clinical blue stays at 220. Formula teal at 195. Nothing occupies 140–160.
-- **Avoided alternatives:**
-  - Hue 90–110 (yellow-green / lime): too close to BMF amber, reads as caution.
-  - Hue 160–180 (emerald → cyan): too close to Formula teal at 195, and 170 in particular is a "success" color in most design systems — semantic collision risk on any future "valid/submitted" UI state.
-  - Hue 280–310 (purple/magenta): strong distinguishability but clashes with "warm clinical, calm" brand; reads as marketing/consumer.
-  - Hue 25–60 (red→amber): reserved for error and BMF.
+`Baby` is visually distinct from `Syringe`, `Milk`, `Droplet` and reads unambiguously as "infant," which is the defining subject of a feeding-advancement calculator. The semantic gap ("baby" ≠ "feeds") is acceptable because the label text is always visible (NAV-01/NAV-02), so the icon carries recognition, not meaning.
 
-### Literal OKLCH values
+**Action:** In `src/lib/shell/registry.ts`, add `Baby` to the existing `@lucide/svelte` import and use it on the `feeds` entry. Extend the `identityClass` union to include `'identity-feeds'`. No `package.json` change.
 
-Modeled directly on the v1.5 Formula teal block in `src/app.css` (lines 195–208), with lightness pulled from the same pattern that passed axe in v1.5 and the "95% L / 0.04 C hero" discipline that the Morphine hero had to adopt post-audit:
+**Confidence:** HIGH — `Baby` is a long-standing lucide icon, present in every recent release including the currently-installed 1.8.0.
 
-```css
-/* src/app.css — add inside the existing @layer base identity block */
-.identity-gir {
-  --color-identity:      oklch(46% 0.12 145);   /* light-mode accent text + focus ring */
-  --color-identity-hero: oklch(94% 0.045 145);  /* light-mode hero background */
-}
-.dark .identity-gir,
-[data-theme="dark"] .identity-gir {
-  --color-identity:      oklch(82% 0.10 145);   /* dark-mode accent text + focus ring */
-  --color-identity-hero: oklch(30% 0.09 145);   /* dark-mode hero background */
-}
+### 3. Numeric formatting library for ml/feed display?
+
+**Verdict: NO addition. Keep inline `.toFixed(1)` pattern.**
+
+**Rationale:**
+- Morphine (mg), Formula (g/packets/scoops), and GIR (mg/kg/min and ml/hr) all format inline at the render site. There is no shared `formatNumber` helper, and introducing one for a single new calculator would require a codemod across three existing calculators to justify itself.
+- `ml/feed` is a single-decimal clinical value — `.toFixed(1)` is trivially correct for the range involved (0.1–50 ml).
+- Libs like `numeral`, `d3-format`, or `Intl.NumberFormat` wrappers offer no benefit here: no locale-specific grouping, no currency, no unit conversion. Pure decimal truncation.
+- The project has a zero-runtime-deps posture for calculator math (DEBT-03 decision, v1.9). Adding one for display formatting would violate that trajectory.
+
+**Action:** Use `value.toFixed(1)` at the render site in `FeedAdvanceCalculator.svelte`. If the same formatting repeats 3+ times within the module, extract a local `formatMlPerFeed(n: number)` helper in `src/lib/feeds/feeds.ts` — local to the module, not shared.
+
+### 4. Additional Tailwind plugin for the 4th identity hue?
+
+**Verdict: NO plugin. Add one OKLCH token pair to `src/app.css`.**
+
+**Rationale:**
+- v1.5 introduced the `--color-identity` pattern wired to exactly 4 surfaces (result hero, focus rings, eyebrows, active nav indicator). It is implemented purely with CSS custom properties declared under `.identity-morphine`, `.identity-formula`, `.identity-gir` selectors in `src/app.css`.
+- No Tailwind plugin is involved; Tailwind 4's `@theme` + arbitrary-value utilities consume the tokens directly. Adding a plugin would add an indirection for zero expressive gain.
+- The Morphine v1.5 Phase 20 retune and the GIR v1.8 first-pass-green both confirm the flow: pick an OKLCH triple → declare it → run 4 axe sweeps (light/dark, focus, hero, nav) → adjust L only if contrast fails.
+
+**Action:** In `src/app.css`, add a new `.identity-feeds` selector block mirroring `.identity-gir`. Pick a hue that clears WCAG 4.5:1 in both themes against existing result-hero text tokens. Hue-space already in use: 220 (Morphine blue), 60 (Formula amber), 145 (GIR green). **Recommended: hue ~25 (warm terracotta/clay) or hue ~285 (violet)** — both clearly separated from the existing three on the hue wheel and neither collides with the red reserved for errors. Final L/C tuning is a Phase task, not a research task.
+
+**Axe-core upfront audit** (per v1.8 Key Decision): do the OKLCH contrast math in the discussion phase, not after the first axe failure. Cost of one audit < cost of one retune cycle.
+
+## Alternatives Considered
+
+| Category | Recommended | Alternative | Why Not |
+|----------|-------------|-------------|---------|
+| xlsx parity | Hand-written fixtures | `xlsx` / `exceljs` devDep | Adds weight, silently propagates truncation errors, provides nothing hand-transcription doesn't already guarantee. |
+| Nav icon | `Baby` (existing `@lucide/svelte`) | `Utensils`, `Soup`, `CookingPot` | Wrong clinical register — these read "adult dining." |
+| Nav icon | `Baby` | Custom SVG | No benefit; lucide maintains parity with Svelte 5 via `@lucide/svelte`. |
+| Number formatting | Inline `.toFixed(1)` | `numeral`, `d3-format`, `Intl.NumberFormat` | Single-decimal clinical value. Zero locale/grouping needs. Violates zero-dep posture. |
+| Identity hue | New OKLCH token in `app.css` | Tailwind plugin | Plugin adds indirection for a ~6-line CSS change. Pattern is proven through 3 calculators. |
+| Identity hue | New OKLCH token | Reuse existing hue | Per-tab identity is the entire point of `--color-identity`; reuse would collapse the signal. |
+
+## Installation
+
+```bash
+# No runtime installs.
+# No devDependency installs.
+# No package.json changes beyond the v1.12.0 version bump at release.
 ```
-
-### Contrast sanity check
-
-Token contract (restating from `src/app.css`):
-- Light `--color-surface-card` = `oklch(100% 0 0)` → pure white, L=1.0
-- Light `--color-text-primary` = `oklch(18% 0.012 230)` → near-black, L≈0.18
-- Dark `--color-surface-card` = `oklch(23% 0.014 236)` → L≈0.23
-- Dark `--color-text-primary` = `oklch(93% 0.006 230)` → L≈0.93
-
-**Light mode:**
-- `--color-identity` at L=46% on white card (L=100%): the v1.5 Formula teal uses `oklch(49% 0.11 195)` on the same surface and passes AA for UI text (3:1) and body text (4.5:1). Hue 145 at L=46% is perceptually *slightly darker* than L=49% (green luminance weighting), so the contrast against white will be **marginally better** than the already-passing Formula teal. Expected contrast ratio ≈ 5.0–5.4:1 vs white. **PASS 4.5:1 AA normal text.**
-- `--color-identity-hero` at L=94% holding L=18% body text: this replicates the Morphine post-audit fix pattern (L=95% hero behind primary text). Expected ratio ≈ 12–13:1. **PASS 4.5:1 AA.** The hero background is for decorative framing; the text on it is `--color-text-primary`, not the identity color.
-
-**Dark mode:**
-- `--color-identity` at L=82% on dark card L=23%: the Formula dark teal uses `oklch(82% 0.09 195)` on the same surface and passes. Hue 145 at the same L and slightly higher chroma (0.10) produces essentially identical luminance. Expected ratio ≈ 7.5–8:1 vs dark card. **PASS 4.5:1 AA, likely AAA.**
-- `--color-identity-hero` at L=30% holding L=93% primary text: Formula dark hero uses L=30% and clears 4.5:1. Expected ratio ≈ 9–10:1. **PASS.**
-
-**Caveat — chroma-induced lightness drift:** OKLCH lightness is perceptually uniform but per-channel luminance varies with hue. Green hues render slightly brighter than blue hues at equal L. This means the light-mode `--color-identity` at L=46% might land closer to a 5.0:1 ratio (rather than 5.4:1) — still safely above AA but the Phase 20-equivalent axe sweep in v1.8 is mandatory confirmation, same as Morphine/Formula went through. If the axe sweep fails (extremely unlikely given the headroom), bump the light-mode accent to `oklch(44% 0.12 145)` (darker) — this is the same one-step adjustment v1.5 used for the Morphine hero.
-
-## What NOT to Add
-
-- **No new charting / table / dataviz library.** A 6-row titration table is plain HTML. Introducing `@tanstack/svelte-table`, `ag-grid`, or similar would add bundle weight, break offline-first, and contradict the "earn trust through restraint" design principle.
-- **No math library (`mathjs`, `decimal.js`, etc.).** GIR math is single-step floating-point arithmetic within safe ranges; native JS `number` is sufficient, matching what Morphine and Formula already do. Spreadsheet parity is established via fixtures, not arbitrary-precision arithmetic.
-- **No animation library.** The existing `.animate-result-pulse` (200 ms, reduced-motion gated) covers the hero. Adding `svelte/motion` tweens or `motion-one` for a row-highlight effect is out of character — a 150 ms CSS `background-color` transition on the selected row, already covered by the global `html:not(.no-transition) *` rule in `src/app.css` line 120, is sufficient.
-- **No new icon pack.** `@lucide/svelte` has Droplet/Droplets and is already installed. Adding Heroicons or Phosphor to get a "better" glucose icon is gratuitous.
-- **No dynamic imports / route-level code splitting for GIR.** The registry-as-manifest decision in v1.0 was explicit. GIR is always-needed. Splitting adds Vite config complexity and a perceptible first-paint cost on the GIR tab.
-- **No new state manager.** The `$state` rune + sessionStorage backup pattern used by Morphine and Formula is the convention. No Zustand/nanostores/Pinia equivalents.
-- **No conflation of `SegmentedToggle` with table semantics.** See "New Component Props." A tablist is not a table row selector; they have different ARIA contracts. If the interaction pattern needs to evolve, introduce a new `RangeSelector` component rather than overloading `SegmentedToggle`.
-- **No new theme mechanism.** The v1.5 `identityClass` → CSS-variable swap is the one and only per-tab identity mechanism. Do not introduce Tailwind theme `extend` variants or CSS-in-JS for this.
-- **No clinical-range autocorrection.** v1.6 explicitly chose "advisory on blur, no auto-clamp." GIR must honor the same contract — a 25% dextrose entry should warn, not snap to 20%.
 
 ## Sources
 
-- Tailwind CSS v4 dark mode + `@custom-variant` (matches the existing `app.css` pattern): https://tailwindcss.com/docs/dark-mode — HIGH confidence (official docs, current major version)
-- OKLCH color model, perceptual uniformity, and hue spacing: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch — HIGH confidence (MDN, authoritative)
-- Oklch.com interactive picker for contrast verification (standard tool used during v1.4/v1.5 audits): https://oklch.com/ — MEDIUM confidence (community tool, widely used)
-- WCAG 2.1 AA contrast requirements (4.5:1 normal text, 3:1 UI components + large text): https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html — HIGH confidence (W3C normative)
-- WAI-ARIA Authoring Practices, Tabs pattern (keyboard model that `SegmentedToggle` already implements): https://www.w3.org/WAI/ARIA/apg/patterns/tabs/ — HIGH confidence (W3C APG)
-- Svelte 5 runes / `$state` / `$bindable` / `$props` (pattern used in `SegmentedToggle.svelte`): https://svelte.dev/docs/svelte/what-are-runes — HIGH confidence (official)
-- `@lucide/svelte` (official Svelte 5 package, already an installed dependency; Droplet/Droplets icons confirmed present in the Lucide icon set): https://lucide.dev/icons/ — HIGH confidence (official icon catalog)
-- Existing project evidence (HIGH confidence, local verification):
-  - `src/app.css` lines 186–209 — existing identity-pattern block this milestone extends verbatim
-  - `src/lib/shell/registry.ts` — `identityClass` union to extend
-  - `src/lib/shared/components/SegmentedToggle.svelte` — `role="tablist"` with full keyboard nav already wired to `--color-identity`
-  - `.planning/PROJECT.md` lines 51–67 — v1.5/v1.6/v1.7 shipped contracts this milestone inherits
+- PROJECT.md Validated list (v1.5 `--color-identity` introduction, v1.8 GIR first-pass axe green, v1.9 DEBT-03 zero-dep posture, v1.11 Morphine xlsx Sheet1 parity) — HIGH confidence, in-repo authority.
+- `src/lib/shell/registry.ts` — current icon imports and `identityClass` union — HIGH confidence, read directly.
+- `@lucide/svelte` 1.8.0 icon inventory (`Baby` long-standing export) — HIGH confidence, present in currently-installed version.
+- Tailwind CSS v4 `@theme` + CSS custom property docs: https://tailwindcss.com/docs/theme — MEDIUM confidence, consistent with existing `src/app.css` usage.
+- Key Decisions: "Research before PR for new identity hues" (v1.8) and "Drop ESLint in favor of svelte-check + Prettier only" (v1.9, Phase 30-02) — HIGH confidence, establish the zero-dep guardrail.
