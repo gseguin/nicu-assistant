@@ -21,14 +21,6 @@
     result ? `${result.currentGirMgKgMin.toFixed(1)}-${result.initialRateMlHr.toFixed(1)}` : ''
   );
 
-  let selectedRow = $derived(
-    result && girState.current.selectedBucketId
-      ? result.titration.find((r) => r.bucketId === girState.current.selectedBucketId) ?? null
-      : null
-  );
-
-  let targetPulseKey = $derived(selectedRow ? selectedRow.bucketId : '');
-
   // Advisory flags
   let showDexAdvisory = $derived(
     girState.current.dextrosePct != null && girState.current.dextrosePct > 12.5
@@ -38,19 +30,6 @@
 
   function handleSelectBucket(bucketId: string) {
     girState.current.selectedBucketId = bucketId;
-  }
-
-  type DeltaHero =
-    | { kind: 'stop' }
-    | { kind: 'no-change' }
-    | { kind: 'delta'; glyph: '▲' | '▼'; abs: string; word: '(increase)' | '(decrease)' };
-
-  function deltaHero(row: { bucketId: string; deltaRateMlHr: number; targetGirMgKgMin: number }): DeltaHero {
-    if (row.targetGirMgKgMin <= 0) return { kind: 'stop' };
-    if (row.deltaRateMlHr === 0) return { kind: 'no-change' };
-    if (row.deltaRateMlHr > 0)
-      return { kind: 'delta', glyph: '▲', abs: row.deltaRateMlHr.toFixed(1), word: '(increase)' };
-    return { kind: 'delta', glyph: '▼', abs: Math.abs(row.deltaRateMlHr).toFixed(1), word: '(decrease)' };
   }
 
   // Persist on change
@@ -183,50 +162,6 @@
         onselect={handleSelectBucket}
       />
     </section>
-
-    <!-- TARGET-GUIDANCE HERO -->
-    {#key targetPulseKey}
-      <section
-        class="card px-5 py-5 animate-result-pulse"
-        style="background: var(--color-identity-hero);"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {#if selectedRow}
-          {@const hero = deltaHero(selectedRow)}
-          <div class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-identity)]">
-            {#if hero.kind === 'stop'}HYPERGLYCEMIA{:else if hero.kind === 'no-change'}TARGET REACHED{:else}ADJUST RATE{/if}
-          </div>
-          {#if hero.kind === 'stop'}
-            <div class="flex items-baseline gap-2">
-              <span class="text-display font-black uppercase tracking-wider text-[var(--color-text-primary)]">STOP</span>
-              <span class="text-ui text-[var(--color-text-secondary)]">dextrose infusion</span>
-            </div>
-          {:else if hero.kind === 'no-change'}
-            <div class="flex items-baseline gap-2">
-              <span class="text-display font-black num text-[var(--color-text-tertiary)]" aria-hidden="true">—</span>
-              <span class="text-ui text-[var(--color-text-secondary)]">no change</span>
-            </div>
-            <div class="text-ui text-[var(--color-text-secondary)] num mt-2">
-              {selectedRow.targetFluidsMlKgDay.toFixed(0)} ml/kg/day · {selectedRow.targetRateMlHr.toFixed(1)} ml/hr · {selectedRow.targetGirMgKgMin.toFixed(1)} mg/kg/min
-            </div>
-          {:else}
-            <div class="flex items-baseline gap-2">
-              <span class="text-display font-black num text-[var(--color-text-primary)]">{hero.glyph} {hero.abs}</span>
-              <span class="text-ui text-[var(--color-text-tertiary)]">ml/hr</span>
-              <span class="text-ui text-[var(--color-text-secondary)]">{hero.word}</span>
-            </div>
-            <div class="text-ui text-[var(--color-text-secondary)] num mt-2">
-              {selectedRow.targetFluidsMlKgDay.toFixed(0)} ml/kg/day · {selectedRow.targetRateMlHr.toFixed(1)} ml/hr · {selectedRow.targetGirMgKgMin.toFixed(1)} mg/kg/min
-            </div>
-          {/if}
-        {:else}
-          <p class="text-ui text-[var(--color-text-secondary)]">
-            Select a glucose range to see target rate
-          </p>
-        {/if}
-      </section>
-    {/key}
   {/if}
 
   <!-- POPULATION REFERENCE CARD -->
