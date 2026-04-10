@@ -99,7 +99,10 @@ Plans:
   4. Full Nutrition mode accepts TPN dextrose (two parallel lines), SMOF ml, enteral volume + kcal/oz and shows total kcal/kg/d as the hero value
   5. Safety advisories appear when thresholds are crossed (trophic > advance, dextrose > 12.5%, total kcal/kg/d out of range) without blocking input
   6. Playwright happy-path passes at mobile 375 + desktop 1280 for both modes; axe-core sweeps bring total suite to 20/20 green
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 38-01-PLAN.md — Config extensions + state module + FeedAdvanceCalculator component + route + about-content
+- [ ] 38-02-PLAN.md — Component tests + Playwright E2E + axe-core a11y sweeps
 **UI hint**: yes
 
 ### Phase 39: Release v1.12.0
@@ -124,5 +127,5 @@ Plans:
 | 35    | v1.11 | 1/1 | Complete    | 2026-04-09 |
 | 36. Wave 0 | v1.12 | 2/2 | Complete    | 2026-04-10 |
 | 37. Pure Logic | v1.12 | 2/2 | Complete    | 2026-04-10 |
-| 38. UI + E2E | v1.12 | 0/? | Not started | - |
+| 38. UI + E2E | v1.12 | 0/2 | Not started | - |
 | 39. Release | v1.12 | 0/? | Not started | - |
