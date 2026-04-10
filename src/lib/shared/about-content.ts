@@ -50,10 +50,11 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     title: 'Feed Advance Calculator',
     version: appVersion,
     description:
-      'Calculates bedside feeding advancement volumes and full TPN nutrition totals for NICU patients.',
+      'Calculates bedside feeding advancement volumes (trophic, advance step, goal ml/feed) and full TPN + enteral nutrition totals (kcal/kg/d) for NICU patients. Supports configurable feed frequency and advance cadence.',
     notes: [
-      'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement).',
-      'Coming soon.',
+      'Bedside mode: trophic/advance/goal ml per feed from weight and ml/kg/d targets, with frequency (q2h-q6h) and cadence (every feed to once daily) dropdowns.',
+      'Full nutrition mode: total kcal/kg/d from dual TPN dextrose lines, SMOF lipid, and enteral feeds. Hero output is total kcal/kg/d.',
+      'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement). Results are advisory — clinical judgment required.',
     ],
   },
 };

@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { setCalculatorContext } from '$lib/shared/context.js';
+  import { feedsState } from '$lib/feeds/state.svelte.js';
+  import FeedAdvanceCalculator from '$lib/feeds/FeedAdvanceCalculator.svelte';
   import { Baby } from '@lucide/svelte';
 
   onMount(() => {
@@ -8,6 +10,7 @@
       id: 'feeds',
       accentColor: 'var(--color-identity)'
     });
+    feedsState.init();
   });
 </script>
 
@@ -20,7 +23,9 @@
     <Baby size={28} class="text-[var(--color-identity)]" aria-hidden="true" />
     <div class="flex flex-col">
       <h1 class="text-title font-bold text-[var(--color-text-primary)]">Feed Advance Calculator</h1>
-      <span class="text-ui text-[var(--color-text-secondary)]">coming soon</span>
+      <span class="text-ui text-[var(--color-text-secondary)]">bedside volumes + nutrition totals</span>
     </div>
   </header>
+
+  <FeedAdvanceCalculator />
 </div>
