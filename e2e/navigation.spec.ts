@@ -25,10 +25,11 @@ test.describe('Navigation (v1.2 restructure)', () => {
 		await expect(bottomNav).toBeVisible();
 
 		const tabs = bottomNav.getByRole('tab');
-		await expect(tabs).toHaveCount(3);
+		await expect(tabs).toHaveCount(4);
 		await expect(tabs.nth(0)).toContainText('Morphine Wean');
 		await expect(tabs.nth(1)).toContainText('Formula');
 		await expect(tabs.nth(2)).toContainText('GIR');
+		await expect(tabs.nth(3)).toContainText('Feeds');
 
 		await expect(bottomNav.getByRole('button', { name: /about/i })).toHaveCount(0);
 		await expect(bottomNav.getByRole('button', { name: /switch to/i })).toHaveCount(0);

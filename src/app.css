@@ -197,8 +197,8 @@
     --color-identity-hero: oklch(92% 0.05 195);
   }
   .identity-gir {
-    --color-identity:      oklch(46% 0.12 145);
-    --color-identity-hero: oklch(94% 0.045 145);
+    --color-identity:      oklch(42% 0.12 145);
+    --color-identity-hero: oklch(96% 0.03 145);
   }
   .dark .identity-morphine,
   [data-theme="dark"] .identity-morphine {
