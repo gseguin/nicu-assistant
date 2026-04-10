@@ -13,7 +13,7 @@
 - [v1.8 GIR Calculator](milestones/v1.8-ROADMAP.md) - Phases 26-28 (shipped 2026-04-09)
 - [v1.9 GIR Titration Hero Swap + Polish](milestones/v1.9-ROADMAP.md) - Phases 29-31 (shipped 2026-04-09)
 - [v1.10 GIR Simplification + Dock + Tech Debt](milestones/v1.10-ROADMAP.md) - Phases 32-34 (shipped 2026-04-10)
-- **v1.11 Morphine Mode Removal — Single Source of Truth** - Phase 35 (shipped 2026-04-09)
+- [v1.11 Morphine Mode Removal — Single Source of Truth](milestones/v1.11-ROADMAP.md) - Phase 35 (shipped 2026-04-09)
 
 ## Phases
 
@@ -41,9 +41,14 @@ See [milestones/v1.10-ROADMAP.md](milestones/v1.10-ROADMAP.md) for full phase de
 
 </details>
 
-### v1.11 Morphine Mode Removal — Single Source of Truth
+<details>
+<summary>v1.11 Morphine Mode Removal — Single Source of Truth (Phase 35) — SHIPPED 2026-04-09</summary>
 
-- [x] **Phase 35: Morphine Mode Removal + Release v1.11** — Remove Linear/Compounding mode toggle from Morphine Wean calculator. Source of truth = `morphine-wean-calculator.xlsx` Sheet1 (linear formula verified row-by-row). Delete `WeanMode` type, `compounding` config, `calculateCompoundingSchedule()` and tests, SegmentedToggle from `MorphineWeanCalculator.svelte`, `mode` field from state. Update spreadsheet-parity tests to lock xlsx Sheet1 as sole authority. Update AboutSheet copy. Bump to v1.11.0. Maintain 16/16 axe sweeps green. **Requirements:** MORPH-01..09. **Success criteria:** (1) UI shows no mode toggle; (2) schedule matches xlsx Sheet1 row-by-row for the test fixture; (3) `calculateCompoundingSchedule` and `WeanMode` removed from codebase; (4) full test suite + 16/16 axe sweeps green; (5) AboutSheet + `package.json` reflect v1.11.0.
+- [x] **Phase 35: Morphine Mode Removal + Release v1.11** — Remove linear/compounding mode toggle from Morphine Wean calculator. xlsx Sheet1 is the sole authoritative formula. Delete `WeanMode`, `calculateCompoundingSchedule`, `modes` config, SegmentedToggle usage. Lock spreadsheet-parity tests row-by-row against Sheet1. Bump v1.11.0. (1/1 plan)
+
+See [milestones/v1.11-ROADMAP.md](milestones/v1.11-ROADMAP.md) for full phase details.
+
+</details>
 
 ## Progress
 

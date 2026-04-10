@@ -1,5 +1,24 @@
 # Milestones
 
+## v1.11 Morphine Mode Removal — Single Source of Truth (Shipped: 2026-04-09)
+
+**Phases completed:** 1 phase (35), 1 plan, 15 tasks
+
+**Tag:** `v1.11.0`
+
+**Key accomplishments:**
+
+- **Morphine Wean is now a single-formula calculator.** The linear/compounding mode toggle is gone. `morphine-wean-calculator.xlsx` Sheet1 is the sole authoritative formula: step 1 = `weight × maxDose`; step N>1 = `previous − (weight × maxDose × decreasePct)` — a fixed mg reduction per step. Formula audited cell-by-cell before any code change; `calculateLinearSchedule()` already matched exactly, so the milestone became a pure deletion + simplification (MORPH-01, MORPH-02).
+- **Compounding removed in depth.** `calculateCompoundingSchedule()`, the `WeanMode` type, the `modes` config block, the `activeMode` state field, and the `SegmentedToggle` usage in `MorphineWeanCalculator.svelte` were all deleted. Net diff: +36 / −216 (−180 LOC) across 12 files in a single commit (MORPH-03..05).
+- **State migration = no-op.** Stale `activeMode` keys in sessionStorage are silently dropped by the existing `{ ...defaultState(), ...parsed }` spread pattern in `morphineState.init()` — no version bump, no explicit key cleanup, no user-visible churn.
+- **Spreadsheet-parity tests locked to xlsx Sheet1.** Rewrote `calculations.test.ts`: removed compounding unit tests and the Sheet2 compounding parity block; renamed the Sheet1 block to `"Morphine wean — xlsx Sheet1 spreadsheet parity"` with row-by-row assertions for all 10 steps × 3 fields for the canonical fixture (weight 3.1, maxDose 0.04, decreasePct 0.10) (MORPH-06).
+- **Component and E2E specs updated.** Removed tablist/tab-click assertions; added explicit `"does not render a weaning mode toggle"` assertions in both unit and Playwright. All 16/16 axe sweeps remain green with zero OKLCH tuning or layout fixes (MORPH-07).
+- **AboutSheet copy rewritten.** `src/lib/shared/about-content.ts` Morphine description and notes now describe a single fixed-reduction formula and cite `morphine-wean-calculator.xlsx` Sheet1 as source (MORPH-08).
+- **Release v1.11.0.** `package.json` bumped 1.10.0 → 1.11.0 (AboutSheet version reflects automatically via Vite `define`). PROJECT.md Validated list updated; Active section cleared (MORPH-09).
+- **Final gates.** svelte-check 0/0 across 4493 files, vitest 185/185, `pnpm build` ✓, Playwright 47 passed / 3 skipped (PWA prod only) / 0 failed, 16/16 axe sweeps green.
+
+---
+
 ## v1.10 GIR Simplification + Dock + Tech Debt (Shipped: 2026-04-10)
 
 **Phases completed:** 3 phases (32, 33, 34), 3 plans
