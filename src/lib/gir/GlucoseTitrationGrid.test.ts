@@ -70,6 +70,33 @@ describe('GlucoseTitrationGrid', () => {
     expect(onselect).toHaveBeenCalledWith('gt70');
   });
 
+  it('severe-neuro bucket renders STOP unconditionally even when targetGirMgKgMin > 0', () => {
+    // Realistic severe-neuro fixture: positive targetGirMgKgMin (9.7), positive deltaRateMlHr (2.0).
+    // Current <= 0 gate would render ▲ 2.0 (increase). The fix must render STOP dextrose infusion.
+    // Use a fixture where ONLY bucketId severe-neuro should trigger STOP.
+    // gt70 is given positive targets so it cannot mask severe-neuro via the old <=0 gate.
+    const rows = makeRows([
+      {}, {}, {}, {}, {},
+      { targetGirMgKgMin: 7.0, targetFluidsMlKgDay: 56, targetRateMlHr: 9.0, deltaRateMlHr: -1.5 },
+    ]);
+    const { container } = render(GlucoseTitrationGrid, { rows, selectedBucketId: null, onselect: () => {} });
+    // Find severe-neuro rows by eyebrow text "SEVERE NEURO SIGNS" (mobile) or
+    // "Severe neurologic signs" visible label (desktop). Walk up to role=radio.
+    const radios = screen.getAllByRole('radio');
+    const severeRows = radios.filter((r) => /severe neuro/i.test(r.textContent || ''));
+    expect(severeRows.length).toBeGreaterThan(0);
+    for (const row of severeRows) {
+      const text = (row.textContent || '').toLowerCase();
+      expect(text).toContain('stop');
+      expect(text).toContain('dextrose infusion');
+      // Must NOT render the Δ-rate increase/decrease hero
+      expect(text).not.toContain('▲');
+      expect(text).not.toContain('▼');
+      expect(text).not.toContain('(increase)');
+      expect(text).not.toContain('(decrease)');
+    }
+  });
+
   it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
     const stops = screen.getAllByText(/^STOP$/);
