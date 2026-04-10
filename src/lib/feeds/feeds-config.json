@@ -1,0 +1,85 @@
+{
+	"defaults": {
+		"weightKg": 1.94,
+		"trophicMlKgDay": 20,
+		"advanceMlKgDay": 30,
+		"goalMlKgDay": 160,
+		"trophicFrequency": "q3h",
+		"advanceCadence": "bid",
+		"totalFluidsMlHr": 12,
+		"tpnDex1Pct": 10,
+		"tpnMl1Hr": 56,
+		"tpnDex2Pct": 0,
+		"tpnMl2Hr": 0,
+		"smofMl": 0,
+		"enteralMl": 200,
+		"enteralKcalPerOz": 24
+	},
+	"inputs": {
+		"weightKg": { "min": 0.4, "max": 6.0, "step": 0.01 },
+		"trophicMlKgDay": { "min": 10, "max": 30, "step": 1 },
+		"advanceMlKgDay": { "min": 10, "max": 40, "step": 1 },
+		"goalMlKgDay": { "min": 120, "max": 180, "step": 5 },
+		"totalFluidsMlHr": { "min": 1, "max": 30, "step": 0.5 },
+		"tpnDexPct": { "min": 0, "max": 25, "step": 0.5 },
+		"tpnMlHr": { "min": 0, "max": 200, "step": 1 },
+		"smofMl": { "min": 0, "max": 100, "step": 1 },
+		"enteralMl": { "min": 0, "max": 500, "step": 1 },
+		"enteralKcalPerOz": { "min": 20, "max": 30, "step": 1 }
+	},
+	"dropdowns": {
+		"frequency": [
+			{ "id": "q3h", "label": "q3h (8 feeds/day)", "feedsPerDay": 8 },
+			{ "id": "q4h", "label": "q4h (6 feeds/day)", "feedsPerDay": 6 }
+		],
+		"cadence": [
+			{ "id": "every", "label": "Every feed", "type": "relative", "value": 1 },
+			{ "id": "every-other", "label": "Every other feed", "type": "relative", "value": 2 },
+			{ "id": "every-3rd", "label": "Every 3rd feed", "type": "relative", "value": 3 },
+			{ "id": "bid", "label": "Twice daily (BID)", "type": "absolute", "value": 2 },
+			{ "id": "qd", "label": "Once daily (QD)", "type": "absolute", "value": 1 }
+		]
+	},
+	"advisories": [
+		{
+			"id": "trophic-exceeds-advance",
+			"field": "trophicMlKgDay",
+			"comparator": "gt",
+			"value": 0,
+			"message": "Trophic volume exceeds advance \u2014 verify inputs",
+			"mode": "bedside"
+		},
+		{
+			"id": "dextrose-high-line1",
+			"field": "tpnDex1Pct",
+			"comparator": "gt",
+			"value": 12.5,
+			"message": "Dextrose >12.5% typically requires central access",
+			"mode": "full-nutrition"
+		},
+		{
+			"id": "dextrose-high-line2",
+			"field": "tpnDex2Pct",
+			"comparator": "gt",
+			"value": 12.5,
+			"message": "Dextrose >12.5% typically requires central access",
+			"mode": "full-nutrition"
+		},
+		{
+			"id": "total-kcal-high",
+			"field": "totalKcalPerKgDay",
+			"comparator": "gt",
+			"value": 140,
+			"message": "Total kcal/kg/d above expected range \u2014 verify",
+			"mode": "full-nutrition"
+		},
+		{
+			"id": "total-kcal-low",
+			"field": "totalKcalPerKgDay",
+			"comparator": "lt",
+			"value": 90,
+			"message": "Total kcal/kg/d below growth target \u2014 verify",
+			"mode": "full-nutrition"
+		}
+	]
+}
