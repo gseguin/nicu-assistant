@@ -8,7 +8,7 @@ A PWA that unifies clinical calculators into a single tool for NICU staff. Curre
 
 **Shipped:** v1.11 Morphine Mode Removal — Single Source of Truth (2026-04-09) — Morphine Wean linear/compounding mode toggle removed; `morphine-wean-calculator.xlsx` Sheet1 is the sole authoritative formula (linear: previous − weight × maxDose × decreasePct); `calculateCompoundingSchedule`, `WeanMode` type, `modes` config block, and SegmentedToggle usage in Morphine all deleted; spreadsheet-parity tests locked row-by-row against Sheet1 (10 steps); AboutSheet copy rewritten; PWA at version 1.11.0; svelte-check 0/0, vitest 185/185, Playwright 47 passed / 3 skipped, 16/16 axe sweeps green.
 
-**In progress:** v1.12 Feed Advance Calculator — Phase 37 (Pure Logic + Config + Parity Tests) complete: all Feed Advance calculation functions implemented in `src/lib/feeds/` — bedside advancement (Sheet2) with parameterized frequency × cadence, full nutrition (Sheet1) with dual-line TPN dextrose, IV backfill, data-driven advisory checking; named constants with JSDoc (DEXTROSE_KCAL_PER_GRAM, LIPID_KCAL_PER_ML, ML_PER_OZ); `feeds-config.json` with clinical defaults/ranges/dropdowns/advisories; spreadsheet-parity fixtures locked to xlsx canonical weights (1.94/1.74); parameter-matrix tests for all 10 frequency × cadence combos. svelte-check 0/0, vitest 215/215.
+**In progress:** v1.12 Feed Advance Calculator — Phase 38 (UI + State + Component Tests + Route + E2E + A11y) complete: `FeedAdvanceCalculator.svelte` (504 lines) with SegmentedToggle for Bedside Advancement / Full Nutrition modes, shared weight input, bedside mode with three equally-prominent per-feed outputs (trophic/advance/goal) + IV backfill, full nutrition mode with dual TPN dextrose lines + total kcal/kg/d hero value, 9 data-driven advisory banners, sessionStorage state persistence. TrophicFrequency extended to q2h/q3h/q4h/q6h. Route wired, about-content updated. 13 component tests + 5 E2E tests + 6 axe-core sweeps. svelte-check 0/0, vitest 228/228. 4 human verification items pending.
 
 ## Core Value
 
@@ -193,4 +193,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 — v1.12 Phase 37 complete (pure logic + config + parity tests)*
+*Last updated: 2026-04-10 — v1.12 Phase 38 complete (UI + state + tests + E2E + a11y)*
