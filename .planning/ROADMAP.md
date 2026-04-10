@@ -43,7 +43,7 @@ See [milestones/v1.9-ROADMAP.md](milestones/v1.9-ROADMAP.md) for full phase deta
 ### v1.10 GIR Simplification + Dock + Tech Debt (Phases 32-34)
 
 - [x] **Phase 32: GIR Simplification** — Remove summary hero card, per-card secondary metrics row, reference card; preserve click/tap visual treatment; drop `aria-live` (severe-neuro STOP gating fix dropped from scope mid-flight) (completed 2026-04-10)
-- [ ] **Phase 33: GIR Dock Magnification** — Port morphine-wean dock magnification to `GlucoseTitrationGrid`; mobile-only + reduced-motion guards; axe re-verify
+- [x] **Phase 33: GIR Dock Magnification** — Port morphine-wean dock magnification to `GlucoseTitrationGrid`; mobile-only + reduced-motion guards; axe re-verify (completed 2026-04-10)
 - [ ] **Phase 34: Tech Debt Majors + Release v1.10** — Upgrade `@types/node` 22→25 and `typescript` 5→6 (deferred from v1.9); bump package.json to 1.10.0; update PROJECT.md Validated list with retired-entry strikethroughs
 
 ## Phase Details
@@ -95,5 +95,5 @@ See [milestones/v1.9-ROADMAP.md](milestones/v1.9-ROADMAP.md) for full phase deta
 | 26-28 | v1.8 | 9/9 | Complete | 2026-04-09 |
 | 29-31 | v1.9 | 4/4 | Complete | 2026-04-09 |
 | 32. GIR Simplification | v1.10 | 1/1 | Complete   | 2026-04-10 |
-| 33. GIR Dock Magnification | v1.10 | 0/0 | Not started | - |
+| 33. GIR Dock Magnification | v1.10 | 1/1 | Complete   | 2026-04-10 |
 | 34. Tech Debt Majors + Release v1.10 | v1.10 | 0/0 | Not started | - |
