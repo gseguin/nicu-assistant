@@ -46,4 +46,14 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Dextrose >12.5% requires central venous access. GIR >12 mg/kg/min warrants hyperinsulinism workup.',
     ],
   },
+  feeds: {
+    title: 'Feed Advance Calculator',
+    version: appVersion,
+    description:
+      'Calculates bedside feeding advancement volumes and full TPN nutrition totals for NICU patients.',
+    notes: [
+      'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement).',
+      'Coming soon.',
+    ],
+  },
 };

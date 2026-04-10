@@ -11,6 +11,7 @@
   const activeCalculatorId = $derived<CalculatorId>(
     page.url.pathname.startsWith('/formula') ? 'formula'
     : page.url.pathname.startsWith('/gir') ? 'gir'
+    : page.url.pathname.startsWith('/feeds') ? 'feeds'
     : 'morphine-wean'
   );
 </script>

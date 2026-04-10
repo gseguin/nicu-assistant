@@ -1,6 +1,6 @@
 // src/lib/shell/registry.ts
 import type { Component } from 'svelte';
-import { Syringe, Milk, Droplet } from '@lucide/svelte';
+import { Syringe, Milk, Droplet, Baby } from '@lucide/svelte';
 
 export interface CalculatorEntry {
   id: string;          // Route segment — must match src/routes/{id}/
@@ -8,7 +8,7 @@ export interface CalculatorEntry {
   href: string;        // SvelteKit href
   icon: Component;     // Lucide icon component
   description: string; // Screen reader accessible description
-  identityClass: 'identity-morphine' | 'identity-formula' | 'identity-gir';
+  identityClass: 'identity-morphine' | 'identity-formula' | 'identity-gir' | 'identity-feeds';
 }
 
 export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
@@ -35,5 +35,13 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     icon: Droplet,
     description: 'Glucose infusion rate calculator',
     identityClass: 'identity-gir',
+  },
+  {
+    id: 'feeds',
+    label: 'Feeds',
+    href: '/feeds',
+    icon: Baby,
+    description: 'Feed advance calculator',
+    identityClass: 'identity-feeds',
   },
 ] as const;
