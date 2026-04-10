@@ -98,7 +98,7 @@
 >
   {#each rows as row, i (row.bucketId)}
     {@const selected = selectedBucketId === row.bucketId}
-    {@const stopInfusion = row.targetGirMgKgMin <= 0}
+    {@const stopInfusion = row.bucketId === 'severe-neuro' || row.targetGirMgKgMin <= 0}
     {@const d = formatDelta(row.deltaRateMlHr)}
     <div
       bind:this={rowRefs[i]}
@@ -166,7 +166,7 @@
 
   {#each rows as row, i (row.bucketId)}
     {@const selected = selectedBucketId === row.bucketId}
-    {@const stopInfusion = row.targetGirMgKgMin <= 0}
+    {@const stopInfusion = row.bucketId === 'severe-neuro' || row.targetGirMgKgMin <= 0}
     {@const d = formatDelta(row.deltaRateMlHr)}
     <div
       bind:this={rowRefs[i]}
