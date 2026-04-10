@@ -1,14 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/svelte';
 
-// Mock morphineState before importing the component.
-// The real module uses Svelte 5 $state runes which are difficult to control
-// in test environments. We provide a plain reactive-like object instead.
-const mockState = {
-  weightKg: null as number | null,
-  maxDoseMgKgDose: null as number | null,
-  decreasePct: null as number | null,
-};
+// Import a $state-backed mock from a .svelte.ts helper so bind:value bindings
+// see reactive properties and don't trigger binding_property_non_reactive warnings.
+import { mockState, resetMockState } from './test-mock-state.svelte.js';
 
 vi.mock('$lib/morphine/state.svelte.js', () => ({
   morphineState: {
@@ -17,11 +12,7 @@ vi.mock('$lib/morphine/state.svelte.js', () => ({
     },
     init: vi.fn(),
     persist: vi.fn(),
-    reset: vi.fn(() => {
-      mockState.weightKg = null;
-      mockState.maxDoseMgKgDose = null;
-      mockState.decreasePct = null;
-    }),
+    reset: vi.fn(() => resetMockState()),
   },
 }));
 
@@ -29,10 +20,7 @@ import MorphineWeanCalculator from './MorphineWeanCalculator.svelte';
 
 describe('MorphineWeanCalculator', () => {
   beforeEach(() => {
-    // Reset mock state to defaults before each test
-    mockState.weightKg = null;
-    mockState.maxDoseMgKgDose = null;
-    mockState.decreasePct = null;
+    resetMockState();
   });
 
   it('does not render a weaning mode toggle', () => {
