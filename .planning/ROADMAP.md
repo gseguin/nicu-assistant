@@ -114,7 +114,9 @@ Plans:
   2. PROJECT.md Validated list includes all v1.12 entries
   3. App has a distinct, recognizable favicon at all standard sizes (16x16 through 512x512)
   4. Final gates pass: svelte-check 0/0, vitest all green, Playwright all green, axe 20/20, `pnpm build` succeeds
-**Plans**: TBD
+**Plans:** 1 plan
+Plans:
+- [ ] 39-01-PLAN.md — Version bump to 1.12.0, PROJECT.md validated list update, favicon generation, final gates
 
 ## Progress
 
@@ -128,4 +130,4 @@ Plans:
 | 36. Wave 0 | v1.12 | 2/2 | Complete    | 2026-04-10 |
 | 37. Pure Logic | v1.12 | 2/2 | Complete    | 2026-04-10 |
 | 38. UI + E2E | v1.12 | 2/2 | Complete    | 2026-04-10 |
-| 39. Release | v1.12 | 0/? | Not started | - |
+| 39. Release | v1.12 | 0/1 | Not started | - |
