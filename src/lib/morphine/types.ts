@@ -1,5 +1,3 @@
-export type WeanMode = 'linear' | 'compounding';
-
 export interface WeanStep {
   step: number;           // 1-based step number
   doseMg: number;         // Dose in mg
@@ -8,7 +6,6 @@ export interface WeanStep {
 }
 
 export interface MorphineStateData {
-  activeMode: WeanMode;
   weightKg: number | null;
   maxDoseMgKgDose: number | null;
   decreasePct: number | null;

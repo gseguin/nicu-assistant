@@ -1,18 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { calculateLinearSchedule, calculateCompoundingSchedule } from '$lib/morphine/calculations.js';
+  import { calculateLinearSchedule } from '$lib/morphine/calculations.js';
   import { morphineState } from '$lib/morphine/state.svelte.js';
   import NumericInput from '$lib/shared/components/NumericInput.svelte';
-  import SegmentedToggle from '$lib/shared/components/SegmentedToggle.svelte';
-  import type { WeanMode, WeanStep, MorphineInputRanges } from '$lib/morphine/types.js';
+  import type { WeanStep, MorphineInputRanges } from '$lib/morphine/types.js';
   import config from '$lib/morphine/morphine-config.json';
 
   const inputs = config.inputs as MorphineInputRanges;
-
-  const MODE_OPTIONS: { value: WeanMode; label: string }[] = [
-    { value: 'linear', label: 'Linear' },
-    { value: 'compounding', label: 'Compounding' },
-  ];
 
   // Dock-style magnification: scale cards based on distance from viewport center
   let activeStepIndex = $state(-1);
@@ -101,20 +95,17 @@
 
   // Derived schedule computation
   let schedule: WeanStep[] = $derived.by(() => {
-    const { weightKg, maxDoseMgKgDose, decreasePct, activeMode } = morphineState.current;
+    const { weightKg, maxDoseMgKgDose, decreasePct } = morphineState.current;
     if (weightKg === null || maxDoseMgKgDose === null || decreasePct === null) return [];
     if (weightKg <= 0 || maxDoseMgKgDose <= 0 || decreasePct <= 0) return [];
     const pct = decreasePct / 100; // convert from percentage integer to decimal
-    if (activeMode === 'linear') {
-      return calculateLinearSchedule(weightKg, maxDoseMgKgDose, pct);
-    }
-    return calculateCompoundingSchedule(weightKg, maxDoseMgKgDose, pct);
+    return calculateLinearSchedule(weightKg, maxDoseMgKgDose, pct);
   });
 
   // Recalculation feedback: derive a key from schedule identity to trigger CSS animation via {#key}
   let calcKey = $derived(
     schedule.length > 0
-      ? `${schedule[0].doseMg}-${schedule[schedule.length - 1].doseMg}-${morphineState.current.activeMode}`
+      ? `${schedule[0].doseMg}-${schedule[schedule.length - 1].doseMg}`
       : ''
   );
 
@@ -137,14 +128,6 @@
 </script>
 
 <div class="space-y-6">
-  <!-- Mode Switcher -->
-  <SegmentedToggle
-    label="Weaning mode"
-    ariaLabel="Weaning mode"
-    bind:value={morphineState.current.activeMode}
-    options={MODE_OPTIONS}
-  />
-
   <!-- Inputs Card -->
   <section class="card flex flex-col gap-4">
     <NumericInput

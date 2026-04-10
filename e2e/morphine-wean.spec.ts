@@ -23,7 +23,7 @@ test.describe('Morphine Wean Calculator', () => {
 	});
 
 	test('summary card shows total reduction percentage', async ({ page }) => {
-		// Linear mode with defaults: 90% total reduction
+		// Defaults: 90% total reduction
 		const summary = page.getByTestId('morphine-summary');
 		await expect(summary).toBeVisible();
 		await expect(summary).toContainText('90.0%');
@@ -42,12 +42,10 @@ test.describe('Morphine Wean Calculator', () => {
 		expect(errorElements).toBe(0);
 	});
 
-	test('switching to compounding mode changes total reduction', async ({ page }) => {
-		await page.getByRole('tab', { name: 'Compounding' }).click();
-		await page.waitForTimeout(300);
-		// Compounding total reduction is ~61.3%
-		const summary = page.getByTestId('morphine-summary');
-		await expect(summary).toContainText(/6[0-2]\.\d%/);
+	test('does not render a weaning mode toggle', async ({ page }) => {
+		await expect(page.getByRole('tablist', { name: 'Weaning mode' })).toHaveCount(0);
+		await expect(page.getByRole('tab', { name: 'Linear' })).toHaveCount(0);
+		await expect(page.getByRole('tab', { name: 'Compounding' })).toHaveCount(0);
 	});
 
 	test('clear inputs resets to default values', async ({ page }) => {
@@ -67,17 +65,6 @@ test.describe('Morphine Wean Calculator', () => {
 		// Starting dose = 5 * 0.08 = 0.4000
 		const scheduleRegion = page.locator('[aria-label="Weaning schedule"]');
 		await expect(scheduleRegion).toContainText('0.4000');
-	});
-
-	test('mode tabs have correct ARIA attributes', async ({ page }) => {
-		const tablist = page.getByRole('tablist', { name: 'Weaning mode' });
-		await expect(tablist).toBeVisible();
-
-		const linearTab = page.getByRole('tab', { name: 'Linear' });
-		await expect(linearTab).toHaveAttribute('aria-selected', 'true');
-
-		const compoundingTab = page.getByRole('tab', { name: 'Compounding' });
-		await expect(compoundingTab).toHaveAttribute('aria-selected', 'false');
 	});
 
 	test('schedule has aria-live region for screen readers', async ({ page }) => {

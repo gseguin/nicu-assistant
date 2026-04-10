@@ -16,11 +16,11 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     title: 'Morphine Wean Calculator',
     version: appVersion,
     description:
-      'Calculates a step-by-step morphine weaning schedule using either a linear (fixed reduction) or compounding (percentage reduction) method.',
+      'Calculates a step-by-step morphine weaning schedule with a fixed mg reduction per step, matching the source spreadsheet.',
     notes: [
-      'Supports linear mode (constant dose reduction each step) and compounding mode (percentage of current dose each step).',
+      'Each step reduces the dose by weight × max dose × decrease % (a constant mg reduction across all 10 steps).',
       'Default parameters: 3.1 kg weight, 0.04 mg/kg/dose max dose, 10% decrease per step.',
-      'Always produces a 10-step schedule. Results are a starting point — clinical judgment required.',
+      'Source: morphine-wean-calculator.xlsx Sheet1. Results are a starting point — clinical judgment required.',
     ],
   },
   formula: {

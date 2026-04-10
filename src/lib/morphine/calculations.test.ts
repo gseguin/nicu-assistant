@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateLinearSchedule, calculateCompoundingSchedule } from './calculations.js';
+import { calculateLinearSchedule } from './calculations.js';
 
 describe('calculateLinearSchedule', () => {
   const weight = 3.1;
@@ -50,49 +50,10 @@ describe('calculateLinearSchedule', () => {
   });
 });
 
-describe('calculateCompoundingSchedule', () => {
-  const weight = 3.1;
-  const maxDose = 0.04;
-  const decreasePct = 0.10;
-
-  it('returns exactly 10 steps', () => {
-    const steps = calculateCompoundingSchedule(weight, maxDose, decreasePct);
-    expect(steps).toHaveLength(10);
-  });
-
-  it('step 1 dose equals weight * maxDose with zero reduction', () => {
-    const steps = calculateCompoundingSchedule(weight, maxDose, decreasePct);
-    expect(steps[0].step).toBe(1);
-    expect(steps[0].doseMg).toBeCloseTo(0.124, 6);
-    expect(steps[0].reductionMg).toBe(0);
-  });
-
-  it('step 2 dose equals step 1 dose * (1 - decreasePct)', () => {
-    const steps = calculateCompoundingSchedule(weight, maxDose, decreasePct);
-    expect(steps[1].doseMg).toBeCloseTo(0.1116, 6);
-  });
-
-  it('step 3 dose equals step 2 dose * (1 - decreasePct)', () => {
-    const steps = calculateCompoundingSchedule(weight, maxDose, decreasePct);
-    expect(steps[2].doseMg).toBeCloseTo(0.10044, 6);
-  });
-
-  it('reductions decrease each step (exponential decay)', () => {
-    const steps = calculateCompoundingSchedule(weight, maxDose, decreasePct);
-    for (let i = 2; i < steps.length; i++) {
-      expect(steps[i].reductionMg).toBeLessThan(steps[i - 1].reductionMg);
-    }
-  });
-
-  it('doseMgKgDose equals doseMg / weight', () => {
-    const steps = calculateCompoundingSchedule(weight, maxDose, decreasePct);
-    for (const step of steps) {
-      expect(step.doseMgKgDose).toBeCloseTo(step.doseMg / weight, 6);
-    }
-  });
-});
-
-describe('Linear mode — Sheet1 spreadsheet parity', () => {
+describe('Morphine wean — xlsx Sheet1 spreadsheet parity', () => {
+  // Source of truth: morphine-wean-calculator.xlsx Sheet1, cells B15..B24
+  // Inputs: weight 3.1, maxDose 0.04 mg/kg/dose, decreasePct 0.10
+  // Formula: step N = prev − (weight × maxDose × decreasePct) = prev − 0.0124
   const steps = calculateLinearSchedule(3.1, 0.04, 0.10);
 
   const expected: { step: number; doseMg: number; doseMgKgDose: number; reductionMg: number }[] = [
@@ -110,33 +71,6 @@ describe('Linear mode — Sheet1 spreadsheet parity', () => {
 
   for (const row of expected) {
     it(`step ${row.step} matches Sheet1 row`, () => {
-      const s = steps[row.step - 1];
-      expect(s.step).toBe(row.step);
-      expect(s.doseMg).toBeCloseTo(row.doseMg, 4);
-      expect(s.doseMgKgDose).toBeCloseTo(row.doseMgKgDose, 4);
-      expect(s.reductionMg).toBeCloseTo(row.reductionMg, 4);
-    });
-  }
-});
-
-describe('Compounding mode — Sheet2 spreadsheet parity', () => {
-  const steps = calculateCompoundingSchedule(3.1, 0.08, 0.10);
-
-  const expected: { step: number; doseMg: number; doseMgKgDose: number; reductionMg: number }[] = [
-    { step: 1, doseMg: 0.248, doseMgKgDose: 0.08, reductionMg: 0 },
-    { step: 2, doseMg: 0.2232, doseMgKgDose: 0.072, reductionMg: 0.0248 },
-    { step: 3, doseMg: 0.2009, doseMgKgDose: 0.0648, reductionMg: 0.0223 },
-    { step: 4, doseMg: 0.1808, doseMgKgDose: 0.0583, reductionMg: 0.0201 },
-    { step: 5, doseMg: 0.1627, doseMgKgDose: 0.0525, reductionMg: 0.0181 },
-    { step: 6, doseMg: 0.1464, doseMgKgDose: 0.0472, reductionMg: 0.0163 },
-    { step: 7, doseMg: 0.1318, doseMgKgDose: 0.0425, reductionMg: 0.0146 },
-    { step: 8, doseMg: 0.1186, doseMgKgDose: 0.0383, reductionMg: 0.0132 },
-    { step: 9, doseMg: 0.1068, doseMgKgDose: 0.0344, reductionMg: 0.0119 },
-    { step: 10, doseMg: 0.0961, doseMgKgDose: 0.031, reductionMg: 0.0107 },
-  ];
-
-  for (const row of expected) {
-    it(`step ${row.step} matches Sheet2 row`, () => {
       const s = steps[row.step - 1];
       expect(s.step).toBe(row.step);
       expect(s.doseMg).toBeCloseTo(row.doseMg, 4);

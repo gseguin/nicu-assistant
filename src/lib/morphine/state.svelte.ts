@@ -10,7 +10,6 @@ const SESSION_KEY = 'nicu_morphine_state';
 
 function defaultState(): MorphineStateData {
   return {
-    activeMode: 'linear',
     weightKg: config.defaults.weightKg,
     maxDoseMgKgDose: config.defaults.maxDoseMgKgDose,
     decreasePct: config.defaults.decreasePct,

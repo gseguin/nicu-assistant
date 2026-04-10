@@ -1,11 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/svelte';
+import { render, screen } from '@testing-library/svelte';
 
 // Mock morphineState before importing the component.
 // The real module uses Svelte 5 $state runes which are difficult to control
 // in test environments. We provide a plain reactive-like object instead.
 const mockState = {
-  activeMode: 'linear' as 'linear' | 'compounding',
   weightKg: null as number | null,
   maxDoseMgKgDose: null as number | null,
   decreasePct: null as number | null,
@@ -19,7 +18,6 @@ vi.mock('$lib/morphine/state.svelte.js', () => ({
     init: vi.fn(),
     persist: vi.fn(),
     reset: vi.fn(() => {
-      mockState.activeMode = 'linear';
       mockState.weightKg = null;
       mockState.maxDoseMgKgDose = null;
       mockState.decreasePct = null;
@@ -32,33 +30,15 @@ import MorphineWeanCalculator from './MorphineWeanCalculator.svelte';
 describe('MorphineWeanCalculator', () => {
   beforeEach(() => {
     // Reset mock state to defaults before each test
-    mockState.activeMode = 'linear';
     mockState.weightKg = null;
     mockState.maxDoseMgKgDose = null;
     mockState.decreasePct = null;
   });
 
-  it('renders mode tabs with correct roles and default active mode', () => {
+  it('does not render a weaning mode toggle', () => {
     render(MorphineWeanCalculator);
-    const tabs = screen.getAllByRole('tab');
-    expect(tabs).toHaveLength(2);
-    expect(tabs[0]).toHaveTextContent('Linear');
-    expect(tabs[1]).toHaveTextContent('Compounding');
-    // Linear is the default active mode
-    expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
-    expect(tabs[1]).toHaveAttribute('aria-selected', 'false');
-  });
-
-  it('switches active mode when clicking Compounding tab', async () => {
-    render(MorphineWeanCalculator);
-    const tabs = screen.getAllByRole('tab');
-    const compoundingTab = tabs[1];
-
-    await fireEvent.click(compoundingTab);
-
-    // After click, mockState.activeMode is set by the component's activateMode function
-    // which sets morphineState.current.activeMode = mode (writes to our mockState)
-    expect(mockState.activeMode).toBe('compounding');
+    expect(screen.queryByRole('tablist')).toBeNull();
+    expect(screen.queryByRole('tab')).toBeNull();
   });
 
   it('renders three input fields with correct labels', () => {
@@ -131,12 +111,6 @@ describe('MorphineWeanCalculator', () => {
     });
   });
 
-  it('tablist has correct ARIA label', () => {
-    render(MorphineWeanCalculator);
-    const tablist = screen.getByRole('tablist');
-    expect(tablist).toHaveAttribute('aria-label', 'Weaning mode');
-  });
-
   describe('v1.2 polish fixes', () => {
     beforeEach(() => {
       mockState.weightKg = 3.1;
@@ -154,7 +128,7 @@ describe('MorphineWeanCalculator', () => {
 
     it('reduction amounts show percentage alongside mg value', () => {
       render(MorphineWeanCalculator);
-      // Linear mode: every step has 10.0% reduction
+      // Every step has a fixed 10.0% reduction relative to the prior dose.
       // Step 2 should show "-0.0124 mg (10.0%)"
       expect(screen.getByText(/-0\.0124 mg \(10\.0%\)/)).toBeTruthy();
     });

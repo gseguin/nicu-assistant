@@ -6,7 +6,7 @@ A PWA that unifies clinical calculators into a single tool for NICU staff. Curre
 
 ## Current State
 
-**Shipped:** v1.10 GIR Simplification + Dock + Tech Debt (2026-04-10) — GIR calculator stripped to essentials (summary hero card, per-card secondary metrics row, and population reference card removed; bucket grid is the sole focal point), morphine-wean dock magnification ported to the GIR bucket list on mobile, TypeScript 6 + @types/node 25 majors closed (zero source edits required), 16/16 axe sweeps green, svelte-check 0/0 across 4521 files, PWA at version 1.10.0.
+**Shipped:** v1.11 Morphine Mode Removal — Single Source of Truth (2026-04-09) — Morphine Wean linear/compounding mode toggle removed; `morphine-wean-calculator.xlsx` Sheet1 is the sole authoritative formula (linear: previous − weight × maxDose × decreasePct); `calculateCompoundingSchedule`, `WeanMode` type, `modes` config block, and SegmentedToggle usage in Morphine all deleted; spreadsheet-parity tests locked row-by-row against Sheet1 (10 steps); AboutSheet copy rewritten; PWA at version 1.11.0; svelte-check 0/0, vitest 185/185, Playwright 47 passed / 3 skipped, 16/16 axe sweeps green.
 
 ## Core Value
 
@@ -95,20 +95,13 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ GIR Dock Magnification: morphine-wean-style scroll-driven dock magnification ported to `GlucoseTitrationGrid.svelte` (MAX_SCALE 1.06, radius 2.5, rAF-throttled); mobile-only (`innerWidth < 768`) + `prefers-reduced-motion` guards; `MutationObserver` re-run on row changes; 16/16 axe sweeps remain green (GIR-DOCK-01..04) — v1.10
 - ✓ Tech debt majors closed: `@types/node` 22 → 25, `typescript` 5 → 6 — full gate green (svelte-check 0/0, vitest 203/203, `pnpm build` ✓, Playwright 48 passed / 3 skipped + 16/16 axe green) (DEBT-MAJ-01, DEBT-MAJ-02) — v1.10
 - ✓ `package.json` version bumped to 1.10.0; AboutSheet reflects v1.10.0 via the `__APP_VERSION__` build-time constant sourced from `package.json`; PROJECT.md Validated list updated with v1.10 entries and retired entries struck through (REL-01, REL-02, REL-03) — v1.10
+- ✓ Morphine Wean linear/compounding mode toggle removed; `morphine-wean-calculator.xlsx` Sheet1 is the single source of truth; `calculateCompoundingSchedule` function, `WeanMode` type, `modes` config block, and SegmentedToggle usage in `MorphineWeanCalculator.svelte` all deleted; `activeMode` dropped from `MorphineStateData` (stale sessionStorage keys silently ignored); spreadsheet-parity tests locked row-by-row against Sheet1 for weight 3.1, maxDose 0.04, decreasePct 0.10 (10 steps × 3 fields); Sheet2 compounding parity block removed (MORPH-01..07) — v1.11
+- ✓ AboutSheet Morphine copy rewritten to describe a single fixed-reduction formula and cite `morphine-wean-calculator.xlsx` Sheet1 (MORPH-08) — v1.11
+- ✓ `package.json` version bumped to 1.11.0; AboutSheet reflects v1.11.0 via the `__APP_VERSION__` build-time constant; PROJECT.md Validated list updated with v1.11 entries (MORPH-09) — v1.11
 
 ### Active
 
-**Milestone v1.11: Morphine Mode Removal — Single Source of Truth**
-
-Goal: Remove the linear/compounding mode toggle from the Morphine Wean calculator. The xlsx Sheet1 (`morphine-wean-calculator.xlsx`) is the single source of truth and uses only the linear formula (verified: step N = previous − weight×maxDose×decreasePct).
-
-Target features:
-- Remove `WeanMode` type, mode toggle UI, and `compounding` mode from `morphine-config.json`
-- Delete `calculateCompoundingSchedule()` and its tests
-- Simplify state singleton (drop `mode` field)
-- Lock spreadsheet-parity tests against xlsx Sheet1 row-by-row
-- Update AboutSheet copy if it mentions modes
-- Maintain 16/16 axe sweeps green; bump to v1.11.0
+_No active requirements — next milestone to be defined via `/gsd-new-milestone`._
 
 ### Out of Scope
 
@@ -119,11 +112,11 @@ Target features:
 
 ## Context
 
-**Shipped v1.10** with three clinical calculators, GIR calculator stripped to its essentials (bucket grid is the sole focal point — summary hero, per-card secondary row, and population reference card all retired), morphine-style scroll-driven dock magnification on the GIR mobile bucket list, TypeScript 6 + @types/node 25 majors closed (zero source edits required), comprehensive a11y coverage (16/16 axe sweeps), and co-located Vitest (203/203) + Playwright suites.
+**Shipped v1.11** with three clinical calculators. Morphine Wean is now a single-formula calculator matching `morphine-wean-calculator.xlsx` Sheet1 exactly (linear mg reduction per step); the linear/compounding mode toggle has been removed along with all supporting code (`WeanMode`, `calculateCompoundingSchedule`, `modes` config block). GIR calculator remains stripped to its essentials (bucket grid is the sole focal point), morphine-style scroll-driven dock magnification on the GIR mobile bucket list, TypeScript 6 + @types/node 25, comprehensive a11y coverage (16/16 axe sweeps), and co-located Vitest (185/185) + Playwright (47 passed / 3 skipped) suites.
 Tech stack: SvelteKit 2.57 + Svelte 5.55 (runes) + Tailwind CSS 4 + Vite 8.0 + TypeScript 6.0 + pnpm 10.33.
 
 **Current calculators:**
-- Morphine Wean: linear/compounding modes, config-driven defaults, dock magnification, summary card
+- Morphine Wean: single linear formula (xlsx Sheet1 parity), config-driven defaults, dock magnification, summary card
 - Formula: modified/BMF modes, 40+ brands with manufacturer grouping, redesigned empty state
 - GIR: Weight/Dextrose%/Fluid-order inputs, interactive 6-bucket glucose titration, dextrose-green identity, clinical safety advisories (dextrose >12.5%, GIR >12, GIR <4)
 
@@ -182,4 +175,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.11 Morphine Mode Removal milestone started*
+*Last updated: 2026-04-09 — v1.11 Morphine Mode Removal milestone shipped*
