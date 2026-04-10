@@ -18,12 +18,8 @@ function defaultState(): GirStateData {
   };
 }
 
-let _state = $state<GirStateData>(defaultState());
-
-export const girState = {
-  get current(): GirStateData {
-    return _state;
-  },
+class GirState {
+  current = $state<GirStateData>(defaultState());
 
   /** Call from onMount only — reads sessionStorage to restore state */
   init(): void {
@@ -31,29 +27,31 @@ export const girState = {
       const stored = sessionStorage.getItem(SESSION_KEY);
       if (stored) {
         const parsed = JSON.parse(stored) as Partial<GirStateData>;
-        _state = { ...defaultState(), ...parsed };
+        this.current = { ...defaultState(), ...parsed };
       }
     } catch {
       // Silent: invalid JSON or private browsing mode
     }
-  },
+  }
 
   /** Persist current state to sessionStorage */
   persist(): void {
     try {
-      sessionStorage.setItem(SESSION_KEY, JSON.stringify(_state));
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(this.current));
     } catch {
       // Silent: private browsing mode or storage quota exceeded
     }
-  },
+  }
 
   /** Reset state to defaults and clear sessionStorage */
   reset(): void {
-    _state = defaultState();
+    this.current = defaultState();
     try {
       sessionStorage.removeItem(SESSION_KEY);
     } catch {
       // Silent: private browsing mode
     }
-  },
-};
+  }
+}
+
+export const girState = new GirState();
