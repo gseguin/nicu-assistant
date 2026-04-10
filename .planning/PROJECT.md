@@ -73,7 +73,7 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ Third clinical calculator: Glucose Infusion Rate (GIR) with Weight/Dextrose%/Fluid-order inputs, Current GIR + Initial rate hero outputs (CORE-01..05) — v1.8
 - ✓ Interactive 6-bucket glucose-driven titration grid with keyboard nav, roving tabindex, radiogroup semantics, identity highlighting, ▲/▼ Δ-rate glyphs, institutional-protocol disclaimer (TITR-01..08) — v1.8
 - ✓ GIR safety advisories: Dex>12.5% central-access, GIR>12 hyperinsulinism, GIR<4 below-basal, config-driven NumericInput ranges, EPIC paste normalization (SAFE-01..05) — v1.8
-- ✓ GIR population reference card: IDM/LGA, IUGR, Preterm/NPO starting ranges (REF-01) — v1.8
+- ~~✓ GIR population reference card: IDM/LGA, IUGR, Preterm/NPO starting ranges (REF-01) — v1.8~~ — retired in v1.10 (population reference card removed; Phase 32 GIR-SIMP-03)
 - ✓ GIR architecture: registry entry, `.identity-gir` OKLCH tokens, `src/lib/gir/` module, `/gir` route, zero shared-component modifications (ARCH-01..06) — v1.8
 - ✓ Spreadsheet-parity unit tests for GIR (all 6 buckets × all formula columns) and config shape tests (TEST-01, TEST-03) — v1.8
 - ✓ Component tests for GirCalculator + GlucoseTitrationGrid: empty-state, valid-flow, bucket selection, full keyboard matrix, advisory rendering (TEST-02) — v1.8
@@ -82,7 +82,7 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ AboutSheet updated with GIR entry citing `GIR-Wean-Calculator.xlsx` + MDCalc/Hawkes *J Perinatol* 2020 (PMC7286731), institutional-protocol disclaimer (DOC-01) — v1.8
 - ✓ `package.json` version bumped to 1.8.0 (DOC-02) — v1.8
 - ✓ PROJECT.md Validated list updated with v1.8 entries at milestone completion (DOC-03) — v1.8
-- ✓ GIR titration hero swap: Δ rate (ml/hr ▲/▼ with increase/decrease label) is the bedside hero on every bucket card; GIR mg/kg/min demoted to the secondary row; neutral STOP-card treatment for the Δ=0 "current state" bucket (GIR-SWAP-01..03) — v1.9
+- ✓ GIR titration hero swap: Δ rate (ml/hr ▲/▼ with increase/decrease label) is the bedside hero on every bucket card; GIR mg/kg/min demoted to the secondary row; neutral STOP-card treatment for the Δ=0 "current state" bucket (GIR-SWAP-01..03) — v1.9 — ~~Target GIR summary hero card portion~~ retired in v1.10 (summary hero card removed; grid-level Δ rate hero retained — Phase 32 GIR-SIMP-01)
 - ✓ v1.8 GIR a11y guarantees preserved through the swap: radiogroup semantics, roving tabindex, aria-live, prefers-reduced-motion, focus rings; component + E2E + 16/16 axe sweeps updated for the new layout and remain green (GIR-SWAP-04..07) — v1.9
 - ✓ Impeccable critique pass across Morphine, Formula, and GIR in both themes at mobile 375 + desktop 1280 with all P1 and addressable P2/P3 findings fixed; dark identity-hero retuned to `oklch(22% 0.045 145)` to preserve 4.5:1 against new tertiary ml/hr text; SegmentedToggle inactive text lifted to primary token; bucket labels normalized to en-dash typography (POLISH-01..04) — v1.9
 - ✓ Dependency sweep within current majors — Svelte 5.55.2, SvelteKit 2.57.0, Vite 8.0.8, Vitest 4.1.4, Playwright 1.59.1, @lucide/svelte 1.8.0, bits-ui 2.17.3 — full test suite re-verified after each group (DEBT-01) — v1.9
@@ -91,6 +91,10 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - ✓ Prior-milestone deferred cleanups closed: Phase 29 deferred items (6) + 8 pre-existing e2e assertion drifts from v1.5–v1.8 (DEBT-04) — v1.9
 - ✓ `package.json` version bumped to 1.9.0; AboutSheet reflects v1.9.0 via the `__APP_VERSION__` build-time constant sourced from `package.json` (REL-01, REL-02) — v1.9
 - ✓ PROJECT.md Validated list updated with v1.9 entries at milestone completion (REL-03) — v1.9
+- ✓ GIR Simplification: Target GIR summary hero card removed; per-card Fluids|Rate|GIR secondary row removed; "Starting GIR by population" reference card removed; severe-neuro STOP treatment gated unconditionally on `bucketId === 'severe-neuro' || targetGirMgKgMin <= 0`; `aria-live` selection announcements dropped (redundant with visible Δ rate); click/tap visual treatment + radiogroup a11y preserved (GIR-SIMP-01..05, 07; GIR-SIMP-06 dropped) — v1.10
+- ✓ GIR Dock Magnification: morphine-wean-style scroll-driven dock magnification ported to `GlucoseTitrationGrid.svelte` (MAX_SCALE 1.06, radius 2.5, rAF-throttled); mobile-only (`innerWidth < 768`) + `prefers-reduced-motion` guards; `MutationObserver` re-run on row changes; 16/16 axe sweeps remain green (GIR-DOCK-01..04) — v1.10
+- ✓ Tech debt majors closed: `@types/node` 22 → 25, `typescript` 5 → 6 — full gate green (svelte-check 0/0, vitest 203/203, `pnpm build` ✓, Playwright 48 passed / 3 skipped + 16/16 axe green) (DEBT-MAJ-01, DEBT-MAJ-02) — v1.10
+- ✓ `package.json` version bumped to 1.10.0; AboutSheet reflects v1.10.0 via the `__APP_VERSION__` build-time constant sourced from `package.json`; PROJECT.md Validated list updated with v1.10 entries and retired entries struck through (REL-01, REL-02, REL-03) — v1.10
 
 ### Active
 
@@ -179,4 +183,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.10 GIR Simplification + Dock + Tech Debt milestone started*
+*Last updated: 2026-04-09 — v1.10 GIR Simplification + Dock + Tech Debt milestone shipped*
