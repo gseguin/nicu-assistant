@@ -215,4 +215,13 @@
     --color-identity:      oklch(82% 0.10 145);
     --color-identity-hero: oklch(22% 0.045 145);
   }
+  .identity-feeds {
+    --color-identity:      oklch(50% 0.13 30);
+    --color-identity-hero: oklch(94% 0.04 30);
+  }
+  .dark .identity-feeds,
+  [data-theme="dark"] .identity-feeds {
+    --color-identity:      oklch(80% 0.10 30);
+    --color-identity-hero: oklch(24% 0.05 30);
+  }
 }

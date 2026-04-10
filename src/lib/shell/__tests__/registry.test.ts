@@ -7,7 +7,7 @@ import { CALCULATOR_REGISTRY, type CalculatorEntry } from '$lib/shell/registry';
 describe('CALCULATOR_REGISTRY', () => {
   it('contains the expected calculator ids', () => {
     const ids = CALCULATOR_REGISTRY.map((e) => e.id).sort();
-    expect(ids).toEqual(['formula', 'gir', 'morphine-wean']);
+    expect(ids).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
   });
 
   it('includes Morphine Wean calculator as first entry', () => {
