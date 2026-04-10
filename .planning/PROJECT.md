@@ -8,6 +8,8 @@ A PWA that unifies clinical calculators into a single tool for NICU staff. Curre
 
 **Shipped:** v1.11 Morphine Mode Removal — Single Source of Truth (2026-04-09) — Morphine Wean linear/compounding mode toggle removed; `morphine-wean-calculator.xlsx` Sheet1 is the sole authoritative formula (linear: previous − weight × maxDose × decreasePct); `calculateCompoundingSchedule`, `WeanMode` type, `modes` config block, and SegmentedToggle usage in Morphine all deleted; spreadsheet-parity tests locked row-by-row against Sheet1 (10 steps); AboutSheet copy rewritten; PWA at version 1.11.0; svelte-check 0/0, vitest 185/185, Playwright 47 passed / 3 skipped, 16/16 axe sweeps green.
 
+**In progress:** v1.12 Feed Advance Calculator — Phase 36 (Wave 0 Scaffolding) complete: 4th "Feeds" tab with Baby icon, `/feeds` placeholder route, `.identity-feeds` OKLCH hue ~30 terracotta tokens, `CalculatorId` union extended, NavShell ternary extended, AboutSheet stub, 3/3 axe sweeps green. svelte-check 0/0, vitest 185/185.
+
 ## Core Value
 
 Clinicians can switch between NICU calculation tools instantly from a single app without losing context, using the same trusted interfaces they already know.
