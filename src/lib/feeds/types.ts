@@ -1,7 +1,7 @@
 import type { NumericInputRange } from '$lib/shared/types.js';
 
 export type FeedsMode = 'bedside' | 'full-nutrition';
-export type TrophicFrequency = 'q3h' | 'q4h';
+export type TrophicFrequency = 'q2h' | 'q3h' | 'q4h' | 'q6h';
 export type AdvanceCadence = 'every' | 'every-other' | 'every-3rd' | 'bid' | 'qd';
 
 export interface FeedsStateData {

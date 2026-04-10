@@ -29,8 +29,10 @@
 	},
 	"dropdowns": {
 		"frequency": [
+			{ "id": "q2h", "label": "q2h (12 feeds/day)", "feedsPerDay": 12 },
 			{ "id": "q3h", "label": "q3h (8 feeds/day)", "feedsPerDay": 8 },
-			{ "id": "q4h", "label": "q4h (6 feeds/day)", "feedsPerDay": 6 }
+			{ "id": "q4h", "label": "q4h (6 feeds/day)", "feedsPerDay": 6 },
+			{ "id": "q6h", "label": "q6h (4 feeds/day)", "feedsPerDay": 4 }
 		],
 		"cadence": [
 			{ "id": "every", "label": "Every feed", "type": "relative", "value": 1 },
@@ -80,6 +82,38 @@
 			"value": 90,
 			"message": "Total kcal/kg/d below growth target \u2014 verify",
 			"mode": "full-nutrition"
+		},
+		{
+			"id": "advance-high",
+			"field": "advanceMlKgDay",
+			"comparator": "gt",
+			"value": 40,
+			"message": "Advance >40 ml/kg/d \u2014 verify per unit protocol",
+			"mode": "bedside"
+		},
+		{
+			"id": "goal-high",
+			"field": "goalMlKgDay",
+			"comparator": "gt",
+			"value": 180,
+			"message": "Goal >180 ml/kg/d \u2014 verify per unit protocol",
+			"mode": "bedside"
+		},
+		{
+			"id": "goal-low",
+			"field": "goalMlKgDay",
+			"comparator": "lt",
+			"value": 120,
+			"message": "Goal <120 ml/kg/d \u2014 verify per unit protocol",
+			"mode": "bedside"
+		},
+		{
+			"id": "weight-elbw",
+			"field": "weightKg",
+			"comparator": "lt",
+			"value": 0.5,
+			"message": "Weight below 500 g \u2014 confirm ELBW protocol",
+			"mode": "both"
 		}
 	]
 }
