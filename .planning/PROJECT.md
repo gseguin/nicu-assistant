@@ -8,7 +8,7 @@ A PWA that unifies clinical calculators into a single tool for NICU staff. Curre
 
 **Shipped:** v1.11 Morphine Mode Removal — Single Source of Truth (2026-04-09) — Morphine Wean linear/compounding mode toggle removed; `morphine-wean-calculator.xlsx` Sheet1 is the sole authoritative formula (linear: previous − weight × maxDose × decreasePct); `calculateCompoundingSchedule`, `WeanMode` type, `modes` config block, and SegmentedToggle usage in Morphine all deleted; spreadsheet-parity tests locked row-by-row against Sheet1 (10 steps); AboutSheet copy rewritten; PWA at version 1.11.0; svelte-check 0/0, vitest 185/185, Playwright 47 passed / 3 skipped, 16/16 axe sweeps green.
 
-**In progress:** v1.12 Feed Advance Calculator — Phase 36 (Wave 0 Scaffolding) complete: 4th "Feeds" tab with Baby icon, `/feeds` placeholder route, `.identity-feeds` OKLCH hue ~30 terracotta tokens, `CalculatorId` union extended, NavShell ternary extended, AboutSheet stub, 3/3 axe sweeps green. svelte-check 0/0, vitest 185/185.
+**In progress:** v1.12 Feed Advance Calculator — Phase 37 (Pure Logic + Config + Parity Tests) complete: all Feed Advance calculation functions implemented in `src/lib/feeds/` — bedside advancement (Sheet2) with parameterized frequency × cadence, full nutrition (Sheet1) with dual-line TPN dextrose, IV backfill, data-driven advisory checking; named constants with JSDoc (DEXTROSE_KCAL_PER_GRAM, LIPID_KCAL_PER_ML, ML_PER_OZ); `feeds-config.json` with clinical defaults/ranges/dropdowns/advisories; spreadsheet-parity fixtures locked to xlsx canonical weights (1.94/1.74); parameter-matrix tests for all 10 frequency × cadence combos. svelte-check 0/0, vitest 215/215.
 
 ## Core Value
 
@@ -193,4 +193,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.12 Feed Advance Calculator milestone started*
+*Last updated: 2026-04-10 — v1.12 Phase 37 complete (pure logic + config + parity tests)*
