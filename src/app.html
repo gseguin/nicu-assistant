@@ -22,13 +22,21 @@
         });
       })();
     </script>
-    <!-- DS-04: Plus Jakarta Sans — Google Fonts with display=swap -->
+    <!-- DS-04: Plus Jakarta Sans — Google Fonts, loaded async to avoid render-blocking -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
     <meta name="description" content="Clinical calculator for NICU staff — morphine weaning schedules, infant formula fortification, glucose infusion rate titration, and feed advance volumes." />
     <!-- NAV-04: viewport-fit=cover required for iOS safe-area-inset in standalone PWA mode -->
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
