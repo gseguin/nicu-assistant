@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A PWA that unifies clinical calculators into a single tool for NICU staff. Currently includes an infant formula recipe calculator, a morphine weaning schedule calculator, and a glucose infusion rate (GIR) calculator with interactive glucose-driven titration. Built with a shared component library, responsive navigation, and a plugin-like architecture that makes adding new calculators straightforward.
+A PWA that unifies clinical calculators into a single tool for NICU staff. Includes four calculators: infant formula recipe, morphine weaning schedule, glucose infusion rate (GIR) with titration grid, and feed advance (bedside advancement + full nutrition modes). Built with a shared component library, responsive navigation, and a plugin-like architecture that makes adding new calculators straightforward.
 
 ## Current State
 
@@ -183,4 +183,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 — v1.12.0 Phase 39 complete (release — version bump, PROJECT.md, favicon, gates)*
+*Last updated: 2026-04-10 — v1.12 Feed Advance Calculator milestone shipped*

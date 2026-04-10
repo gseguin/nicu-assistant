@@ -1,5 +1,18 @@
 # Milestones
 
+## v1.12 Feed Advance Calculator (Shipped: 2026-04-10)
+
+**Phases completed:** 3 phases, 6 plans, 9 tasks
+
+**Key accomplishments:**
+
+- 1. [Rule 1 - Bug] Updated registry test to include 'feeds' in expected IDs
+- Axe-core a11y sweeps for /feeds route confirming identity-feeds OKLCH tokens (hue 30) pass 4.5:1 contrast in light mode, dark mode, and focus-visible states
+- 1. [Rule 1 - Bug] SelectPicker onchange prop does not exist
+- e2e/feeds.spec.ts
+
+---
+
 ## v1.11 Morphine Mode Removal — Single Source of Truth (Shipped: 2026-04-09)
 
 **Phases completed:** 1 phase (35), 1 plan, 15 tasks

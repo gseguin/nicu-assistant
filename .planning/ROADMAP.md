@@ -14,7 +14,7 @@
 - [v1.9 GIR Titration Hero Swap + Polish](milestones/v1.9-ROADMAP.md) - Phases 29-31 (shipped 2026-04-09)
 - [v1.10 GIR Simplification + Dock + Tech Debt](milestones/v1.10-ROADMAP.md) - Phases 32-34 (shipped 2026-04-10)
 - [v1.11 Morphine Mode Removal — Single Source of Truth](milestones/v1.11-ROADMAP.md) - Phase 35 (shipped 2026-04-09)
-- v1.12 Feed Advance Calculator - Phases 36-39
+- [v1.12 Feed Advance Calculator](milestones/v1.12-ROADMAP.md) - Phases 36-39 (shipped 2026-04-10)
 
 ## Phases
 
@@ -51,72 +51,17 @@ See [milestones/v1.11-ROADMAP.md](milestones/v1.11-ROADMAP.md) for full phase de
 
 </details>
 
-### v1.12 Feed Advance Calculator
+<details>
+<summary>v1.12 Feed Advance Calculator (Phases 36-39) — SHIPPED 2026-04-10</summary>
 
-- [x] **Phase 36: Wave 0 — Scaffolding + Identity Hue** — Extend `CalculatorId` union, registry entry, NavShell ternary, AboutSheet stub, `.identity-feeds` OKLCH token pair, `/feeds` placeholder route. Must compile before anything downstream. (completed 2026-04-10)
-- [x] **Phase 37: Pure Logic + Config + Parity Tests** — Types, `feeds-config.json`, `calculations.ts` with named constants, locked spreadsheet-parity fixtures for Sheet1 (full nutrition) and Sheet2 (bedside advancement), parameter-matrix tests, config shape tests. Gate: vitest green before UI. (completed 2026-04-10)
-- [x] **Phase 38: UI + State + Component Tests + Route + E2E + A11y** — `FeedAdvanceCalculator.svelte` with SegmentedToggle (Bedside Advancement + Full Nutrition modes), all inputs/dropdowns/outputs, safety advisories, `state.svelte.ts`, component tests, Playwright happy-path E2E, axe-core sweeps (20/20). (completed 2026-04-10)
-- [x] **Phase 39: Release v1.12.0** — Version bump, PROJECT.md Validated list, app favicon, final gates green. (completed 2026-04-10)
+- [x] **Phase 36: Wave 0 — Scaffolding + Identity Hue** — CalculatorId union, registry, NavShell, identity-feeds OKLCH tokens, /feeds placeholder (2/2 plans)
+- [x] **Phase 37: Pure Logic + Config + Parity Tests** — Types, config, calculations locked to xlsx Sheet1+Sheet2, parity tests (2/2 plans)
+- [x] **Phase 38: UI + State + Component Tests + Route + E2E + A11y** — FeedAdvanceCalculator.svelte, state, component tests, Playwright E2E, 20/20 axe sweeps (2/2 plans)
+- [x] **Phase 39: Release v1.12.0** — Version bump, PROJECT.md, favicon, final gates (1/1 plan)
 
-## Phase Details
+See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase details.
 
-### Phase 36: Wave 0 — Scaffolding + Identity Hue
-**Goal**: The app compiles with a visible 4th "Feeds" tab in the nav, a placeholder route, and a pre-audited OKLCH identity hue — unblocking all downstream phases
-**Depends on**: Phase 35
-**Requirements**: ARCH-01, ARCH-02, ARCH-03, ARCH-04, ARCH-05, ARCH-06, ARCH-07, HUE-01, HUE-02, HUE-03
-**Success Criteria** (what must be TRUE):
-  1. User sees a 4th "Feeds" tab in the bottom nav (mobile) and top nav (desktop) with a distinct icon and label
-  2. Tapping/clicking the Feeds tab navigates to `/feeds` and shows a placeholder page
-  3. The Feeds tab has a visually distinct identity hue (not blue, not teal, not green) on its active indicator and placeholder content
-  4. `pnpm check` and `pnpm test` pass with zero errors (no regressions from type union + registry extension)
-  5. Pre-PR axe-core sweep confirms the new identity hue passes 4.5:1 contrast on all 4 identity surfaces in both themes
-**Plans**: TBD
-**UI hint**: yes
-
-### Phase 37: Pure Logic + Config + Parity Tests
-**Goal**: All Feed Advance calculation functions are implemented, tested, and locked to `nutrition-calculator.xlsx` Sheet1 and Sheet2 — the clinical correctness gate before any UI work
-**Depends on**: Phase 36
-**Requirements**: CORE-09, FREQ-04, FULL-04, FULL-05, FULL-06, FULL-07, SAFE-06, TEST-01, TEST-02, TEST-03, TEST-04
-**Success Criteria** (what must be TRUE):
-  1. Bedside advancement calculations (trophic/advance/goal ml/feed, total fluids ml/hr) match `nutrition-calculator.xlsx` Sheet2 row-by-row within ~1% epsilon for the canonical fixture (weight 1.94, default frequency, default cadence)
-  2. Full nutrition calculations (dextrose kcal from BOTH lines, lipid kcal, enteral kcal, total kcal/kg/d) match `nutrition-calculator.xlsx` Sheet1 row-by-row within ~1% epsilon for the canonical fixture (weight 1.74)
-  3. Unit constants (3.4 kcal/g dextrose, 2 kcal/ml lipid, 30 ml/oz) are named constants with JSDoc, not magic numbers
-  4. Parameter-matrix tests cover every frequency x cadence dropdown combination for internal consistency
-  5. `feeds-config.json` shape tests validate input ranges, dropdown options, and advisory thresholds
-**Plans:** 2/2 plans complete
-Plans:
-- [x] 37-01-PLAN.md — Types, config (JSON + typed wrapper), and all pure calculation functions
-- [x] 37-02-PLAN.md — Parity fixtures, spreadsheet-parity tests, parameter-matrix tests, config shape tests
-
-### Phase 38: UI + State + Component Tests + Route + E2E + A11y
-**Goal**: Clinicians can use the Feed Advance Calculator at the bedside (Bedside Advancement mode) and during rounds (Full Nutrition mode) with the same trust level as existing calculators
-**Depends on**: Phase 37
-**Requirements**: CORE-01, CORE-02, CORE-03, CORE-04, CORE-05, CORE-06, CORE-07, CORE-08, FREQ-01, FREQ-02, FREQ-03, FREQ-05, IV-01, IV-02, IV-03, FULL-01, FULL-02, FULL-03, SAFE-01, SAFE-02, SAFE-03, SAFE-04, SAFE-05, TEST-05, TEST-06, TEST-07
-**Success Criteria** (what must be TRUE):
-  1. User can enter weight, trophic/advance/goal ml/kg/d and see three per-feed ml outputs simultaneously, with ml/kg/d echoed back next to each
-  2. User can switch trophic frequency (q2h/q3h/q4h/q6h) and advance cadence dropdowns and see outputs update live without re-entering values
-  3. User can toggle between Bedside Advancement and Full Nutrition modes via SegmentedToggle, with weight persisting across modes
-  4. Full Nutrition mode accepts TPN dextrose (two parallel lines), SMOF ml, enteral volume + kcal/oz and shows total kcal/kg/d as the hero value
-  5. Safety advisories appear when thresholds are crossed (trophic > advance, dextrose > 12.5%, total kcal/kg/d out of range) without blocking input
-  6. Playwright happy-path passes at mobile 375 + desktop 1280 for both modes; axe-core sweeps bring total suite to 20/20 green
-**Plans:** 2/2 plans complete
-Plans:
-- [x] 38-01-PLAN.md — Config extensions + state module + FeedAdvanceCalculator component + route + about-content
-- [x] 38-02-PLAN.md — Component tests + Playwright E2E + axe-core a11y sweeps
-**UI hint**: yes
-
-### Phase 39: Release v1.12.0
-**Goal**: v1.12.0 is shipped with version bump, documentation, favicon, and all gates green
-**Depends on**: Phase 38
-**Requirements**: REL-01, REL-02, REL-03, REL-04
-**Success Criteria** (what must be TRUE):
-  1. `package.json` shows version 1.12.0 and AboutSheet reflects it automatically
-  2. PROJECT.md Validated list includes all v1.12 entries
-  3. App has a distinct, recognizable favicon at all standard sizes (16x16 through 512x512)
-  4. Final gates pass: svelte-check 0/0, vitest all green, Playwright all green, axe 20/20, `pnpm build` succeeds
-**Plans:** 1/1 plans complete
-Plans:
-- [x] 39-01-PLAN.md — Version bump to 1.12.0, PROJECT.md validated list update, favicon generation, final gates
+</details>
 
 ## Progress
 
