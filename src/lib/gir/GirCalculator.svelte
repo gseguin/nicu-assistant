@@ -163,22 +163,4 @@
       />
     </section>
   {/if}
-
-  <!-- POPULATION REFERENCE CARD -->
-  <section class="card px-5 py-4">
-    <div class="text-2xs font-semibold uppercase tracking-wide text-[var(--color-identity)] mb-3">
-      Starting GIR by population
-    </div>
-    <div class="grid grid-cols-[1fr_auto] gap-y-2 gap-x-4">
-      <div class="text-ui text-[var(--color-text-secondary)]">IDM / LGA</div>
-      <div class="text-base font-semibold num text-[var(--color-text-primary)]">3–5 <span class="text-ui text-[var(--color-text-tertiary)]">mg/kg/min</span></div>
-      <div class="text-ui text-[var(--color-text-secondary)]">IUGR</div>
-      <div class="text-base font-semibold num text-[var(--color-text-primary)]">5–7 <span class="text-ui text-[var(--color-text-tertiary)]">mg/kg/min</span></div>
-      <div class="text-ui text-[var(--color-text-secondary)]">Preterm or NPO</div>
-      <div class="text-base font-semibold num text-[var(--color-text-primary)]">4–6 <span class="text-ui text-[var(--color-text-tertiary)]">mg/kg/min</span></div>
-    </div>
-    <p class="text-2xs text-[var(--color-text-tertiary)] mt-3">
-      Reference ranges only — not a prescription.
-    </p>
-  </section>
 </div>
