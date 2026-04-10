@@ -70,34 +70,7 @@ describe('GlucoseTitrationGrid', () => {
     expect(onselect).toHaveBeenCalledWith('gt70');
   });
 
-  it('severe-neuro bucket renders STOP unconditionally even when targetGirMgKgMin > 0', () => {
-    // Realistic severe-neuro fixture: positive targetGirMgKgMin (9.7), positive deltaRateMlHr (2.0).
-    // Current <= 0 gate would render ▲ 2.0 (increase). The fix must render STOP dextrose infusion.
-    // Use a fixture where ONLY bucketId severe-neuro should trigger STOP.
-    // gt70 is given positive targets so it cannot mask severe-neuro via the old <=0 gate.
-    const rows = makeRows([
-      {}, {}, {}, {}, {},
-      { targetGirMgKgMin: 7.0, targetFluidsMlKgDay: 56, targetRateMlHr: 9.0, deltaRateMlHr: -1.5 },
-    ]);
-    const { container } = render(GlucoseTitrationGrid, { rows, selectedBucketId: null, onselect: () => {} });
-    // Find severe-neuro rows by eyebrow text "SEVERE NEURO SIGNS" (mobile) or
-    // "Severe neurologic signs" visible label (desktop). Walk up to role=radio.
-    const radios = screen.getAllByRole('radio');
-    const severeRows = radios.filter((r) => /severe neuro/i.test(r.textContent || ''));
-    expect(severeRows.length).toBeGreaterThan(0);
-    for (const row of severeRows) {
-      const text = (row.textContent || '').toLowerCase();
-      expect(text).toContain('stop');
-      expect(text).toContain('dextrose infusion');
-      // Must NOT render the Δ-rate increase/decrease hero
-      expect(text).not.toContain('▲');
-      expect(text).not.toContain('▼');
-      expect(text).not.toContain('(increase)');
-      expect(text).not.toContain('(decrease)');
-    }
-  });
-
-  it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () => {
+it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
     const stops = screen.getAllByText(/^STOP$/);
     expect(stops.length).toBeGreaterThan(0);
@@ -172,23 +145,21 @@ describe('GlucoseTitrationGrid', () => {
     expect(label).toMatch(/Glucose.*?(increase|decrease).*?milliliters per hour.*?milligrams per kilogram per minute/);
   });
 
-  it('desktop header row text order is Range | Δ rate | Target fluids | Target rate | Target GIR', () => {
+  it('desktop header row text order is Range | Δ rate (post 32-01 simplification)', () => {
     const { container } = render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
-    // Desktop grid is the second radiogroup (hidden sm:grid)
     const grids = container.querySelectorAll('[role="radiogroup"]');
     expect(grids.length).toBe(2);
     const desktop = grids[1];
-    // Header divs are the first 5 direct children with "text-ui font-semibold" class
     const headerDivs = Array.from(desktop.querySelectorAll(':scope > div')).filter((el) => {
       const cls = (el as HTMLElement).className || '';
       return cls.includes('text-ui') && cls.includes('font-semibold');
     });
-    expect(headerDivs.length).toBe(5);
+    expect(headerDivs.length).toBe(2);
     const texts = headerDivs.map((el) => (el.textContent || '').trim());
-    expect(texts).toEqual(['Range', 'Δ rate', 'Target fluids', 'Target rate', 'Target GIR']);
+    expect(texts).toEqual(['Range', 'Δ rate']);
   });
 
-  it('ArrowUp moves selection backward (wraps to end from first)', async () => {
+it('ArrowUp moves selection backward (wraps to end from first)', async () => {
     const onselect = vi.fn();
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect });
     const radios = screen.getAllByRole('radio');

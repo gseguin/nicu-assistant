@@ -10,7 +10,7 @@ describe('GirCalculator', () => {
 
   it('renders without crashing', () => {
     render(GirCalculator);
-    expect(screen.getByText('Starting GIR by population')).toBeTruthy();
+    expect(screen.getByText('CURRENT GIR')).toBeTruthy();
   });
 
   it('shows Current GIR hero with default state values', () => {
@@ -33,22 +33,9 @@ describe('GirCalculator', () => {
     expect(screen.getByText(/Dextrose >12\.5% requires central venous access/)).toBeTruthy();
   });
 
-  it('renders population reference card with all three rows', () => {
-    render(GirCalculator);
-    expect(screen.getByText('IDM / LGA')).toBeTruthy();
-    expect(screen.getByText('IUGR')).toBeTruthy();
-    expect(screen.getByText('Preterm or NPO')).toBeTruthy();
-    expect(screen.getByText(/3–5/)).toBeTruthy();
-  });
-
   it('renders titration grid header when result valid', () => {
     render(GirCalculator);
     expect(screen.getByText('If current glucose is…')).toBeTruthy();
-  });
-
-  it('shows target-guidance empty state until bucket selected', () => {
-    render(GirCalculator);
-    expect(screen.getByText('Select a glucose range to see target rate')).toBeTruthy();
   });
 
   it('valid inputs render non-null Current GIR and Initial rate numbers', () => {
@@ -59,21 +46,21 @@ describe('GirCalculator', () => {
     expect(screen.getAllByText('mg/kg/min').length).toBeGreaterThan(0);
   });
 
-  it('selecting a bucket updates target-guidance hero with Δ rate as the action', async () => {
+  it('selecting a bucket applies aria-checked on the bucket radio', async () => {
     girState.current.weightKg = 3.1;
     girState.current.dextrosePct = 12.5;
     girState.current.mlPerKgPerDay = 80;
     render(GirCalculator);
     const radios = screen.getAllByRole('radio');
-    await fireEvent.click(radios[2]); // 40-50 bucket (first-rendered layout)
-    // Post-Phase 30-01: summary hero eyebrow is ADJUST RATE / HYPERGLYCEMIA / TARGET REACHED
-    // and the big number is Δ rate (ml/hr), not GIR (mg/kg/min).
-    expect(screen.getByText('ADJUST RATE')).toBeTruthy();
-    // Direction word appears in the bucket cards AND the summary hero — at least 2 matches.
-    expect(screen.getAllByText(/\((increase|decrease)\)/).length).toBeGreaterThanOrEqual(2);
+    await fireEvent.click(radios[2]);
+    // Post-Phase 32-01: summary hero is gone. Selection state lives only on the
+    // bucket card itself (border + identity-hero fill, aria-checked=true).
+    expect(radios[2].getAttribute('aria-checked')).toBe('true');
+    // Δ rate hero remains visible on populated buckets.
+    expect(screen.getAllByText(/\((increase|decrease)\)/).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('GIR >12 advisory surfaces when computed GIR is high', () => {
+it('GIR >12 advisory surfaces when computed GIR is high', () => {
     girState.current.weightKg = 1;
     girState.current.dextrosePct = 20;
     girState.current.mlPerKgPerDay = 150;
