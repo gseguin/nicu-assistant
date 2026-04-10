@@ -15,7 +15,7 @@
 | GIR-SIMP-03 | Phase 32 | Pending |
 | GIR-SIMP-04 | Phase 32 | Pending |
 | GIR-SIMP-05 | Phase 32 | Pending |
-| GIR-SIMP-06 | Phase 32 | Pending |
+| GIR-SIMP-06 | Phase 32 | Dropped (severe-neuro card stays as-is; deferred clinical question remains deferred) |
 | GIR-SIMP-07 | Phase 32 | Pending |
 | GIR-DOCK-01 | Phase 33 | Pending |
 | GIR-DOCK-02 | Phase 33 | Pending |
@@ -41,9 +41,9 @@
 
 - [ ] **GIR-SIMP-05**: Drop `aria-live` announcements on bucket selection — with no downstream consumer and the Δ rate already visible on every card, the announcement is redundant noise for screen-reader users.
 
-- [ ] **GIR-SIMP-06**: Fix the deferred severe-neuro clinical bolus correctness issue (deferred from v1.9 per Phase 30 NOTES.md / GIR-CRITIQUE.md §2). The `severe-neuro` bucket must render the STOP treatment unconditionally, gated on `row.bucketId === 'severe-neuro' || row.targetGirMgKgMin <= 0` — not just on the calculated GIR being ≤ 0. Add a component test asserting the severe-neuro card always shows STOP. Update parity fixtures only if the severe-neuro row's `deltaRateMlHr` needs to be suppressed.
+- [ ] ~~**GIR-SIMP-06**: Fix the deferred severe-neuro clinical bolus correctness issue~~ — **DROPPED.** The `severe-neuro` bucket continues to render the same Δ rate hero treatment as every other bucket (no unconditional STOP gating). The deferred clinical bolus copy question from v1.9 NOTES.md remains deferred. No change to `GlucoseTitrationGrid.svelte` STOP gating logic, no new test, no parity fixture changes.
 
-- [ ] **GIR-SIMP-07**: Tests updated — delete all e2e assertions referencing "ADJUST RATE" / "HYPERGLYCEMIA" / "TARGET REACHED" eyebrow strings and the summary hero card; delete all component test assertions referencing the per-card secondary metrics row and the reference card; add assertion that severe-neuro card always shows STOP. All tests green.
+- [ ] **GIR-SIMP-07**: Tests updated — delete all e2e assertions referencing "ADJUST RATE" / "HYPERGLYCEMIA" / "TARGET REACHED" eyebrow strings and the summary hero card; delete all component test assertions referencing the per-card secondary metrics row and the reference card. All tests green.
 
 ---
 

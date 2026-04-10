@@ -49,16 +49,16 @@ See [milestones/v1.9-ROADMAP.md](milestones/v1.9-ROADMAP.md) for full phase deta
 ## Phase Details
 
 ### Phase 32: GIR Simplification
-**Goal**: The GIR calculator is stripped down to its essentials — the bucket grid is the sole focal point, cards show only the Δ rate hero + bucket range label, click/tap visual feedback preserved, severe-neuro clinical bolus correctness resolved.
+**Goal**: The GIR calculator is stripped down to its essentials — the bucket grid is the sole focal point, cards show only the Δ rate hero + bucket range label, click/tap visual feedback preserved.
 **Depends on**: Phase 31 (v1.9 shipped)
-**Requirements**: GIR-SIMP-01, GIR-SIMP-02, GIR-SIMP-03, GIR-SIMP-04, GIR-SIMP-05, GIR-SIMP-06, GIR-SIMP-07
+**Requirements**: GIR-SIMP-01, GIR-SIMP-02, GIR-SIMP-03, GIR-SIMP-04, GIR-SIMP-05, ~~GIR-SIMP-06~~ (dropped), GIR-SIMP-07
 **Success Criteria** (what must be TRUE):
   1. `GirCalculator.svelte` no longer renders the Target GIR summary hero card (ADJUST RATE / HYPERGLYCEMIA / TARGET REACHED eyebrow + treatment). The bucket grid is the only content between the inputs and the disclaimer.
   2. `GlucoseTitrationGrid.svelte` bucket cards no longer show the per-card `Fluids | Rate | GIR` secondary metrics row. Each card shows only the bucket range label (left) and the Δ rate hero (right with ▲/▼ + ml/hr + increase/decrease label).
   3. The "Starting GIR by population" reference card at the bottom of `GirCalculator.svelte` is removed entirely.
   4. Click/tap visual treatment is preserved on bucket cards (border-l-4 + `--color-identity-hero` fill). `role="radiogroup"` / `role="radio"` / roving tabindex / keyboard nav / focus rings are retained. `selectedBucketId` in `state.svelte.ts` is retained for visual continuity across navigation.
   5. `aria-live` announcements on bucket selection are removed (no downstream consumer, Δ rate already visible on every card).
-  6. The severe-neuro bucket renders the STOP treatment unconditionally in both mobile and desktop branches — gated on `row.bucketId === 'severe-neuro' || row.targetGirMgKgMin <= 0`. Component test asserts this.
+  6. ~~Severe-neuro STOP gating fix~~ — **DROPPED.** The severe-neuro bucket continues to render the same Δ rate hero treatment as every other bucket; no STOP gating change. Deferred clinical bolus copy question from v1.9 NOTES.md remains deferred.
   7. All e2e assertions referencing "ADJUST RATE" / "HYPERGLYCEMIA" / "TARGET REACHED" eyebrow strings and the reference card are deleted. All component test assertions referencing the per-card secondary metrics row are deleted. Full test suite green.
 **Plans**: TBD
 **UI hint**: yes
