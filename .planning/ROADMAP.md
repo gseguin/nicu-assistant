@@ -53,7 +53,7 @@ See [milestones/v1.11-ROADMAP.md](milestones/v1.11-ROADMAP.md) for full phase de
 
 ### v1.12 Feed Advance Calculator
 
-- [ ] **Phase 36: Wave 0 — Scaffolding + Identity Hue** — Extend `CalculatorId` union, registry entry, NavShell ternary, AboutSheet stub, `.identity-feeds` OKLCH token pair, `/feeds` placeholder route. Must compile before anything downstream.
+- [x] **Phase 36: Wave 0 — Scaffolding + Identity Hue** — Extend `CalculatorId` union, registry entry, NavShell ternary, AboutSheet stub, `.identity-feeds` OKLCH token pair, `/feeds` placeholder route. Must compile before anything downstream. (completed 2026-04-10)
 - [ ] **Phase 37: Pure Logic + Config + Parity Tests** — Types, `feeds-config.json`, `calculations.ts` with named constants, locked spreadsheet-parity fixtures for Sheet1 (full nutrition) and Sheet2 (bedside advancement), parameter-matrix tests, config shape tests. Gate: vitest green before UI.
 - [ ] **Phase 38: UI + State + Component Tests + Route + E2E + A11y** — `FeedAdvanceCalculator.svelte` with SegmentedToggle (Bedside Advancement + Full Nutrition modes), all inputs/dropdowns/outputs, safety advisories, `state.svelte.ts`, component tests, Playwright happy-path E2E, axe-core sweeps (20/20).
 - [ ] **Phase 39: Release v1.12.0** — Version bump, PROJECT.md Validated list, app favicon, final gates green.
@@ -118,7 +118,7 @@ See [milestones/v1.11-ROADMAP.md](milestones/v1.11-ROADMAP.md) for full phase de
 | 29-31 | v1.9 | 4/4 | Complete | 2026-04-09 |
 | 32-34 | v1.10 | 3/3 | Complete | 2026-04-10 |
 | 35    | v1.11 | 1/1 | Complete    | 2026-04-09 |
-| 36. Wave 0 | v1.12 | 0/? | Not started | - |
+| 36. Wave 0 | v1.12 | 2/2 | Complete    | 2026-04-10 |
 | 37. Pure Logic | v1.12 | 0/? | Not started | - |
 | 38. UI + E2E | v1.12 | 0/? | Not started | - |
 | 39. Release | v1.12 | 0/? | Not started | - |
