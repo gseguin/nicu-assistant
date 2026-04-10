@@ -94,7 +94,18 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-_No active requirements — next milestone to be defined via `/gsd-new-milestone`._
+## Current Milestone: v1.10 GIR Simplification + Dock + Tech Debt
+
+**Goal:** Strip the GIR calculator to its essentials — the bucket grid is the sole focal point. Remove the summary hero card, per-card secondary metrics row, and bottom reference card. Preserve click/tap visual feedback on bucket cards (no downstream consumer). Port morphine-wean dock magnification to the now-thinner GIR bucket list. Resolve v1.9's deferred severe-neuro clinical bolus correctness fix. Close v1.9's two deferred dep majors (`@types/node` 22→25, `typescript` 5→6).
+
+**Target features:**
+- **GIR Simplification (Phase 32)** — drop Target GIR summary hero card, drop per-card Fluids|Rate|GIR secondary row, drop "Starting GIR by population" reference card; keep click/tap visual treatment + radiogroup a11y; drop `aria-live` (redundant); fix severe-neuro STOP gating unconditionally
+- **GIR Dock Magnification (Phase 33)** — port morphine-wean scroll-driven dock magnification to `GlucoseTitrationGrid` with mobile-only + reduced-motion guards; 16/16 axe re-verify
+- **Tech Debt Majors + Release (Phase 34)** — upgrade `@types/node` 22→25, `typescript` 5→6; bump `package.json` to 1.10.0; update PROJECT.md Validated list with retired-entry strikethroughs
+
+**Key context:** Follow-up clinician feedback after v1.9 shipped. The Δ rate hero swap was the right move, but the summary card + per-card secondary row + reference card are all noise around the actual bedside artifact (the bucket grid). Simpler = faster to read = safer at bedside.
+
+_Active requirements defined in REQUIREMENTS.md._
 
 ### Out of Scope
 
@@ -168,4 +179,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 — v1.9 GIR Titration Hero Swap + Polish milestone shipped*
+*Last updated: 2026-04-09 — v1.10 GIR Simplification + Dock + Tech Debt milestone started*
