@@ -6,7 +6,7 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "06:00"
-      timezone: "America/Toronto"
+      timezone: "America/Denver"
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
@@ -46,7 +46,7 @@ updates:
       interval: "weekly"
       day: "monday"
       time: "06:00"
-      timezone: "America/Toronto"
+      timezone: "America/Denver"
     labels:
       - "dependencies"
       - "docker"
