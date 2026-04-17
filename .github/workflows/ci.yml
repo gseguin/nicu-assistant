@@ -110,7 +110,8 @@ jobs:
         with:
           urls: |
             http://localhost:4173/
-            http://localhost:4173/morphine
+            http://localhost:4173/morphine-wean
+            http://localhost:4173/formula
             http://localhost:4173/gir
             http://localhost:4173/feeds
           uploadArtifacts: true

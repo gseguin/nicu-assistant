@@ -70,7 +70,7 @@ src/
     morphine/     # Morphine wean calculator + morphine-config.json
     gir/          # GIR calculator + titration grid + gir-config.json
     feeds/        # Feed advance calculator + feeds-config.json
-  routes/         # /, /morphine, /gir, /feeds, /formula (one per calculator)
+  routes/         # /, /morphine-wean, /gir, /feeds, /formula (one per calculator)
 static/           # Icons, manifest assets
 ```
 

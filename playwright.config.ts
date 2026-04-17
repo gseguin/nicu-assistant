@@ -9,7 +9,7 @@ export default defineConfig({
 	retries: process.env.CI ? 2 : 0,
 	reporter: process.env.CI ? 'dot' : 'list',
 	use: {
-		baseURL: 'http://localhost:5173',
+		baseURL: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
 		trace: 'on-first-retry'
 	},
 	projects: [
@@ -18,9 +18,16 @@ export default defineConfig({
 			use: { ...devices['Desktop Chrome'] }
 		}
 	],
-	webServer: {
-		command: 'pnpm run dev',
-		port: 5173,
-		reuseExistingServer: !process.env.CI
-	}
+	webServer: process.env.CI
+		? {
+				command: 'pnpm run build && pnpm run preview --port 4173',
+				port: 4173,
+				reuseExistingServer: false,
+				timeout: 180_000
+			}
+		: {
+				command: 'pnpm run dev',
+				port: 5173,
+				reuseExistingServer: true
+			}
 });
