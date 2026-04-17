@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Prettier format check
+        run: pnpm run format:check
+
       - name: svelte-check
         run: pnpm run check
 

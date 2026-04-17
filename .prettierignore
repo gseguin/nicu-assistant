@@ -1,0 +1,40 @@
+# Build outputs
+build/
+dist/
+.svelte-kit/
+.vite/
+coverage/
+playwright-report/
+test-results/
+
+# Dependencies
+node_modules/
+
+# Lockfiles
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Generated
+src/app.d.ts
+
+# Artifacts
+*.xlsx
+*.docx
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.ico
+
+# Planning / tooling scratch
+.planning/
+.claude/
+.codex
+.remember/
+.playwright-mcp/
+
+# Env
+.env
+.env.*
