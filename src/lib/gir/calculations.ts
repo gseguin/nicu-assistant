@@ -20,7 +20,7 @@ import type { GirResult, GirTitrationRow, GlucoseBucket } from './types.js';
 export function calculateCurrentGir(
   weightKg: number,
   dextrosePct: number,
-  mlPerKgPerDay: number,
+  mlPerKgPerDay: number
 ): number {
   // weightKg unused in simplified formula but kept in signature for clinical clarity + audit
   void weightKg;
@@ -46,7 +46,7 @@ export function calculateTitrationRows(
   weightKg: number,
   dextrosePct: number,
   mlPerKgPerDay: number,
-  buckets: GlucoseBucket[],
+  buckets: GlucoseBucket[]
 ): GirTitrationRow[] {
   const currentGir = calculateCurrentGir(weightKg, dextrosePct, mlPerKgPerDay);
   const initialRate = calculateInitialRateMlHr(weightKg, mlPerKgPerDay);
@@ -62,20 +62,20 @@ export function calculateTitrationRows(
       targetGirMgKgMin: targetGir,
       targetFluidsMlKgDay: targetFluids,
       targetRateMlHr: targetRate,
-      deltaRateMlHr: targetRate - initialRate,
+      deltaRateMlHr: targetRate - initialRate
     };
   });
 }
 
 export function calculateGir(
   state: { weightKg: number | null; dextrosePct: number | null; mlPerKgPerDay: number | null },
-  buckets: GlucoseBucket[],
+  buckets: GlucoseBucket[]
 ): GirResult | null {
   const { weightKg, dextrosePct, mlPerKgPerDay } = state;
   if (weightKg == null || dextrosePct == null || mlPerKgPerDay == null) return null;
   return {
     currentGirMgKgMin: calculateCurrentGir(weightKg, dextrosePct, mlPerKgPerDay),
     initialRateMlHr: calculateInitialRateMlHr(weightKg, mlPerKgPerDay),
-    titration: calculateTitrationRows(weightKg, dextrosePct, mlPerKgPerDay, buckets),
+    titration: calculateTitrationRows(weightKg, dextrosePct, mlPerKgPerDay, buckets)
   };
 }

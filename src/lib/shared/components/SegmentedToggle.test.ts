@@ -7,13 +7,13 @@ import SegmentedToggleHarness from './SegmentedToggleHarness.svelte';
 
 const twoOptions = [
   { value: 'a', label: 'Alpha' },
-  { value: 'b', label: 'Beta' },
+  { value: 'b', label: 'Beta' }
 ];
 
 const threeOptions = [
   { value: 'a', label: 'Alpha' },
   { value: 'b', label: 'Beta' },
-  { value: 'c', label: 'Gamma' },
+  { value: 'c', label: 'Gamma' }
 ];
 
 function tabs(): HTMLButtonElement[] {
@@ -41,7 +41,9 @@ describe('SegmentedToggle', () => {
     expect(alpha.getAttribute('aria-selected')).toBe('true');
     expect(alpha.getAttribute('tabindex')).toBe('0');
     // Inactive button has hover variant only, not the solid active class fragment
-    expect(beta.className).not.toContain('bg-[var(--color-surface-card)] text-[var(--color-identity)]');
+    expect(beta.className).not.toContain(
+      'bg-[var(--color-surface-card)] text-[var(--color-identity)]'
+    );
     expect(beta.getAttribute('aria-selected')).toBe('false');
     expect(beta.getAttribute('tabindex')).toBe('-1');
   });

@@ -6,12 +6,12 @@ A Progressive Web App that unifies four clinical calculators for NICU staff into
 
 ## Calculators
 
-| Calculator | Source of truth | Key outputs |
-|------------|-----------------|-------------|
-| **Formula** | `recipe-calculator.xlsx` | Fortification recipe (amount to add) across 40+ infant formulas, modified + BMF modes |
-| **Morphine Wean** | `morphine-wean-calculator.xlsx` Sheet1 | Fixed-reduction wean schedule (single linear formula) |
-| **GIR** | `GIR-Wean-Calculator.xlsx` + Hawkes *J Perinatol* 2020 (PMC7286731) | Current GIR, initial rate, interactive 6-bucket glucose-driven titration grid with Δ rate heroes |
-| **Feed Advance** | `nutrition-calculator.xlsx` Sheet1 + Sheet2 | Bedside advancement (trophic/advance/goal per-feed volumes + IV backfill) and full nutrition (dual TPN dextrose + SMOF + enteral, total kcal/kg/d) |
+| Calculator        | Source of truth                                                     | Key outputs                                                                                                                                        |
+| ----------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Formula**       | `recipe-calculator.xlsx`                                            | Fortification recipe (amount to add) across 40+ infant formulas, modified + BMF modes                                                              |
+| **Morphine Wean** | `morphine-wean-calculator.xlsx` Sheet1                              | Fixed-reduction wean schedule (single linear formula)                                                                                              |
+| **GIR**           | `GIR-Wean-Calculator.xlsx` + Hawkes _J Perinatol_ 2020 (PMC7286731) | Current GIR, initial rate, interactive 6-bucket glucose-driven titration grid with Δ rate heroes                                                   |
+| **Feed Advance**  | `nutrition-calculator.xlsx` Sheet1 + Sheet2                         | Bedside advancement (trophic/advance/goal per-feed volumes + IV backfill) and full nutrition (dual TPN dextrose + SMOF + enteral, total kcal/kg/d) |
 
 All clinical data is embedded at build time from JSON config files under `src/lib/*/` — no network calls, no backend.
 
@@ -39,18 +39,18 @@ pnpm dev -- --open    # and open the browser
 
 ## Scripts
 
-| Command | Purpose |
-|---------|---------|
-| `pnpm dev` | Start Vite dev server |
-| `pnpm build` | Production build (SPA, PWA-enabled) |
-| `pnpm preview` | Preview the production build locally |
-| `pnpm check` | `svelte-kit sync` + `svelte-check` (TypeScript + Svelte diagnostics) |
-| `pnpm check:watch` | Same as above, watch mode |
-| `pnpm test` | Vitest (watch) |
-| `pnpm test:run` | Vitest (one-shot, for CI) |
-| `pnpm format` | Prettier across the repo |
-| `pnpm docker:build` | Build the production Docker image |
-| `pnpm docker:deploy` | Build + `docker compose up -d` |
+| Command              | Purpose                                                              |
+| -------------------- | -------------------------------------------------------------------- |
+| `pnpm dev`           | Start Vite dev server                                                |
+| `pnpm build`         | Production build (SPA, PWA-enabled)                                  |
+| `pnpm preview`       | Preview the production build locally                                 |
+| `pnpm check`         | `svelte-kit sync` + `svelte-check` (TypeScript + Svelte diagnostics) |
+| `pnpm check:watch`   | Same as above, watch mode                                            |
+| `pnpm test`          | Vitest (watch)                                                       |
+| `pnpm test:run`      | Vitest (one-shot, for CI)                                            |
+| `pnpm format`        | Prettier across the repo                                             |
+| `pnpm docker:build`  | Build the production Docker image                                    |
+| `pnpm docker:deploy` | Build + `docker compose up -d`                                       |
 
 End-to-end tests live alongside the app; run them with:
 

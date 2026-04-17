@@ -5,16 +5,26 @@
     "mlPerKgPerDay": 65
   },
   "inputs": {
-    "weightKg":      { "min": 0.3, "max": 10,  "step": 0.1 },
-    "dextrosePct":   { "min": 2.5, "max": 25,  "step": 0.5 },
-    "mlPerKgPerDay": { "min": 40,  "max": 200, "step": 5   }
+    "weightKg": { "min": 0.3, "max": 10, "step": 0.1 },
+    "dextrosePct": { "min": 2.5, "max": 25, "step": 0.5 },
+    "mlPerKgPerDay": { "min": 40, "max": 200, "step": 5 }
   },
   "glucoseBuckets": [
-    { "id": "severe-neuro", "label": "Severe neurologic signs", "action": "Increase by 1.5", "targetGirDelta":  1.5 },
-    { "id": "lt40",         "label": "<40",                      "action": "Increase by 1.0", "targetGirDelta":  1.0 },
-    { "id": "40-50",        "label": "40–50",                    "action": "Increase by 0.5", "targetGirDelta":  0.5 },
-    { "id": "50-60",        "label": "50–60",                    "action": "No change or consider wean by 0.5", "targetGirDelta": -0.5 },
-    { "id": "60-70",        "label": "60–70",                    "action": "Decrease by 1.0", "targetGirDelta": -1.0 },
-    { "id": "gt70",         "label": ">70",                      "action": "Decrease by 1.5", "targetGirDelta": -1.5 }
+    {
+      "id": "severe-neuro",
+      "label": "Severe neurologic signs",
+      "action": "Increase by 1.5",
+      "targetGirDelta": 1.5
+    },
+    { "id": "lt40", "label": "<40", "action": "Increase by 1.0", "targetGirDelta": 1.0 },
+    { "id": "40-50", "label": "40–50", "action": "Increase by 0.5", "targetGirDelta": 0.5 },
+    {
+      "id": "50-60",
+      "label": "50–60",
+      "action": "No change or consider wean by 0.5",
+      "targetGirDelta": -0.5
+    },
+    { "id": "60-70", "label": "60–70", "action": "Decrease by 1.0", "targetGirDelta": -1.0 },
+    { "id": "gt70", "label": ">70", "action": "Decrease by 1.5", "targetGirDelta": -1.5 }
   ]
 }

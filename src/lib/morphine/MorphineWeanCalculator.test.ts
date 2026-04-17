@@ -12,8 +12,8 @@ vi.mock('$lib/morphine/state.svelte.js', () => ({
     },
     init: vi.fn(),
     persist: vi.fn(),
-    reset: vi.fn(() => resetMockState()),
-  },
+    reset: vi.fn(() => resetMockState())
+  }
 }));
 
 import MorphineWeanCalculator from './MorphineWeanCalculator.svelte';
@@ -53,9 +53,7 @@ describe('MorphineWeanCalculator', () => {
 
   it('shows empty state placeholder without inputs', () => {
     render(MorphineWeanCalculator);
-    expect(
-      screen.getByText('Enter values above to generate weaning schedule.')
-    ).toBeTruthy();
+    expect(screen.getByText('Enter values above to generate weaning schedule.')).toBeTruthy();
   });
 
   describe('Phase 23-01: result feedback', () => {
@@ -84,10 +82,12 @@ describe('MorphineWeanCalculator', () => {
         Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
           value: () => {},
           writable: true,
-          configurable: true,
+          configurable: true
         });
       }
-      const scrollSpy = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+      const scrollSpy = vi
+        .spyOn(HTMLElement.prototype, 'scrollIntoView')
+        .mockImplementation(() => {});
       const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
       const activeBefore = document.activeElement;
       render(MorphineWeanCalculator);

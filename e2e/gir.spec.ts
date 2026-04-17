@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
 // in a real browser (unlike jsdom, which renders both layouts = 12 radios).
 for (const viewport of [
   { name: 'mobile', width: 375, height: 667 },
-  { name: 'desktop', width: 1280, height: 800 },
+  { name: 'desktop', width: 1280, height: 800 }
 ]) {
   test.describe(`GIR happy path (${viewport.name})`, () => {
     test.use({ viewport: { width: viewport.width, height: viewport.height } });
@@ -19,7 +19,9 @@ for (const viewport of [
         .catch(() => {});
     });
 
-    test('enter inputs → current hero updates → select bucket → target hero updates', async ({ page }) => {
+    test('enter inputs → current hero updates → select bucket → target hero updates', async ({
+      page
+    }) => {
       await page.getByLabel('Weight').fill('3.1');
       await page.getByLabel('Dextrose').fill('12.5');
       await page.getByLabel('Fluid order').fill('80');
@@ -40,7 +42,12 @@ for (const viewport of [
       await expect(radios.first()).toHaveAttribute('aria-checked', 'true');
 
       // Δ rate is the titration-row hero — at least one visible direction word + ml/hr unit on a populated bucket
-      await expect(page.getByText(/\((increase|decrease)\)/).locator('visible=true').first()).toBeVisible();
+      await expect(
+        page
+          .getByText(/\((increase|decrease)\)/)
+          .locator('visible=true')
+          .first()
+      ).toBeVisible();
       await expect(page.getByText('ml/hr').locator('visible=true').first()).toBeVisible();
     });
 

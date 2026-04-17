@@ -60,7 +60,7 @@ describe('GirCalculator', () => {
     expect(screen.getAllByText(/\((increase|decrease)\)/).length).toBeGreaterThanOrEqual(1);
   });
 
-it('GIR >12 advisory surfaces when computed GIR is high', () => {
+  it('GIR >12 advisory surfaces when computed GIR is high', () => {
     girState.current.weightKg = 1;
     girState.current.dextrosePct = 20;
     girState.current.mlPerKgPerDay = 150;

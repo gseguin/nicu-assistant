@@ -20,7 +20,7 @@ describe('fortificationState', () => {
       volumeMl: 180,
       formulaId: 'neocate-infant',
       targetKcalOz: 24,
-      unit: 'teaspoons',
+      unit: 'teaspoons'
     });
   });
 
@@ -32,7 +32,7 @@ describe('fortificationState', () => {
         volumeMl: 240,
         formulaId: 'similac-hmf',
         targetKcalOz: 22,
-        unit: 'packets',
+        unit: 'packets'
       })
     );
     fortificationState.init();
@@ -74,16 +74,12 @@ describe('fortificationState', () => {
   });
 
   it('persist() and init() are no-throw when sessionStorage throws', () => {
-    const setItemSpy = vi
-      .spyOn(Storage.prototype, 'setItem')
-      .mockImplementation(() => {
-        throw new Error('QuotaExceeded');
-      });
-    const getItemSpy = vi
-      .spyOn(Storage.prototype, 'getItem')
-      .mockImplementation(() => {
-        throw new Error('SecurityError');
-      });
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('QuotaExceeded');
+    });
+    const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('SecurityError');
+    });
 
     expect(() => fortificationState.persist()).not.toThrow();
     expect(() => fortificationState.init()).not.toThrow();

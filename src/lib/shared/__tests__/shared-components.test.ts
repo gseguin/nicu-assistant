@@ -93,7 +93,7 @@ describe('NumericInput', () => {
 
   it('shows error paragraph and aria-invalid="true" when error prop is set', () => {
     render(NumericInput, {
-      props: { value: null, label: 'Test Field', error: 'Value is required' },
+      props: { value: null, label: 'Test Field', error: 'Value is required' }
     });
     const input = screen.getByRole('spinbutton');
     expect(input).toHaveAttribute('aria-invalid', 'true');
@@ -102,7 +102,7 @@ describe('NumericInput', () => {
 
   it('has no error paragraph and aria-invalid="false" when error prop is empty', () => {
     render(NumericInput, {
-      props: { value: null, label: 'Test Field', error: '' },
+      props: { value: null, label: 'Test Field', error: '' }
     });
     const input = screen.getByRole('spinbutton');
     expect(input).toHaveAttribute('aria-invalid', 'false');

@@ -12,7 +12,7 @@ function defaultState(): MorphineStateData {
   return {
     weightKg: config.defaults.weightKg,
     maxDoseMgKgDose: config.defaults.maxDoseMgKgDose,
-    decreasePct: config.defaults.decreasePct,
+    decreasePct: config.defaults.decreasePct
   };
 }
 

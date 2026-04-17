@@ -4,7 +4,7 @@ import { calculateLinearSchedule } from './calculations.js';
 describe('calculateLinearSchedule', () => {
   const weight = 3.1;
   const maxDose = 0.04;
-  const decreasePct = 0.10;
+  const decreasePct = 0.1;
 
   it('returns exactly 10 steps', () => {
     const steps = calculateLinearSchedule(weight, maxDose, decreasePct);
@@ -20,7 +20,7 @@ describe('calculateLinearSchedule', () => {
 
   it('all reductions after step 1 are constant', () => {
     const steps = calculateLinearSchedule(weight, maxDose, decreasePct);
-    const expectedReduction = 0.124 * 0.10; // 0.0124
+    const expectedReduction = 0.124 * 0.1; // 0.0124
     for (let i = 1; i < steps.length; i++) {
       expect(steps[i].reductionMg).toBeCloseTo(expectedReduction, 6);
     }
@@ -40,7 +40,7 @@ describe('calculateLinearSchedule', () => {
   });
 
   it('clamps dose to 0 when reduction would make it negative', () => {
-    const steps = calculateLinearSchedule(weight, maxDose, 0.20);
+    const steps = calculateLinearSchedule(weight, maxDose, 0.2);
     // With 20% reduction per step: reduction = 0.0248 each step
     // By step 6: dose = 0.124 - 5*0.0248 = 0.0 (exact)
     // Steps 7-10 should be clamped to 0
@@ -54,7 +54,7 @@ describe('Morphine wean — xlsx Sheet1 spreadsheet parity', () => {
   // Source of truth: morphine-wean-calculator.xlsx Sheet1, cells B15..B24
   // Inputs: weight 3.1, maxDose 0.04 mg/kg/dose, decreasePct 0.10
   // Formula: step N = prev − (weight × maxDose × decreasePct) = prev − 0.0124
-  const steps = calculateLinearSchedule(3.1, 0.04, 0.10);
+  const steps = calculateLinearSchedule(3.1, 0.04, 0.1);
 
   const expected: { step: number; doseMg: number; doseMgKgDose: number; reductionMg: number }[] = [
     { step: 1, doseMg: 0.124, doseMgKgDose: 0.04, reductionMg: 0 },
@@ -66,7 +66,7 @@ describe('Morphine wean — xlsx Sheet1 spreadsheet parity', () => {
     { step: 7, doseMg: 0.0496, doseMgKgDose: 0.016, reductionMg: 0.0124 },
     { step: 8, doseMg: 0.0372, doseMgKgDose: 0.012, reductionMg: 0.0124 },
     { step: 9, doseMg: 0.0248, doseMgKgDose: 0.008, reductionMg: 0.0124 },
-    { step: 10, doseMg: 0.0124, doseMgKgDose: 0.004, reductionMg: 0.0124 },
+    { step: 10, doseMg: 0.0124, doseMgKgDose: 0.004, reductionMg: 0.0124 }
   ];
 
   for (const row of expected) {

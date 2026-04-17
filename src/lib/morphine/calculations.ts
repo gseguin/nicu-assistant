@@ -22,7 +22,7 @@ export function calculateLinearSchedule(
         step: stepNum,
         doseMg: initialDose,
         doseMgKgDose: initialDose / weightKg,
-        reductionMg: 0,
+        reductionMg: 0
       });
     } else {
       const rawDose = steps[i - 1].doseMg - reductionPerStep;
@@ -31,7 +31,7 @@ export function calculateLinearSchedule(
         step: stepNum,
         doseMg,
         doseMgKgDose: doseMg / weightKg,
-        reductionMg: doseMg === 0 && rawDose < 0 ? steps[i - 1].doseMg : reductionPerStep,
+        reductionMg: doseMg === 0 && rawDose < 0 ? steps[i - 1].doseMg : reductionPerStep
       });
     }
   }

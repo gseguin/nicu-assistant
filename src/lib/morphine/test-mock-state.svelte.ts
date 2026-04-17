@@ -7,7 +7,7 @@ import type { MorphineStateData } from './types.js';
 export const mockState = $state<MorphineStateData>({
   weightKg: null,
   maxDoseMgKgDose: null,
-  decreasePct: null,
+  decreasePct: null
 });
 
 export function resetMockState(): void {

@@ -1,10 +1,10 @@
-@import "tailwindcss";
-@source not "../.planning";
-@source not "../.claude";
-@source not "../.remember";
-@source not "../.playwright-mcp";
-@source not "../e2e";
-@source not "./**/*.{test,spec}.{js,ts}";
+@import 'tailwindcss';
+@source not '../.planning';
+@source not '../.claude';
+@source not '../.remember';
+@source not '../.playwright-mcp';
+@source not '../e2e';
+@source not './**/*.{test,spec}.{js,ts}';
 
 /* DS-02 / D-06: Class-based dark variant for Tailwind CSS 4 */
 /* Tailwind CSS 4 removes the darkMode config option; use @custom-variant instead. */
@@ -14,7 +14,7 @@
 
 @theme {
   /* DS-01: Clinical Blue — OKLCH scale from formula-calculator/src/app.css */
-  --color-clinical-50:  oklch(97.5% 0.018 230);
+  --color-clinical-50: oklch(97.5% 0.018 230);
   --color-clinical-100: oklch(93% 0.04 225);
   --color-clinical-200: oklch(86% 0.08 220);
   --color-clinical-300: oklch(77% 0.13 225);
@@ -26,90 +26,101 @@
   --color-clinical-900: oklch(22% 0.08 235);
 
   /* DS-01: BMF Amber — OKLCH scale from formula-calculator/src/app.css */
-  --color-bmf-50:  oklch(97% 0.02 80);
+  --color-bmf-50: oklch(97% 0.02 80);
   --color-bmf-100: oklch(93% 0.05 78);
-  --color-bmf-200: oklch(86% 0.10 72);
+  --color-bmf-200: oklch(86% 0.1 72);
   --color-bmf-300: oklch(78% 0.15 68);
   --color-bmf-400: oklch(72% 0.18 65);
   --color-bmf-500: oklch(72% 0.18 65);
   --color-bmf-600: oklch(62% 0.16 60);
   --color-bmf-700: oklch(50% 0.13 55);
-  --color-bmf-800: oklch(38% 0.10 50);
+  --color-bmf-800: oklch(38% 0.1 50);
   --color-bmf-900: oklch(27% 0.07 48);
 
   /* Semantic aliases — expose CSS vars as Tailwind utilities */
   /* e.g. bg-surface, text-primary, border-border, bg-surface-card */
-  --color-surface:      var(--color-surface);
-  --color-surface-alt:  var(--color-surface-alt);
+  --color-surface: var(--color-surface);
+  --color-surface-alt: var(--color-surface-alt);
   --color-surface-card: var(--color-surface-card);
-  --color-border:       var(--color-border);
-  --color-text-primary:    var(--color-text-primary);
-  --color-text-secondary:  var(--color-text-secondary);
-  --color-text-tertiary:   var(--color-text-tertiary);
-  --color-accent:       var(--color-accent);
+  --color-border: var(--color-border);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-accent: var(--color-accent);
   --color-accent-light: var(--color-accent-light);
   --color-accent-result: var(--color-accent-result);
-  --color-bmf-result:    var(--color-bmf-result);
-  --color-error:        var(--color-error);
-  --color-error-light:  var(--color-error-light);
+  --color-bmf-result: var(--color-bmf-result);
+  --color-error: var(--color-error);
+  --color-error-light: var(--color-error-light);
 
   /* DS-04: Font stack — Plus Jakarta Sans with system fallbacks */
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 
   /* Custom type scale for clinical UI (fills Tailwind gaps) */
-  --text-2xs:     0.6875rem;   /* 11px — minimum readable labels */
-  --text-ui:      0.8125rem;   /* 13px — nav labels, field labels */
-  --text-title:   1.375rem;    /* 22px — page h1 */
-  --text-display: 2.75rem;     /* 44px — primary clinical result values */
+  --text-2xs: 0.6875rem; /* 11px — minimum readable labels */
+  --text-ui: 0.8125rem; /* 13px — nav labels, field labels */
+  --text-title: 1.375rem; /* 22px — page h1 */
+  --text-display: 2.75rem; /* 44px — primary clinical result values */
 }
 
 @layer base {
   /* Light mode — default semantic surface tokens (D-04: follows system preference) */
   :root {
-    --color-surface:         oklch(97.5% 0.006 225);
-    --color-surface-alt:     oklch(90% 0.008 220);
-    --color-surface-card:    oklch(100% 0 0);
-    --color-border:          oklch(63% 0.01 220);    /* WCAG fix: was 80%, now 3:1+ on surface & card */
-    --color-text-primary:    oklch(18% 0.012 230);
-    --color-text-secondary:  oklch(35% 0.01 225);
-    --color-text-tertiary:   oklch(50% 0.008 225);
-    --color-accent:          oklch(49% 0.17 220);    /* clinical-600 — UI text accent */
-    --color-accent-light:    oklch(86% 0.08 220);    /* clinical-200 */
-    --color-accent-result:   oklch(42% 0.14 220);    /* darker clinical — result card bg, 4.5:1 w/ white */
-    --color-bmf-result:      oklch(44% 0.13 55);     /* darker amber — result card bg, 4.5:1 w/ white */
-    --color-error:           oklch(50% 0.20 25);
-    --color-error-light:     oklch(90% 0.06 25);
-    --color-scrim:           oklch(18% 0.012 230 / 0.55);
+    --color-surface: oklch(97.5% 0.006 225);
+    --color-surface-alt: oklch(90% 0.008 220);
+    --color-surface-card: oklch(100% 0 0);
+    --color-border: oklch(63% 0.01 220); /* WCAG fix: was 80%, now 3:1+ on surface & card */
+    --color-text-primary: oklch(18% 0.012 230);
+    --color-text-secondary: oklch(35% 0.01 225);
+    --color-text-tertiary: oklch(50% 0.008 225);
+    --color-accent: oklch(49% 0.17 220); /* clinical-600 — UI text accent */
+    --color-accent-light: oklch(86% 0.08 220); /* clinical-200 */
+    --color-accent-result: oklch(
+      42% 0.14 220
+    ); /* darker clinical — result card bg, 4.5:1 w/ white */
+    --color-bmf-result: oklch(44% 0.13 55); /* darker amber — result card bg, 4.5:1 w/ white */
+    --color-error: oklch(50% 0.2 25);
+    --color-error-light: oklch(90% 0.06 25);
+    --color-scrim: oklch(18% 0.012 230 / 0.55);
   }
 
   /* Dark mode — activated by .dark class OR [data-theme="dark"] */
   /* Intentionally designed: warm slate base with lower chroma than light mode. */
   /* Surface hierarchy uses subtle lightness steps to create depth without harshness. */
   .dark,
-  [data-theme="dark"] {
-    --color-surface:         oklch(16% 0.012 240);
-    --color-surface-alt:     oklch(20% 0.014 238);
-    --color-surface-card:    oklch(23% 0.014 236);
-    --color-border:          oklch(58% 0.018 235);   /* Critique fix: was 53%, now clearer card edges on dark surfaces */
-    --color-text-primary:    oklch(93% 0.006 230);
-    --color-text-secondary:  oklch(80% 0.010 228);  /* v1.4 A11Y fix: was 70%, now 4.5:1+ on surface/card/border */
-    --color-text-tertiary:   oklch(62% 0.008 228);   /* WCAG fix: was 55%, now 4.5:1+ on surface */
-    --color-accent:          oklch(82% 0.12 220);     /* v1.4 A11Y fix: was 72%, now 4.5:1+ on surface-card */
-    --color-accent-light:    oklch(28% 0.08 225);
-    --color-accent-result:   oklch(44% 0.14 220);    /* darker clinical — result card bg, 4.5:1 w/ white */
-    --color-bmf-result:      oklch(44% 0.13 55);     /* darker amber — same as light (both need dark bg for white text) */
-    --color-error:           oklch(72% 0.16 25);
-    --color-error-light:     oklch(25% 0.08 25);
-    --color-scrim:           oklch(8% 0.012 240 / 0.70);
+  [data-theme='dark'] {
+    --color-surface: oklch(16% 0.012 240);
+    --color-surface-alt: oklch(20% 0.014 238);
+    --color-surface-card: oklch(23% 0.014 236);
+    --color-border: oklch(
+      58% 0.018 235
+    ); /* Critique fix: was 53%, now clearer card edges on dark surfaces */
+    --color-text-primary: oklch(93% 0.006 230);
+    --color-text-secondary: oklch(
+      80% 0.01 228
+    ); /* v1.4 A11Y fix: was 70%, now 4.5:1+ on surface/card/border */
+    --color-text-tertiary: oklch(62% 0.008 228); /* WCAG fix: was 55%, now 4.5:1+ on surface */
+    --color-accent: oklch(82% 0.12 220); /* v1.4 A11Y fix: was 72%, now 4.5:1+ on surface-card */
+    --color-accent-light: oklch(28% 0.08 225);
+    --color-accent-result: oklch(
+      44% 0.14 220
+    ); /* darker clinical — result card bg, 4.5:1 w/ white */
+    --color-bmf-result: oklch(
+      44% 0.13 55
+    ); /* darker amber — same as light (both need dark bg for white text) */
+    --color-error: oklch(72% 0.16 25);
+    --color-error-light: oklch(25% 0.08 25);
+    --color-scrim: oklch(8% 0.012 240 / 0.7);
   }
 
   /* DS-04: Apply Plus Jakarta Sans globally */
-  html, body {
+  html,
+  body {
     font-family: var(--font-sans);
     background-color: var(--color-surface);
     color: var(--color-text-primary);
     min-height: 100dvh;
-    min-height: 100svh;  /* fallback */
+    min-height: 100svh; /* fallback */
     -webkit-text-size-adjust: 100%;
     font-kerning: normal;
     -webkit-font-smoothing: antialiased;
@@ -118,15 +129,22 @@
 
   /* Smooth theme transition — calm, not flashy */
   html:not(.no-transition) * {
-    transition: background-color 200ms ease-out, color 200ms ease-out, border-color 200ms ease-out;
+    transition:
+      background-color 200ms ease-out,
+      color 200ms ease-out,
+      border-color 200ms ease-out;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html * { transition: none !important; }
+    html * {
+      transition: none !important;
+    }
   }
 
   /* DS-05: 48px minimum touch targets for all interactive elements */
-  button, select, input {
+  button,
+  select,
+  input {
     @apply min-h-[48px];
     font-family: var(--font-sans);
   }
@@ -135,26 +153,34 @@
 @layer components {
   /* Shared card surface — used by placeholder routes and eventually calculator sections */
   .card {
-    @apply bg-[var(--color-surface-card)] p-4 rounded-xl shadow-sm border border-[var(--color-border)];
+    @apply rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-card)] p-4 shadow-sm;
   }
 
   /* DS-04: Tabular numerics for clinical output values */
   .num {
     font-variant-numeric: tabular-nums;
-    font-feature-settings: "tnum";
+    font-feature-settings: 'tnum';
   }
 
   /* Shared result entrance animation — Morphine summary card + Formula hero */
   @keyframes result-pulse {
-    0%   { opacity: 0.7; transform: scale(0.95); }
-    100% { opacity: 1;   transform: scale(1); }
+    0% {
+      opacity: 0.7;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
   .animate-result-pulse {
     animation: result-pulse 200ms cubic-bezier(0.25, 1, 0.5, 1);
     transform-origin: center;
   }
   @media (prefers-reduced-motion: reduce) {
-    .animate-result-pulse { animation: none; }
+    .animate-result-pulse {
+      animation: none;
+    }
   }
 
   /* Icon button — header actions, toggle button */
@@ -170,7 +196,9 @@
     border-radius: 9999px;
     cursor: pointer;
     color: var(--color-text-tertiary);
-    transition: color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+    transition:
+      color 120ms ease-in-out,
+      box-shadow 120ms ease-in-out;
     line-height: 0;
   }
   .icon-btn:hover {
@@ -185,43 +213,43 @@
 
 @layer base {
   :root {
-    --color-identity:      var(--color-accent);
+    --color-identity: var(--color-accent);
     --color-identity-hero: var(--color-accent-light);
   }
   .identity-morphine {
-    --color-identity:      var(--color-accent);
+    --color-identity: var(--color-accent);
     --color-identity-hero: oklch(95% 0.04 220);
   }
   .identity-formula {
-    --color-identity:      oklch(49% 0.11 195);
+    --color-identity: oklch(49% 0.11 195);
     --color-identity-hero: oklch(92% 0.05 195);
   }
   .identity-gir {
-    --color-identity:      oklch(42% 0.12 145);
+    --color-identity: oklch(42% 0.12 145);
     --color-identity-hero: oklch(96% 0.03 145);
   }
   .dark .identity-morphine,
-  [data-theme="dark"] .identity-morphine {
-    --color-identity:      var(--color-accent);
-    --color-identity-hero: oklch(32% 0.10 220);
+  [data-theme='dark'] .identity-morphine {
+    --color-identity: var(--color-accent);
+    --color-identity-hero: oklch(32% 0.1 220);
   }
   .dark .identity-formula,
-  [data-theme="dark"] .identity-formula {
-    --color-identity:      oklch(82% 0.09 195);
+  [data-theme='dark'] .identity-formula {
+    --color-identity: oklch(82% 0.09 195);
     --color-identity-hero: oklch(30% 0.08 195);
   }
   .dark .identity-gir,
-  [data-theme="dark"] .identity-gir {
-    --color-identity:      oklch(82% 0.10 145);
+  [data-theme='dark'] .identity-gir {
+    --color-identity: oklch(82% 0.1 145);
     --color-identity-hero: oklch(22% 0.045 145);
   }
   .identity-feeds {
-    --color-identity:      oklch(50% 0.13 30);
+    --color-identity: oklch(50% 0.13 30);
     --color-identity-hero: oklch(94% 0.04 30);
   }
   .dark .identity-feeds,
-  [data-theme="dark"] .identity-feeds {
-    --color-identity:      oklch(80% 0.10 30);
+  [data-theme='dark'] .identity-feeds {
+    --color-identity: oklch(80% 0.1 30);
     --color-identity-hero: oklch(24% 0.05 30);
   }
 }

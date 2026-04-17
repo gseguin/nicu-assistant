@@ -14,7 +14,7 @@ function defaultState(): GirStateData {
     weightKg: config.defaults.weightKg,
     dextrosePct: config.defaults.dextrosePct,
     mlPerKgPerDay: config.defaults.mlPerKgPerDay,
-    selectedBucketId: null,
+    selectedBucketId: null
   };
 }
 

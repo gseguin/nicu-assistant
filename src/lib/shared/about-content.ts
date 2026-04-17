@@ -20,8 +20,8 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     notes: [
       'Each step reduces the dose by weight × max dose × decrease % (a constant mg reduction across all 10 steps).',
       'Default parameters: 3.1 kg weight, 0.04 mg/kg/dose max dose, 10% decrease per step.',
-      'Source: morphine-wean-calculator.xlsx Sheet1. Results are a starting point — clinical judgment required.',
-    ],
+      'Source: morphine-wean-calculator.xlsx Sheet1. Results are a starting point — clinical judgment required.'
+    ]
   },
   formula: {
     title: 'Fortification Calculator',
@@ -31,8 +31,8 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     notes: [
       'Five inputs (Base, Starting Volume, Formula, Target Calorie, Unit) and four outputs (Amount to Add, Yield, Exact kcal/oz, Suggested Starting Volume).',
       '30 formulas across 4 manufacturers (Abbott, Mead Johnson, Nestlé, Nutricia). Packets unit is only available for Similac HMF.',
-      "Results must be verified against your institution's feeding protocol.",
-    ],
+      "Results must be verified against your institution's feeding protocol."
+    ]
   },
   gir: {
     title: 'Glucose Infusion Rate',
@@ -43,8 +43,8 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Formula: Current GIR = (Dex% × rate ml/hr × 10) / (Weight × 60); Initial rate = (Weight × ml/kg/day) / 24.',
       'Source spreadsheet: GIR-Wean-Calculator.xlsx (CALC tab). Formula validated against MDCalc and Hawkes et al., J Perinatol 2020 (PMC7286731).',
       "The 6-bucket titration adjustment values are an institutional protocol — verify against your unit's own protocol before acting.",
-      'Dextrose >12.5% requires central venous access. GIR >12 mg/kg/min warrants hyperinsulinism workup.',
-    ],
+      'Dextrose >12.5% requires central venous access. GIR >12 mg/kg/min warrants hyperinsulinism workup.'
+    ]
   },
   feeds: {
     title: 'Feed Advance Calculator',
@@ -54,7 +54,7 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     notes: [
       'Bedside mode: trophic/advance/goal ml per feed from weight and ml/kg/d targets, with frequency (q2h-q6h) and cadence (every feed to once daily) dropdowns.',
       'Full nutrition mode: total kcal/kg/d from dual TPN dextrose lines, SMOF lipid, and enteral feeds. Hero output is total kcal/kg/d.',
-      'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement). Results are advisory — clinical judgment required.',
-    ],
-  },
+      'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement). Results are advisory — clinical judgment required.'
+    ]
+  }
 };

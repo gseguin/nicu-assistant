@@ -7,7 +7,7 @@ const REQUIRED_KEYS = [
   'manufacturer',
   'displacement_factor',
   'calorie_concentration',
-  'grams_per_scoop',
+  'grams_per_scoop'
 ] as const;
 
 describe('fortification-config loader', () => {

@@ -17,7 +17,7 @@ export const mockState = $state<MockFortificationState>({
   volumeMl: 180,
   formulaId: 'neocate-infant',
   targetKcalOz: 24,
-  unit: 'teaspoons',
+  unit: 'teaspoons'
 });
 
 export function resetMockState(): void {

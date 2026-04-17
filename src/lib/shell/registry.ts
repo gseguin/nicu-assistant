@@ -3,10 +3,10 @@ import type { Component } from 'svelte';
 import { Syringe, Milk, Droplet, Baby } from '@lucide/svelte';
 
 export interface CalculatorEntry {
-  id: string;          // Route segment — must match src/routes/{id}/
-  label: string;       // Tab label text — always visible (NAV-01/NAV-02)
-  href: string;        // SvelteKit href
-  icon: Component;     // Lucide icon component
+  id: string; // Route segment — must match src/routes/{id}/
+  label: string; // Tab label text — always visible (NAV-01/NAV-02)
+  href: string; // SvelteKit href
+  icon: Component; // Lucide icon component
   description: string; // Screen reader accessible description
   identityClass: 'identity-morphine' | 'identity-formula' | 'identity-gir' | 'identity-feeds';
 }
@@ -18,7 +18,7 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     href: '/morphine-wean',
     icon: Syringe,
     description: 'Morphine weaning schedule calculator',
-    identityClass: 'identity-morphine',
+    identityClass: 'identity-morphine'
   },
   {
     id: 'formula',
@@ -26,7 +26,7 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     href: '/formula',
     icon: Milk,
     description: 'Infant formula fortification calculator',
-    identityClass: 'identity-formula',
+    identityClass: 'identity-formula'
   },
   {
     id: 'gir',
@@ -34,7 +34,7 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     href: '/gir',
     icon: Droplet,
     description: 'Glucose infusion rate calculator',
-    identityClass: 'identity-gir',
+    identityClass: 'identity-gir'
   },
   {
     id: 'feeds',
@@ -42,6 +42,6 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     href: '/feeds',
     icon: Baby,
     description: 'Feed advance calculator',
-    identityClass: 'identity-feeds',
-  },
+    identityClass: 'identity-feeds'
+  }
 ] as const;

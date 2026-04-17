@@ -42,12 +42,12 @@ describe('CALCULATOR_REGISTRY', () => {
   });
 
   it('all entry IDs are unique', () => {
-    const ids = CALCULATOR_REGISTRY.map(e => e.id);
+    const ids = CALCULATOR_REGISTRY.map((e) => e.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
   it('all entry hrefs are unique', () => {
-    const hrefs = CALCULATOR_REGISTRY.map(e => e.href);
+    const hrefs = CALCULATOR_REGISTRY.map((e) => e.href);
     expect(new Set(hrefs).size).toBe(hrefs.length);
   });
 

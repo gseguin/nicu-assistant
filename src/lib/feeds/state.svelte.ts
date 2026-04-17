@@ -27,7 +27,7 @@ function defaultState(): FeedsStateData {
     tpnMl2Hr: defaults.tpnMl2Hr,
     smofMl: defaults.smofMl,
     enteralMl: defaults.enteralMl,
-    enteralKcalPerOz: defaults.enteralKcalPerOz,
+    enteralKcalPerOz: defaults.enteralKcalPerOz
   };
 }
 

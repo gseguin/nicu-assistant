@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 for (const viewport of [
   { name: 'mobile', width: 375, height: 667 },
-  { name: 'desktop', width: 1280, height: 800 },
+  { name: 'desktop', width: 1280, height: 800 }
 ]) {
   test.describe(`Feeds happy path (${viewport.name})`, () => {
     test.use({ viewport: { width: viewport.width, height: viewport.height } });

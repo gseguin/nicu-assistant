@@ -13,6 +13,6 @@
 export function normalizeNumericInput(raw: string): string {
   return raw
     .trim()
-    .replace(/\u00A0/g, '')   // strip non-breaking spaces from EPIC rich-text paste
-    .replace(/,/g, '.');      // locale comma → decimal point
+    .replace(/\u00A0/g, '') // strip non-breaking spaces from EPIC rich-text paste
+    .replace(/,/g, '.'); // locale comma → decimal point
 }

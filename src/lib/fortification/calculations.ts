@@ -6,7 +6,7 @@ import type {
   FortificationResult,
   FortificationFormula,
   UnitType,
-  BaseType,
+  BaseType
 } from './types.js';
 
 const ML_PER_OZ = 29.57;
@@ -14,7 +14,7 @@ const HMF_ID = 'similac-hmf';
 
 const BASE_KCAL: Record<BaseType, number> = {
   'breast-milk': 20,
-  water: 0,
+  water: 0
 };
 
 /** Gram mass of the added powder for a given unit. See Plan 09-02 Formula Reference (B-4). */
@@ -39,7 +39,7 @@ function inverseGeneralVolume(
   targetKcal: number,
   baseKcal: number,
   disp: number,
-  cal: number,
+  cal: number
 ): number {
   const numerSlope = targetKcal - baseKcal;
   if (numerSlope === 0) return 0;
@@ -50,7 +50,7 @@ const ZERO_RESULT: FortificationResult = {
   amountToAdd: 0,
   yieldMl: 0,
   exactKcalPerOz: 0,
-  suggestedStartingVolumeMl: '0 (0 oz)',
+  suggestedStartingVolumeMl: '0 (0 oz)'
 };
 
 /** Branch tag — which formula path produced amountToAdd. Drives the SSV inverse. */
@@ -121,8 +121,7 @@ export function calculateFortification(inputs: FortificationInputs): Fortificati
 
   const gAdded = gramsAdded(amountToAdd, unit, formula);
   const yieldMl = volumeMl + gAdded * disp;
-  const exactKcalPerOz =
-    ((baseKcal * volumeMl) / ML_PER_OZ + gAdded * cal) / (yieldMl / ML_PER_OZ);
+  const exactKcalPerOz = ((baseKcal * volumeMl) / ML_PER_OZ + gAdded * cal) / (yieldMl / ML_PER_OZ);
 
   if (!Number.isFinite(yieldMl) || !Number.isFinite(exactKcalPerOz)) return ZERO_RESULT;
 
@@ -172,7 +171,7 @@ export function calculateFortification(inputs: FortificationInputs): Fortificati
       amountToAdd,
       yieldMl,
       exactKcalPerOz,
-      suggestedStartingVolumeMl: '0 (0 oz)',
+      suggestedStartingVolumeMl: '0 (0 oz)'
     };
   }
 
@@ -183,6 +182,6 @@ export function calculateFortification(inputs: FortificationInputs): Fortificati
     amountToAdd,
     yieldMl,
     exactKcalPerOz,
-    suggestedStartingVolumeMl: `${mL} (${oz} oz)`,
+    suggestedStartingVolumeMl: `${mL} (${oz} oz)`
   };
 }

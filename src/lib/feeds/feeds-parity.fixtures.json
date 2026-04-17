@@ -1,70 +1,70 @@
 {
-	"_comment": "Values hand-copied from nutrition-calculator.xlsx. NEVER edit to match code changes.",
-	"_cellRefs": {
-		"sheet1": "Sheet1!B3:B20 — weight 1.74, TPN dex1=0%/56ml, dex2=0%/0ml, SMOF=0ml, enteral=200ml/24kcal/oz",
-		"sheet2": "Sheet2!C2:C5,B7:B9 — weight 1.94, trophic 20, advance 30, goal 160, trophic q4h(/6), advance q3h(/8) bid(/2), goal q3h(/8)"
-	},
-	"sheet1": {
-		"input": {
-			"weightKg": 1.74,
-			"tpnDex1Pct": 0,
-			"tpnMl1": 56,
-			"tpnDex2Pct": 0,
-			"tpnMl2": 0,
-			"smofMl": 0,
-			"enteralMl": 200,
-			"enteralKcalPerOz": 24
-		},
-		"expected": {
-			"dextroseKcal": 0,
-			"lipidKcal": 0,
-			"enteralKcal": 160,
-			"totalKcalPerKgDay": 91.95402299,
-			"mlPerKg": 147.1264368,
-			"autoAdvanceMlPerFeed": 3.2625
-		}
-	},
-	"sheet1DualDex": {
-		"_derivation": "Hand-calculated: dex1=10%/50ml, dex2=7.5%/30ml → ((0.10*50)+(0.075*30))*3.4 = (5+2.25)*3.4 = 24.65",
-		"input": {
-			"weightKg": 1.74,
-			"tpnDex1Pct": 10,
-			"tpnMl1": 50,
-			"tpnDex2Pct": 7.5,
-			"tpnMl2": 30,
-			"smofMl": 0,
-			"enteralMl": 200,
-			"enteralKcalPerOz": 24
-		},
-		"expected": {
-			"dextroseKcal": 24.65
-		}
-	},
-	"sheet2": {
-		"input": {
-			"weightKg": 1.94,
-			"trophicMlKgDay": 20,
-			"advanceMlKgDay": 30,
-			"goalMlKgDay": 160,
-			"trophicFeedsPerDay": 6,
-			"advanceFeedsPerDay": 8,
-			"advanceEventsPerDay": 2,
-			"goalFeedsPerDay": 8
-		},
-		"expected": {
-			"trophicMlPerFeed": 6.466666667,
-			"advanceStepMlPerFeed": 3.6375,
-			"goalMlPerFeed": 38.8
-		}
-	},
-	"sheet2IvBackfill": {
-		"input": {
-			"totalFluidsMlHr": 12,
-			"enteralMlPerFeed": 9,
-			"feedHours": 3
-		},
-		"expected": {
-			"ivBackfillRate": 9
-		}
-	}
+  "_comment": "Values hand-copied from nutrition-calculator.xlsx. NEVER edit to match code changes.",
+  "_cellRefs": {
+    "sheet1": "Sheet1!B3:B20 — weight 1.74, TPN dex1=0%/56ml, dex2=0%/0ml, SMOF=0ml, enteral=200ml/24kcal/oz",
+    "sheet2": "Sheet2!C2:C5,B7:B9 — weight 1.94, trophic 20, advance 30, goal 160, trophic q4h(/6), advance q3h(/8) bid(/2), goal q3h(/8)"
+  },
+  "sheet1": {
+    "input": {
+      "weightKg": 1.74,
+      "tpnDex1Pct": 0,
+      "tpnMl1": 56,
+      "tpnDex2Pct": 0,
+      "tpnMl2": 0,
+      "smofMl": 0,
+      "enteralMl": 200,
+      "enteralKcalPerOz": 24
+    },
+    "expected": {
+      "dextroseKcal": 0,
+      "lipidKcal": 0,
+      "enteralKcal": 160,
+      "totalKcalPerKgDay": 91.95402299,
+      "mlPerKg": 147.1264368,
+      "autoAdvanceMlPerFeed": 3.2625
+    }
+  },
+  "sheet1DualDex": {
+    "_derivation": "Hand-calculated: dex1=10%/50ml, dex2=7.5%/30ml → ((0.10*50)+(0.075*30))*3.4 = (5+2.25)*3.4 = 24.65",
+    "input": {
+      "weightKg": 1.74,
+      "tpnDex1Pct": 10,
+      "tpnMl1": 50,
+      "tpnDex2Pct": 7.5,
+      "tpnMl2": 30,
+      "smofMl": 0,
+      "enteralMl": 200,
+      "enteralKcalPerOz": 24
+    },
+    "expected": {
+      "dextroseKcal": 24.65
+    }
+  },
+  "sheet2": {
+    "input": {
+      "weightKg": 1.94,
+      "trophicMlKgDay": 20,
+      "advanceMlKgDay": 30,
+      "goalMlKgDay": 160,
+      "trophicFeedsPerDay": 6,
+      "advanceFeedsPerDay": 8,
+      "advanceEventsPerDay": 2,
+      "goalFeedsPerDay": 8
+    },
+    "expected": {
+      "trophicMlPerFeed": 6.466666667,
+      "advanceStepMlPerFeed": 3.6375,
+      "goalMlPerFeed": 38.8
+    }
+  },
+  "sheet2IvBackfill": {
+    "input": {
+      "totalFluidsMlHr": 12,
+      "enteralMlPerFeed": 9,
+      "feedHours": 3
+    },
+    "expected": {
+      "ivBackfillRate": 9
+    }
+  }
 }

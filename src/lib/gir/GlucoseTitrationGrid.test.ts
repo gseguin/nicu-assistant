@@ -5,12 +5,60 @@ import type { GirTitrationRow } from './types.js';
 
 function makeRows(overrides: Partial<GirTitrationRow>[] = []): GirTitrationRow[] {
   const base: GirTitrationRow[] = [
-    { bucketId: 'severe-neuro', label: 'Severe neurologic signs', action: 'Increase by 1.5', targetGirMgKgMin: 9.7, targetFluidsMlKgDay: 77, targetRateMlHr: 12.6, deltaRateMlHr: 2.0 },
-    { bucketId: 'lt40',         label: '<40',    action: 'Increase by 1.0', targetGirMgKgMin: 9.2, targetFluidsMlKgDay: 73, targetRateMlHr: 11.9, deltaRateMlHr: 1.3 },
-    { bucketId: '40-50',        label: '40-50',  action: 'Increase by 0.5', targetGirMgKgMin: 8.7, targetFluidsMlKgDay: 69, targetRateMlHr: 11.3, deltaRateMlHr: 0.6 },
-    { bucketId: '50-60',        label: '50-60',  action: 'No change or consider wean by 0.5', targetGirMgKgMin: 7.7, targetFluidsMlKgDay: 61, targetRateMlHr: 10.0, deltaRateMlHr: -0.6 },
-    { bucketId: '60-70',        label: '60-70',  action: 'Decrease by 1.0', targetGirMgKgMin: 7.2, targetFluidsMlKgDay: 57, targetRateMlHr: 9.3, deltaRateMlHr: -1.3 },
-    { bucketId: 'gt70',         label: '>70',    action: 'Decrease by 1.5', targetGirMgKgMin: 0, targetFluidsMlKgDay: 0, targetRateMlHr: 0, deltaRateMlHr: -10 },
+    {
+      bucketId: 'severe-neuro',
+      label: 'Severe neurologic signs',
+      action: 'Increase by 1.5',
+      targetGirMgKgMin: 9.7,
+      targetFluidsMlKgDay: 77,
+      targetRateMlHr: 12.6,
+      deltaRateMlHr: 2.0
+    },
+    {
+      bucketId: 'lt40',
+      label: '<40',
+      action: 'Increase by 1.0',
+      targetGirMgKgMin: 9.2,
+      targetFluidsMlKgDay: 73,
+      targetRateMlHr: 11.9,
+      deltaRateMlHr: 1.3
+    },
+    {
+      bucketId: '40-50',
+      label: '40-50',
+      action: 'Increase by 0.5',
+      targetGirMgKgMin: 8.7,
+      targetFluidsMlKgDay: 69,
+      targetRateMlHr: 11.3,
+      deltaRateMlHr: 0.6
+    },
+    {
+      bucketId: '50-60',
+      label: '50-60',
+      action: 'No change or consider wean by 0.5',
+      targetGirMgKgMin: 7.7,
+      targetFluidsMlKgDay: 61,
+      targetRateMlHr: 10.0,
+      deltaRateMlHr: -0.6
+    },
+    {
+      bucketId: '60-70',
+      label: '60-70',
+      action: 'Decrease by 1.0',
+      targetGirMgKgMin: 7.2,
+      targetFluidsMlKgDay: 57,
+      targetRateMlHr: 9.3,
+      deltaRateMlHr: -1.3
+    },
+    {
+      bucketId: 'gt70',
+      label: '>70',
+      action: 'Decrease by 1.5',
+      targetGirMgKgMin: 0,
+      targetFluidsMlKgDay: 0,
+      targetRateMlHr: 0,
+      deltaRateMlHr: -10
+    }
   ];
   return base.map((r, i) => ({ ...r, ...(overrides[i] ?? {}) }));
 }
@@ -70,7 +118,7 @@ describe('GlucoseTitrationGrid', () => {
     expect(onselect).toHaveBeenCalledWith('gt70');
   });
 
-it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () => {
+  it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
     const stops = screen.getAllByText(/^STOP$/);
     expect(stops.length).toBeGreaterThan(0);
@@ -85,7 +133,9 @@ it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () 
     const severe = radios.filter((r) => /^Severe neuro/i.test(r.getAttribute('aria-label') || ''));
     expect(severe.length).toBeGreaterThan(0);
     for (const row of severe) {
-      expect((row.getAttribute('aria-label') || '').toLowerCase()).toContain('stop dextrose infusion');
+      expect((row.getAttribute('aria-label') || '').toLowerCase()).toContain(
+        'stop dextrose infusion'
+      );
     }
   });
 
@@ -139,14 +189,22 @@ it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () 
   it('ariaLabelFor on normal bucket announces direction + ml/hr BEFORE mg/kg/min', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
     const radios = screen.getAllByRole('radio');
-    const lt40 = radios.find((r) => /Glucose less than 40/i.test(r.getAttribute('aria-label') || ''));
+    const lt40 = radios.find((r) =>
+      /Glucose less than 40/i.test(r.getAttribute('aria-label') || '')
+    );
     expect(lt40).toBeTruthy();
     const label = lt40!.getAttribute('aria-label') || '';
-    expect(label).toMatch(/Glucose.*?(increase|decrease).*?milliliters per hour.*?milligrams per kilogram per minute/);
+    expect(label).toMatch(
+      /Glucose.*?(increase|decrease).*?milliliters per hour.*?milligrams per kilogram per minute/
+    );
   });
 
   it('desktop header row text order is Range | Δ rate (post 32-01 simplification)', () => {
-    const { container } = render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
+    const { container } = render(GlucoseTitrationGrid, {
+      rows: makeRows(),
+      selectedBucketId: null,
+      onselect: () => {}
+    });
     const grids = container.querySelectorAll('[role="radiogroup"]');
     expect(grids.length).toBe(2);
     const desktop = grids[1];
@@ -159,7 +217,7 @@ it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () 
     expect(texts).toEqual(['Range', 'Δ rate']);
   });
 
-it('ArrowUp moves selection backward (wraps to end from first)', async () => {
+  it('ArrowUp moves selection backward (wraps to end from first)', async () => {
     const onselect = vi.fn();
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect });
     const radios = screen.getAllByRole('radio');

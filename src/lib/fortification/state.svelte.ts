@@ -21,7 +21,7 @@ function defaultState(): FortificationStateData {
     volumeMl: 180,
     formulaId: 'neocate-infant',
     targetKcalOz: 24,
-    unit: 'teaspoons',
+    unit: 'teaspoons'
   };
 }
 

@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/svelte';
 import { tick } from 'svelte';
 
 vi.mock('../context.js', () => ({
-  getCalculatorContext: () => ({ accentColor: 'oklch(49% 0.17 220)' }),
+  getCalculatorContext: () => ({ accentColor: 'oklch(49% 0.17 220)' })
 }));
 
 import SelectPicker from './SelectPicker.svelte';
@@ -11,13 +11,13 @@ import SelectPicker from './SelectPicker.svelte';
 const flatOptions = [
   { value: 'a', label: 'Apple' },
   { value: 'b', label: 'Banana' },
-  { value: 'c', label: 'Cherry' },
+  { value: 'c', label: 'Cherry' }
 ];
 const groupedOptions = [
   { value: 'g1-a', label: 'Alpha', group: 'Greek' },
   { value: 'g1-b', label: 'Beta', group: 'Greek' },
   { value: 'g2-a', label: 'One', group: 'Numbers' },
-  { value: 'g2-b', label: 'Two', group: 'Numbers' },
+  { value: 'g2-b', label: 'Two', group: 'Numbers' }
 ];
 
 function getTrigger(label: string): HTMLButtonElement {
@@ -109,9 +109,7 @@ describe('SelectPicker', () => {
     render(SelectPicker, { props: { label: 'Fruit', value: 'b', options: flatOptions } });
     await fireEvent.click(getTrigger('Fruit'));
     await tick();
-    const selected = screen
-      .getAllByRole('option')
-      .find((o) => o.textContent?.includes('Banana'));
+    const selected = screen.getAllByRole('option').find((o) => o.textContent?.includes('Banana'));
     expect(selected?.getAttribute('aria-selected')).toBe('true');
   });
 
@@ -132,7 +130,7 @@ const searchableOptions = [
   { value: 'sim-neo', label: 'Similac NeoSure', group: 'Abbott' },
   { value: 'enfa-ar', label: 'Enfamil AR', group: 'Mead Johnson' },
   { value: 'enfa-pre', label: 'Enfamil Premature', group: 'Mead Johnson' },
-  { value: 'gerb', label: 'Gerber Good Start', group: 'Nestle' },
+  { value: 'gerb', label: 'Gerber Good Start', group: 'Nestle' }
 ];
 
 function openTrigger(label: string) {
@@ -142,7 +140,7 @@ function openTrigger(label: string) {
 describe('SelectPicker searchable mode', () => {
   it('T-12 opens with search input focused and empty', async () => {
     render(SelectPicker, {
-      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true }
     });
     await fireEvent.click(openTrigger('Formula'));
     await tick();
@@ -154,7 +152,7 @@ describe('SelectPicker searchable mode', () => {
 
   it('T-13 typing filters by label and group (case-insensitive)', async () => {
     render(SelectPicker, {
-      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true }
     });
     await fireEvent.click(openTrigger('Formula'));
     await tick();
@@ -177,7 +175,7 @@ describe('SelectPicker searchable mode', () => {
 
   it('T-14 shows "No matches" with role=status when filter empty', async () => {
     render(SelectPicker, {
-      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true }
     });
     await fireEvent.click(openTrigger('Formula'));
     await tick();
@@ -191,7 +189,7 @@ describe('SelectPicker searchable mode', () => {
 
   it('T-15 ArrowDown enters list, ArrowUp returns to search input', async () => {
     render(SelectPicker, {
-      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true }
     });
     await fireEvent.click(openTrigger('Formula'));
     await tick();
@@ -209,7 +207,7 @@ describe('SelectPicker searchable mode', () => {
 
   it('T-16 Enter on single match selects and closes', async () => {
     render(SelectPicker, {
-      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true }
     });
     const trigger = openTrigger('Formula');
     await fireEvent.click(trigger);
@@ -225,7 +223,7 @@ describe('SelectPicker searchable mode', () => {
 
   it('T-17 reopening resets searchQuery and refocuses input', async () => {
     const { container } = render(SelectPicker, {
-      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true },
+      props: { label: 'Formula', value: '', options: searchableOptions, searchable: true }
     });
     const trigger = openTrigger('Formula');
     await fireEvent.click(trigger);
@@ -249,7 +247,7 @@ describe('SelectPicker searchable mode', () => {
 
   it('T-18 searchable=false (default) renders no Filter textbox', async () => {
     render(SelectPicker, {
-      props: { label: 'Formula', value: '', options: searchableOptions },
+      props: { label: 'Formula', value: '', options: searchableOptions }
     });
     await fireEvent.click(openTrigger('Formula'));
     await tick();

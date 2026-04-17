@@ -16,8 +16,8 @@ vi.mock('$lib/fortification/state.svelte.js', () => ({
     },
     init: vi.fn(),
     persist: vi.fn(),
-    reset: vi.fn(() => resetMockState()),
-  },
+    reset: vi.fn(() => resetMockState())
+  }
 }));
 
 import FortificationCalculator from './FortificationCalculator.svelte';
@@ -118,9 +118,7 @@ describe('FortificationCalculator', () => {
     await tick();
     await tick();
     // HMF + packets is valid — not blocked
-    expect(
-      screen.queryByText(/Packets is only available for Similac HMF/)
-    ).toBeNull();
+    expect(screen.queryByText(/Packets is only available for Similac HMF/)).toBeNull();
 
     // Transition to non-HMF — should auto-reset unit to teaspoons
     mockState.formulaId = 'neocate-infant';
@@ -128,9 +126,7 @@ describe('FortificationCalculator', () => {
     await tick();
 
     expect(mockState.unit).toBe('teaspoons');
-    expect(
-      screen.queryByText(/Packets is only available for Similac HMF/)
-    ).toBeNull();
+    expect(screen.queryByText(/Packets is only available for Similac HMF/)).toBeNull();
     const hero = getHeroCard();
     expect(within(hero).getByText(/^\s*2\s*$/)).toBeTruthy();
     expect(within(hero).getByText('Teaspoons')).toBeTruthy();
@@ -216,10 +212,12 @@ describe('FortificationCalculator', () => {
         Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
           value: () => {},
           writable: true,
-          configurable: true,
+          configurable: true
         });
       }
-      const scrollSpy = vi.spyOn(HTMLElement.prototype, 'scrollIntoView').mockImplementation(() => {});
+      const scrollSpy = vi
+        .spyOn(HTMLElement.prototype, 'scrollIntoView')
+        .mockImplementation(() => {});
       const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
       render(FortificationCalculator);
       const activeBefore = document.activeElement;

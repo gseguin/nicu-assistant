@@ -15,7 +15,7 @@ describe('calculateFortification — documented case (VAL-01)', () => {
       base: 'breast-milk',
       volumeMl: 180,
       targetKcalOz: 24,
-      unit: 'teaspoons',
+      unit: 'teaspoons'
     });
     expect(r.amountToAdd).toBe(2);
     expect(r.yieldMl).toBeCloseTo(183.5, 4);
@@ -31,7 +31,7 @@ describe('calculateFortification — Packets special case (CALC-04)', () => {
       base: 'water',
       volumeMl: 180,
       targetKcalOz: 24,
-      unit: 'packets',
+      unit: 'packets'
     });
     expect(r.amountToAdd).toBeCloseTo(7.2, 4);
     expect(r.yieldMl).toBeGreaterThanOrEqual(180);
@@ -45,7 +45,7 @@ describe('calculateFortification — Packets special case (CALC-04)', () => {
       base: 'water',
       volumeMl: 180,
       targetKcalOz: 22,
-      unit: 'packets',
+      unit: 'packets'
     });
     expect(r.amountToAdd).toBeCloseTo(3.6, 4);
   });
@@ -56,7 +56,7 @@ describe('calculateFortification — Packets special case (CALC-04)', () => {
       base: 'water',
       volumeMl: 180,
       targetKcalOz: 24,
-      unit: 'packets',
+      unit: 'packets'
     });
     expect(r.amountToAdd).toBe(0);
     expect(r.yieldMl).toBe(0);
@@ -72,7 +72,7 @@ describe('calculateFortification — BM+Tsp shortcut (CALC-05)', () => {
       base: 'breast-milk',
       volumeMl: 180,
       targetKcalOz: 22,
-      unit: 'teaspoons',
+      unit: 'teaspoons'
     });
     expect(r.amountToAdd).toBe(1);
     expect(r.yieldMl).toBeGreaterThan(180);
@@ -92,7 +92,7 @@ describe('calculateFortification — general formula + units (CALC-02/03)', () =
       base: 'water',
       volumeMl: 180,
       targetKcalOz: 24,
-      unit: 'grams',
+      unit: 'grams'
     });
     expect(r.amountToAdd).toBeCloseTo(34.27942972359829, 4);
     expect(r.yieldMl).toBeGreaterThanOrEqual(180);
@@ -108,7 +108,7 @@ describe('calculateFortification — general formula + units (CALC-02/03)', () =
       base: 'breast-milk',
       volumeMl: 180,
       targetKcalOz: 24,
-      unit: 'scoops',
+      unit: 'scoops'
     });
     expect(r.amountToAdd).toBeCloseTo(8.276813426830673, 4);
     expect(r.yieldMl).toBeGreaterThan(180);
@@ -124,7 +124,7 @@ describe('calculateFortification — general formula + units (CALC-02/03)', () =
       base: 'breast-milk',
       volumeMl: 180,
       targetKcalOz: 26,
-      unit: 'tablespoons',
+      unit: 'tablespoons'
     });
     expect(r.amountToAdd).toBeCloseTo(1.1554840154032437, 4);
     expect(r.yieldMl).toBeGreaterThan(180);
@@ -140,13 +140,13 @@ describe('calculateFortification — invalid input (IFERROR parity)', () => {
       base: 'breast-milk',
       volumeMl: 0,
       targetKcalOz: 24,
-      unit: 'teaspoons',
+      unit: 'teaspoons'
     });
     expect(r).toEqual({
       amountToAdd: 0,
       yieldMl: 0,
       exactKcalPerOz: 0,
-      suggestedStartingVolumeMl: '0 (0 oz)',
+      suggestedStartingVolumeMl: '0 (0 oz)'
     });
   });
 });

@@ -16,7 +16,12 @@ describe('gir-config shape', () => {
 
   it('glucoseBuckets has exactly 6 entries in correct order', () => {
     expect(glucoseBuckets.map((b) => b.id)).toEqual([
-      'severe-neuro', 'lt40', '40-50', '50-60', '60-70', 'gt70',
+      'severe-neuro',
+      'lt40',
+      '40-50',
+      '50-60',
+      '60-70',
+      'gt70'
     ]);
   });
 

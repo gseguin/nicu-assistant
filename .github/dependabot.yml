@@ -1,73 +1,73 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "06:00"
-      timezone: "America/Denver"
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'America/Denver'
     open-pull-requests-limit: 10
     labels:
-      - "dependencies"
-      - "npm"
+      - 'dependencies'
+      - 'npm'
     commit-message:
-      prefix: "chore"
-      include: "scope"
+      prefix: 'chore'
+      include: 'scope'
     groups:
       sveltekit:
         patterns:
-          - "@sveltejs/*"
-          - "svelte"
-          - "svelte-*"
+          - '@sveltejs/*'
+          - 'svelte'
+          - 'svelte-*'
       tailwind:
         patterns:
-          - "tailwindcss"
-          - "@tailwindcss/*"
+          - 'tailwindcss'
+          - '@tailwindcss/*'
       vite:
         patterns:
-          - "vite"
-          - "@vite-pwa/*"
+          - 'vite'
+          - '@vite-pwa/*'
       testing:
         patterns:
-          - "vitest"
-          - "@vitest/*"
-          - "@playwright/*"
-          - "@testing-library/*"
-          - "@axe-core/*"
-          - "jsdom"
+          - 'vitest'
+          - '@vitest/*'
+          - '@playwright/*'
+          - '@testing-library/*'
+          - '@axe-core/*'
+          - 'jsdom'
       types:
         patterns:
-          - "@types/*"
+          - '@types/*'
 
-  - package-ecosystem: "docker"
-    directory: "/"
+  - package-ecosystem: 'docker'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "06:00"
-      timezone: "America/Denver"
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'America/Denver'
     labels:
-      - "dependencies"
-      - "docker"
+      - 'dependencies'
+      - 'docker'
     commit-message:
-      prefix: "chore"
-      include: "scope"
+      prefix: 'chore'
+      include: 'scope'
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "06:00"
-      timezone: "America/Denver"
+      interval: 'weekly'
+      day: 'monday'
+      time: '06:00'
+      timezone: 'America/Denver'
     labels:
-      - "dependencies"
-      - "github-actions"
+      - 'dependencies'
+      - 'github-actions'
     commit-message:
-      prefix: "chore"
-      include: "scope"
+      prefix: 'chore'
+      include: 'scope'
     groups:
       actions:
         patterns:
-          - "*"
+          - '*'

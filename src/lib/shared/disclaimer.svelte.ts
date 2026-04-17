@@ -6,22 +6,22 @@ let _acknowledged = $state(false);
 let _initialized = $state(false);
 
 export const disclaimer = {
-	get acknowledged(): boolean {
-		return _acknowledged;
-	},
-	get initialized(): boolean {
-		return _initialized;
-	},
-	init(): void {
-		_acknowledged = localStorage.getItem(DISCLAIMER_KEY) === 'true';
-		_initialized = true;
-	},
-	acknowledge(): void {
-		_acknowledged = true;
-		try {
-			localStorage.setItem(DISCLAIMER_KEY, 'true');
-		} catch {
-			// private browsing — acknowledge in memory only
-		}
-	}
+  get acknowledged(): boolean {
+    return _acknowledged;
+  },
+  get initialized(): boolean {
+    return _initialized;
+  },
+  init(): void {
+    _acknowledged = localStorage.getItem(DISCLAIMER_KEY) === 'true';
+    _initialized = true;
+  },
+  acknowledge(): void {
+    _acknowledged = true;
+    try {
+      localStorage.setItem(DISCLAIMER_KEY, 'true');
+    } catch {
+      // private browsing — acknowledge in memory only
+    }
+  }
 };

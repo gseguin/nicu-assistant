@@ -3,16 +3,16 @@ import {
   calculateCurrentGir,
   calculateInitialRateMlHr,
   calculateTitrationRows,
-  calculateGir,
+  calculateGir
 } from './calculations.js';
 import { glucoseBuckets } from './gir-config.js';
 import fixtures from './gir-parity.fixtures.json';
 
 const EPSILON = 0.01; // 1% — reconciles exact 10/60 constant vs spreadsheet truncation
 const ABS_FLOOR = 0.15; // absolute ml/hr floor for delta comparisons near zero;
-                        // truncated spreadsheet constants cascade into delta subtraction,
-                        // so we accept either 1% relative OR <0.15 ml/hr absolute
-                        // (clinically insignificant on an infusion pump).
+// truncated spreadsheet constants cascade into delta subtraction,
+// so we accept either 1% relative OR <0.15 ml/hr absolute
+// (clinically insignificant on an infusion pump).
 
 function closeEnough(actual: number, expected: number): boolean {
   const absDiff = Math.abs(actual - expected);
@@ -55,19 +55,28 @@ describe('GIR calculations — spreadsheet parity', () => {
 
 describe('calculateGir aggregator', () => {
   it('returns null if weightKg is null', () => {
-    expect(calculateGir({ weightKg: null, dextrosePct: 12.5, mlPerKgPerDay: 65 }, glucoseBuckets)).toBeNull();
+    expect(
+      calculateGir({ weightKg: null, dextrosePct: 12.5, mlPerKgPerDay: 65 }, glucoseBuckets)
+    ).toBeNull();
   });
 
   it('returns null if dextrosePct is null', () => {
-    expect(calculateGir({ weightKg: 3.93, dextrosePct: null, mlPerKgPerDay: 65 }, glucoseBuckets)).toBeNull();
+    expect(
+      calculateGir({ weightKg: 3.93, dextrosePct: null, mlPerKgPerDay: 65 }, glucoseBuckets)
+    ).toBeNull();
   });
 
   it('returns null if mlPerKgPerDay is null', () => {
-    expect(calculateGir({ weightKg: 3.93, dextrosePct: 12.5, mlPerKgPerDay: null }, glucoseBuckets)).toBeNull();
+    expect(
+      calculateGir({ weightKg: 3.93, dextrosePct: 12.5, mlPerKgPerDay: null }, glucoseBuckets)
+    ).toBeNull();
   });
 
   it('returns full GirResult when all inputs present', () => {
-    const result = calculateGir({ weightKg: 3.93, dextrosePct: 12.5, mlPerKgPerDay: 65 }, glucoseBuckets);
+    const result = calculateGir(
+      { weightKg: 3.93, dextrosePct: 12.5, mlPerKgPerDay: 65 },
+      glucoseBuckets
+    );
     expect(result).not.toBeNull();
     expect(result!.titration).toHaveLength(6);
     expect(result!.currentGirMgKgMin).toBeGreaterThan(0);

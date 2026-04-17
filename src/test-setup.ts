@@ -13,8 +13,8 @@ if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
       removeListener: () => {},
       addEventListener: () => {},
       removeEventListener: () => {},
-      dispatchEvent: () => false,
-    }),
+      dispatchEvent: () => false
+    })
   });
 }
 
@@ -42,7 +42,7 @@ if (typeof Element !== 'undefined' && !Element.prototype.animate) {
       currentTime: 0,
       playState: 'finished',
       finished: Promise.resolve(),
-      ready: Promise.resolve(),
+      ready: Promise.resolve()
     };
     // Immediately invoke onfinish once assigned
     queueMicrotask(() => {
@@ -93,9 +93,7 @@ if (typeof HTMLDialogElement !== 'undefined') {
         r.addedNodes.forEach((n) => {
           if (n instanceof HTMLDialogElement) ensureHidden(n);
           if (n instanceof HTMLElement) {
-            n.querySelectorAll('dialog').forEach((d) =>
-              ensureHidden(d as HTMLDialogElement)
-            );
+            n.querySelectorAll('dialog').forEach((d) => ensureHidden(d as HTMLDialogElement));
           }
         });
       }
