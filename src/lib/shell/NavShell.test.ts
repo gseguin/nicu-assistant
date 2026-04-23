@@ -32,17 +32,17 @@ describe('NavShell structure (v1.2 restructure)', () => {
     expect(navShellSource).toContain('NICU Assist');
   });
 
-  it('info and theme buttons are in the header, not the bottom nav', () => {
+  it('hamburger and theme buttons are in the header, not the bottom nav', () => {
     const bottomNavMatch = BOTTOM_NAV_ATTR.exec(navShellSource);
     expect(bottomNavMatch).not.toBeNull();
 
     const headerSection = navShellSource.slice(0, bottomNavMatch!.index);
     const bottomNavSection = navShellSource.slice(bottomNavMatch!.index);
 
-    expect(headerSection).toContain('About this calculator');
+    expect(headerSection).toContain('Open calculator menu');
     expect(headerSection).toContain('theme.toggle');
 
-    expect(bottomNavSection).not.toContain('About this calculator');
+    expect(bottomNavSection).not.toContain('Open calculator menu');
     expect(bottomNavSection).not.toContain('theme.toggle');
   });
 

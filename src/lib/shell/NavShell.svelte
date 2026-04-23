@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { CALCULATOR_REGISTRY } from './registry.js';
 	import { theme } from '$lib/shared/theme.svelte.js';
-	import { Sun, Moon, Info, Menu } from '@lucide/svelte';
+	import { Sun, Moon, Menu } from '@lucide/svelte';
 	import AboutSheet from '$lib/shared/components/AboutSheet.svelte';
 	import HamburgerMenu from './HamburgerMenu.svelte';
 	import type { CalculatorId } from '$lib/shared/types.js';
@@ -28,6 +28,19 @@
          min-h-14 items-center gap-2 border-b
          border-[var(--color-border)] bg-[var(--color-surface)] px-4"
 >
+	<!-- Hamburger button: top-left corner -->
+	<button
+		bind:this={menuTriggerBtn}
+		type="button"
+		class="icon-btn -ml-2 min-h-[48px] min-w-[48px]"
+		aria-label="Open calculator menu"
+		aria-haspopup="dialog"
+		aria-expanded={menuOpen}
+		onclick={() => (menuOpen = true)}
+	>
+		<Menu size={20} aria-hidden="true" />
+	</button>
+
 	<!-- App name -->
 	<span class="text-base font-semibold tracking-tight text-[var(--color-text-primary)]"
 		>NICU Assist</span
@@ -57,43 +70,22 @@
 		</div>
 	</nav>
 
-	<!-- Spacer pushes action buttons right -->
+	<!-- Spacer pushes theme button right -->
 	<div class="flex-1"></div>
 
-	<!-- Action buttons: menu + info + theme toggle (all viewports) -->
-	<div class="flex items-center gap-0.5">
-		<button
-			bind:this={menuTriggerBtn}
-			type="button"
-			class="icon-btn min-h-[48px] min-w-[48px]"
-			aria-label="Open calculator menu"
-			aria-haspopup="dialog"
-			aria-expanded={menuOpen}
-			onclick={() => (menuOpen = true)}
-		>
-			<Menu size={20} aria-hidden="true" />
-		</button>
-		<button
-			type="button"
-			class="icon-btn min-h-[48px] min-w-[48px]"
-			aria-label="About this calculator"
-			onclick={() => (aboutOpen = true)}
-		>
-			<Info size={20} aria-hidden="true" />
-		</button>
-		<button
-			type="button"
-			class="icon-btn min-h-[48px] min-w-[48px]"
-			aria-label={theme.current === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-			onclick={() => theme.toggle()}
-		>
-			{#if theme.current === 'dark'}
-				<Sun size={20} aria-hidden="true" />
-			{:else}
-				<Moon size={20} aria-hidden="true" />
-			{/if}
-		</button>
-	</div>
+	<!-- Theme toggle -->
+	<button
+		type="button"
+		class="icon-btn min-h-[48px] min-w-[48px]"
+		aria-label={theme.current === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+		onclick={() => theme.toggle()}
+	>
+		{#if theme.current === 'dark'}
+			<Sun size={20} aria-hidden="true" />
+		{:else}
+			<Moon size={20} aria-hidden="true" />
+		{/if}
+	</button>
 </header>
 
 <!-- Mobile bottom tab bar: calculator tabs only, hidden on md+ -->
@@ -125,5 +117,9 @@
 	</div>
 </nav>
 
-<HamburgerMenu triggerEl={menuTriggerBtn} bind:open={menuOpen} />
+<HamburgerMenu
+	triggerEl={menuTriggerBtn}
+	bind:open={menuOpen}
+	onAbout={() => (aboutOpen = true)}
+/>
 <AboutSheet calculatorId={activeCalculatorId} bind:open={aboutOpen} />

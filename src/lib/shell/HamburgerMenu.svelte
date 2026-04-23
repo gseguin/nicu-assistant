@@ -1,27 +1,26 @@
 <!-- src/lib/shell/HamburgerMenu.svelte -->
-<!-- Source pattern: SelectPicker.svelte lines 32–153, 182–303 -->
-<!-- Phase 40 Plan 02 — native <dialog>-based hamburger menu -->
+<!-- Left-side sliding drawer. <dialog> element gives us focus trap + Esc + scrim for free; -->
+<!-- CSS anchors it to the left edge and slides it in. About row lives at the bottom, separated. -->
 <script lang="ts">
 	import { page } from '$app/state';
-	import { Star, X } from '@lucide/svelte';
+	import { Star, X, Info } from '@lucide/svelte';
 	import { CALCULATOR_REGISTRY } from './registry.js';
 	import { favorites, FAVORITES_MAX } from '$lib/shared/favorites.svelte.js';
 	import type { CalculatorId } from '$lib/shared/types.js';
 
 	let {
 		triggerEl,
-		open = $bindable(false)
+		open = $bindable(false),
+		onAbout
 	}: {
 		triggerEl: HTMLButtonElement | null;
 		open?: boolean;
+		onAbout?: () => void;
 	} = $props();
 
 	let dialog = $state<HTMLDialogElement | null>(null);
-	let closeBtn = $state<HTMLButtonElement | null>(null);
 	const titleId = 'hamburger-title';
 
-	// Reactive open gate: calling showModal() on an already-open <dialog>
-	// throws InvalidStateError, hence the !dialog.open guard.
 	$effect(() => {
 		if (!dialog) return;
 		if (open && !dialog.open) {
@@ -34,38 +33,41 @@
 	}
 
 	function handleDialogClick(e: MouseEvent) {
-		// Scrim click: only the dialog element itself (backdrop) has target === dialog;
-		// clicks on children bubble with target === child.
 		if (e.target === dialog) close();
 	}
 
 	function handleClose() {
-		// Fires on BOTH programmatic close() AND native Esc.
-		// Focus restoration lives here so T-03 (close button) and T-04 (programmatic) both pass.
 		open = false;
-		triggerEl?.focus(); // NAV-HAM-04
+		triggerEl?.focus();
 	}
 
 	function handleLinkClick() {
-		close(); // D-03: nav link closes the menu
+		close();
 	}
 
 	function handleStarClick(id: CalculatorId, e: MouseEvent) {
 		e.stopPropagation();
 		favorites.toggle(id);
-		// Intentionally does NOT close — D-03: star does not close the menu
+	}
+
+	function handleAboutClick() {
+		close();
+		onAbout?.();
 	}
 </script>
 
 <dialog
 	bind:this={dialog}
-	class="hamburger-dialog rounded-2xl bg-[var(--color-surface-card)] text-[var(--color-text-primary)] shadow-2xl"
+	class="hamburger-dialog bg-[var(--color-surface-card)] text-[var(--color-text-primary)] shadow-2xl"
 	aria-labelledby={titleId}
 	onclick={handleDialogClick}
 	onclose={handleClose}
 >
 	{#if open}
-		<div class="flex flex-col" style="padding-bottom: env(safe-area-inset-bottom, 0px)">
+		<div
+			class="flex h-full flex-col"
+			style="padding-bottom: env(safe-area-inset-bottom, 0px)"
+		>
 			<header
 				class="flex items-center justify-between border-b border-[var(--color-border)] px-5 py-4"
 			>
@@ -80,7 +82,6 @@
 					{/if}
 				</div>
 				<button
-					bind:this={closeBtn}
 					type="button"
 					class="icon-btn min-h-[48px] min-w-[48px]"
 					aria-label="Close menu"
@@ -90,7 +91,7 @@
 				</button>
 			</header>
 
-			<ul class="py-2">
+			<ul class="flex-1 overflow-y-auto py-2">
 				{#each CALCULATOR_REGISTRY as calc (calc.id)}
 					{@const isFavorite = favorites.has(calc.id as CalculatorId)}
 					{@const capBlocked = !isFavorite && favorites.isFull}
@@ -131,27 +132,67 @@
 					</li>
 				{/each}
 			</ul>
+
+			<div class="border-t border-[var(--color-border)]">
+				<button
+					type="button"
+					class="flex min-h-[48px] w-full items-center gap-3 px-5 py-3 text-left text-[var(--color-text-primary)] hover:bg-[var(--color-surface)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]"
+					aria-label="About this app"
+					onclick={handleAboutClick}
+				>
+					<Info size={20} aria-hidden="true" />
+					<span>About</span>
+				</button>
+			</div>
 		</div>
 	{/if}
 </dialog>
 
 <style>
+	/* Reset default <dialog> centering — we anchor to the left edge as a drawer. */
 	.hamburger-dialog {
-		margin: auto;
-		width: min(28rem, 100vw);
-		max-width: 28rem;
-		border: 0;
+		margin: 0;
 		padding: 0;
+		border: 0;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: auto;
+		height: 100vh;
+		height: 100dvh;
+		max-height: 100vh;
+		max-height: 100dvh;
+		width: min(20rem, 85vw);
+		max-width: min(20rem, 85vw);
+		border-top-right-radius: 1rem;
+		border-bottom-right-radius: 1rem;
 	}
 	.hamburger-dialog::backdrop {
 		background: var(--color-scrim);
 	}
-	@media (max-width: 640px) {
-		.hamburger-dialog {
-			margin: auto auto 0 auto;
-			width: 100vw;
-			max-width: 100vw;
-			border-radius: 1rem 1rem 0 0;
+	@media (prefers-reduced-motion: no-preference) {
+		.hamburger-dialog[open] {
+			animation: slide-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+		}
+		.hamburger-dialog[open]::backdrop {
+			animation: fade-in 180ms ease;
+		}
+	}
+	@keyframes slide-in {
+		from {
+			transform: translateX(-100%);
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
 		}
 	}
 </style>
