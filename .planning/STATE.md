@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.13
 milestone_name: UAC/UVC Calculator + Favorites Nav
-status: executing
-stopped_at: Phase 41 UI-SPEC approved
-last_updated: "2026-04-23T21:05:55.584Z"
-last_activity: 2026-04-23 -- Phase --phase execution started
+status: Phase 41 complete — ready to plan Phase 42
+stopped_at: Phase 41 verified (human-needed on 4 live-browser checks)
+last_updated: "2026-04-23T21:41:41.760Z"
+last_activity: 2026-04-23 — Phase 41 shipped: NavShell favorites-driven nav + Playwright E2E + axe (2 plans, 6 atomic commits, 10 new Playwright tests + 7 new unit/component tests)
 progress:
-  total_phases: 3
-  completed_phases: 1
+  total_phases: 4
+  completed_phases: 2
   total_plans: 5
-  completed_plans: 3
-  percent: 60
+  completed_plans: 5
+  percent: 50
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase --phase — 41
+**Current focus:** v1.13 — Phase 41 complete; ready to plan Phase 42 (UAC/UVC Calculator)
 
 ## Current Position
 
-Phase: --phase (41) — EXECUTING
-Plan: 1 of --name
-Status: Executing Phase --phase
-Last activity: 2026-04-23 -- Phase --phase execution started
+Phase: 42 — UAC/UVC Calculator (not started)
+Plan: —
+Status: Phase 41 complete, ready to plan Phase 42
+Last activity: 2026-04-23 — Phase 41 shipped: NavShell flipped to favorites-driven nav, FAV-TEST-03 + FAV-TEST-04 closed, svelte-check 0/0, vitest 267/267, 10/10 new Playwright tests green
 
 ## Performance Metrics
 
@@ -64,7 +64,7 @@ None.
 ## Session Continuity
 
 Last session: --stopped-at
-Stopped at: Phase 41 UI-SPEC approved
+Stopped at: Phase 41 verified (human-needed on 4 live-browser checks)
 Resume file: --resume-file
 
 **Planned Phase:** 41 (Favorites-Driven Navigation) — 2 plans — 2026-04-23T21:05:26.006Z

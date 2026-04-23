@@ -136,8 +136,8 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
 | 32-34 | v1.10 | 3/3 | Complete | 2026-04-10 |
 | 35 | v1.11 | 1/1 | Complete | 2026-04-09 |
 | 36-39 | v1.12 | 7/7 | Complete | 2026-04-10 |
-| 40. Favorites Store + Hamburger | v1.13 | 0/? | Not started | — |
-| 41. Favorites-Driven Nav | v1.13 | 0/? | Not started | — |
+| 40. Favorites Store + Hamburger | v1.13 | 3/3 | Complete | 2026-04-23 |
+| 41. Favorites-Driven Nav | v1.13 | 2/2 | Complete | 2026-04-23 |
 | 42. UAC/UVC Calculator | v1.13 | 0/? | Not started | — |
 | 43. Release v1.13.0 | v1.13 | 0/? | Not started | — |
 
