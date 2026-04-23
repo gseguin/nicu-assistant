@@ -6,6 +6,7 @@
 	import DisclaimerModal from '$lib/shared/components/DisclaimerModal.svelte';
 	import { theme } from '$lib/shared/theme.svelte.js';
 	import { disclaimer } from '$lib/shared/disclaimer.svelte.js';
+	import { favorites } from '$lib/shared/favorites.svelte.js';
 	import { pwa } from '$lib/shared/pwa.svelte.js';
 	import { morphineState } from '$lib/morphine/state.svelte.js';
 	import { fortificationState } from '$lib/fortification/state.svelte.js';
@@ -38,6 +39,7 @@
 	onMount(() => {
 		theme.init();
 		disclaimer.init();
+		favorites.init();
 
 		// SW registration — dynamic import avoids SSG/SSR issues with virtual modules
 		if (pwaInfo) {
