@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.13
 milestone_name: UAC/UVC Calculator + Favorites Nav
-status: Phase 40 complete — ready to plan Phase 41
-stopped_at: Phase 40 verified (human-needed on 4 live-browser checks)
-last_updated: "2026-04-23T20:40:00.000Z"
-last_activity: 2026-04-23 — Phase 40 complete (3/3 plans, 33 new tests, svelte-check 0/0, 260/260 tests, pnpm build ✓)
+status: planning
+stopped_at: Phase 41 context gathered
+last_updated: "2026-04-23T20:50:45.243Z"
+last_activity: "2026-04-23 — Phase 40 shipped: favorites store + hamburger menu + shell integration (3 plans, 11 atomic commits, 33 new tests)"
 progress:
-  total_phases: 4
+  total_phases: 3
   completed_phases: 1
   total_plans: 3
   completed_plans: 3
-  percent: 25
+  percent: 100
 ---
 
 # Project State
@@ -64,7 +64,7 @@ None.
 ## Session Continuity
 
 Last session: --stopped-at
-Stopped at: Phase 40 complete
+Stopped at: Phase 41 context gathered
 Resume file: --resume-file
 
 **Planned Phase:** 40 (Favorites Store + Hamburger Menu) — 3 plans — 2026-04-23T19:48:26.788Z
