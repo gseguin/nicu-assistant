@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.13
 milestone_name: UAC/UVC Calculator + Favorites Nav
-status: planning
-stopped_at: Phase 40 context gathered (--auto)
-last_updated: "2026-04-23T19:48:26.791Z"
-last_activity: 2026-04-23 — Roadmap drafted for v1.13 (Phases 40-43, 41/41 requirements mapped)
+status: Phase 40 complete — ready to plan Phase 41
+stopped_at: Phase 40 verified (human-needed on 4 live-browser checks)
+last_updated: "2026-04-23T20:40:00.000Z"
+last_activity: 2026-04-23 — Phase 40 complete (3/3 plans, 33 new tests, svelte-check 0/0, 260/260 tests, pnpm build ✓)
 progress:
-  total_phases: 3
-  completed_phases: 0
+  total_phases: 4
+  completed_phases: 1
   total_plans: 3
-  completed_plans: 0
-  percent: 0
+  completed_plans: 3
+  percent: 25
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.13 — UAC/UVC Calculator + Favorites Nav (Phase 40 next)
+**Current focus:** v1.13 — Phase 40 complete; ready to plan Phase 41 (Favorites-Driven Navigation)
 
 ## Current Position
 
-Phase: 40 — Favorites Store + Hamburger Menu (not started)
+Phase: 41 — Favorites-Driven Navigation (not started)
 Plan: —
-Status: Roadmap complete, ready to plan Phase 40
-Last activity: 2026-04-23 — Roadmap drafted for v1.13 (Phases 40-43, 41/41 requirements mapped)
+Status: Phase 40 complete, ready to plan Phase 41
+Last activity: 2026-04-23 — Phase 40 shipped: favorites store + hamburger menu + shell integration (3 plans, 11 atomic commits, 33 new tests)
 
 ## Performance Metrics
 
@@ -64,7 +64,7 @@ None.
 ## Session Continuity
 
 Last session: --stopped-at
-Stopped at: Phase 40 context gathered (--auto)
+Stopped at: Phase 40 complete
 Resume file: --resume-file
 
 **Planned Phase:** 40 (Favorites Store + Hamburger Menu) — 3 plans — 2026-04-23T19:48:26.788Z
