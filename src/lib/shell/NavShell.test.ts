@@ -1,6 +1,20 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { render } from '@testing-library/svelte';
+import { tick } from 'svelte';
+import NavShell from './NavShell.svelte';
+import { favorites } from '$lib/shared/favorites.svelte.js';
+
+// Mutable page mock — tests override pathname per-test
+const mockPage = { url: { pathname: '/morphine-wean' } };
+vi.mock('$app/state', () => ({ get page() { return mockPage; } }));
+
+beforeEach(() => {
+  localStorage.clear();
+  mockPage.url.pathname = '/morphine-wean';
+  favorites.init(); // seeds defaults: ['morphine-wean','formula','gir','feeds']
+});
 
 // NavShell is difficult to render in jsdom (requires SvelteKit routing context).
 // These tests verify the component's structural properties via source analysis.
@@ -63,4 +77,81 @@ describe('NavShell structure (v1.2 restructure)', () => {
   it('desktop nav is hidden on mobile (hidden md:flex)', () => {
     expect(classAttrContainsAll(navShellSource, ['hidden', 'md:flex'])).toBe(true);
   });
+});
+
+describe('NavShell — favorites-driven rendering (Phase 41)', () => {
+
+  it('T-01 default favorites (4): bottom nav renders 4 tabs', async () => {
+    const { container } = render(NavShell);
+    await tick();
+    const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
+    const tabs = bottomNav.querySelectorAll('[role="tab"]');
+    expect(tabs).toHaveLength(4);
+    expect(tabs[0].textContent).toMatch(/Morphine Wean/i);
+    expect(tabs[1].textContent).toMatch(/Formula/i);
+    expect(tabs[2].textContent).toMatch(/GIR/i);
+    expect(tabs[3].textContent).toMatch(/Feeds/i);
+  });
+
+  it('T-02 reduced favorites (morphine-wean + formula): bottom nav renders 2 tabs', async () => {
+    localStorage.setItem('nicu:favorites', JSON.stringify({ v: 1, ids: ['morphine-wean', 'formula'] }));
+    favorites.init();
+    const { container } = render(NavShell);
+    await tick();
+    const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
+    const tabs = bottomNav.querySelectorAll('[role="tab"]');
+    expect(tabs).toHaveLength(2);
+    expect(tabs[0].textContent).toMatch(/Morphine Wean/i);
+    expect(tabs[1].textContent).toMatch(/Formula/i);
+  });
+
+  it('T-03 zero favorites: both bars render no tabs and throw no error', async () => {
+    favorites.toggle('morphine-wean');
+    favorites.toggle('formula');
+    favorites.toggle('gir');
+    favorites.toggle('feeds');
+    const { container } = render(NavShell);
+    await tick();
+    const allTabs = container.querySelectorAll('[role="tab"]');
+    expect(allTabs).toHaveLength(0);
+  });
+
+  it('T-04 active route matches favorited tab: that tab has aria-selected=true', async () => {
+    mockPage.url.pathname = '/gir';
+    const { container } = render(NavShell);
+    await tick();
+    const allTabs = container.querySelectorAll('[role="tab"]');
+    const selectedTabs = Array.from(allTabs).filter((t) => t.getAttribute('aria-selected') === 'true');
+    expect(selectedTabs.length).toBeGreaterThanOrEqual(1);
+    expect(selectedTabs.some((t) => t.textContent?.match(/GIR/i))).toBe(true);
+  });
+
+  it('T-05 non-favorited active route: no tab has aria-selected=true (NAV-FAV-03)', async () => {
+    localStorage.setItem('nicu:favorites', JSON.stringify({ v: 1, ids: ['morphine-wean', 'formula', 'gir'] }));
+    favorites.init();
+    mockPage.url.pathname = '/feeds';
+    const { container } = render(NavShell);
+    await tick();
+    // Both nav bars (desktop + mobile) render tabs; check each renders 3 (feeds excluded)
+    const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
+    const bottomTabs = bottomNav.querySelectorAll('[role="tab"]');
+    expect(bottomTabs).toHaveLength(3); // feeds is not rendered in bottom bar
+    const selected = Array.from(bottomTabs).filter((t) => t.getAttribute('aria-selected') === 'true');
+    expect(selected).toHaveLength(0);
+  });
+
+  it('T-06 registry order preserved: tabs render morphine-wean→formula→gir→feeds regardless of insertion order', async () => {
+    localStorage.setItem('nicu:favorites', JSON.stringify({ v: 1, ids: ['feeds', 'gir', 'formula', 'morphine-wean'] }));
+    favorites.init();
+    const { container } = render(NavShell);
+    await tick();
+    const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
+    const tabs = bottomNav.querySelectorAll('[role="tab"]');
+    expect(tabs).toHaveLength(4);
+    expect(tabs[0].textContent).toMatch(/Morphine Wean/i);
+    expect(tabs[1].textContent).toMatch(/Formula/i);
+    expect(tabs[2].textContent).toMatch(/GIR/i);
+    expect(tabs[3].textContent).toMatch(/Feeds/i);
+  });
+
 });

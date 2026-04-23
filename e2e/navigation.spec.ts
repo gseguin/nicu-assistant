@@ -2,6 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Navigation (v1.2 restructure)', () => {
   test.beforeEach(async ({ page }) => {
+    // Guard: pre-clear nicu:favorites so NavShell renders the default 4 tabs
+    // (required after Phase 41 flips NavShell to favorites-driven rendering — Pitfall 2 in 41-RESEARCH.md)
+    await page.addInitScript(() => {
+      localStorage.removeItem('nicu:favorites');
+    });
     await page.goto('/morphine-wean');
     await page
       .getByRole('button', { name: /understand/i })

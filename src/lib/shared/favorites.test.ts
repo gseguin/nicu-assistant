@@ -187,3 +187,13 @@ describe('favorites store', () => {
 		spy.mockRestore();
 	});
 });
+
+describe('T-20 — module-scope default (D-07 regression guard)', () => {
+	it('T-20: current is defaults before init() is called', async () => {
+		vi.resetModules();
+		// Dynamic import yields a fresh module instance — _ids initialized to defaultIds()
+		const { favorites: freshFavorites } = await import('./favorites.svelte.js');
+		// Do NOT call init()
+		expect([...freshFavorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+	});
+});
