@@ -83,7 +83,10 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
   3. When 4 calculators are already favorited, non-favorite star buttons become disabled with an accessible reason explaining the cap
   4. A clinician reloading the app (or reopening it days later) sees the same favorites they last chose, and a brand-new install opens with Morphine / Formula / GIR / Feeds favorited
   5. User can open, navigate, star, and close the hamburger entirely by keyboard, with focus returning to the hamburger button on close
-**Plans**: TBD
+**Plans**: 3 plans
+  - [ ] 40-01-PLAN.md — Favorites store (reactive singleton + 19 unit tests)
+  - [ ] 40-02-PLAN.md — HamburgerMenu component (native <dialog> + 13 component tests)
+  - [ ] 40-03-PLAN.md — NavShell title-bar integration + layout init wiring
 **UI hint**: yes
 
 ### Phase 41: Favorites-Driven Navigation
