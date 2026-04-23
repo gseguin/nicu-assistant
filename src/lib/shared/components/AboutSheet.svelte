@@ -30,11 +30,11 @@
 		<Dialog.Overlay class="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-[2px]" />
 		<Dialog.Content
 			onCloseAutoFocus={handleCloseAutoFocus}
-			class="fixed right-0 bottom-0 left-0
-             z-50 flex max-h-[85svh] flex-col overflow-hidden
-             rounded-t-2xl bg-[var(--color-surface-card)] shadow-2xl sm:top-0 sm:right-0
-             sm:bottom-auto sm:left-auto sm:h-full
-             sm:w-[min(28rem,100vw)] sm:rounded-none sm:rounded-l-2xl"
+			class="fixed top-1/2 left-1/2 z-50 flex
+             max-h-[85svh] w-[min(28rem,calc(100vw-2rem))]
+             -translate-x-1/2 -translate-y-1/2 flex-col
+             overflow-hidden rounded-2xl
+             bg-[var(--color-surface-card)] shadow-2xl"
 			aria-labelledby="about-title"
 		>
 			<div class="flex shrink-0 items-center justify-between px-5 pt-5 pb-3">
