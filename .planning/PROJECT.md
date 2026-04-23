@@ -106,7 +106,19 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-(No active milestone — v1.12 archived. Run `/gsd-new-milestone` to start next.)
+## Current Milestone: v1.13 UAC/UVC Calculator + Favorites Nav
+
+**Goal:** Add a fifth calculator (UAC/UVC umbilical catheter depth) and introduce a hamburger menu + favorites pattern so the bottom bar stays uncluttered as the app scales beyond 4 calculators.
+
+**Target features:**
+
+- UAC/UVC calculator: single weight input (0.3–10 kg) as textbox + slider; two visually distinct hero result cards computing UAC depth (`weight × 3 + 9`, cm) and UVC depth (`(weight × 3 + 9) / 2`, cm) from `uac-uvc-calculator.xlsx`
+- Hamburger menu listing every registered calculator, each with a toggleable star button to favorite/unfavorite
+- Favorites-driven bottom bar (mobile) and top nav (desktop): max 4 favorites; star buttons disabled for non-favorites once the cap is reached
+- First-run favorites default: Morphine, Formula, GIR, Feeds (preserves the current v1.12 bottom bar for existing users)
+- Favorites persisted in localStorage (survives across sessions)
+- Own identity hue for UAC/UVC with 4.5:1 contrast in light + dark, researched before PR per v1.8 decision
+- Clinical quality bar unchanged: spreadsheet-parity tests, Playwright happy path + axe sweeps across both themes, AboutSheet entry citing `uac-uvc-calculator.xlsx`
 
 ### Out of Scope
 
@@ -181,4 +193,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 — v1.12 Feed Advance Calculator milestone shipped*
+*Last updated: 2026-04-23 — v1.13 UAC/UVC Calculator + Favorites Nav milestone started*

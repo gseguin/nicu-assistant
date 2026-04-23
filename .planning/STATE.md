@@ -1,33 +1,34 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.12
-milestone_name: Feed Advance Calculator
-status: Archived
-stopped_at: v1.12 archived
-last_updated: "2026-04-10T15:00:00.000Z"
-last_activity: 2026-04-10
+milestone: v1.13
+milestone_name: UAC/UVC Calculator + Favorites Nav
+status: Defining requirements
+stopped_at: Milestone started — defining requirements
+last_updated: "2026-04-23T00:00:00.000Z"
+last_activity: 2026-04-23
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 7
-  completed_plans: 7
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-10)
+See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.12 archived — ready for `/gsd-new-milestone`
+**Current focus:** v1.13 — UAC/UVC Calculator + Favorites Nav (defining requirements)
 
 ## Current Position
 
-Milestone: v1.12 — Feed Advance Calculator (Archived)
-Status: Archived
-Last activity: 2026-04-10
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-23 — Milestone v1.13 started
 
 ## Performance Metrics
 
