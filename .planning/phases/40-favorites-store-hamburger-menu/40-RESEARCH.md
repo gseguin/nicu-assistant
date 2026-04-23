@@ -1180,7 +1180,7 @@ Every critical claim in this research was verified against the codebase. A small
 
 **User confirmation needed:** None of these assumptions reach the level of requiring a discuss-phase gate — they are all implementation risks that surface in tests, not architectural choices.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 ### 1. `$state` array read-only exposure — does returning the proxy leak mutability?
 
@@ -1190,6 +1190,8 @@ Every critical claim in this research was verified against the codebase. A small
 
 **Recommendation:** Accept this as a defense-in-depth concern, not a correctness issue. The `readonly` type in TS + code review will catch 99% of it. If a planner wants hard immutability, they can return a `$state.snapshot(_ids)` — but that breaks reactivity (snapshot is a plain object, not a proxy). The accepted tradeoff: the Svelte 5 community pattern is `get`-accessor returning the reactive value directly, and NavShell (Phase 41) is the only in-repo consumer. Plan to add an ESLint rule only if misuse appears. [CITED: https://mainmatter.com/blog/2025/03/11/global-state-in-svelte-5/ — the blog post cited in CLAUDE.md confirms the `get`-accessor pattern]
 
+**RESOLVED:** Expose `current` as a `readonly CalculatorId[]` via a `get`-accessor returning the reactive Svelte 5 proxy directly; rely on the TypeScript `readonly` type plus code review for immutability (no `$state.snapshot` — it breaks reactivity).
+
 ### 2. Should `favorites.init()` use `$effect` for auto-persist or stay explicit?
 
 **What we know:** `theme.svelte.ts` persists in its `set()` mutator (not via `$effect`). `disclaimer.svelte.ts` persists in `acknowledge()` (not via `$effect`). `morphine/state.svelte.ts` has an explicit `persist()` method called from the component.
@@ -1197,6 +1199,8 @@ Every critical claim in this research was verified against the codebase. A small
 **What's unclear:** Could wire an `$effect` inside the singleton: `$effect(() => { if (_initialized) persist(_ids); })`. Cleaner but less explicit.
 
 **Recommendation:** Follow the established explicit-persist pattern — `toggle()` calls `persist()` directly. Matches the rest of the codebase. Effects inside `.svelte.ts` modules work but are harder to reason about. The planner should NOT introduce `$effect`-based persistence in this file.
+
+**RESOLVED:** Follow the existing explicit-persist pattern — call `persist(_ids)` directly inside `toggle()` (mirroring `theme.svelte.ts` and `disclaimer.svelte.ts`); do NOT use `$effect`-based auto-persistence.
 
 ### 3. Should the hamburger menu re-render when `activeCalculatorId` changes (for `aria-current="page"` on links)?
 
@@ -1206,6 +1210,8 @@ Every critical claim in this research was verified against the codebase. A small
 
 **Recommendation:** Yes — add `aria-current={page.url.pathname.startsWith(calc.href) ? 'page' : undefined}` on each link inside the menu. Zero extra logic; matches NavShell.svelte:47 and 104. One-line addition.
 
+**RESOLVED:** Add `aria-current={page.url.pathname.startsWith(calc.href) ? 'page' : undefined}` on every `<a href={calc.href}>` inside HamburgerMenu, and import `page` from `$app/state` — propagated to Plan 02 Task 1.
+
 ### 4. jsdom polyfill coverage for `aria-pressed` reactivity
 
 **What we know:** `aria-pressed` is a standard attribute; jsdom + @testing-library read it via `getAttribute`.
@@ -1214,6 +1220,8 @@ Every critical claim in this research was verified against the codebase. A small
 
 **Recommendation:** Run T-12 early. If it fails, investigate rune reactivity vs attribute binding; fallback is using `{#key favorites.has(calc.id)}` blocks. Low risk — this is idiomatic Svelte 5.
 
+**RESOLVED:** Treat `aria-pressed` reactivity as working (idiomatic Svelte 5); run T-12 early in Wave 2 execution and fall back to `{#key favorites.has(calc.id)}` only if the test fails.
+
 ### 5. Should the menu trap focus inside itself, or let it escape (via native `<dialog>` behavior)?
 
 **What we know:** Native `<dialog>.showModal()` traps focus within the dialog subtree. [CITED: WHATWG HTML spec]
@@ -1221,6 +1229,8 @@ Every critical claim in this research was verified against the codebase. A small
 **What's unclear:** jsdom doesn't implement this focus trap.
 
 **Recommendation:** Component tests cannot assert focus-trap behavior; defer to Playwright E2E (Phase 41 FAV-TEST-03) for real-browser validation.
+
+**RESOLVED:** Rely on native `<dialog>.showModal()` focus trap; Phase 40 component tests cover DOM-order tab stops (T-13), and real-browser focus-trap verification is deferred to Phase 41 Playwright E2E (FAV-TEST-03).
 
 ## Environment Availability
 
