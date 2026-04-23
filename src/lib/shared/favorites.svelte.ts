@@ -67,7 +67,10 @@ function persist(ids: readonly CalculatorId[]): void {
 	}
 }
 
-let _ids = $state<CalculatorId[]>([]);
+// D-07 latent-init fix: seed defaults at module scope so NavShell renders correct tabs on
+// first synchronous paint before onMount fires. defaultIds() calls CALCULATOR_REGISTRY which
+// is a static const — no circular deps, safe at module scope.
+let _ids = $state<CalculatorId[]>(defaultIds());
 let _initialized = $state(false);
 
 export const favorites = {

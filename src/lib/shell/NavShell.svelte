@@ -1,24 +1,32 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { CALCULATOR_REGISTRY } from './registry.js';
+	import type { CalculatorEntry } from './registry.js';
 	import { theme } from '$lib/shared/theme.svelte.js';
 	import { Sun, Moon, Menu } from '@lucide/svelte';
 	import AboutSheet from '$lib/shared/components/AboutSheet.svelte';
 	import HamburgerMenu from './HamburgerMenu.svelte';
 	import type { CalculatorId } from '$lib/shared/types.js';
+	import { favorites } from '$lib/shared/favorites.svelte.js';
+
+	// D-01: Map built once per module load (CALCULATOR_REGISTRY is static)
+	// byId typed as Map<string, CalculatorEntry> because CalculatorEntry.id is string, not CalculatorId
+	const byId = new Map<string, CalculatorEntry>(
+		CALCULATOR_REGISTRY.map((c) => [c.id, c])
+	);
 
 	let aboutOpen = $state(false);
 	let menuOpen = $state(false);
 	let menuTriggerBtn = $state<HTMLButtonElement | null>(null);
 
-	const activeCalculatorId = $derived<CalculatorId>(
-		page.url.pathname.startsWith('/formula')
-			? 'formula'
-			: page.url.pathname.startsWith('/gir')
-				? 'gir'
-				: page.url.pathname.startsWith('/feeds')
-					? 'feeds'
-					: 'morphine-wean'
+	// D-05: registry-driven derivation — undefined when on non-calculator routes (e.g. /)
+	const activeCalculatorId = $derived<CalculatorId | undefined>(
+		(CALCULATOR_REGISTRY.find((c) => page.url.pathname.startsWith(c.href))?.id as CalculatorId) ?? undefined
+	);
+
+	// D-01: render only favorited calculators in registry order
+	const visibleCalculators = $derived(
+		favorites.current.map((id) => byId.get(id)).filter((c): c is CalculatorEntry => c !== undefined)
 	);
 </script>
 
@@ -49,7 +57,7 @@
 	<!-- Desktop calculator tabs (hidden on mobile) -->
 	<nav class="ml-4 hidden gap-2 md:flex" aria-label="Calculator navigation">
 		<div class="flex gap-2" role="tablist">
-			{#each CALCULATOR_REGISTRY as calc}
+			{#each visibleCalculators as calc}
 				{@const isActive = page.url.pathname.startsWith(calc.href)}
 				<a
 					href={calc.href}
@@ -96,7 +104,7 @@
 	aria-label="Calculator navigation"
 >
 	<div class="flex" role="tablist">
-		{#each CALCULATOR_REGISTRY as calc}
+		{#each visibleCalculators as calc}
 			{@const isActive = page.url.pathname.startsWith(calc.href)}
 			<a
 				href={calc.href}
@@ -122,4 +130,4 @@
 	bind:open={menuOpen}
 	onAbout={() => (aboutOpen = true)}
 />
-<AboutSheet calculatorId={activeCalculatorId} bind:open={aboutOpen} />
+<AboutSheet calculatorId={activeCalculatorId ?? 'morphine-wean'} bind:open={aboutOpen} />
