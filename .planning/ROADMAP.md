@@ -98,7 +98,9 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
   2. User sees the same favorites in the desktop top nav with each tab's identity indicator intact
   3. When user navigates to a non-favorited calculator via the hamburger, the bottom bar and top nav do NOT grow a temporary tab — the current route is indicated by the title/header instead
   4. User can complete the end-to-end flow (open hamburger → unfavorite one tab → favorite another → reload) and see favorites persisted and nav updated, with the open hamburger passing axe sweeps in both themes
-**Plans**: TBD
+**Plans**: 2 plans
+  - [ ] 41-01-PLAN.md — NavShell flip + store seed + activeCalculatorId cleanup + component tests + navigation.spec.ts guard
+  - [ ] 41-02-PLAN.md — Playwright E2E (favorites-nav.spec.ts) + Playwright axe (favorites-nav-a11y.spec.ts)
 **UI hint**: yes
 
 ### Phase 42: UAC/UVC Calculator
