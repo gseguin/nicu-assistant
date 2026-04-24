@@ -27,10 +27,14 @@ describe('GirCalculator', () => {
     expect(screen.getByText(/Enter weight, dextrose %, and fluid rate/)).toBeTruthy();
   });
 
-  it('surfaces amber Dextrose >12.5% advisory', () => {
+  it('does NOT render the dextrose-input advisory itself (extracted to GirInputs in 42.1-05)', () => {
+    // Plan 42.1-05 (D-08): the Dextrose >12.5% advisory is co-located with the
+    // Dextrose NumericInput (which now lives in GirInputs.svelte). The calculator
+    // owns only result-derived advisories (GIR>12, GIR<4). Coverage moved to
+    // GirInputs.test.ts.
     girState.current.dextrosePct = 15;
     render(GirCalculator);
-    expect(screen.getByText(/Dextrose >12\.5% requires central venous access/)).toBeTruthy();
+    expect(screen.queryByText(/Dextrose >12\.5% requires central venous access/)).toBeNull();
   });
 
   it('renders titration grid header when result valid', () => {
