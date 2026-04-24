@@ -4,7 +4,6 @@
 	import NumericInput from '$lib/shared/components/NumericInput.svelte';
 	import config from './uac-uvc-config.json';
 	import type { UacUvcInputRanges } from './types.js';
-	import { ArrowDownToLine, ArrowUpFromLine } from '@lucide/svelte';
 
 	const inputs = config.inputs as UacUvcInputRanges;
 
@@ -58,16 +57,16 @@
 			>
 				{#if result}
 					<div class="flex flex-col gap-3">
-						<div class="flex items-center gap-2">
-							<ArrowDownToLine
-								size={24}
-								class="text-[var(--color-identity)]"
-								aria-hidden="true"
-							/>
+						<div class="flex flex-col">
 							<div
-								class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+								class="text-title font-black tracking-tight text-[var(--color-identity)]"
 							>
-								UAC DEPTH — ARTERIAL
+								UAC
+							</div>
+							<div
+								class="text-2xs font-semibold tracking-wide text-[var(--color-text-secondary)] uppercase"
+							>
+								Arterial depth
 							</div>
 						</div>
 						<div class="flex items-baseline gap-2">
@@ -95,16 +94,16 @@
 			>
 				{#if result}
 					<div class="flex flex-col gap-3">
-						<div class="flex items-center gap-2">
-							<ArrowUpFromLine
-								size={24}
-								class="text-[var(--color-identity)]"
-								aria-hidden="true"
-							/>
+						<div class="flex flex-col">
 							<div
-								class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+								class="text-title font-black tracking-tight text-[var(--color-identity)]"
 							>
-								UVC DEPTH — VENOUS
+								UVC
+							</div>
+							<div
+								class="text-2xs font-semibold tracking-wide text-[var(--color-text-secondary)] uppercase"
+							>
+								Venous depth
 							</div>
 						</div>
 						<div class="flex items-baseline gap-2">
