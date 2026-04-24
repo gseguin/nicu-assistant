@@ -143,9 +143,9 @@ Filled during roadmap creation.
 | FAV-TEST-02 | Phase 40 | ✓ Validated |
 | FAV-TEST-03 | Phase 41 | ✓ Validated |
 | FAV-TEST-04 | Phase 41 | ✓ Validated |
-| REL-01 | Phase 43 | Pending |
-| REL-02 | Phase 43 | Pending |
-| REL-03 | Phase 43 | Pending |
+| REL-01 | Phase 43 | ✓ Validated |
+| REL-02 | Phase 43 | ✓ Validated |
+| REL-03 | Phase 43 | ✓ Validated |
 
 **Coverage:**
 - v1.13 requirements: 41 total
