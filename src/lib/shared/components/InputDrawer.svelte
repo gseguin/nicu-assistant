@@ -74,7 +74,7 @@
 	onclose={handleClose}
 >
 	{#if expanded}
-		<div class="flex h-full flex-col" style="padding-bottom: env(safe-area-inset-bottom, 0px);">
+		<div class="flex flex-col" style="padding-bottom: env(safe-area-inset-bottom, 0px); max-height: 100%;">
 			<header
 				class="flex items-center justify-between border-b border-[var(--color-border)] px-5 py-4"
 			>
@@ -108,8 +108,7 @@
 		top: auto;
 		width: 100%;
 		max-width: 100%;
-		height: 80vh;
-		height: 80dvh;
+		/* Drawer auto-fits to content; 80dvh is the ceiling, not the target. */
 		max-height: 80vh;
 		max-height: 80dvh;
 		border-top-left-radius: 1rem;
