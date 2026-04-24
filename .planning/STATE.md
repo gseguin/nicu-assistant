@@ -1,34 +1,34 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.13
-milestone_name: UAC/UVC Calculator + Favorites Nav
-status: milestone_complete
-stopped_at: Phase 43 context gathered
-last_updated: "2026-04-24T22:35:40.925Z"
-last_activity: 2026-04-24 -- Phase 43 execution started
+milestone: v1.14
+milestone_name: Kendamil Formulas + Desktop Full Nav
+status: defining_requirements
+stopped_at: Milestone v1.14 started
+last_updated: "2026-04-25T00:00:00.000Z"
+last_activity: 2026-04-25 -- Milestone v1.14 started
 progress:
-  total_phases: 4
-  completed_phases: 5
-  total_plans: 14
-  completed_plans: 15
-  percent: 125
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-23)
+See: .planning/PROJECT.md (updated 2026-04-25)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase 43 — Release v1.13.0
+**Current focus:** Milestone v1.14 — defining requirements
 
 ## Current Position
 
-Phase: 43
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-04-24
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-25 — Milestone v1.14 started
 
 ## Performance Metrics
 

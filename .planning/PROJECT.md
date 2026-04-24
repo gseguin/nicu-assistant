@@ -113,9 +113,15 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-## Current Milestone: v1.13 UAC/UVC Calculator + Favorites Nav (Shipped)
+## Current Milestone: v1.14 Kendamil Formulas + Desktop Full Nav
 
-**Shipped.** Fifth clinical calculator delivered: UAC/UVC umbilical-catheter depth with weight input (textbox + slider, 0.3–10 kg) producing two visually distinct hero result cards for UAC and UVC depth. Hamburger menu lists every registered calculator; favorites-driven nav (max 4) replaces the static bottom bar with first-run defaults preserving the v1.12 layout for existing users. Design polish sweep (Phase 42.1) closed the /impeccable critique residual: shared HeroResult contract, DisclaimerBanner v1→v2, mobile-nav clearance, hero-fills-viewport InputDrawer pattern, dock magnification removed, scoped CSS transitions; DESIGN.md / DESIGN.json design contract enforced. Clinical-safety carve-out: STOP-red on severe-neuro GIR (single authorized exception to Red-as-Error rule). Released as v1.13.0.
+**Goal:** Expand the formula picker with the Kendamil family (Organic, Classic, Goat) and let desktop users see every registered calculator in the top toolbar.
+
+**Target features:**
+- Add three Kendamil infant-formula entries to `fortification-config.json` — Organic, Classic, Goat — sourced from hcp.kendamil.com manufacturer specs, grouped under a "Kendamil" manufacturer in the picker, with packets-supported defaults and spreadsheet-parity tests consistent with the v1.3 patterns
+- Diverge desktop top toolbar from mobile bottom bar: desktop (md+) renders every registered calculator with identity colors / focus rings / `aria-current` semantics preserved; mobile stays favorites-driven (4-cap, hamburger-managed)
+- Hamburger button remains visible on desktop for About / disclaimer re-read (v1.13 NAV-FAV-04 routing preserved)
+- Zero regressions to v1.13 favorites store, hamburger menu, or the 5 existing calculators (Morphine, Formula, GIR, Feeds, UAC/UVC); WCAG 2.1 AA axe sweeps re-run in light + dark, both viewports
 
 ### Out of Scope
 
@@ -190,4 +196,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-24 — v1.13.0 Phase 43 complete (release — version bump, PROJECT.md, REQUIREMENTS.md, ROADMAP.md, orphan cleanup, gates)*
+*Last updated: 2026-04-24 — v1.14 milestone started (Kendamil formula family + desktop full-nav divergence)*
