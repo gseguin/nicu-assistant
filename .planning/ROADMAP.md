@@ -119,9 +119,26 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
   - [ ] 42-03-PLAN.md — Wave 2: Playwright E2E (e2e/uac-uvc.spec.ts — 375 + 1280 + favorites round-trip + cap-full + reload + slider drag) + axe sweeps (e2e/uac-uvc-a11y.spec.ts — light + dark)
 **UI hint**: yes
 
+### Phase 42.1: Design Polish + Redesign Sweep (Impeccable Critique Remainder) (INSERTED)
+
+**Goal:** Close the complete /impeccable critique residual after Phase 42 — every screen honors DESIGN.md (the new design contract), the result owns the viewport, the mobile bottom nav stops clipping content, identity hue stays inside calculator surfaces (Identity-Inside Rule), the disclaimer becomes a dismissable banner with re-read in AboutSheet, decorative motion is removed, and the 42-UI-REVIEW spec drift is reconciled.
+**Requirements**: TBD (captured as D-01 through D-33 in 42.1-CONTEXT.md)
+**Depends on:** Phase 42
+**Success Criteria** (what must be TRUE):
+  1. Mobile bottom nav clears content on every calculator at 375 + 414 viewports (no occlusion); single-line tab labels; backdrop-blur on nav surface
+  2. Identity hue is restricted to inside-the-route surfaces only (eyebrow, hero tint, slider track, calculator-input focus ring); chrome (top tab underline, bottom nav active state, hamburger drawer star icons) carries Clinical Blue or neutral
+  3. Every calculator (5 today + future) renders its result through the shared `<HeroResult>` component; hero owns above-the-fold viewport on mount; inputs collapse to a sticky drawer above the bottom nav
+  4. Disclaimer is a dismissable banner (no first-paint-blocking modal); the full text is re-readable from AboutSheet; existing acknowledgments auto-migrate
+  5. Morphine schedule shows 3-decimal mg precision (no `0.0620` noise); dock-style scroll magnification removed; CSS transitions scoped to specific selectors; root `/` ships a static-HTML meta refresh redirect
+  6. 42-UI-REVIEW residue closed: D-05 third cue restored on UAC/UVC (directional arrows), `42-UI-SPEC.md` amended retrospectively for post-em-dash-purge eyebrow + bits-ui Slider substitution
+  7. DESIGN.md / DESIGN.json (project root) is the design contract every change honors; all named rules (Identity-Inside, Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong, Five-Roles-Only, Tabular-Numbers, Eyebrow-Above-Numeral, 11 px Floor, Tonal-Depth, Flat-Card-Default) enforced by review
+  8. All 281 existing unit tests + parity tests + Playwright E2E + axe sweeps stay green; new tests added for `<HeroResult>`, `formatMg`/`formatPercent`, `<DisclaimerBanner>` migration, and mobile-nav clearance Playwright check
+**Plans:** TBD (run /gsd-plan-phase 42.1 to break down — context locked in 42.1-CONTEXT.md)
+**UI hint**: yes
+
 ### Phase 43: Release v1.13.0
 **Goal**: v1.13 is shipped: version reflected in the AboutSheet, PROJECT.md tells the story of what landed, and the full clinical quality gate is green.
-**Depends on**: Phase 40, Phase 41, Phase 42
+**Depends on**: Phase 40, Phase 41, Phase 42, Phase 42.1
 **Requirements**: REL-01, REL-02, REL-03
 **Success Criteria** (what must be TRUE):
   1. User opening the About dialog sees version `1.13.0` (sourced via the existing `__APP_VERSION__` build-time constant)

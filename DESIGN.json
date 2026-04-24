@@ -1,0 +1,327 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-04-24T04:19:22Z",
+  "title": "Design System: NICU Assistant",
+  "extensions": {
+    "colorMeta": {
+      "clinical-blue": {
+        "role": "primary",
+        "displayName": "Clinical Blue",
+        "canonical": "oklch(49% 0.17 220)",
+        "tonalRamp": [
+          "oklch(22% 0.08 235)",
+          "oklch(30% 0.11 230)",
+          "oklch(40% 0.14 225)",
+          "oklch(49% 0.17 220)",
+          "oklch(59% 0.19 210)",
+          "oklch(67% 0.17 210)",
+          "oklch(77% 0.13 225)",
+          "oklch(86% 0.08 220)",
+          "oklch(93% 0.04 225)",
+          "oklch(97.5% 0.018 230)"
+        ]
+      },
+      "bmf-amber": {
+        "role": "secondary",
+        "displayName": "BMF Amber (Breast Milk Fortifier semantic)",
+        "canonical": "oklch(72% 0.18 65)",
+        "tonalRamp": [
+          "oklch(27% 0.07 48)",
+          "oklch(38% 0.10 50)",
+          "oklch(50% 0.13 55)",
+          "oklch(62% 0.16 60)",
+          "oklch(72% 0.18 65)",
+          "oklch(78% 0.15 68)",
+          "oklch(86% 0.10 72)",
+          "oklch(93% 0.05 78)",
+          "oklch(97% 0.02 80)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Warm Slate Surface (light)",
+        "canonical": "oklch(97.5% 0.006 225)",
+        "tonalRamp": [
+          "oklch(16% 0.012 240)",
+          "oklch(20% 0.014 238)",
+          "oklch(23% 0.014 236)",
+          "oklch(35% 0.010 225)",
+          "oklch(50% 0.008 225)",
+          "oklch(63% 0.010 220)",
+          "oklch(80% 0.010 228)",
+          "oklch(90% 0.008 220)",
+          "oklch(97.5% 0.006 225)",
+          "oklch(100% 0 0)"
+        ]
+      },
+      "identity-morphine": {
+        "role": "tertiary",
+        "displayName": "Identity: Morphine (Clinical Blue, scoped)",
+        "canonical": "oklch(49% 0.17 220)",
+        "scope": "Inside .identity-morphine surfaces only — hero card tint, eyebrow, slider track. Never in chrome."
+      },
+      "identity-formula": {
+        "role": "tertiary",
+        "displayName": "Identity: Formula (Muted Teal)",
+        "canonical": "oklch(49% 0.11 195)",
+        "scope": "Inside .identity-formula surfaces only."
+      },
+      "identity-gir": {
+        "role": "tertiary",
+        "displayName": "Identity: GIR (Clinical Green)",
+        "canonical": "oklch(42% 0.12 145)",
+        "scope": "Inside .identity-gir surfaces only."
+      },
+      "identity-feeds": {
+        "role": "tertiary",
+        "displayName": "Identity: Feeds (Warm Coral)",
+        "canonical": "oklch(50% 0.13 30)",
+        "scope": "Inside .identity-feeds surfaces only."
+      },
+      "identity-uac": {
+        "role": "tertiary",
+        "displayName": "Identity: UAC/UVC (Clinical Rose)",
+        "canonical": "oklch(42% 0.12 350)",
+        "scope": "Inside .identity-uac surfaces only."
+      },
+      "error": {
+        "role": "semantic",
+        "displayName": "Error / Out-of-Range Advisory",
+        "canonical": "oklch(50% 0.20 25)",
+        "scope": "Validation, advisory, error states only. Never a UI accent."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display 44",
+        "purpose": "Hero result numerals only. Tabular, weight 800. The single largest object on every calculator."
+      },
+      "title": {
+        "displayName": "Title 22",
+        "purpose": "Page h1 (calculator name in route header) and AboutSheet section headings."
+      },
+      "body": {
+        "displayName": "Body 16",
+        "purpose": "Paragraph copy in disclaimer, AboutSheet, advisory messages. Cap at 65–75 ch."
+      },
+      "ui": {
+        "displayName": "UI 13",
+        "purpose": "Nav labels, field labels, button text, segmented-toggle pills, slider readouts."
+      },
+      "label": {
+        "displayName": "Label 11 (UPPERCASE)",
+        "purpose": "Eyebrow above hero numerals, bottom-nav tab labels, in-card section eyebrows. Floor — never used for advisory or paragraph copy."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card",
+        "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+        "purpose": "Standard raised card. Inputs card, hero card, schedule cards."
+      },
+      {
+        "name": "modal",
+        "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+        "purpose": "Modal, drawer, AboutSheet, SelectPicker. Maximum shadow weight in the system."
+      },
+      {
+        "name": "inset-track",
+        "value": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)",
+        "purpose": "Segmented-toggle track recesses into its surface; the active pill rises with shadow-card."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 2px var(--color-accent-light)",
+        "purpose": "Custom focus indicator on .icon-btn. All other focus uses outline-2 outline-offset-2."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Default easing. Used by result-pulse and standard state transitions."
+      },
+      {
+        "name": "ease-out-200",
+        "value": "200ms ease-out",
+        "purpose": "Theme color transition (background-color, color, border-color). Calm, not flashy."
+      },
+      {
+        "name": "result-pulse",
+        "value": "200ms cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "Hero result entrance/update animation. Reduced-motion respected."
+      },
+      {
+        "name": "icon-btn-hover",
+        "value": "120ms ease-in-out",
+        "purpose": "Icon button color and box-shadow transitions. Brief, snappy, conveys hover state."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Solid clinical-blue CTA. Used sparingly — disclaimer acknowledgment, drawer About link, SelectPicker confirm.",
+      "html": "<button class=\"ds-btn-primary\">I Understand</button>",
+      "css": ".ds-btn-primary { min-height: 3.25rem; width: 100%; padding: 0.75rem 1rem; background: oklch(42% 0.14 220); color: oklch(100% 0 0); font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; font-size: 1rem; font-weight: 600; border: none; border-radius: 0.625rem; cursor: pointer; transition: background-color 200ms ease-out; } .ds-btn-primary:hover { background: oklch(40% 0.14 220); } .ds-btn-primary:focus-visible { outline: 2px solid oklch(86% 0.08 220); outline-offset: 2px; }"
+    },
+    {
+      "name": "Icon Button",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "48 × 48 hit area, transparent background, neutral glyph. Used in title bar (hamburger, theme toggle), drawer close, etc.",
+      "html": "<button class=\"ds-btn-icon\" aria-label=\"Open menu\"><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"3\" y1=\"12\" x2=\"21\" y2=\"12\"/><line x1=\"3\" y1=\"6\" x2=\"21\" y2=\"6\"/><line x1=\"3\" y1=\"18\" x2=\"21\" y2=\"18\"/></svg></button>",
+      "css": ".ds-btn-icon { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; min-width: 48px; padding: 0.25rem; background: none; border: none; border-radius: 9999px; color: oklch(50% 0.008 225); cursor: pointer; line-height: 0; transition: color 120ms ease-in-out, box-shadow 120ms ease-in-out; } .ds-btn-icon:hover { color: oklch(49% 0.17 220); } .ds-btn-icon:focus-visible { outline: none; color: oklch(49% 0.17 220); box-shadow: 0 0 0 2px oklch(86% 0.08 220); }"
+    },
+    {
+      "name": "Numeric Input",
+      "kind": "input",
+      "refersTo": "input-numeric",
+      "description": "48 px tall, right-side unit suffix, blur-gated out-of-range advisory, never auto-clamps.",
+      "html": "<label class=\"ds-input-wrap\"><span class=\"ds-input-label\">Weight</span><span class=\"ds-input-row\"><input type=\"number\" class=\"ds-input-numeric\" placeholder=\"2.5\" inputmode=\"decimal\" value=\"2.5\"/><span class=\"ds-input-suffix\">kg</span></span><span class=\"ds-input-hint\">0.3–10 kg</span></label>",
+      "css": ".ds-input-wrap { display: flex; flex-direction: column; gap: 0.375rem; } .ds-input-label { font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; color: oklch(35% 0.01 225); margin-left: 0.125rem; } .ds-input-row { display: flex; align-items: center; gap: 0.5rem; min-height: 48px; padding: 0.5rem 0.875rem; background: oklch(100% 0 0); border: 1px solid oklch(63% 0.01 220); border-radius: 0.75rem; transition: border-color 120ms ease-in-out; } .ds-input-row:focus-within { outline: 2px solid oklch(49% 0.17 220); outline-offset: 2px; } .ds-input-numeric { flex: 1; min-width: 0; appearance: none; background: none; border: none; outline: none; font-family: inherit; font-size: 1rem; font-weight: 500; color: oklch(18% 0.012 230); font-variant-numeric: tabular-nums; } .ds-input-numeric::-webkit-outer-spin-button, .ds-input-numeric::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; } .ds-input-suffix { font-family: inherit; font-size: 1rem; font-weight: 500; color: oklch(50% 0.008 225); } .ds-input-hint { font-family: inherit; font-size: 0.8125rem; color: oklch(50% 0.008 225); margin-left: 0.125rem; }"
+    },
+    {
+      "name": "Hero Result Card",
+      "kind": "custom",
+      "refersTo": "hero-card",
+      "description": "Signature pattern — identity-tinted card, eyebrow + display numeral + unit suffix. To be codified as <HeroResult> shared component in Phase 42.1.",
+      "html": "<section class=\"ds-hero-card\" aria-live=\"polite\" aria-atomic=\"true\"><span class=\"ds-hero-eyebrow\">UAC DEPTH</span><div class=\"ds-hero-row\"><span class=\"ds-hero-numeral\">16.5</span><span class=\"ds-hero-unit\">cm</span></div><span class=\"ds-hero-secondary\">Arterial · Shukla / Dunn</span></section>",
+      "css": ".ds-hero-card { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.5rem 1.25rem; background: oklch(95% 0.035 350); border: 1px solid oklch(63% 0.01 220); border-radius: 1.25rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; } .ds-hero-eyebrow { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: oklch(42% 0.12 350); } .ds-hero-row { display: flex; align-items: baseline; gap: 0.5rem; } .ds-hero-numeral { font-size: 2.75rem; font-weight: 800; line-height: 1; letter-spacing: -0.01em; color: oklch(18% 0.012 230); font-variant-numeric: tabular-nums; font-feature-settings: 'tnum'; } .ds-hero-unit { font-size: 1rem; font-weight: 500; color: oklch(35% 0.01 225); } .ds-hero-secondary { font-size: 0.8125rem; color: oklch(35% 0.01 225); }"
+    },
+    {
+      "name": "Standard Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Inputs card, schedule cards, AboutSheet section. Flat with 1 px border + shadow-sm. Never nested.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-eyebrow\">INPUTS</div><div class=\"ds-card-body\">Card content here.</div></div>",
+      "css": ".ds-card { background: oklch(100% 0 0); border: 1px solid oklch(63% 0.01 220); border-radius: 0.75rem; padding: 1rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; color: oklch(18% 0.012 230); } .ds-card-eyebrow { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; color: oklch(50% 0.008 225); margin-bottom: 0.5rem; } .ds-card-body { font-size: 1rem; line-height: 1.5; }"
+    },
+    {
+      "name": "Segmented Toggle",
+      "kind": "chip",
+      "refersTo": "segmented-toggle-track",
+      "description": "Two- to four-option choice control. Track recesses, active pill rises. Used for mode switches (e.g. Bedside / Full Nutrition).",
+      "html": "<div class=\"ds-toggle-track\" role=\"tablist\" aria-label=\"Mode\"><button class=\"ds-toggle-pill ds-toggle-pill--active\" role=\"tab\" aria-selected=\"true\">Bedside</button><button class=\"ds-toggle-pill\" role=\"tab\" aria-selected=\"false\">Full nutrition</button></div>",
+      "css": ".ds-toggle-track { display: flex; padding: 0.25rem; background: oklch(90% 0.008 220); border: 1px solid oklch(63% 0.01 220); border-radius: 1rem; box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05); font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; } .ds-toggle-pill { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1rem; min-height: 48px; background: none; border: none; border-radius: 0.75rem; color: oklch(18% 0.012 230); font-family: inherit; font-size: 0.8125rem; font-weight: 600; cursor: pointer; transition: background-color 200ms ease-out, color 200ms ease-out; outline: none; } .ds-toggle-pill:hover { background: oklch(97.5% 0.006 225); color: oklch(49% 0.17 220); } .ds-toggle-pill:focus-visible { box-shadow: 0 0 0 2px oklch(49% 0.17 220); } .ds-toggle-pill--active { background: oklch(100% 0 0); color: oklch(49% 0.17 220); box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); }"
+    },
+    {
+      "name": "Desktop Calculator Tab",
+      "kind": "nav",
+      "refersTo": "nav-tab-desktop",
+      "description": "Top calculator nav (md and up). Active tab carries clinical-blue underline (NOT identity hue — chrome stays neutral per The Identity-Inside Rule).",
+      "html": "<nav class=\"ds-nav-tabs\" aria-label=\"Calculator navigation\"><div role=\"tablist\" style=\"display:flex;gap:0.5rem;\"><a class=\"ds-nav-tab ds-nav-tab--active\" href=\"/morphine-wean\" role=\"tab\" aria-selected=\"true\">Morphine</a><a class=\"ds-nav-tab\" href=\"/formula\" role=\"tab\" aria-selected=\"false\">Formula</a><a class=\"ds-nav-tab\" href=\"/gir\" role=\"tab\" aria-selected=\"false\">GIR</a></div></nav>",
+      "css": ".ds-nav-tabs { display: flex; padding-left: 1rem; font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; } .ds-nav-tab { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 48px; padding: 0.75rem 1rem; border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom: 2px solid transparent; font-size: 0.8125rem; font-weight: 500; color: oklch(35% 0.01 225); text-decoration: none; transition: color 200ms ease-out, border-color 200ms ease-out; } .ds-nav-tab:hover { color: oklch(18% 0.012 230); } .ds-nav-tab:focus-visible { outline: 2px solid oklch(49% 0.17 220); outline-offset: 2px; } .ds-nav-tab--active { color: oklch(49% 0.17 220); border-bottom-color: oklch(49% 0.17 220); }"
+    },
+    {
+      "name": "Mobile Bottom Nav Tab",
+      "kind": "nav",
+      "refersTo": "nav-tab-bottom-mobile",
+      "description": "Fixed bottom tab bar (sub-md). 56 px tall, icon + UPPERCASE label, active tab carries clinical-blue text and top inset stripe.",
+      "html": "<nav class=\"ds-nav-bottom\" aria-label=\"Calculators\"><a class=\"ds-nav-bottom-tab ds-nav-bottom-tab--active\" href=\"/morphine-wean\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M9 11h6m-6 4h6m-6-8h6\"/><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/></svg><span>MORPHINE</span></a><a class=\"ds-nav-bottom-tab\" href=\"/formula\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 11h14M5 7h14M5 15h14\"/></svg><span>FORMULA</span></a></nav>",
+      "css": ".ds-nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: oklch(100% 0 0); border-top: 1px solid oklch(63% 0.01 220); padding-bottom: env(safe-area-inset-bottom, 0px); font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif; } .ds-nav-bottom-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.125rem; min-height: 56px; padding: 0.5rem 0; color: oklch(35% 0.01 225); text-decoration: none; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.02em; transition: color 200ms ease-out; } .ds-nav-bottom-tab:focus-visible { outline: 2px solid oklch(49% 0.17 220); outline-offset: -2px; } .ds-nav-bottom-tab--active { color: oklch(49% 0.17 220); box-shadow: inset 0 2px 0 oklch(49% 0.17 220); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Reference",
+    "overview": "The NICU Assistant is a well-thumbed clinical handbook on the unit shelf, translated to a phone screen. Authority comes from precision, not decoration. A clinician with a wailing infant, an order in their head, and ninety seconds to compute should reach the answer without rebuilding a mental model — every screen makes the same promise the same way: the result is the interface.\n\nThe system is warm clinical, not hospital-cold and not consumer-app-warm. Plus Jakarta Sans replaces the institutional sans-serifs that cue EHR fatigue; OKLCH neutrals carry a faint blue lean that reads as cared-for rather than sterile; the dark mode is intentionally re-perceived in warm slate, never auto-inverted. Tabular numerals are non-negotiable — clinical numbers must align under their successors when a clinician scans for the value to act on.\n\nThis system is for a product register, not a brand surface — familiarity is a feature, surprise is a tax. Calculators are siblings, not personalities. New calculators inherit the system; they do not redesign within it.",
+    "keyCharacteristics": [
+      "Result-first hierarchy: the display numeral (44 px / weight 800 / tabular) owns its viewport.",
+      "OKLCH everywhere — no #000, no #fff. Every neutral is faintly blue-tinted; every accent passes WCAG 4.5:1.",
+      "Single family, five roles: Plus Jakarta Sans at display 44, title 22, body 16, ui 13, label 11.",
+      "Identity-as-system, scoped: each calculator declares an identity hue, but identity color appears only inside that calculator's surfaces — never in global chrome.",
+      "48 px touch floor on every interactive element. Always.",
+      "Both themes designed: dark mode is warm slate with reduced chroma at the extremes."
+    ],
+    "rules": [
+      {
+        "name": "The Identity-Inside Rule",
+        "body": "Identity hue belongs inside the calculator's own surfaces — eyebrow text, hero card tint, slider track, focus ring on the calculator's inputs. Identity hue is prohibited in the global nav (top tabs and bottom tab bar both use Clinical Blue for the active state), the hamburger drawer (star icons are neutral), and the title bar. Adding a sixth, seventh, or eighth calculator does not add a sixth, seventh, or eighth color to the chrome.",
+        "section": "colors"
+      },
+      {
+        "name": "The Amber-as-Semantic Rule",
+        "body": "Amber (oklch(72% 0.18 65) family) is reserved exclusively for the BMF fortifier mode in the formula calculator. It carries a clinical meaning (breast milk fortifier present in the recipe). Amber for decoration, identity, or any other state is forbidden.",
+        "section": "colors"
+      },
+      {
+        "name": "The OKLCH-Only Rule",
+        "body": "All color values are declared in OKLCH. Hex, #000, #fff, RGB, HSL — prohibited. The token system in app.css is the single source of truth; if a value is needed and not in the token system, add it as a token, do not inline a hex.",
+        "section": "colors"
+      },
+      {
+        "name": "The Red-Means-Wrong Rule",
+        "body": "Red is reserved for errors and out-of-range advisories. Red as a UI accent (delete buttons, primary CTAs, alerting badges) is forbidden — clinicians will read it as 'the calculation is wrong' and pause.",
+        "section": "colors"
+      },
+      {
+        "name": "The Five-Roles-Only Rule",
+        "body": "Five sizes, five roles. Prohibited: arbitrary text-[Npx] values, fluid clamp() typography (consistent DPI in clinical use makes fluid type a regression), display fonts paired against the body font.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular-Numbers Rule",
+        "body": "Every clinical number renders with .num (font-variant-numeric: tabular-nums). A column of doses, volumes, or rates must align under itself when a clinician scans. Prohibited: proportional figures on any value a clinician will read or copy.",
+        "section": "typography"
+      },
+      {
+        "name": "The Eyebrow-Above-Numeral Rule",
+        "body": "Hero numerals are introduced by a single label-role eyebrow row, identity-colored, uppercase. The numeral itself is the largest object on the screen. The unit suffix sits in body or ui weight beside or below the numeral, never above.",
+        "section": "typography"
+      },
+      {
+        "name": "The 11 px Floor",
+        "body": "--text-2xs (11 px) is the floor and is for labels only — bottom-nav tab labels, in-card eyebrows, range hints under inputs. Prohibited: advisory copy, error messages, or paragraph text at 11 px. Advisory copy steps up to --text-ui (13 px) minimum.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tonal-Depth Rule",
+        "body": "Depth is conveyed through the three surface tokens (--color-surface < --color-surface-alt < --color-surface-card), not through shadows. Prohibited: drop shadows on inline content, ambient glows, and any shadow used to separate elements that share the same surface — use a tonal step or a 1 px border instead.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Flat-Card-Default Rule",
+        "body": "Cards are flat by default with a 1 px border and shadow-sm. Prohibited: nested cards (always wrong), gradient card backgrounds, pseudo-3D card lifts on hover.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do declare every color in OKLCH. The token system in app.css is the single source of truth.",
+      "Do use the .num utility on every clinical numeric output (doses, volumes, rates, depths, percentages).",
+      "Do restrict identity hue to inside the calculator's route. Eyebrow, hero tint, slider track, calculator-input focus ring — yes. Global nav, hamburger drawer, title bar — no.",
+      "Do size every interactive element at 48 px minimum.",
+      "Do use env(safe-area-inset-bottom) on every fixed-bottom element.",
+      "Do show range hints (min–max unit) under every NumericInput. Use en-dash, never em-dash.",
+      "Do show out-of-range advisories on blur — never auto-clamp the value. The clinician is the source of truth.",
+      "Do design dark mode intentionally: warm slate base, lower chroma at extremes, three-step surface lightness.",
+      "Do use aria-live='polite' + aria-atomic='true' on the hero result so screen readers announce the new number.",
+      "Do prevent FOUC: read localStorage.nicu_assistant_theme and apply .dark class before first paint.",
+      "Do preserve clinician's work: disclaimer cannot wipe inputs, navigation cannot drop calculator state, input value persists in sessionStorage."
+    ],
+    "donts": [
+      "Don't use #000, #fff, hex, RGB, or HSL anywhere in the codebase. OKLCH only.",
+      "Don't use em dashes (— or --) in any user-rendered string, aria-label, or screen-reader copy.",
+      "Don't ship side-stripe borders. border-left or border-right greater than 1 px as a colored accent is prohibited.",
+      "Don't spread identity hue into the chrome. Active desktop tab uses Clinical Blue, hamburger stars are neutral, title bar carries no identity color.",
+      "Don't invent a new hero shape per calculator. Every calculator uses the shared <HeroResult> pattern.",
+      "Don't show false precision. Morphine doses round to 3 decimals, percentages to 2.",
+      "Don't use red as a UI accent. Red is reserved for errors and validation.",
+      "Don't use Amber for decoration or identity. Amber is only the BMF fortifier semantic.",
+      "Don't use 11 px text for advisory copy or paragraphs.",
+      "Don't ship gradient text, gradient buttons, glassmorphism, or ambient glows.",
+      "Don't use a modal as the first thought.",
+      "Don't nest cards. Ever.",
+      "Don't ship icon-only navigation. Bottom nav, hamburger drawer rows, and desktop tabs always carry a text label.",
+      "Don't auto-clamp NumericInput values. Show advisory on blur; trust the clinician.",
+      "Don't ship pure consumer-health, legacy-EHR, SaaS-dashboard, marketing-page, or baby-app aesthetics.",
+      "Don't ship animations the clinician will read as 'the app is laggy.' Scroll-driven scaling, decorative entrances, orchestrated page-loads — prohibited."
+    ]
+  }
+}
