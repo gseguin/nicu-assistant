@@ -63,9 +63,9 @@
 					href={calc.href}
 					class="{calc.identityClass} flex min-h-[48px] items-center gap-2 rounded-t-lg border-b-2 px-4
                  py-3 text-ui font-medium transition-colors
-                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-identity)]
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
                  {isActive
-						? 'border-[var(--color-identity)] text-[var(--color-identity)]'
+						? 'border-[var(--color-accent)] text-[var(--color-accent)]'
 						: 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
 					aria-label="{calc.label}. {calc.description}"
 					aria-selected={isActive}
@@ -110,9 +110,9 @@
 				href={calc.href}
 				class="{calc.identityClass} flex min-h-14 flex-1 flex-col items-center justify-center
                gap-1 py-2 text-ui font-medium transition-colors
-               focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)]
+               focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]
                {isActive
-					? 'font-semibold text-[var(--color-identity)]'
+					? 'font-semibold text-[var(--color-accent)]'
 					: 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
 				aria-label="{calc.label}. {calc.description}"
 				aria-selected={isActive}
