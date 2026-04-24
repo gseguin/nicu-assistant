@@ -9,6 +9,7 @@
 //   - Keyboard (focus + Enter) dismisses the banner
 
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 const KEY_V1 = 'nicu_assistant_disclaimer_v1';
 const KEY_V2 = 'nicu_assistant_disclaimer_v2';
@@ -104,4 +105,31 @@ test.describe('Disclaimer Banner (D-12, D-14, D-15)', () => {
     const v2 = await page.evaluate((k) => localStorage.getItem(k), KEY_V2);
     expect(v2).toBe('true');
   });
+
+  // axe Sweep Scope item 2: banner-visible state in both themes (D-32 + UI-SPEC).
+  // Scopes axe to the banner subtree only — covers the new component without
+  // re-asserting pre-existing baseline failures (e.g., bits-ui Slider on UAC/UVC).
+  for (const theme of ['light', 'dark'] as const) {
+    test(`banner-visible state has no axe violations in ${theme} mode`, async ({ page }) => {
+      await page.addInitScript(() => localStorage.clear());
+      await page.goto('/morphine-wean');
+
+      await page.evaluate((t) => {
+        document.documentElement.classList.add('no-transition');
+        document.documentElement.classList.remove(t === 'light' ? 'dark' : 'light');
+        document.documentElement.classList.add(t);
+        document.documentElement.setAttribute('data-theme', t);
+      }, theme);
+
+      const banner = page.getByRole('region', { name: /clinical use disclaimer/i });
+      await expect(banner).toBeVisible();
+
+      const results = await new AxeBuilder({ page })
+        .include('[aria-label="Clinical use disclaimer"]')
+        .withTags(['wcag2a', 'wcag2aa'])
+        .analyze();
+
+      expect(results.violations).toEqual([]);
+    });
+  }
 });
