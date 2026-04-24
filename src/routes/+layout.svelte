@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	import '../app.css';
 	import NavShell from '$lib/shell/NavShell.svelte';
 	import UpdateBanner from '$lib/shell/UpdateBanner.svelte';
-	import DisclaimerModal from '$lib/shared/components/DisclaimerModal.svelte';
+	import DisclaimerBanner from '$lib/shared/components/DisclaimerBanner.svelte';
+	import AboutSheet from '$lib/shared/components/AboutSheet.svelte';
+	import { CALCULATOR_REGISTRY } from '$lib/shell/registry.js';
+	import type { CalculatorId } from '$lib/shared/types.js';
 	import { theme } from '$lib/shared/theme.svelte.js';
 	import { disclaimer } from '$lib/shared/disclaimer.svelte.js';
 	import { favorites } from '$lib/shared/favorites.svelte.js';
@@ -13,6 +17,15 @@
 	import { pwaInfo } from 'virtual:pwa-info';
 
 	let { children } = $props();
+
+	// 42.1-03 D-15: aboutOpen lives at the layout level so DisclaimerBanner's "More" link
+	// and HamburgerMenu's About row both reach the same AboutSheet instance.
+	let aboutOpen = $state(false);
+
+	// Mirror NavShell's prior derivation so AboutSheet always sees a valid calculator id.
+	const activeCalculatorId = $derived<CalculatorId>(
+		(CALCULATOR_REGISTRY.find((c) => page.url.pathname.startsWith(c.href))?.id as CalculatorId) ?? 'morphine-wean'
+	);
 
 	// Idle = all inputs in both calculators still at defaults (D-02)
 	const isIdle = $derived(
@@ -65,12 +78,13 @@
 	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 </svelte:head>
 
-<DisclaimerModal />
 <UpdateBanner />
 <div class="flex min-h-screen flex-col">
-	<NavShell />
+	<NavShell bind:aboutOpen />
+	<DisclaimerBanner onShowFull={() => (aboutOpen = true)} />
 	<!-- pb clearance: 4rem nav + env(safe-area-inset-bottom) + 1rem visual breathing room (replaces magnification headroom from Phase 33, removed in 42.1 plan 4) -->
 	<main class="flex-1 pb-[calc(theme(spacing.16)+env(safe-area-inset-bottom,0px)+1rem)] md:pb-0">
 		{@render children()}
 	</main>
 </div>
+<AboutSheet calculatorId={activeCalculatorId} bind:open={aboutOpen} />

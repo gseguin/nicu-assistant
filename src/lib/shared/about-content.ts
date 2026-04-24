@@ -7,9 +7,14 @@ interface AboutContent {
   version: string;
   description: string;
   notes: string[];
+  disclaimer: string;
 }
 
 const appVersion = `v${typeof __APP_VERSION__ !== 'undefined' ? __APP_VERSION__ : '0.0.0'}`;
+
+// Shared full disclaimer text (D-13). Banner copy is a one-sentence subset (DisclaimerBanner.svelte).
+const DISCLAIMER =
+  'Clinical decision support, not medical advice. Verify all values before clinical use. This app does not replace clinical judgment; all outputs must be reviewed by qualified NICU staff before administration.';
 
 export const aboutContent: Record<CalculatorId, AboutContent> = {
   'morphine-wean': {
@@ -21,7 +26,8 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Each step reduces the dose by weight × max dose × decrease % (a constant mg reduction across all 10 steps).',
       'Default parameters: 3.1 kg weight, 0.04 mg/kg/dose max dose, 10% decrease per step.',
       'Source: morphine-wean-calculator.xlsx Sheet1. Results are a starting point; clinical judgment required.'
-    ]
+    ],
+    disclaimer: DISCLAIMER
   },
   formula: {
     title: 'Fortification Calculator',
@@ -33,7 +39,8 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       '30 formulas across 4 manufacturers (Abbott, Mead Johnson, Nestlé, Nutricia). Packets unit is only available for Similac HMF.',
       'When Similac HMF is selected, displacement-corrected math accounts for fortifier volume in the recipe (powder displaces a small amount of liquid).',
       "Results must be verified against your institution's feeding protocol."
-    ]
+    ],
+    disclaimer: DISCLAIMER
   },
   gir: {
     title: 'Glucose Infusion Rate',
@@ -45,7 +52,8 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Source spreadsheet: GIR-Wean-Calculator.xlsx (CALC tab). Formula validated against MDCalc and Hawkes et al., J Perinatol 2020 (PMC7286731).',
       "The 6-bucket titration adjustment values are an institutional protocol. Verify against your unit's own protocol before acting.",
       'Dextrose >12.5% requires central venous access. GIR >12 mg/kg/min warrants hyperinsulinism workup.'
-    ]
+    ],
+    disclaimer: DISCLAIMER
   },
   feeds: {
     title: 'Feed Advance Calculator',
@@ -56,7 +64,8 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Bedside mode: trophic/advance/goal ml per feed from weight and ml/kg/d targets, with frequency (q2h-q6h) and cadence (every feed to once daily) dropdowns.',
       'Full nutrition mode: total kcal/kg/d from dual TPN dextrose lines, SMOF lipid, and enteral feeds. Hero output is total kcal/kg/d.',
       'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement). Results are advisory; clinical judgment required.'
-    ]
+    ],
+    disclaimer: DISCLAIMER
   },
   'uac-uvc': {
     title: 'UAC/UVC Catheter Depth',
@@ -67,6 +76,7 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Formulas: UAC depth = weight × 3 + 9 (cm); UVC depth = (weight × 3 + 9) / 2 (cm).',
       'Source: uac-uvc-calculator.xlsx (cells B3 and B7).',
       'Rule-of-thumb estimate only. Final placement MUST be confirmed by imaging (chest/abdominal X-ray) per institutional protocol before use.'
-    ]
+    ],
+    disclaimer: DISCLAIMER
   }
 };

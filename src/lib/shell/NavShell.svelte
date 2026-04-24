@@ -4,9 +4,7 @@
 	import type { CalculatorEntry } from './registry.js';
 	import { theme } from '$lib/shared/theme.svelte.js';
 	import { Sun, Moon, Menu } from '@lucide/svelte';
-	import AboutSheet from '$lib/shared/components/AboutSheet.svelte';
 	import HamburgerMenu from './HamburgerMenu.svelte';
-	import type { CalculatorId } from '$lib/shared/types.js';
 	import { favorites } from '$lib/shared/favorites.svelte.js';
 
 	// D-01: Map built once per module load (CALCULATOR_REGISTRY is static)
@@ -15,14 +13,13 @@
 		CALCULATOR_REGISTRY.map((c) => [c.id, c])
 	);
 
-	let aboutOpen = $state(false);
+	// 42.1-03 D-15: About sheet hoisted to +layout.svelte; aboutOpen now lives at the layout
+	// level so DisclaimerBanner's "More" link can also open it. NavShell binds the prop so
+	// the hamburger menu's About callback continues to work.
+	let { aboutOpen = $bindable(false) }: { aboutOpen?: boolean } = $props();
+
 	let menuOpen = $state(false);
 	let menuTriggerBtn = $state<HTMLButtonElement | null>(null);
-
-	// D-05: registry-driven derivation — undefined when on non-calculator routes (e.g. /)
-	const activeCalculatorId = $derived<CalculatorId | undefined>(
-		(CALCULATOR_REGISTRY.find((c) => page.url.pathname.startsWith(c.href))?.id as CalculatorId) ?? undefined
-	);
 
 	// D-01: render only favorited calculators in registry order
 	const visibleCalculators = $derived(
@@ -131,4 +128,3 @@
 	bind:open={menuOpen}
 	onAbout={() => (aboutOpen = true)}
 />
-<AboutSheet calculatorId={activeCalculatorId ?? 'morphine-wean'} bind:open={aboutOpen} />

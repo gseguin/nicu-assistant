@@ -62,6 +62,19 @@
 				<p class="text-base leading-relaxed text-[var(--color-text-secondary)]">
 					{content.description}
 				</p>
+				{#if content.disclaimer}
+					<section aria-labelledby="about-disclaimer-heading" class="mt-4">
+						<h3
+							id="about-disclaimer-heading"
+							class="text-2xs font-semibold tracking-wide uppercase text-[var(--color-text-tertiary)]"
+						>
+							Disclaimer
+						</h3>
+						<p class="mt-2 text-base leading-relaxed text-[var(--color-text-secondary)]">
+							{content.disclaimer}
+						</p>
+					</section>
+				{/if}
 				<ul class="space-y-2">
 					{#each content.notes as note}
 						<li class="flex gap-2 text-sm text-[var(--color-text-secondary)]">
