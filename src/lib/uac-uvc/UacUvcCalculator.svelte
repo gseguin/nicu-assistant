@@ -6,7 +6,6 @@
 	import config from './uac-uvc-config.json';
 	import type { UacUvcInputRanges } from './types.js';
 	import { Slider } from 'bits-ui';
-	import { ArrowDownToLine, ArrowUpFromLine } from '@lucide/svelte';
 
 	const inputs = config.inputs as UacUvcInputRanges;
 
@@ -69,67 +68,81 @@
 	</section>
 
 	<!-- HERO GRID: UAC + UVC side-by-side on md+, stacked on mobile.
-	     Eyebrows use middle-dot U+00B7 (·) per em-dash ban (commit 917ecf2). -->
+	     "UAC" / "UVC" promoted as large identity-colored labels;
+	     "Arterial" / "Venous" qualifier sits as a quieter secondary line. -->
 	<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-		{#if result}
-			<HeroResult
-				eyebrow="UAC DEPTH · ARTERIAL"
-				value={result.uacCm.toFixed(1)}
-				unit="cm"
-				icon={ArrowDownToLine}
-				pulseKey={pulseKey}
-			/>
-			<HeroResult
-				eyebrow="UVC DEPTH · VENOUS"
-				value={result.uvcCm.toFixed(1)}
-				unit="cm"
-				icon={ArrowUpFromLine}
-				pulseKey={pulseKey}
-			/>
-		{:else}
-			<HeroResult eyebrow="UAC DEPTH · ARTERIAL" value="" pulseKey="empty-uac">
-				{#snippet children()}
-					<div class="flex flex-col gap-2">
-						<div class="flex items-center gap-2">
-							<ArrowDownToLine
-								size={24}
-								class="text-[var(--color-identity)]"
-								aria-hidden="true"
-							/>
-							<span
-								class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
-							>
-								UAC DEPTH · ARTERIAL
+		<HeroResult
+			eyebrow="UAC"
+			value={result ? result.uacCm.toFixed(1) : ''}
+			unit={result ? 'cm' : undefined}
+			pulseKey={result ? pulseKey : 'empty-uac'}
+			ariaLabel="UAC depth, arterial"
+		>
+			{#snippet children()}
+				<div class="flex flex-col gap-2">
+					<div class="flex items-baseline gap-3">
+						<span
+							class="text-title font-black tracking-tight text-[var(--color-identity)] uppercase"
+						>
+							UAC
+						</span>
+						<span
+							class="text-2xs font-semibold tracking-wide text-[var(--color-text-secondary)] uppercase"
+						>
+							Arterial depth
+						</span>
+					</div>
+					{#if result}
+						<div class="flex items-baseline gap-2">
+							<span class="num text-display font-black text-[var(--color-text-primary)]">
+								{result.uacCm.toFixed(1)}
 							</span>
+							<span class="text-ui font-medium text-[var(--color-text-secondary)]">cm</span>
 						</div>
+					{:else}
 						<p class="text-ui text-[var(--color-text-secondary)]">
 							Enter weight to compute depth
 						</p>
+					{/if}
+				</div>
+			{/snippet}
+		</HeroResult>
+		<HeroResult
+			eyebrow="UVC"
+			value={result ? result.uvcCm.toFixed(1) : ''}
+			unit={result ? 'cm' : undefined}
+			pulseKey={result ? pulseKey : 'empty-uvc'}
+			ariaLabel="UVC depth, venous"
+		>
+			{#snippet children()}
+				<div class="flex flex-col gap-2">
+					<div class="flex items-baseline gap-3">
+						<span
+							class="text-title font-black tracking-tight text-[var(--color-identity)] uppercase"
+						>
+							UVC
+						</span>
+						<span
+							class="text-2xs font-semibold tracking-wide text-[var(--color-text-secondary)] uppercase"
+						>
+							Venous depth
+						</span>
 					</div>
-				{/snippet}
-			</HeroResult>
-			<HeroResult eyebrow="UVC DEPTH · VENOUS" value="" pulseKey="empty-uvc">
-				{#snippet children()}
-					<div class="flex flex-col gap-2">
-						<div class="flex items-center gap-2">
-							<ArrowUpFromLine
-								size={24}
-								class="text-[var(--color-identity)]"
-								aria-hidden="true"
-							/>
-							<span
-								class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
-							>
-								UVC DEPTH · VENOUS
+					{#if result}
+						<div class="flex items-baseline gap-2">
+							<span class="num text-display font-black text-[var(--color-text-primary)]">
+								{result.uvcCm.toFixed(1)}
 							</span>
+							<span class="text-ui font-medium text-[var(--color-text-secondary)]">cm</span>
 						</div>
+					{:else}
 						<p class="text-ui text-[var(--color-text-secondary)]">
 							Enter weight to compute depth
 						</p>
-					</div>
-				{/snippet}
-			</HeroResult>
-		{/if}
+					{/if}
+				</div>
+			{/snippet}
+		</HeroResult>
 	</div>
 </div>
 
