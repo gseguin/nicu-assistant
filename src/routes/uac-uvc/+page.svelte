@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { setCalculatorContext } from '$lib/shared/context.js';
 	import { uacUvcState } from '$lib/uac-uvc/state.svelte.js';
+	import UacUvcCalculator from '$lib/uac-uvc/UacUvcCalculator.svelte';
 	import { Ruler } from '@lucide/svelte';
 
 	onMount(() => {
@@ -26,6 +27,5 @@
 		</div>
 	</header>
 
-	<!-- TODO(plan 42-02): replace placeholder with `<UacUvcCalculator />` once component is built. -->
-	<div aria-hidden="true"></div>
+	<UacUvcCalculator />
 </div>
