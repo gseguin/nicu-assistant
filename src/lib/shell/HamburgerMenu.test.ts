@@ -29,7 +29,7 @@ describe('HamburgerMenu', () => {
 		document.body.appendChild(trigger);
 		render(HamburgerMenu, { props: { triggerEl: trigger, open: false } });
 		// <dialog> element exists but content is gated by {#if open}
-		expect(screen.queryByRole('link', { name: /Morphine Wean/i })).toBeNull();
+		expect(screen.queryByRole('link', { name: /Morphine/i })).toBeNull();
 	});
 
 	it('T-02 opens when prop bound to true — lists every registered calculator', async () => {
@@ -40,7 +40,7 @@ describe('HamburgerMenu', () => {
 		render(HamburgerMenu, { props: { triggerEl: trigger, open: true } });
 		await tick();
 		expect(screen.getAllByRole('link')).toHaveLength(5);
-		expect(screen.getByRole('link', { name: /Morphine Wean/i })).toBeTruthy();
+		expect(screen.getByRole('link', { name: /Morphine/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /Formula/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /GIR/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /Feeds/i })).toBeTruthy();
@@ -81,7 +81,7 @@ describe('HamburgerMenu', () => {
 			props: { triggerEl: trigger, open: true }
 		});
 		await tick();
-		const link = screen.getByRole('link', { name: /Morphine Wean/i });
+		const link = screen.getByRole('link', { name: /Morphine/i });
 		// Prevent jsdom navigation
 		link.addEventListener('click', (e) => e.preventDefault());
 		await fireEvent.click(link);
@@ -99,7 +99,7 @@ describe('HamburgerMenu', () => {
 		});
 		await tick();
 		const star = screen.getByRole('button', {
-			name: /Remove Morphine Wean from favorites/i
+			name: /Remove Morphine from favorites/i
 		});
 		await fireEvent.click(star);
 		await tick();
@@ -114,7 +114,7 @@ describe('HamburgerMenu', () => {
 		render(HamburgerMenu, { props: { triggerEl: trigger, open: true } });
 		await tick();
 		const star = screen.getByRole('button', {
-			name: /Remove Morphine Wean from favorites/i
+			name: /Remove Morphine from favorites/i
 		});
 		expect(star.getAttribute('aria-pressed')).toBe('true');
 	});
@@ -131,7 +131,7 @@ describe('HamburgerMenu', () => {
 		render(HamburgerMenu, { props: { triggerEl: trigger, open: true } });
 		await tick();
 		const star = screen.getByRole('button', {
-			name: /Add Morphine Wean to favorites/i
+			name: /Add Morphine to favorites/i
 		});
 		expect(star.getAttribute('aria-pressed')).toBe('false');
 	});
@@ -177,11 +177,11 @@ describe('HamburgerMenu', () => {
 		document.body.appendChild(trigger);
 		render(HamburgerMenu, { props: { triggerEl: trigger, open: true } });
 		await tick();
-		let star = screen.getByRole('button', { name: /Add Morphine Wean to favorites/i });
+		let star = screen.getByRole('button', { name: /Add Morphine to favorites/i });
 		expect(star.getAttribute('aria-pressed')).toBe('false');
 		await fireEvent.click(star);
 		await tick();
-		star = screen.getByRole('button', { name: /Remove Morphine Wean from favorites/i });
+		star = screen.getByRole('button', { name: /Remove Morphine from favorites/i });
 		expect(star.getAttribute('aria-pressed')).toBe('true');
 	});
 

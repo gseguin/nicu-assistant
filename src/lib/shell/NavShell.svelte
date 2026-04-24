@@ -63,9 +63,9 @@
 					href={calc.href}
 					class="{calc.identityClass} flex min-h-[48px] items-center gap-2 rounded-t-lg border-b-2 px-4
                  py-3 text-ui font-medium transition-colors
-                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-identity)]
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]
                  {isActive
-						? 'border-[var(--color-identity)] text-[var(--color-identity)]'
+						? 'border-[var(--color-accent)] text-[var(--color-accent)]'
 						: 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
 					aria-label="{calc.label}. {calc.description}"
 					aria-selected={isActive}
@@ -97,9 +97,10 @@
 </header>
 
 <!-- Mobile bottom tab bar: calculator tabs only, hidden on md+ -->
+<!-- D-11: sole glassmorphism license in the system per DESIGN.md - do not propagate -->
 <nav
 	class="fixed right-0 bottom-0 left-0 z-10 border-t
-         border-[var(--color-border)] bg-[var(--color-surface)] pb-[env(safe-area-inset-bottom,0px)]
+         border-[var(--color-border)] bg-[var(--color-surface)]/95 backdrop-blur pb-[env(safe-area-inset-bottom,0px)]
          md:hidden"
 	aria-label="Calculator navigation"
 >
@@ -110,9 +111,9 @@
 				href={calc.href}
 				class="{calc.identityClass} flex min-h-14 flex-1 flex-col items-center justify-center
                gap-1 py-2 text-ui font-medium transition-colors
-               focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)]
+               focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]
                {isActive
-					? 'font-semibold text-[var(--color-identity)]'
+					? 'font-semibold text-[var(--color-accent)]'
 					: 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
 				aria-label="{calc.label}. {calc.description}"
 				aria-selected={isActive}

@@ -31,7 +31,7 @@ test.describe('Navigation (v1.2 restructure)', () => {
 
     const tabs = bottomNav.getByRole('tab');
     await expect(tabs).toHaveCount(4);
-    await expect(tabs.nth(0)).toContainText('Morphine Wean');
+    await expect(tabs.nth(0)).toContainText('Morphine');
     await expect(tabs.nth(1)).toContainText('Formula');
     await expect(tabs.nth(2)).toContainText('GIR');
     await expect(tabs.nth(3)).toContainText('Feeds');
