@@ -46,15 +46,15 @@ test.describe('Morphine Wean Accessibility', () => {
 
   test('morphine wean page has no axe violations with schedule visible', async ({ page }) => {
     // Fill in valid inputs to generate a weaning schedule
-    await page.getByLabel('Dosing weight').fill('3.1');
-    await page.getByLabel('Max morphine dose').fill('0.04');
-    await page.getByLabel('Decrease per step').fill('10');
+    await page.getByLabel('Dosing weight', { exact: true }).fill('3.1');
+    await page.getByLabel('Max morphine dose', { exact: true }).fill('0.04');
+    await page.getByLabel('Decrease per step', { exact: true }).fill('10');
 
     // Wait for schedule to render
     await expect(page.getByText(/Step 1: Starting dose/)).toBeVisible();
 
     // Render the identity focus ring so axe can see it
-    await page.getByLabel('Dosing weight').focus();
+    await page.getByLabel('Dosing weight', { exact: true }).focus();
 
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
@@ -72,13 +72,13 @@ test.describe('Morphine Wean Accessibility', () => {
     });
     await page.waitForTimeout(250);
 
-    await page.getByLabel('Dosing weight').fill('3.1');
-    await page.getByLabel('Max morphine dose').fill('0.04');
-    await page.getByLabel('Decrease per step').fill('10');
+    await page.getByLabel('Dosing weight', { exact: true }).fill('3.1');
+    await page.getByLabel('Max morphine dose', { exact: true }).fill('0.04');
+    await page.getByLabel('Decrease per step', { exact: true }).fill('10');
     await expect(page.getByText(/Step 1: Starting dose/)).toBeVisible();
 
     // Render the identity focus ring so axe can see it
-    await page.getByLabel('Dosing weight').focus();
+    await page.getByLabel('Dosing weight', { exact: true }).focus();
 
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
     expect(results.violations).toEqual([]);
@@ -91,7 +91,7 @@ test.describe('Morphine Wean Accessibility', () => {
       document.documentElement.setAttribute('data-theme', 'light');
     });
 
-    const weight = page.getByLabel('Dosing weight');
+    const weight = page.getByLabel('Dosing weight', { exact: true });
     await weight.fill('99999');
     await weight.blur();
 
@@ -115,7 +115,7 @@ test.describe('Morphine Wean Accessibility', () => {
     });
     await page.waitForTimeout(250);
 
-    const weight = page.getByLabel('Dosing weight');
+    const weight = page.getByLabel('Dosing weight', { exact: true });
     await weight.fill('99999');
     await weight.blur();
 

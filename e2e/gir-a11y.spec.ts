@@ -43,12 +43,12 @@ test.describe('GIR Accessibility', () => {
   });
 
   test('gir page has no axe violations with focus ring visible', async ({ page }) => {
-    await page.getByLabel('Weight').fill('3.1');
-    await page.getByLabel('Dextrose').fill('10');
-    await page.getByLabel('Fluid order').fill('80');
+    await page.getByLabel('Weight', { exact: true }).fill('3.1');
+    await page.getByLabel('Dextrose', { exact: true }).fill('10');
+    await page.getByLabel('Fluid order', { exact: true }).fill('80');
 
     // Render the identity focus ring so axe can see it
-    await page.getByLabel('Weight').focus();
+    await page.getByLabel('Weight', { exact: true }).focus();
 
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
@@ -64,9 +64,9 @@ test.describe('GIR Accessibility', () => {
       document.documentElement.setAttribute('data-theme', 'light');
     });
 
-    await page.getByLabel('Weight').fill('3.1');
-    await page.getByLabel('Dextrose').fill('15');
-    await page.getByLabel('Fluid order').fill('80');
+    await page.getByLabel('Weight', { exact: true }).fill('3.1');
+    await page.getByLabel('Dextrose', { exact: true }).fill('15');
+    await page.getByLabel('Fluid order', { exact: true }).fill('80');
 
     await expect(page.getByText(/requires central venous access/i)).toBeVisible();
 
@@ -86,9 +86,9 @@ test.describe('GIR Accessibility', () => {
       document.documentElement.setAttribute('data-theme', 'light');
     });
 
-    await page.getByLabel('Weight').fill('3.1');
-    await page.getByLabel('Dextrose').fill('10');
-    await page.getByLabel('Fluid order').fill('80');
+    await page.getByLabel('Weight', { exact: true }).fill('3.1');
+    await page.getByLabel('Dextrose', { exact: true }).fill('10');
+    await page.getByLabel('Fluid order', { exact: true }).fill('80');
 
     // Select a glucose bucket (first radio in the titration radiogroup)
     const radiogroup = page
@@ -114,9 +114,9 @@ test.describe('GIR Accessibility', () => {
     });
     await page.waitForTimeout(250);
 
-    await page.getByLabel('Weight').fill('3.1');
-    await page.getByLabel('Dextrose').fill('10');
-    await page.getByLabel('Fluid order').fill('80');
+    await page.getByLabel('Weight', { exact: true }).fill('3.1');
+    await page.getByLabel('Dextrose', { exact: true }).fill('10');
+    await page.getByLabel('Fluid order', { exact: true }).fill('80');
 
     const radiogroup = page
       .getByRole('radiogroup', { name: /glucose range titration helper/i })

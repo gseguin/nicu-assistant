@@ -23,7 +23,7 @@ test.describe('Feeds Accessibility', () => {
       document.documentElement.setAttribute('data-theme', 'light');
     });
 
-    await page.getByLabel('Weight').fill('1.94');
+    await page.getByLabel('Weight', { exact: true }).fill('1.94');
     await expect(page.getByText('Trophic').first()).toBeVisible();
 
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
@@ -39,7 +39,7 @@ test.describe('Feeds Accessibility', () => {
     });
     await page.waitForTimeout(250);
 
-    await page.getByLabel('Weight').fill('1.94');
+    await page.getByLabel('Weight', { exact: true }).fill('1.94');
     await expect(page.getByText('Trophic').first()).toBeVisible();
 
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
@@ -54,7 +54,7 @@ test.describe('Feeds Accessibility', () => {
     });
 
     await page.getByRole('tab', { name: /Full Nutrition/i }).click();
-    await page.getByLabel('Weight').fill('1.74');
+    await page.getByLabel('Weight', { exact: true }).fill('1.74');
     await page.locator('#feeds-dex1-pct').fill('10');
     await page.locator('#feeds-ml1-hr').fill('56');
     await expect(page.getByText('TOTAL KCAL/KG/DAY')).toBeVisible();
@@ -73,7 +73,7 @@ test.describe('Feeds Accessibility', () => {
     await page.waitForTimeout(250);
 
     await page.getByRole('tab', { name: /Full Nutrition/i }).click();
-    await page.getByLabel('Weight').fill('1.74');
+    await page.getByLabel('Weight', { exact: true }).fill('1.74');
     await page.locator('#feeds-dex1-pct').fill('10');
     await page.locator('#feeds-ml1-hr').fill('56');
     await expect(page.getByText('TOTAL KCAL/KG/DAY')).toBeVisible();
@@ -83,11 +83,11 @@ test.describe('Feeds Accessibility', () => {
   });
 
   test('feeds with focus ring visible - no axe violations', async ({ page }) => {
-    await page.getByLabel('Weight').fill('1.94');
+    await page.getByLabel('Weight', { exact: true }).fill('1.94');
     await expect(page.getByText('Trophic').first()).toBeVisible();
 
     // Render the identity focus ring so axe can see it
-    await page.getByLabel('Weight').focus();
+    await page.getByLabel('Weight', { exact: true }).focus();
 
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
     expect(results.violations).toEqual([]);
@@ -101,7 +101,7 @@ test.describe('Feeds Accessibility', () => {
     });
 
     // Weight below 500g triggers ELBW advisory
-    await page.getByLabel('Weight').fill('0.4');
+    await page.getByLabel('Weight', { exact: true }).fill('0.4');
     await expect(page.getByText(/Weight below 500 g/)).toBeVisible();
 
     await page.addStyleTag({
