@@ -7,42 +7,64 @@ import NumericInput from '../components/NumericInput.svelte';
 // We import it as a .svelte.ts module — Vitest + svelte plugin handles compilation.
 
 describe('disclaimer singleton', () => {
-  const DISCLAIMER_KEY = 'nicu_assistant_disclaimer_v1';
+  const DISCLAIMER_KEY_V1 = 'nicu_assistant_disclaimer_v1';
+  const DISCLAIMER_KEY_V2 = 'nicu_assistant_disclaimer_v2';
 
   beforeEach(() => {
     localStorage.clear();
   });
 
-  it('init() with localStorage "true" sets acknowledged to true', async () => {
-    localStorage.setItem(DISCLAIMER_KEY, 'true');
-    // Dynamic import to get fresh module state per test via the Svelte compiler
+  // Scenario 1: Fresh install (no v1, no v2) → not acknowledged
+  it('fresh install (no v1, no v2): init() leaves acknowledged false', async () => {
+    const { disclaimer } = await import('../disclaimer.svelte.js');
+    disclaimer.init();
+    expect(disclaimer.initialized).toBe(true);
+    expect(disclaimer.acknowledged).toBe(false);
+    // Banner gate: initialized && !acknowledged = true (show banner)
+    expect(disclaimer.initialized && !disclaimer.acknowledged).toBe(true);
+  });
+
+  // Scenario 2: v1='true' present, v2 absent → acknowledged true; v2 written; v1 still present
+  it('migration: v1="true" with v2 absent on init writes v2 and preserves v1', async () => {
+    localStorage.setItem(DISCLAIMER_KEY_V1, 'true');
     const { disclaimer } = await import('../disclaimer.svelte.js');
     disclaimer.init();
     expect(disclaimer.acknowledged).toBe(true);
+    // v2 was written by migration
+    expect(localStorage.getItem(DISCLAIMER_KEY_V2)).toBe('true');
+    // v1 preserved (audit trail)
+    expect(localStorage.getItem(DISCLAIMER_KEY_V1)).toBe('true');
   });
 
-  it('init() with no localStorage entry sets acknowledged to false', async () => {
+  // Scenario 3: v2='true' on init → acknowledged true; no v1 read needed
+  it('steady state: v2="true" sets acknowledged true (banner hidden)', async () => {
+    localStorage.setItem(DISCLAIMER_KEY_V2, 'true');
     const { disclaimer } = await import('../disclaimer.svelte.js');
     disclaimer.init();
-    expect(disclaimer.acknowledged).toBe(false);
+    expect(disclaimer.acknowledged).toBe(true);
+    // Banner gate: initialized && !acknowledged = false (hide banner)
+    expect(disclaimer.initialized && !disclaimer.acknowledged).toBe(false);
   });
 
-  it('acknowledge() sets acknowledged to true and persists to localStorage', async () => {
+  // Scenario 4: acknowledge() writes v2 only
+  it('acknowledge() writes v2 (not v1) to localStorage', async () => {
     const { disclaimer } = await import('../disclaimer.svelte.js');
     disclaimer.init();
     expect(disclaimer.acknowledged).toBe(false);
 
     disclaimer.acknowledge();
     expect(disclaimer.acknowledged).toBe(true);
-    expect(localStorage.getItem(DISCLAIMER_KEY)).toBe('true');
+    expect(localStorage.getItem(DISCLAIMER_KEY_V2)).toBe('true');
+    // v1 is not written by acknowledge()
+    expect(localStorage.getItem(DISCLAIMER_KEY_V1)).toBe(null);
   });
 
+  // Scenario 5: localStorage.setItem throws (private mode) → in-memory acknowledge still works
   it('acknowledge() succeeds even when localStorage.setItem throws (private browsing)', async () => {
     const { disclaimer } = await import('../disclaimer.svelte.js');
     disclaimer.init();
 
     // Simulate private browsing: setItem throws
-    const originalSetItem = localStorage.setItem;
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new DOMException('QuotaExceededError');
     });
@@ -54,31 +76,21 @@ describe('disclaimer singleton', () => {
     vi.restoreAllMocks();
   });
 
-  it('initialized becomes true after init() and modal gate works correctly', async () => {
-    // Test the full lifecycle in a single test to avoid module caching issues.
-    // The disclaimer singleton keeps state across dynamic imports in the same process.
+  // Scenario 6: v1='true' AND v2='true' both present → acknowledged true; idempotent (no extra writes)
+  it('idempotent: both v1 and v2 set → acknowledged true, no extra writes', async () => {
+    localStorage.setItem(DISCLAIMER_KEY_V1, 'true');
+    localStorage.setItem(DISCLAIMER_KEY_V2, 'true');
+
+    // Spy on setItem to confirm migration does NOT re-write v2
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+
     const { disclaimer } = await import('../disclaimer.svelte.js');
-
-    // After init with empty localStorage: should show modal
     disclaimer.init();
-    expect(disclaimer.initialized).toBe(true);
-    expect(disclaimer.acknowledged).toBe(false);
-    // Modal gate: initialized && !acknowledged = true (show modal)
-    expect(disclaimer.initialized && !disclaimer.acknowledged).toBe(true);
-
-    // After acknowledge: should hide modal
-    disclaimer.acknowledge();
     expect(disclaimer.acknowledged).toBe(true);
-    // Modal gate: initialized && !acknowledged = false (hide modal)
-    expect(disclaimer.initialized && !disclaimer.acknowledged).toBe(false);
-  });
+    // No setItem call from init() since v2 was already 'true'
+    expect(setItemSpy).not.toHaveBeenCalled();
 
-  it('modal gate is false when previously acknowledged in localStorage', async () => {
-    localStorage.setItem(DISCLAIMER_KEY, 'true');
-    const { disclaimer } = await import('../disclaimer.svelte.js');
-    disclaimer.init();
-    // initialized=true, acknowledged=true → modal stays hidden
-    expect(disclaimer.initialized && !disclaimer.acknowledged).toBe(false);
+    vi.restoreAllMocks();
   });
 });
 
