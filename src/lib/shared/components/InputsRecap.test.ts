@@ -87,18 +87,18 @@ describe('InputsRecap', () => {
 		expect(btn.getAttribute('aria-expanded')).toBe('true');
 	});
 
-	it('T-06 desktop group variant renders alongside mobile button with same data', () => {
+	it('T-06 desktop variant is not rendered (recap is mobile-only — md+ uses sticky sidebar inputs)', () => {
 		render(InputsRecap, {
 			props: {
 				items: [{ label: 'Weight', value: '2.4', unit: 'kg' }],
 				onOpen: () => {}
 			}
 		});
-		// Both the mobile <button> and desktop <div role="group"> render — CSS shows/hides.
-		// The group carries its own aria-label for screen-reader clarity.
-		const group = screen.getByRole('group', { name: /Current inputs/i });
-		expect(group).toBeTruthy();
-		// Value appears twice in DOM (once per variant); that's correct.
-		expect(screen.getAllByText('2.4').length).toBe(2);
+		// Only the mobile <button> renders. Desktop wide viewports surface the
+		// inputs directly in the sticky right column — the recap would duplicate
+		// information without adding a drawer affordance that doesn't exist.
+		expect(screen.queryByRole('group', { name: /Current inputs/i })).toBeNull();
+		// Value appears once (mobile button's dl), not twice.
+		expect(screen.getAllByText('2.4').length).toBe(1);
 	});
 });

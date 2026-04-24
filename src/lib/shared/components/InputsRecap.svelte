@@ -174,14 +174,11 @@
 	/>
 </button>
 
-<!-- Desktop: passive display (inputs live in the sticky right column) -->
-<div
-	class="inputs-recap hidden w-full items-start rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 md:flex"
-	role="group"
-	aria-label="Current inputs"
->
-	{@render itemList()}
-</div>
+<!-- Desktop (md+) hides the recap entirely: inputs are already visible in the
+     sticky right column, so the recap would duplicate information without
+     adding a drawer affordance that doesn't exist on desktop. The mobile
+     <button> variant above is the only InputsRecap render path that ever
+     reaches the DOM on wide viewports (where it's hidden via md:hidden). -->
 
 <style>
 	.inputs-recap {
