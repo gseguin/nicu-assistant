@@ -19,6 +19,7 @@
 	import NumericInput from '$lib/shared/components/NumericInput.svelte';
 	import SelectPicker from '$lib/shared/components/SelectPicker.svelte';
 	import SegmentedToggle from '$lib/shared/components/SegmentedToggle.svelte';
+	import HeroResult from '$lib/shared/components/HeroResult.svelte';
 	import { AlertTriangle } from '@lucide/svelte';
 	import type { SelectOption } from '$lib/shared/types.js';
 
@@ -222,8 +223,18 @@
 			/>
 		</section>
 
+		<!-- BEDSIDE PRIMARY HERO: Goal ml/feed (most actionable advancement target) -->
+		{#if bedsideResult}
+			<HeroResult
+				eyebrow="GOAL ML/FEED"
+				value={bedsideResult.goalMlPerFeed.toFixed(1)}
+				unit="ml/feed"
+				pulseKey={bedsideResult.goalMlPerFeed}
+			/>
+		{/if}
+
 		<!-- BEDSIDE OUTPUTS: Three equally-prominent rows -->
-		<section class="card" aria-live="polite" aria-atomic="true">
+		<section class="card">
 			{#if bedsideResult}
 				<div class="flex flex-col divide-y divide-[var(--color-border)]">
 					<!-- Trophic -->
@@ -434,28 +445,29 @@
 		</section>
 
 		<!-- FULL NUTRITION HERO: total kcal/kg/d -->
-		<section
-			class="card px-5 py-5"
-			style="background: var(--color-identity-hero);"
-			aria-live="polite"
-			aria-atomic="true"
-		>
-			{#if fullNutritionResult}
-				<div class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase">
-					TOTAL KCAL/KG/DAY
-				</div>
-				<div class="flex items-baseline gap-2">
-					<span class="num text-display font-black text-[var(--color-text-primary)]">
-						{fullNutritionResult.totalKcalPerKgDay.toFixed(1)}
-					</span>
-					<span class="text-ui text-[var(--color-text-secondary)]">kcal/kg/d</span>
-				</div>
-			{:else}
-				<p class="text-ui text-[var(--color-text-secondary)]">
-					Enter a weight to see nutrition totals.
-				</p>
-			{/if}
-		</section>
+		{#if fullNutritionResult}
+			<HeroResult
+				eyebrow="TOTAL KCAL/KG/DAY"
+				value={fullNutritionResult.totalKcalPerKgDay.toFixed(1)}
+				unit="kcal/kg/d"
+				pulseKey={fullNutritionResult.totalKcalPerKgDay}
+			/>
+		{:else}
+			<HeroResult eyebrow="TOTAL KCAL/KG/DAY" value="" pulseKey="empty">
+				{#snippet children()}
+					<div class="flex flex-col gap-2">
+						<span
+							class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+						>
+							TOTAL KCAL/KG/DAY
+						</span>
+						<p class="text-ui text-[var(--color-text-secondary)]">
+							Enter a weight to see nutrition totals.
+						</p>
+					</div>
+				{/snippet}
+			</HeroResult>
+		{/if}
 
 		<!-- SECONDARY OUTPUTS: summary grid -->
 		{#if fullNutritionResult}

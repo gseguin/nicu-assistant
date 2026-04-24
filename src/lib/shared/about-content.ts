@@ -31,6 +31,7 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     notes: [
       'Five inputs (Base, Starting Volume, Formula, Target Calorie, Unit) and four outputs (Amount to Add, Yield, Exact kcal/oz, Suggested Starting Volume).',
       '30 formulas across 4 manufacturers (Abbott, Mead Johnson, Nestlé, Nutricia). Packets unit is only available for Similac HMF.',
+      'When Similac HMF is selected, displacement-corrected math accounts for fortifier volume in the recipe (powder displaces a small amount of liquid).',
       "Results must be verified against your institution's feeding protocol."
     ]
   },

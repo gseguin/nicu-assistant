@@ -16,14 +16,14 @@ describe('UacUvcCalculator', () => {
     expect(emptyStates).toHaveLength(2); // one per card
   });
 
-  it('valid input at 2.5 kg: renders UAC 16.5 and UVC 8.3 with card labels and unit', () => {
+  it('valid input at 2.5 kg: renders UAC 16.5 and UVC 8.3 with eyebrow labels and unit', () => {
     uacUvcState.current.weightKg = 2.5;
     render(UacUvcCalculator);
 
-    expect(screen.getByText('UAC')).toBeTruthy();
-    expect(screen.getByText('UVC')).toBeTruthy();
-    expect(screen.getByText('Arterial depth')).toBeTruthy();
-    expect(screen.getByText('Venous depth')).toBeTruthy();
+    // Post-D-07: eyebrows are unified strings "UAC DEPTH · ARTERIAL" and
+    // "UVC DEPTH · VENOUS" using middle-dot U+00B7 (em-dash banned).
+    expect(screen.getByText('UAC DEPTH · ARTERIAL')).toBeTruthy();
+    expect(screen.getByText('UVC DEPTH · VENOUS')).toBeTruthy();
     expect(screen.getByText('16.5')).toBeTruthy(); // UAC @ 2.5 kg = 16.5 cm
     expect(screen.getByText('8.3')).toBeTruthy(); //  UVC @ 2.5 kg = 8.25 cm → toFixed(1) → "8.3"
     // "cm" unit appears in both hero cards (and possibly in NumericInput hints)

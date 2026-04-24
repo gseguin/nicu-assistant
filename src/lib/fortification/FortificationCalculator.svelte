@@ -11,6 +11,7 @@
 	import NumericInput from '$lib/shared/components/NumericInput.svelte';
 	import SelectPicker from '$lib/shared/components/SelectPicker.svelte';
 	import SegmentedToggle from '$lib/shared/components/SegmentedToggle.svelte';
+	import HeroResult from '$lib/shared/components/HeroResult.svelte';
 	import type { SelectOption } from '$lib/shared/types.js';
 	import type { BaseType, UnitType, TargetKcalOz } from './types.js';
 
@@ -156,7 +157,10 @@
 	});
 
 	function formatAmount(n: number): string {
-		return n.toFixed(2).replace(/\.?0+$/, '');
+		// D-23: keep one decimal so .num tabular alignment holds and clinically
+		// meaningful precision is preserved (`'2.0'` not `'2'`).
+		if (n === 0) return '0.0';
+		return n.toFixed(1);
 	}
 
 	// Persist on any state change (mirror morphine)
@@ -198,32 +202,29 @@
 	</section>
 
 	<!-- Hero: Amount to Add -->
-	<section
-		class="card bg-[var(--color-identity-hero)] px-5 py-5"
-		aria-live="polite"
-		aria-atomic="true"
-	>
-		{#key calcKey}
-			<div class="animate-result-pulse">
-				<span class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase">
-					Amount to Add
-				</span>
-				{#if result}
-					<div class="mt-3 flex items-baseline gap-2">
-						<span class="num text-5xl font-bold text-[var(--color-text-primary)]"
-							>{formatAmount(result.amountToAdd)}</span
-						>
-						<span class="text-lg font-semibold text-[var(--color-text-secondary)]">{unitLabel}</span
-						>
-					</div>
-				{:else}
-					<p class="mt-3 text-sm text-[var(--color-text-tertiary)]">
+	{#if result}
+		<HeroResult
+			eyebrow="AMOUNT TO ADD"
+			value={formatAmount(result.amountToAdd)}
+			unit={unitLabel}
+			pulseKey={calcKey}
+		/>
+	{:else}
+		<HeroResult eyebrow="AMOUNT TO ADD" value="" pulseKey={calcKey}>
+			{#snippet children()}
+				<div class="flex flex-col gap-2">
+					<span
+						class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+					>
+						AMOUNT TO ADD
+					</span>
+					<p class="text-sm text-[var(--color-text-tertiary)]">
 						Enter a starting volume to see the recipe.
 					</p>
-				{/if}
-			</div>
-		{/key}
-	</section>
+				</div>
+			{/snippet}
+		</HeroResult>
+	{/if}
 
 	<!-- Verification Card -->
 	{#if result}

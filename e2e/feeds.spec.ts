@@ -20,9 +20,14 @@ for (const viewport of [
       await expect(page.getByText('Trophic').first()).toBeVisible();
       await expect(page.getByText('Advance step')).toBeVisible();
       await expect(page.getByText('Goal').first()).toBeVisible();
-      // Three ml/feed units in output
+      // Post-D-07: HeroResult adds a "ml/feed" unit on the GOAL ML/FEED hero
+      // above the existing 3-row breakdown. Playwright's getByText resolves
+      // 5 elements (4 explicit ml/feed spans + 1 nested baseline-flex parent
+      // whose text aggregates the unit). Asserting "at least 4" is the
+      // semantically correct check; pin to >= 4.
       const mlFeedElements = page.getByText('ml/feed');
-      await expect(mlFeedElements).toHaveCount(3);
+      const count = await mlFeedElements.count();
+      expect(count).toBeGreaterThanOrEqual(4);
     });
 
     test('bedside mode: empty state when weight cleared', async ({ page }) => {

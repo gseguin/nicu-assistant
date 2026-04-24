@@ -23,17 +23,17 @@ test.describe('Morphine Wean Calculator', () => {
   });
 
   test('summary card shows total reduction percentage', async ({ page }) => {
-    // Defaults: 90% total reduction
+    // Defaults: 90% total reduction (formatPercent → 2 decimals)
     const summary = page.getByTestId('morphine-summary');
     await expect(summary).toBeVisible();
-    await expect(summary).toContainText('90.0%');
+    await expect(summary).toContainText('90.00%');
     await expect(summary).toContainText('Total reduction');
   });
 
   test('reduction amounts show percentage alongside mg', async ({ page }) => {
     const scheduleRegion = page.locator('[aria-label="Weaning schedule"]');
-    // Step 2 shows reduction with percentage
-    await expect(scheduleRegion).toContainText('-0.0124 mg (10.0%)');
+    // Step 2 shows reduction via formatMg + formatPercent (3-decimal mg, 2-decimal %).
+    await expect(scheduleRegion).toContainText('-0.012 mg (10.00%)');
   });
 
   test('no error-colored elements in schedule', async ({ page }) => {
@@ -62,9 +62,9 @@ test.describe('Morphine Wean Calculator', () => {
     await page.getByLabel('Dosing weight').fill('5');
     await page.getByLabel('Max morphine dose').fill('0.08');
     await page.getByLabel('Decrease per step').fill('20');
-    // Starting dose = 5 * 0.08 = 0.4000
+    // Starting dose = 5 * 0.08 = 0.400 (formatMg → 3 decimals)
     const scheduleRegion = page.locator('[aria-label="Weaning schedule"]');
-    await expect(scheduleRegion).toContainText('0.4000');
+    await expect(scheduleRegion).toContainText('0.400');
   });
 
   test('schedule has aria-live region for screen readers', async ({ page }) => {

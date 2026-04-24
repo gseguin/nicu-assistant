@@ -55,11 +55,9 @@ for (const viewport of [
 
 			await page.getByLabel('Weight', { exact: true }).fill('2.5');
 
-			// Both card labels + secondary context visible
-			await expect(page.getByText('UAC', { exact: true })).toBeVisible();
-			await expect(page.getByText('UVC', { exact: true })).toBeVisible();
-			await expect(page.getByText('Arterial depth')).toBeVisible();
-			await expect(page.getByText('Venous depth')).toBeVisible();
+			// Post-D-07: HeroResult unifies eyebrows. UAC/UVC use middle-dot U+00B7.
+			await expect(page.getByText('UAC DEPTH · ARTERIAL')).toBeVisible();
+			await expect(page.getByText('UVC DEPTH · VENOUS')).toBeVisible();
 
 			// Hero values at weight 2.5 kg: UAC = 2.5*3+9 = 16.5 ; UVC = 16.5/2 = 8.25 → toFixed(1) = 8.3
 			await expect(page.getByText('16.5')).toBeVisible();
