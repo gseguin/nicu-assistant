@@ -1,19 +1,27 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/svelte';
+import { render, screen } from '@testing-library/svelte';
 import FeedAdvanceCalculator from './FeedAdvanceCalculator.svelte';
 import { feedsState } from './state.svelte.js';
+
+// Plan 42.1-05 (D-08): inputs (Weight + mode toggle + per-mode inputs incl.
+// totalFluidsMlHr) were extracted into FeedAdvanceInputs.svelte. The calculator
+// now renders the result hero + per-mode output region + advisories only.
+// Tests that previously interacted with input fields or the mode-toggle moved
+// to FeedAdvanceInputs.test.ts; here we cover the hero/output surface.
 
 describe('FeedAdvanceCalculator', () => {
   beforeEach(() => {
     feedsState.reset();
   });
 
-  it('renders without crashing', () => {
+  it('does not render input fields itself (extracted to FeedAdvanceInputs in 42.1-05)', () => {
     render(FeedAdvanceCalculator);
-    expect(screen.getByText('Weight')).toBeTruthy();
+    expect(screen.queryAllByRole('spinbutton')).toHaveLength(0);
+    expect(screen.queryByLabelText('Weight')).toBeNull();
+    expect(screen.queryByRole('tablist')).toBeNull();
   });
 
-  it('shows empty-state message when weight is null', () => {
+  it('shows empty-state message when weight is null (bedside default mode)', () => {
     feedsState.current.weightKg = null;
     render(FeedAdvanceCalculator);
     expect(screen.getByText(/Enter a weight to see per-feed volumes/)).toBeTruthy();
@@ -22,11 +30,10 @@ describe('FeedAdvanceCalculator', () => {
   it('shows bedside outputs with default state values when weight entered', () => {
     feedsState.current.weightKg = 1.94;
     render(FeedAdvanceCalculator);
-    // "Trophic" appears as both input label and output heading
-    expect(screen.getAllByText('Trophic').length).toBeGreaterThanOrEqual(1);
+    // Output headings (lowercase identity eyebrows)
+    expect(screen.getByText('Trophic')).toBeTruthy();
     expect(screen.getByText('Advance step')).toBeTruthy();
-    // "Goal" appears as both input label and output heading
-    expect(screen.getAllByText('Goal').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('Goal')).toBeTruthy();
     // Post-D-07: HeroResult adds a "ml/feed" unit on the GOAL ML/FEED hero
     // above the existing 3-row breakdown (3 + 1 = 4).
     expect(screen.getAllByText('ml/feed').length).toBe(4);
@@ -44,21 +51,10 @@ describe('FeedAdvanceCalculator', () => {
     expect(screen.getAllByText(/ml\/hr/).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('mode toggle switches to full nutrition', async () => {
+  it('switches to full-nutrition output region when state.mode flips', () => {
     feedsState.current.weightKg = 1.94;
+    feedsState.current.mode = 'full-nutrition';
     render(FeedAdvanceCalculator);
-    const fullNutritionTab = screen.getByRole('tab', { name: /Full Nutrition/i });
-    await fireEvent.click(fullNutritionTab);
-    expect(screen.getByText(/TOTAL KCAL\/KG\/DAY/)).toBeTruthy();
-  });
-
-  it('mode toggle preserves weight', async () => {
-    feedsState.current.weightKg = 2.5;
-    render(FeedAdvanceCalculator);
-    const fullNutritionTab = screen.getByRole('tab', { name: /Full Nutrition/i });
-    await fireEvent.click(fullNutritionTab);
-    // Weight is still set -- full nutrition results should render
-    expect(feedsState.current.weightKg).toBe(2.5);
     expect(screen.getByText(/TOTAL KCAL\/KG\/DAY/)).toBeTruthy();
   });
 
