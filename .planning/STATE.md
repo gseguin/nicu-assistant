@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.13
 milestone_name: UAC/UVC Calculator + Favorites Nav
-status: planning
-stopped_at: Phase 42 UI-SPEC approved
-last_updated: "2026-04-24T00:08:19.819Z"
-last_activity: "2026-04-23 — Phase 41 shipped: NavShell flipped to favorites-driven nav, FAV-TEST-03 + FAV-TEST-04 closed, svelte-check 0/0, vitest 267/267, 10/10 new Playwright tests green"
+status: executing
+stopped_at: Phase 42.1 context gathered
+last_updated: "2026-04-24T04:27:36.173Z"
+last_activity: 2026-04-24 -- Phase --phase execution started
 progress:
-  total_phases: 3
-  completed_phases: 2
+  total_phases: 4
+  completed_phases: 3
   total_plans: 8
-  completed_plans: 5
-  percent: 63
+  completed_plans: 8
+  percent: 100
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.13 — Phase 41 complete; ready to plan Phase 42 (UAC/UVC Calculator)
+**Current focus:** Phase --phase — 42
 
 ## Current Position
 
-Phase: 42 — UAC/UVC Calculator (not started)
-Plan: —
-Status: Phase 41 complete, ready to plan Phase 42
-Last activity: 2026-04-23 — Phase 41 shipped: NavShell flipped to favorites-driven nav, FAV-TEST-03 + FAV-TEST-04 closed, svelte-check 0/0, vitest 267/267, 10/10 new Playwright tests green
+Phase: --phase (42) — EXECUTING
+Plan: 1 of --name
+Status: Executing Phase --phase
+Last activity: 2026-04-24 -- Phase --phase execution started
 
 ## Performance Metrics
 
@@ -53,6 +53,10 @@ Last activity: 2026-04-23 — Phase 41 shipped: NavShell flipped to favorites-dr
 - [v1.13]: Ship favorites-nav BEFORE UAC/UVC to avoid bottom-bar overflow at 375px and throwaway code. Phase 40 delivers the store + hamburger (NavShell unchanged), Phase 41 flips NavShell to read from the store, Phase 42 lands UAC/UVC as a non-favorited 5th calculator that exercises the add/disable-at-cap flow end-to-end.
 - [v1.13]: First-run favorites default `['morphine', 'formula', 'gir', 'feeds']` preserves the current v1.12 bottom bar so existing users see zero visible change at the Phase 41 cut.
 
+### Roadmap Evolution
+
+- Phase 42.1 inserted after Phase 42: design-polish-sweep (URGENT) — captures the 7-command /impeccable critique remainder (onboard, colorize, layout, adapt, harden, quieter, final). Commits `2378d29` (polish: stripes) and `917ecf2` (clarify: em dashes) already shipped outside the GSD workflow per user authorization on 2026-04-23; 42.1 carries the remaining scope. Ships IN v1.13 (release 43 now depends on 42.1). 2-week follow-up routine `trig_014XUDEDwK7ve2dKS5dP8JZQ` fires 2026-05-07 and will re-score regardless of release timing.
+
 ### Pending Todos
 
 None.
@@ -64,7 +68,7 @@ None.
 ## Session Continuity
 
 Last session: --stopped-at
-Stopped at: Phase 42 UI-SPEC approved
+Stopped at: Phase 42.1 context gathered
 Resume file: --resume-file
 
 **Planned Phase:** 42 (UAC/UVC Calculator) — 3 plans — 2026-04-24T00:08:19.812Z
