@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { OctagonAlert } from '@lucide/svelte';
 	import type { GirTitrationRow } from './types.js';
 
 	interface Props {
@@ -133,9 +134,17 @@
 				IF {row.bucketId === 'severe-neuro' ? 'SEVERE NEURO SIGNS' : `GLUCOSE ${row.label} mg/dL`}
 			</span>
 			{#if stopInfusion}
-				<div class="mt-1 flex items-baseline gap-2">
+				<!-- Severe-neuro STOP row carries the error color on the word STOP
+				     and the warning icon. Card surface keeps its surface-alt tint
+				     so the row's identity affordance (tappable card) remains intact. -->
+				<div class="mt-1 flex items-center gap-2">
+					<OctagonAlert
+						size={18}
+						class="shrink-0 text-[var(--color-error)]"
+						aria-hidden="true"
+					/>
 					<span
-						class="text-base font-bold tracking-wider text-[var(--color-text-primary)] uppercase"
+						class="text-base font-bold tracking-wider text-[var(--color-error)] uppercase"
 						>STOP</span
 					>
 					<span class="text-ui text-[var(--color-text-tertiary)]">dextrose infusion</span>

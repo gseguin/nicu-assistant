@@ -5,7 +5,7 @@
 	import HeroResult from '$lib/shared/components/HeroResult.svelte';
 	import config from './gir-config.json';
 	import type { GlucoseBucket } from './types.js';
-	import { Info } from '@lucide/svelte';
+	import { Info, OctagonAlert } from '@lucide/svelte';
 
 	// Plan 42.1-05 (D-08): inputs were extracted into GirInputs.svelte so the route can
 	// place them in the desktop sticky right column or the mobile <InputDrawer>. The
@@ -100,9 +100,20 @@
 								: `IF GLUCOSE ${selectedRow.label}${selectedRow.bucketId === 'severe-neuro' ? '' : ' MG/DL'}`}
 						</span>
 						{#if stop}
-							<div class="flex items-baseline gap-2">
+							<!-- Severe-neuro STOP is the single life-or-death string in the
+							     app. Carve-out from the Red-as-Error rule: the word STOP
+							     and the warning octagon render in --color-error so the
+							     hierarchy matches the clinical urgency. The surrounding
+							     hero card keeps its identity-hero tint so the calculator
+							     stays recognizable. -->
+							<div class="flex items-center gap-2">
+								<OctagonAlert
+									size={40}
+									class="shrink-0 text-[var(--color-error)]"
+									aria-hidden="true"
+								/>
 								<span
-									class="text-display font-black tracking-wider text-[var(--color-text-primary)] uppercase"
+									class="text-display font-black tracking-wider text-[var(--color-error)] uppercase"
 									>STOP</span
 								>
 								<span class="text-ui text-[var(--color-text-secondary)]">dextrose infusion</span>
