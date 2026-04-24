@@ -33,16 +33,18 @@ describe('HamburgerMenu', () => {
 	});
 
 	it('T-02 opens when prop bound to true — lists every registered calculator', async () => {
-		// beforeEach already called favorites.init() with defaults (all 4 favorited).
+		// beforeEach already called favorites.init() with defaults (first 4 favorited;
+		// UAC/UVC is the 5th registry entry and per Phase 42 D-02 stays non-favorited at first run).
 		const trigger = document.createElement('button');
 		document.body.appendChild(trigger);
 		render(HamburgerMenu, { props: { triggerEl: trigger, open: true } });
 		await tick();
-		expect(screen.getAllByRole('link')).toHaveLength(4);
+		expect(screen.getAllByRole('link')).toHaveLength(5);
 		expect(screen.getByRole('link', { name: /Morphine Wean/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /Formula/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /GIR/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /Feeds/i })).toBeTruthy();
+		expect(screen.getByRole('link', { name: /UAC\/UVC/i })).toBeTruthy();
 	});
 
 	it('T-03 close button closes the dialog and restores focus to trigger', async () => {
@@ -134,12 +136,19 @@ describe('HamburgerMenu', () => {
 		expect(star.getAttribute('aria-pressed')).toBe('false');
 	});
 
-	it('T-09 at cap: non-favorited star is disabled (would require 5th calculator — documented as skip until Phase 42 adds UAC/UVC)', async () => {
-		// With only 4 registry entries and all 4 seeded as favorites, there's no non-favorited row to test.
-		// This test documents the gap; FAV-TEST-03 in Phase 41 covers the full flow with UAC/UVC.
-		// When Phase 42 adds UAC/UVC, this test MUST be updated to:
-		//   seed 4 favs, render, find star for uac-uvc row, assert disabled attribute.
-		expect(true).toBe(true); // placeholder
+	it('T-09 at cap: non-favorited UAC/UVC star is disabled', async () => {
+		// Phase 42 D-02: UAC/UVC is the 5th registry entry but is NOT in the first-run
+		// defaults (defaults = first 4 entries only). With cap=4 full and UAC/UVC non-favorited,
+		// its star MUST be disabled + aria-disabled="true" per HamburgerMenu's cap-full contract.
+		const trigger = document.createElement('button');
+		document.body.appendChild(trigger);
+		render(HamburgerMenu, { props: { triggerEl: trigger, open: true } });
+		await tick();
+		const star = screen.getByRole('button', {
+			name: /Add UAC\/UVC to favorites \(limit reached/i
+		});
+		expect((star as HTMLButtonElement).disabled).toBe(true);
+		expect(star.getAttribute('aria-disabled')).toBe('true');
 	});
 
 	it('T-10 cap-reached caption appears when favorites.isFull', async () => {

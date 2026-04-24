@@ -252,4 +252,13 @@
     --color-identity: oklch(80% 0.1 30);
     --color-identity-hero: oklch(24% 0.05 30);
   }
+  .identity-uac {
+    --color-identity: oklch(42% 0.12 350);
+    --color-identity-hero: oklch(95% 0.035 350);
+  }
+  .dark .identity-uac,
+  [data-theme='dark'] .identity-uac {
+    --color-identity: oklch(80% 0.10 350);
+    --color-identity-hero: oklch(24% 0.05 350);
+  }
 }

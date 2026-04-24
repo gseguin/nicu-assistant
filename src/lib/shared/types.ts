@@ -4,7 +4,7 @@ export interface SelectOption {
   group?: string;
 }
 
-export type CalculatorId = 'morphine-wean' | 'formula' | 'gir' | 'feeds';
+export type CalculatorId = 'morphine-wean' | 'formula' | 'gir' | 'feeds' | 'uac-uvc';
 
 export interface CalculatorContext {
   id: CalculatorId;

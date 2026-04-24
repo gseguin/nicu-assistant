@@ -56,5 +56,16 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Full nutrition mode: total kcal/kg/d from dual TPN dextrose lines, SMOF lipid, and enteral feeds. Hero output is total kcal/kg/d.',
       'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement). Results are advisory — clinical judgment required.'
     ]
+  },
+  'uac-uvc': {
+    title: 'UAC/UVC Catheter Depth',
+    version: appVersion,
+    description:
+      'Calculates umbilical arterial (UAC) and umbilical venous (UVC) catheter insertion depths from infant weight, using the Shukla/Dunn weight-based rule of thumb.',
+    notes: [
+      'Formulas: UAC depth = weight × 3 + 9 (cm); UVC depth = (weight × 3 + 9) / 2 (cm).',
+      'Source: uac-uvc-calculator.xlsx (cells B3 and B7).',
+      'Rule-of-thumb estimate only — final placement MUST be confirmed by imaging (chest/abdominal X-ray) per institutional protocol before use.'
+    ]
   }
 };
