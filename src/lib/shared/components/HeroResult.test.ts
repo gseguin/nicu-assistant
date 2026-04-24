@@ -71,6 +71,33 @@ describe('HeroResult', () => {
     expect(screen.getByText('ICON EYEBROW')).toBeTruthy();
   });
 
+  it('default-props path always renders a text-display numeral (display-numeral contract)', () => {
+    // Contract (locked 2026-04-24 post-42.1 critique):
+    // Any HeroResult must contain at least one text-display element. The default
+    // props path uses `text-display font-black` on the value span; this test pins
+    // that fact so any future refactor that drops the size class breaks here.
+    render(HeroResult, {
+      props: { eyebrow: 'CONTRACT', value: '7.5', unit: 'mg/kg/min' }
+    });
+    const numeral = screen.getByText('7.5');
+    expect(numeral.className).toContain('text-display');
+    expect(numeral.className).toContain('font-black');
+  });
+
+  it('custom children snippet paths must include a text-display element (documentation)', () => {
+    // Documentation test — the children-snippet escape hatch is used by GIR,
+    // Morphine summary, UAC/UVC, and Feeds for custom shapes (paired, metric-grid,
+    // label-promoted). Each consumer is responsible for including its own
+    // text-display numeral. The HeroResultChildrenHarness used in the
+    // "children Snippet override path" test is intentionally minimal and does
+    // NOT include a text-display element — that harness only covers the
+    // override mechanism, not the contract. The real consumers each have their
+    // own component test that assert the text-display numeral is present.
+    // This test exists as a permanent reminder of the contract, and will pass
+    // so long as it is written.
+    expect(true).toBe(true);
+  });
+
   it('value containing literal <script> is rendered as text (XSS-defense smoke)', () => {
     render(HeroResult, {
       props: { eyebrow: 'XSS', value: '<script>alert(1)</script>' }

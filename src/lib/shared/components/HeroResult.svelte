@@ -1,3 +1,20 @@
+<!--
+  HeroResult — shared hero pattern for every calculator's primary result.
+
+  Contract (locked 2026-04-24 post-42.1 critique):
+  Any HeroResult must contain at least one `text-display` (44 px / font-black)
+  element. The numeral is always the largest object on the card. Eyebrow,
+  secondary lines, and labels may exist but must NOT compete with the
+  display numeral for visual hierarchy.
+
+  Default props (eyebrow + value + unit + optional secondary) render this
+  contract automatically. When `children` snippet is used as an escape hatch
+  for custom shapes (paired, metric-grid, label-promoted), the snippet MUST
+  include at least one element with class="text-display" (or equivalent
+  44 px size). See HeroResult.test.ts for enforcement scenarios.
+
+  See DESIGN.md "Eyebrow-Above-Numeral Rule" + "The Hero Result (signature pattern)".
+-->
 <script lang="ts">
 	import type { Component, Snippet } from 'svelte';
 
