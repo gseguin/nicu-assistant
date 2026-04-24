@@ -24,7 +24,7 @@
 // - Hamburger aria-label strings come from src/lib/shell/HamburgerMenu.svelte:
 //     isFavorite       → `Remove UAC/UVC from favorites`
 //     !isFavorite, OK  → `Add UAC/UVC to favorites`
-//     !isFavorite, cap → `Add UAC/UVC to favorites (limit reached — remove one to add another)`
+//     !isFavorite, cap → `Add UAC/UVC to favorites (limit reached. Remove one to add another.)`
 //   The regex substring-match /add uac\/uvc to favorites \(limit reached/i
 //   handles the cap-full variant regardless of trailing punctuation.
 
@@ -138,7 +138,7 @@ test.describe('UAC/UVC favorites round-trip (mobile)', () => {
 		await expect(mobileBar.getByRole('tab')).toHaveCount(4);
 		await expect(mobileBar.getByRole('tab', { name: /uac\/uvc/i })).toBeVisible();
 		// Feeds gone from the bar
-		await expect(mobileBar.getByRole('tab', { name: /^feeds —/i })).toHaveCount(0);
+		await expect(mobileBar.getByRole('tab', { name: /^feeds\./i })).toHaveCount(0);
 
 		// localStorage round-trip: favorites should contain 'uac-uvc' and NOT 'feeds'
 		const storedIds = await page.evaluate(() => {
@@ -171,10 +171,10 @@ test.describe('UAC/UVC favorites round-trip (mobile)', () => {
 		await page.getByRole('dialog').waitFor({ state: 'visible' });
 
 		// Cap-full caption — HamburgerMenu.svelte:78-82 emits:
-		//   "4 of 4 favorites — remove one to add another."
+		//   "4 of 4 favorites. Remove one to add another."
 		// Em-dash is U+2014. The substring regex matches.
 		await expect(
-			page.getByText(/4 of 4 favorites — remove one to add another/)
+			page.getByText(/4 of 4 favorites\. Remove one to add another/)
 		).toBeVisible();
 
 		// Cap-full star aria-label (HamburgerMenu.svelte:117):

@@ -493,3 +493,55 @@ All 18 Phase 42 requirements mapped to a specific visual/interaction contract el
 - [ ] Dimension 6 Registry Safety: PASS — no third-party registries; `@lucide/svelte` already installed; no new dependencies
 
 **Approval:** pending (checker to upgrade to `approved YYYY-MM-DD`)
+
+---
+
+## Post-Shipment Amendment (Phase 42.1)
+
+**Amended:** 2026-04-24
+**Source:** `.planning/phases/42.1-design-polish-sweep-impeccable-critique-remainder-onboard-co/42.1-CONTEXT.md` D-25 (eyebrow + Slider) + Plan 42.1-03 checkpoint user direction (D-05 third-cue revision) + commit `8c0cf95` (AboutSheet xlsx removal)
+
+The following items in this SPEC do not reflect what shipped (em-dash purge from `917ecf2` + bits-ui Slider substitution from Phase 42 implementation + post-shipment design corrections from Phase 42.1):
+
+### Eyebrow text (post-em-dash purge)
+
+- Original spec: `UAC DEPTH — ARTERIAL` / `UVC DEPTH — VENOUS`
+- Shipped (post-`917ecf2`): em-dashes purged from every user-rendered string — em-dash ban now codified in DESIGN.md.
+- Final shipped form: see "D-05 third cue revision" below — the eyebrow contract was further restructured in Phase 42.1 plan 03 so the calculator-name word ("UAC" / "UVC") is the dominant identity-colored title, and "Arterial depth" / "Venous depth" sits beneath as a quieter secondary label. No middle-dot or em-dash separator is rendered.
+
+### Slider primitive
+
+- Original spec implied native `<input type="range">`.
+- Shipped: bits-ui `<Slider.Root>` / `<Slider.Range>` / `<Slider.Thumb>` (`bits-ui ^2.18.0` — pre-approved primitive library for this codebase).
+- Keyboard matrix coverage (Melt UI builder underneath): ArrowLeft/Right/Up/Down (step), Home/End (min/max), PageUp/PageDown (large step). Verified by `e2e/uac-uvc.spec.ts`.
+- A11y note (Phase 42.1-06): the bits-ui Slider exposes the thumb as `role="slider"`. To satisfy axe `aria-input-field-name`, `aria-label="Weight slider"` was moved from `<Slider.Root>` onto `<Slider.Thumb>`. Documented here so future calculators that consume bits-ui Slider follow the same pattern.
+
+### Asset Inventory addition
+
+- `ArrowDownToLine` (UAC) and `ArrowUpFromLine` (UVC) icons were inadvertently removed during a v1.13 cleanup pass. Restored in Phase 42.1 plan 02 (D-24 + D-26) via the new `<HeroResult icon={...}>` prop.
+
+### `<HeroResult>` adoption
+
+- Phase 42 shipped UAC/UVC with two custom hero blocks. Phase 42.1 plan 02 (D-07) refactored both to consume the shared `<HeroResult>` component — no functional change, but the eyebrow/numeral/unit/icon contract now matches every other calculator.
+
+### D-05 third cue revision: arrows dropped, label-promotion replaces icon-as-third-cue
+
+**Source:** commit `b45ba06` (Phase 42.1 plan 03 user direction during checkpoint)
+**Reverses:** the 42-UI-REVIEW restoration of `ArrowDownToLine` / `ArrowUpFromLine` as the D-05 third cue (originally documented above as "Asset Inventory addition").
+
+The 42-UI-REVIEW had restored `ArrowDownToLine` (UAC) and `ArrowUpFromLine` (UVC) as the third distinction cue (icon next to the eyebrow). User direction during Plan 3 checkpoint reversed that decision in favor of label-promotion:
+
+- **Final hero pattern:** `UAC` / `UVC` are rendered at `text-title` (22 px) `font-black` in identity color (the calculator-name word IS the third cue — large, bold, identity-tinted). The qualifier `Arterial depth` / `Venous depth` sits beneath as a quieter `text-2xs` `text-[var(--color-text-secondary)]` label.
+- **Icons removed:** no `ArrowDownToLine` / `ArrowUpFromLine` icons render in the UAC/UVC heroes. The label IS the cue.
+- **Three independent distinction cues remain intact:** (1) word ("UAC" vs "UVC"), (2) value magnitude (UAC ≈ 2× UVC), (3) identity hue + qualifier ("Arterial" vs "Venous").
+- **Implementation reference:** `src/lib/uac-uvc/UacUvcCalculator.svelte:81-94, 117-130` — the `{#snippet children()}` override of `<HeroResult>` renders the promoted label + qualifier inline.
+
+### AboutSheet source-citation policy: spreadsheet filenames are internal artifacts, not user-facing provenance
+
+**Source:** commit `8c0cf95` (Phase 42.1 post-shipment cleanup)
+
+All four shipped calculators (morphine, gir, feeds, uac-uvc) had their `.xlsx` source-of-truth filenames stripped from `aboutContent.notes` in `src/lib/shared/about-content.ts`. The filename references remain inline in calculation source files (`*-calculations.ts` JSDoc + comments) for internal traceability, but the AboutSheet user-facing notes no longer surface them. Rationale:
+
+- A clinician reading the AboutSheet does not need (or benefit from) a `nutrition-calculator.xlsx` filename. The provenance is the JCH NICU institutional spreadsheet, not a file path.
+- Internal calc-comment xlsx references are preserved so engineers can trace algorithm parity; user-facing copy stays clean.
+- Future calculators must follow the same policy: source-of-truth spreadsheets are referenced internally (calculation file JSDoc + parity fixtures), never in AboutSheet notes.

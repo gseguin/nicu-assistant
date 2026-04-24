@@ -14,12 +14,14 @@ test.describe('Navigation (v1.2 restructure)', () => {
       .catch(() => {});
   });
 
-  test('top title bar shows app name, info, and theme toggle', async ({ page }) => {
+  test('top title bar shows app name, hamburger, and theme toggle', async ({ page }) => {
     // Use the banner landmark (NavShell header has role="banner" via <header>)
+    // Phase 42.1-03: About moved out of the title bar — accessible via the
+    // hamburger drawer's About menu OR the disclaimer banner's "More" link.
     const header = page.getByRole('banner');
     await expect(header).toBeVisible();
     await expect(header.getByText('NICU Assist')).toBeVisible();
-    await expect(header.getByRole('button', { name: /about/i })).toBeVisible();
+    await expect(header.getByRole('button', { name: /open calculator menu/i })).toBeVisible();
     await expect(header.getByRole('button', { name: /switch to/i })).toBeVisible();
   });
 
@@ -76,8 +78,14 @@ test.describe('Navigation (v1.2 restructure)', () => {
     );
   });
 
-  test('info button opens the about sheet', async ({ page }) => {
-    await page.getByRole('button', { name: /about/i }).click();
+  test('hamburger drawer About row opens the about sheet', async ({ page }) => {
+    // Phase 42.1-03 D-15: About row lives in the hamburger drawer; the prior
+    // header info button was retired so disclaimer banner + drawer share one
+    // AboutSheet instance hoisted to +layout.svelte.
+    await page.getByRole('button', { name: /open calculator menu/i }).click();
+    const drawer = page.getByRole('dialog', { name: /calculators/i });
+    await drawer.waitFor({ state: 'visible' });
+    await drawer.getByRole('button', { name: /^about( this app)?$/i }).click();
     await expect(page.getByRole('dialog').getByText('Morphine Wean Calculator')).toBeVisible();
   });
 });

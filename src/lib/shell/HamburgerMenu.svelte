@@ -71,7 +71,7 @@
 			<header
 				class="flex items-center justify-between border-b border-[var(--color-border)] px-5 py-4"
 			>
-				<div class="flex flex-col">
+				<div class="flex flex-col pl-1">
 					<h2 id={titleId} class="text-sm font-semibold text-[var(--color-text-primary)]">
 						Calculators
 					</h2>

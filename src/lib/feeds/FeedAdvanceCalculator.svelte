@@ -146,7 +146,8 @@
 </script>
 
 <div class="space-y-6">
-	<!-- SHARED: Weight input (always visible above toggle) -->
+	<!-- SHARED: Weight input + mode toggle (D-27: toggle moved INTO the weight card so it's
+	     always visible above the per-mode inputs card, not isolated between cards) -->
 	<section class="card flex flex-col gap-4">
 		<NumericInput
 			bind:value={feedsState.current.weightKg}
@@ -160,17 +161,15 @@
 			showRangeHint={true}
 			showRangeError={true}
 		/>
+		<SegmentedToggle
+			label="Calculator mode"
+			bind:value={feedsState.current.mode}
+			options={[
+				{ value: 'bedside', label: 'Bedside Advancement' },
+				{ value: 'full-nutrition', label: 'Full Nutrition' }
+			]}
+		/>
 	</section>
-
-	<!-- MODE TOGGLE -->
-	<SegmentedToggle
-		label="Calculator mode"
-		bind:value={feedsState.current.mode}
-		options={[
-			{ value: 'bedside', label: 'Bedside Advancement' },
-			{ value: 'full-nutrition', label: 'Full Nutrition' }
-		]}
-	/>
 
 	{#if feedsState.current.mode === 'bedside'}
 		<!-- BEDSIDE INPUTS -->
@@ -346,7 +345,7 @@
 						</span>
 						<span class="text-ui text-[var(--color-text-secondary)]">ml/hr</span>
 					</div>
-					<p class="mt-1 text-2xs text-[var(--color-text-tertiary)]">
+					<p class="mt-1 text-ui text-[var(--color-text-tertiary)]">
 						Institution-specific. Verify against your unit protocol.
 					</p>
 				</div>

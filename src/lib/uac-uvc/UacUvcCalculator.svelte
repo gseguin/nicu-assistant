@@ -47,7 +47,6 @@
 			min={inputs.weightKg.min}
 			max={inputs.weightKg.max}
 			step={inputs.weightKg.step}
-			aria-label="Weight slider"
 			class="slider-root relative mt-1 flex h-12 w-full touch-none items-center select-none"
 		>
 			<span
@@ -61,6 +60,7 @@
 			</span>
 			<Slider.Thumb
 				index={0}
+				aria-label="Weight slider"
 				class="block h-6 w-6 rounded-full border-2 bg-[var(--color-surface)] shadow-md transition-transform focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-110"
 				style="border-color: var(--color-identity); --tw-ring-color: var(--color-identity); --tw-ring-offset-color: var(--color-surface);"
 			/>
