@@ -71,8 +71,8 @@
 		<!-- UAC HERO CARD -->
 		{#key pulseKey}
 			<section
-				class="card animate-result-pulse border-t-4 px-5 py-5"
-				style="background: var(--color-identity-hero); border-top-color: var(--color-identity);"
+				class="card animate-result-pulse px-5 py-5 ring-1 ring-inset"
+				style="background: var(--color-identity-hero); --tw-ring-color: var(--color-identity);"
 				aria-live="polite"
 				aria-atomic="true"
 			>
@@ -108,8 +108,8 @@
 		<!-- UVC HERO CARD -->
 		{#key pulseKey}
 			<section
-				class="card animate-result-pulse border-b-4 px-5 py-5"
-				style="background: var(--color-identity-hero); border-bottom-color: var(--color-identity);"
+				class="card animate-result-pulse px-5 py-5 ring-1 ring-inset"
+				style="background: var(--color-identity-hero); --tw-ring-color: var(--color-identity);"
 				aria-live="polite"
 				aria-atomic="true"
 			>

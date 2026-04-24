@@ -201,10 +201,10 @@
 			class="card min-h-[88px] cursor-pointer px-4 py-4 transition-colors transition-transform outline-none
              focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]
              {row.bucketId === 'severe-neuro' && !selected
-				? 'border-l-2 border-l-[var(--color-text-tertiary)]'
+				? 'bg-[var(--color-surface-alt)]'
 				: ''}
              {selected
-				? 'border-l-4 border-l-[var(--color-identity)] bg-[var(--color-identity-hero)]'
+				? 'bg-[var(--color-identity-hero)] ring-1 ring-inset ring-[var(--color-identity)]'
 				: ''}"
 			onclick={() => selectRow(i)}
 			onkeydown={(e) => handleKeydown(e, i)}
@@ -265,10 +265,10 @@
 			class="col-span-full grid min-h-[48px] cursor-pointer grid-cols-subgrid items-center rounded-lg px-3 py-2 transition-colors outline-none
              focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]
              {row.bucketId === 'severe-neuro' && !selected
-				? 'border-l-2 border-l-[var(--color-text-tertiary)]'
+				? 'bg-[var(--color-surface-alt)]'
 				: ''}
              {selected
-				? 'border-l-4 border-l-[var(--color-identity)] bg-[var(--color-identity-hero)]'
+				? 'bg-[var(--color-identity-hero)] ring-1 ring-inset ring-[var(--color-identity)]'
 				: ''}"
 			onclick={() => selectRow(i)}
 			onkeydown={(e) => handleKeydown(e, i)}

@@ -509,8 +509,8 @@
 	<!-- ADVISORIES -->
 	{#each triggeredAdvisories as advisory (advisory.id)}
 		<div
-			class="flex items-start gap-3 rounded-xl border-l-4 px-4 py-3"
-			style="background: var(--color-bmf-50); border-left-color: var(--color-bmf-600);"
+			class="flex items-start gap-3 rounded-xl border px-4 py-3"
+			style="background: var(--color-bmf-50); border-color: var(--color-bmf-300);"
 			role="note"
 		>
 			<AlertTriangle
