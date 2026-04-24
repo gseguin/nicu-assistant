@@ -44,6 +44,8 @@
 		step={inputs.weightKg.step}
 		placeholder="3.1"
 		id="morphine-weight"
+		showRangeHint={true}
+		showRangeError={true}
 	/>
 	<NumericInput
 		bind:value={morphineState.current.maxDoseMgKgDose}
@@ -54,6 +56,8 @@
 		step={inputs.maxDoseMgKgDose.step}
 		placeholder="0.04"
 		id="morphine-max-dose"
+		showRangeHint={true}
+		showRangeError={true}
 	/>
 	<NumericInput
 		bind:value={morphineState.current.decreasePct}
@@ -64,6 +68,8 @@
 		step={inputs.decreasePct.step}
 		placeholder="10"
 		id="morphine-decrease"
+		showRangeHint={true}
+		showRangeError={true}
 	/>
 
 	{#if hasValues}
@@ -71,7 +77,7 @@
 			<button
 				type="button"
 				onclick={clearInputs}
-				class="min-h-[36px] rounded-lg px-3 py-1.5 text-2xs font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
+				class="min-h-[48px] rounded-lg px-3 py-2 text-ui font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
 			>
 				Clear inputs
 			</button>
