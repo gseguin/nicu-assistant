@@ -60,7 +60,7 @@ for (const viewport of [
       if (viewport.name === 'mobile') {
         await page.keyboard.press('Escape');
       }
-      await expect(page.getByText('Enter a weight to see per-feed volumes')).toBeVisible();
+      await expect(page.getByText('Enter weight to see per-feed volumes.')).toBeVisible();
     });
 
     test('full nutrition mode: enter TPN -> hero kcal/kg/d visible', async ({ page }) => {

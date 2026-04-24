@@ -5,6 +5,7 @@
 	import MorphineWeanCalculator from '$lib/morphine/MorphineWeanCalculator.svelte';
 	import MorphineWeanInputs from '$lib/morphine/MorphineWeanInputs.svelte';
 	import InputDrawer from '$lib/shared/components/InputDrawer.svelte';
+	import InputsRecap, { type RecapItem } from '$lib/shared/components/InputsRecap.svelte';
 	import { Syringe } from '@lucide/svelte';
 
 	onMount(() => {
@@ -15,18 +16,27 @@
 		morphineState.init();
 	});
 
-	// Drawer expanded state — mobile-only affordance, drives the bottom-sheet <dialog>.
+	// Drawer expanded state — mobile-only affordance, driven by InputsRecap tap.
 	let drawerExpanded = $state(false);
 
-	// One-line summary for the drawer handle. Tracks live state so a clinician can
-	// confirm what's loaded without expanding the drawer.
-	// 42.1-followup: middle-dot fallback for null values (DESIGN.md em-dash ban).
-	const drawerSummary = $derived.by(() => {
-		const w = morphineState.current.weightKg;
-		const d = morphineState.current.decreasePct;
-		const wStr = w === null ? '·' : `${w}`;
-		const dStr = d === null ? '·' : `${d}%`;
-		return `Weight ${wStr} kg · ${dStr} step`;
+	// Recap items render below the title and above the hero.
+	// Three drivers of the schedule: weight, max dose, step size.
+	const recapItems = $derived.by<RecapItem[]>(() => {
+		const s = morphineState.current;
+		return [
+			{
+				label: 'Weight',
+				value: s.weightKg === null ? null : `${s.weightKg}`,
+				unit: 'kg',
+				fullRow: true
+			},
+			{
+				label: 'Max dose',
+				value: s.maxDoseMgKgDose === null ? null : `${s.maxDoseMgKgDose}`,
+				unit: 'mg/kg'
+			},
+			{ label: 'Step', value: s.decreasePct === null ? null : `${s.decreasePct}`, unit: '%' }
+		];
 	});
 </script>
 
@@ -37,16 +47,9 @@
 <!--
   Plan 42.1-05 (D-08): hero-fills-viewport shell, default-ON.
 
-  Mobile (<md): single column. Hero card sits at top of the page; schedule scrolls
-  below; the InputDrawer pins above the bottom nav (Plan 1's safe-area clearance is
-  preserved by main's pb-[calc(...)] in +layout.svelte).
-
-  Desktop (md+): two-column grid. Hero+schedule on the left ~60%; inputs card sticks
-  to the top of the right ~40% column as the user scrolls. The mobile drawer handle
-  is hidden via md:hidden inside InputDrawer itself.
-
-  Defaults pre-computed via morphineState (weight=3.1, max-dose=0.04, step=10%) —
-  the hero shows a real number on first paint per D-08 acceptance.
+  Reading order below the title: InputsRecap (metadata strip) → HeroResult → schedule.
+  The recap tells the clinician what the result depends on before they read the result.
+  Tapping the recap on mobile opens InputDrawer; desktop shows the sticky right column.
 -->
 <div class="identity-morphine">
 	<div class="mx-auto max-w-lg px-4 py-6 md:max-w-6xl md:px-6">
@@ -55,18 +58,23 @@
 			<h1 class="text-title font-bold text-[var(--color-text-primary)]">Morphine Wean</h1>
 		</header>
 
+		<div class="mt-4">
+			<InputsRecap
+				items={recapItems}
+				onOpen={() => (drawerExpanded = true)}
+				expanded={drawerExpanded}
+				lastEditedAt={morphineState.lastEdited.current}
+			/>
+		</div>
+
 		<div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,1fr)_22rem]">
 			<!-- Hero + schedule column -->
 			<div class="min-w-0">
 				<MorphineWeanCalculator />
 			</div>
 
-			<!-- Desktop inputs column: sticky as user scrolls. Mobile (<md) hides this; the
-			     <InputDrawer> below is the mobile entry point. -->
-			<aside
-				class="hidden md:block"
-				aria-label="Morphine inputs"
-			>
+			<!-- Desktop inputs column: sticky as user scrolls. Mobile opens the drawer via InputsRecap. -->
+			<aside class="hidden md:block" aria-label="Morphine inputs">
 				<div class="sticky top-20">
 					<MorphineWeanInputs />
 				</div>
@@ -75,8 +83,12 @@
 	</div>
 </div>
 
-<!-- Mobile-only inputs drawer: handle pins above the bottom nav, sheet expands on tap. -->
-<InputDrawer summary={drawerSummary} title="Morphine inputs" bind:expanded={drawerExpanded}>
+<!-- Mobile-only inputs drawer: opened by InputsRecap above. -->
+<InputDrawer
+	title="Morphine inputs"
+	bind:expanded={drawerExpanded}
+	onClear={() => morphineState.reset()}
+>
 	{#snippet children()}
 		<MorphineWeanInputs />
 	{/snippet}

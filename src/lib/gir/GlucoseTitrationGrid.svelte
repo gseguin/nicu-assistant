@@ -92,15 +92,16 @@
 		}
 	}
 
-	function labelWithUnit(row: GirTitrationRow): string {
-		if (row.bucketId === 'severe-neuro') return row.label;
-		return `${row.label} mg/dL`;
-	}
 </script>
 
-<!-- Mobile: vertical card stack (<480px) -->
+<!-- Unified card-stack layout at every width. Post-shape refactor (Task 9),
+     the hero above the grid carries the full selected-action statement, so
+     the grid's inner row no longer needs to double as a decision display —
+     it just needs to read as a tappable card with a clear eyebrow + a short
+     action summary beneath. Desktop gets slightly denser vertical padding
+     via md: breakpoints, but the visual structure is the same on both. -->
 <div
-	class="flex flex-col gap-3 sm:hidden"
+	class="flex flex-col gap-2 md:gap-3"
 	role="radiogroup"
 	aria-label="Glucose range titration helper"
 >
@@ -114,100 +115,45 @@
 			aria-checked={selected}
 			aria-label={ariaLabelFor(row)}
 			tabindex={i === focusIndex ? 0 : -1}
-			class="card min-h-[88px] cursor-pointer px-4 py-4 transition-colors outline-none
+			class="card min-h-[72px] cursor-pointer px-4 py-3 transition-colors outline-none
+             hover:bg-[var(--color-surface-alt)]
              focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]
              {row.bucketId === 'severe-neuro' && !selected
 				? 'bg-[var(--color-surface-alt)]'
 				: ''}
              {selected
-				? 'bg-[var(--color-identity-hero)] ring-1 ring-inset ring-[var(--color-identity)]'
+				? 'bg-[var(--color-identity-hero)] ring-1 ring-inset ring-[var(--color-identity)] hover:bg-[var(--color-identity-hero)]'
 				: ''}"
 			onclick={() => selectRow(i)}
 			onkeydown={(e) => handleKeydown(e, i)}
 		>
-			<span class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase">
+			<span
+				class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+			>
 				IF {row.bucketId === 'severe-neuro' ? 'SEVERE NEURO SIGNS' : `GLUCOSE ${row.label} mg/dL`}
 			</span>
 			{#if stopInfusion}
 				<div class="mt-1 flex items-baseline gap-2">
 					<span
-						class="text-display font-black tracking-wider text-[var(--color-text-primary)] uppercase"
+						class="text-base font-bold tracking-wider text-[var(--color-text-primary)] uppercase"
 						>STOP</span
 					>
 					<span class="text-ui text-[var(--color-text-tertiary)]">dextrose infusion</span>
 				</div>
 			{:else if row.deltaRateMlHr === 0}
 				<div class="mt-1 flex items-baseline gap-2">
-					<span
-						class="text-display font-black tracking-wider text-[var(--color-text-tertiary)] uppercase"
-						>Hold</span
-					>
+					<span class="text-base font-bold text-[var(--color-text-tertiary)]">Hold</span>
 					<span class="text-ui text-[var(--color-text-tertiary)]">rate (no change)</span>
 				</div>
 			{:else}
 				<div class="mt-1 flex items-baseline gap-2">
 					<span
-						class="num text-display font-black text-[var(--color-text-primary)]"
+						class="num text-base font-bold text-[var(--color-text-primary)]"
 						aria-hidden="true">{d.glyph}</span
 					>
-					<span class="num text-display font-black text-[var(--color-text-primary)]">{d.abs}</span>
+					<span class="num text-base font-bold text-[var(--color-text-primary)]">{d.abs}</span>
 					<span class="text-ui text-[var(--color-text-tertiary)]">ml/hr</span>
 					<span class="text-ui text-[var(--color-text-tertiary)]">{d.word}</span>
-				</div>
-			{/if}
-		</div>
-	{/each}
-</div>
-
-<!-- Desktop: table grid (≥480px) -->
-<div
-	class="hidden grid-cols-[minmax(140px,1.4fr)_1fr] gap-x-3 gap-y-1 sm:grid"
-	role="radiogroup"
-	aria-label="Glucose range titration helper"
->
-	<!-- Header row (non-interactive) -->
-	<div class="px-3 py-2 text-ui font-semibold text-[var(--color-text-secondary)]">Range</div>
-	<div class="px-3 py-2 text-ui font-semibold text-[var(--color-text-secondary)]">Δ rate</div>
-
-	{#each rows as row, i (row.bucketId)}
-		{@const selected = selectedBucketId === row.bucketId}
-		{@const stopInfusion = row.targetGirMgKgMin <= 0}
-		{@const d = formatDelta(row.deltaRateMlHr)}
-		<div
-			bind:this={rowRefs[i]}
-			role="radio"
-			aria-checked={selected}
-			aria-label={ariaLabelFor(row)}
-			tabindex={i === focusIndex ? 0 : -1}
-			class="col-span-full grid min-h-[48px] cursor-pointer grid-cols-subgrid items-center rounded-lg px-3 py-2 transition-colors outline-none
-             focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]
-             {row.bucketId === 'severe-neuro' && !selected
-				? 'bg-[var(--color-surface-alt)]'
-				: ''}
-             {selected
-				? 'bg-[var(--color-identity-hero)] ring-1 ring-inset ring-[var(--color-identity)]'
-				: ''}"
-			onclick={() => selectRow(i)}
-			onkeydown={(e) => handleKeydown(e, i)}
-		>
-			<div class="text-base text-[var(--color-text-primary)]">{labelWithUnit(row)}</div>
-			{#if stopInfusion}
-				<div
-					class="col-span-1 text-base font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"
-				>
-					STOP <span
-						class="font-normal tracking-normal text-[var(--color-text-tertiary)] normal-case"
-						>dextrose infusion</span
-					>
-				</div>
-			{:else if row.deltaRateMlHr === 0}
-				<div class="text-base font-semibold text-[var(--color-text-tertiary)]">
-					Hold rate <span class="font-normal text-[var(--color-text-tertiary)]">(no change)</span>
-				</div>
-			{:else}
-				<div class="num text-base font-semibold text-[var(--color-text-primary)]">
-					<span aria-hidden="true">{d.glyph}</span>
-					{d.abs} ml/hr <span class="text-[var(--color-text-secondary)]">{d.word}</span>
 				</div>
 			{/if}
 		</div>

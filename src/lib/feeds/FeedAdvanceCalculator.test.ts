@@ -24,7 +24,7 @@ describe('FeedAdvanceCalculator', () => {
   it('shows empty-state message when weight is null (bedside default mode)', () => {
     feedsState.current.weightKg = null;
     render(FeedAdvanceCalculator);
-    expect(screen.getByText(/Enter a weight to see per-feed volumes/)).toBeTruthy();
+    expect(screen.getByText(/Enter weight to see per-feed volumes/)).toBeTruthy();
   });
 
   it('shows bedside outputs with default state values when weight entered', () => {
@@ -72,7 +72,7 @@ describe('FeedAdvanceCalculator', () => {
     feedsState.current.mode = 'full-nutrition';
     feedsState.current.weightKg = null;
     render(FeedAdvanceCalculator);
-    expect(screen.getByText(/Enter a weight to see nutrition totals/)).toBeTruthy();
+    expect(screen.getByText(/Enter weight to see nutrition totals/)).toBeTruthy();
   });
 
   it('trophic-exceeds-advance advisory renders', () => {

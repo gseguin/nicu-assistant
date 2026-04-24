@@ -64,6 +64,7 @@
 			value={formatAmount(result.amountToAdd)}
 			unit={unitLabel}
 			pulseKey={calcKey}
+			numericValue={result.amountToAdd}
 		/>
 	{:else}
 		<HeroResult eyebrow="AMOUNT TO ADD" value="" pulseKey={calcKey}>
@@ -75,7 +76,7 @@
 						AMOUNT TO ADD
 					</span>
 					<p class="text-sm text-[var(--color-text-tertiary)]">
-						Enter a starting volume to see the recipe.
+						Enter starting volume to see the recipe.
 					</p>
 				</div>
 			{/snippet}

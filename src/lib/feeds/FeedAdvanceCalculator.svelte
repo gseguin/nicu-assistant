@@ -115,6 +115,7 @@
 				value={bedsideResult.goalMlPerFeed.toFixed(1)}
 				unit="ml/feed"
 				pulseKey={bedsideResult.goalMlPerFeed}
+				numericValue={bedsideResult.goalMlPerFeed}
 			/>
 		{/if}
 
@@ -184,7 +185,7 @@
 				</div>
 			{:else}
 				<p class="px-5 py-5 text-ui text-[var(--color-text-secondary)]">
-					Enter a weight to see per-feed volumes.
+					Enter weight to see per-feed volumes.
 				</p>
 			{/if}
 		</section>
@@ -232,6 +233,7 @@
 				value={fullNutritionResult.totalKcalPerKgDay.toFixed(1)}
 				unit="kcal/kg/d"
 				pulseKey={fullNutritionResult.totalKcalPerKgDay}
+				numericValue={fullNutritionResult.totalKcalPerKgDay}
 			/>
 		{:else}
 			<HeroResult eyebrow="TOTAL KCAL/KG/DAY" value="" pulseKey="empty">
@@ -243,7 +245,7 @@
 							TOTAL KCAL/KG/DAY
 						</span>
 						<p class="text-ui text-[var(--color-text-secondary)]">
-							Enter a weight to see nutrition totals.
+							Enter weight to see nutrition totals.
 						</p>
 					</div>
 				{/snippet}

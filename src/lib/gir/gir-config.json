@@ -1,6 +1,6 @@
 {
   "defaults": {
-    "weightKg": 3.93,
+    "weightKg": 3.0,
     "dextrosePct": 12.5,
     "mlPerKgPerDay": 65
   },

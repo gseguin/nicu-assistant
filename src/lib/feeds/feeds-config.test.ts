@@ -12,7 +12,7 @@ import {
 
 describe('feeds-config shape', () => {
   it('defaults have valid values', () => {
-    expect(defaults.weightKg).toBe(1.94);
+    expect(defaults.weightKg).toBe(3.0);
     expect(defaults.trophicMlKgDay).toBe(20);
     expect(defaults.advanceMlKgDay).toBe(30);
     expect(defaults.goalMlKgDay).toBe(160);

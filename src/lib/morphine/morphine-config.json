@@ -1,6 +1,6 @@
 {
   "defaults": {
-    "weightKg": 3.1,
+    "weightKg": 3.0,
     "maxDoseMgKgDose": 0.04,
     "decreasePct": 10
   },

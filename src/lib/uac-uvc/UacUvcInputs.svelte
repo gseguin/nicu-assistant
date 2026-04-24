@@ -39,7 +39,8 @@
 		min={inputs.weightKg.min}
 		max={inputs.weightKg.max}
 		step={inputs.weightKg.step}
-		placeholder="2.5"
+		typeStep={0.01}
+		placeholder="3.0"
 		id="uac-weight"
 	/>
 </section>

@@ -7,7 +7,7 @@
 	let expanded = $state(initialExpanded);
 </script>
 
-<InputDrawer summary="Weight 3.1 kg · 10% step" bind:expanded>
+<InputDrawer bind:expanded>
 	{#snippet children()}
 		<input data-testid="drawer-input" placeholder="weight" />
 	{/snippet}

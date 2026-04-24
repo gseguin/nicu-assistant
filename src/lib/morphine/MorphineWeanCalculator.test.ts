@@ -55,7 +55,9 @@ describe('MorphineWeanCalculator', () => {
     render(MorphineWeanCalculator);
     // Copy updated in 42.1-05: dropped "above" since on mobile the inputs now live in a
     // sticky drawer below the schedule, not above it.
-    expect(screen.getByText('Enter values to generate weaning schedule.')).toBeTruthy();
+    expect(
+      screen.getByText('Enter weight, max dose, and step to see the weaning schedule.')
+    ).toBeTruthy();
   });
 
   describe('Phase 23-01: result feedback', () => {
@@ -67,20 +69,26 @@ describe('MorphineWeanCalculator', () => {
 
     it('summary card has aria-live="polite" and aria-atomic="true"', () => {
       render(MorphineWeanCalculator);
-      const summary = document.querySelector('.animate-result-pulse');
-      expect(summary).toBeTruthy();
-      expect(summary!.getAttribute('aria-live')).toBe('polite');
-      expect(summary!.getAttribute('aria-atomic')).toBe('true');
+      // Post-polish refactor: the pulse class lives on an inner wrapper; the
+      // live-region attributes stay on the outer <section>. Locate the
+      // summary via its data-testid and walk up to the wrapping <section>.
+      const summaryBody = document.querySelector('[data-testid="morphine-summary"]');
+      expect(summaryBody).toBeTruthy();
+      const section = summaryBody!.closest('section');
+      expect(section).toBeTruthy();
+      expect(section!.getAttribute('aria-live')).toBe('polite');
+      expect(section!.getAttribute('aria-atomic')).toBe('true');
     });
 
-    it('hero is now a HeroResult consumer (single .animate-result-pulse <section>)', () => {
-      render(MorphineWeanCalculator);
-      // After D-07 refactor, the summary chip is wrapped by a single
-      // <section class="animate-result-pulse"> owned by HeroResult.
-      // The schedule region keeps its own aria-live (separate purpose).
-      const heroSections = document.querySelectorAll('section.animate-result-pulse');
-      expect(heroSections.length).toBe(1);
-      expect(heroSections[0].getAttribute('aria-live')).toBe('polite');
+    it('hero is now a HeroResult consumer (single HeroResult <section> + inner .animate-result-pulse)', () => {
+      const { container } = render(MorphineWeanCalculator);
+      // Post-polish refactor: pulse class moved from the outer <section> to an
+      // inner wrapper for DOM-identity preservation. The HeroResult <section>
+      // is identifiable by carrying an inner .animate-result-pulse wrapper.
+      const pulseWrappers = container.querySelectorAll('section .animate-result-pulse');
+      expect(pulseWrappers.length).toBe(1);
+      const section = pulseWrappers[0].closest('section');
+      expect(section!.getAttribute('aria-live')).toBe('polite');
     });
 
     it('summary card uses shared .animate-result-pulse class (old class removed)', () => {

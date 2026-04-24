@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { defaults, inputs, glucoseBuckets, getBucketById } from './gir-config.js';
 
 describe('gir-config shape', () => {
-  it('defaults match spreadsheet reference example', () => {
-    expect(defaults.weightKg).toBe(3.93);
+  it('defaults land on the unified 3.0 kg anchor + plausible dextrose/fluid', () => {
+    expect(defaults.weightKg).toBe(3.0);
     expect(defaults.dextrosePct).toBe(12.5);
     expect(defaults.mlPerKgPerDay).toBe(65);
   });

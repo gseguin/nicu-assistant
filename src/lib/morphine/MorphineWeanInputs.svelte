@@ -42,7 +42,8 @@
 		min={inputs.weightKg.min}
 		max={inputs.weightKg.max}
 		step={inputs.weightKg.step}
-		placeholder="3.1"
+		typeStep={0.01}
+		placeholder="3.0"
 		id="morphine-weight"
 		showRangeHint={true}
 		showRangeError={true}
@@ -73,7 +74,9 @@
 	/>
 
 	{#if hasValues}
-		<div class="flex justify-center">
+		<!-- Desktop-only: on mobile, the drawer header's "Clear" button owns this
+		     action (no drawer header on desktop). -->
+		<div class="hidden justify-center md:flex">
 			<button
 				type="button"
 				onclick={clearInputs}

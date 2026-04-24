@@ -5,6 +5,7 @@
 	import UacUvcCalculator from '$lib/uac-uvc/UacUvcCalculator.svelte';
 	import UacUvcInputs from '$lib/uac-uvc/UacUvcInputs.svelte';
 	import InputDrawer from '$lib/shared/components/InputDrawer.svelte';
+	import InputsRecap, { type RecapItem } from '$lib/shared/components/InputsRecap.svelte';
 	import { Ruler } from '@lucide/svelte';
 
 	onMount(() => {
@@ -15,16 +16,19 @@
 		uacUvcState.init();
 	});
 
-	// Drawer expanded state — mobile-only affordance, drives the bottom-sheet <dialog>.
+	// Drawer expanded state — mobile-only affordance, driven by InputsRecap tap.
 	let drawerExpanded = $state(false);
 
-	// One-line summary for the drawer handle. Tracks live state so a clinician can
-	// confirm what's loaded without expanding the drawer.
-	const drawerSummary = $derived.by(() => {
-		const w = uacUvcState.current.weightKg;
-		const wStr = w === null ? '·' : `${w}`;
-		return `Weight ${wStr} kg`;
-	});
+	// Single-input calculator — the recap still renders for pattern consistency
+	// across all 5 calculators (the clinician reads the same shape every time).
+	const recapItems = $derived.by<RecapItem[]>(() => [
+		{
+			label: 'Weight',
+			value: uacUvcState.current.weightKg === null ? null : `${uacUvcState.current.weightKg}`,
+			unit: 'kg',
+			fullRow: true
+		}
+	]);
 </script>
 
 <svelte:head>
@@ -34,19 +38,9 @@
 <!--
   Plan 42.1-05 (D-08): hero-fills-viewport shell, default-ON.
 
-  Mobile (<md): single column. UAC + UVC hero grid sits at top of the page; the
-  InputDrawer pins above the bottom nav (Plan 1's safe-area clearance is preserved
-  by main's pb-[calc(...)] in +layout.svelte).
-
-  Desktop (md+): two-column grid. Hero pair on the left ~60%; inputs card sticks
-  to the top of the right ~40% column as the user scrolls. The mobile drawer
-  handle is hidden via md:hidden inside InputDrawer itself.
-
-  IMPORTANT (per orchestrator): the inputs include BOTH NumericInput AND bits-ui
-  Slider for weight (bidirectionally synced). Both go in the drawer.
-
-  Defaults pre-computed via uacUvcState (weight=2.5) so the hero shows real UAC=
-  16.5 / UVC=8.3 numerals on first paint per D-08 acceptance.
+  Reading order below the title: InputsRecap → UAC + UVC hero pair. The inputs
+  include both NumericInput and bits-ui Slider for weight (bidirectionally
+  synced) — both go in the drawer. Tapping the recap on mobile opens it.
 -->
 <div class="identity-uac">
 	<div class="mx-auto max-w-lg px-4 py-6 md:max-w-6xl md:px-6">
@@ -58,14 +52,22 @@
 			</div>
 		</header>
 
+		<div class="mt-4">
+			<InputsRecap
+				items={recapItems}
+				onOpen={() => (drawerExpanded = true)}
+				expanded={drawerExpanded}
+				lastEditedAt={uacUvcState.lastEdited.current}
+			/>
+		</div>
+
 		<div class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-[minmax(0,1fr)_22rem]">
 			<!-- Hero pair column -->
 			<div class="min-w-0">
 				<UacUvcCalculator />
 			</div>
 
-			<!-- Desktop inputs column: sticky as user scrolls. Mobile (<md) hides this; the
-			     <InputDrawer> below is the mobile entry point. -->
+			<!-- Desktop inputs column: sticky as user scrolls. Mobile opens the drawer via InputsRecap. -->
 			<aside class="hidden md:block" aria-label="UAC/UVC inputs">
 				<div class="sticky top-20">
 					<UacUvcInputs />
@@ -75,8 +77,12 @@
 	</div>
 </div>
 
-<!-- Mobile-only inputs drawer: handle pins above the bottom nav, sheet expands on tap. -->
-<InputDrawer summary={drawerSummary} title="UAC/UVC inputs" bind:expanded={drawerExpanded}>
+<!-- Mobile-only inputs drawer: opened by InputsRecap above. -->
+<InputDrawer
+	title="UAC/UVC inputs"
+	bind:expanded={drawerExpanded}
+	onClear={() => uacUvcState.reset()}
+>
 	{#snippet children()}
 		<UacUvcInputs />
 	{/snippet}

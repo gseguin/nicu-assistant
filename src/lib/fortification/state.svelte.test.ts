@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { fortificationState } from './state.svelte.js';
 
-const SESSION_KEY = 'nicu_fortification_state';
+const STORAGE_KEY = 'nicu_fortification_state';
 
 describe('fortificationState', () => {
   beforeEach(() => {
-    sessionStorage.clear();
+    localStorage.clear();
     fortificationState.reset();
   });
 
@@ -13,7 +13,7 @@ describe('fortificationState', () => {
     vi.restoreAllMocks();
   });
 
-  it('init() with empty sessionStorage leaves defaults intact', () => {
+  it('init() with empty localStorage leaves defaults intact', () => {
     fortificationState.init();
     expect(fortificationState.current).toEqual({
       base: 'breast-milk',
@@ -25,8 +25,8 @@ describe('fortificationState', () => {
   });
 
   it('init() with valid stored JSON merges into current state', () => {
-    sessionStorage.setItem(
-      SESSION_KEY,
+    localStorage.setItem(
+      STORAGE_KEY,
       JSON.stringify({
         base: 'water',
         volumeMl: 240,
@@ -44,36 +44,36 @@ describe('fortificationState', () => {
   });
 
   it('init() with corrupt JSON silently keeps defaults', () => {
-    sessionStorage.setItem(SESSION_KEY, '{not valid json');
+    localStorage.setItem(STORAGE_KEY, '{not valid json');
     expect(() => fortificationState.init()).not.toThrow();
     expect(fortificationState.current.base).toBe('breast-milk');
     expect(fortificationState.current.volumeMl).toBe(180);
   });
 
-  it('persist() writes JSON.stringify(current) to sessionStorage under the key', () => {
+  it('persist() writes JSON.stringify(current) to localStorage under the key', () => {
     fortificationState.current.volumeMl = 300;
     fortificationState.persist();
-    const stored = sessionStorage.getItem(SESSION_KEY);
+    const stored = localStorage.getItem(STORAGE_KEY);
     expect(stored).not.toBeNull();
     const parsed = JSON.parse(stored!);
     expect(parsed.volumeMl).toBe(300);
     expect(parsed.formulaId).toBe('neocate-infant');
   });
 
-  it('reset() returns state to defaults and removes the key from sessionStorage', () => {
+  it('reset() returns state to defaults and removes the key from localStorage', () => {
     fortificationState.current.volumeMl = 500;
     fortificationState.current.unit = 'grams';
     fortificationState.persist();
-    expect(sessionStorage.getItem(SESSION_KEY)).not.toBeNull();
+    expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull();
 
     fortificationState.reset();
 
     expect(fortificationState.current.volumeMl).toBe(180);
     expect(fortificationState.current.unit).toBe('teaspoons');
-    expect(sessionStorage.getItem(SESSION_KEY)).toBeNull();
+    expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 
-  it('persist() and init() are no-throw when sessionStorage throws', () => {
+  it('persist() and init() are no-throw when localStorage throws', () => {
     const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new Error('QuotaExceeded');
     });

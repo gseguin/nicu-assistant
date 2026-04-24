@@ -131,21 +131,24 @@ describe('FortificationCalculator', () => {
       expect(hero.getAttribute('aria-atomic')).toBe('true');
     });
 
-    it('hero <section> carries .animate-result-pulse class when result present', () => {
+    it('hero carries an inner .animate-result-pulse wrapper when result present', () => {
       render(FortificationCalculator);
       const hero = getHeroCard();
-      // Post-D-07: HeroResult owns animate-result-pulse on the outer <section>.
-      expect(hero.classList.contains('animate-result-pulse')).toBe(true);
+      // Post-polish refactor: pulse class moved from the <section> itself to
+      // an inner wrapper. DOM identity of the numeric element survives recalc.
+      const pulseWrapper = hero.querySelector('.animate-result-pulse');
+      expect(pulseWrapper).toBeTruthy();
     });
 
-    it('hero inner block re-mounts when result changes ({#key pulseKey})', async () => {
+    it('hero inner numeric preserves DOM identity across result updates (no remount)', async () => {
       render(FortificationCalculator);
       const before = screen.getByText(/^\s*2\.0\s*$/);
       mockState.volumeMl = 360;
       await tick();
       const after = screen.getByText(/^\s*4\.0\s*$/);
-      // Different DOM nodes — HeroResult's {#key pulseKey} re-mounted the inner block.
-      expect(after).not.toBe(before);
+      // Same DOM node — pulse is a class toggle on a stable wrapper now, so
+      // focus/selection/caret inside the hero persist through recalcs.
+      expect(after).toBe(before);
     });
 
     it('does not call scrollIntoView or steal focus on result update', async () => {

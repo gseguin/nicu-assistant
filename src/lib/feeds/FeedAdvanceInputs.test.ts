@@ -32,11 +32,14 @@ describe('FeedAdvanceInputs', () => {
   it('full-nutrition mode renders TPN line / SMOF / enteral inputs', () => {
     feedsState.current.mode = 'full-nutrition';
     render(FeedAdvanceInputs);
-    // Each line has its own Dextrose + Rate fields; the labels repeat across the two lines.
-    expect(screen.getAllByLabelText('Dextrose').length).toBe(2);
-    expect(screen.getAllByLabelText('Rate').length).toBe(2);
-    expect(screen.getByLabelText('SMOF 20% lipid')).toBeTruthy();
-    expect(screen.getByLabelText('Enteral volume')).toBeTruthy();
+    // Full-Nutrition (post-distill) labels each dextrose/rate with the line number
+    // under grouped fieldset legends — "Parenteral (TPN)", "Lipid", "Enteral".
+    expect(screen.getByLabelText('Line 1 · dextrose')).toBeTruthy();
+    expect(screen.getByLabelText('Line 1 · rate')).toBeTruthy();
+    expect(screen.getByLabelText('Line 2 · dextrose')).toBeTruthy();
+    expect(screen.getByLabelText('Line 2 · rate')).toBeTruthy();
+    expect(screen.getByLabelText('SMOF 20%')).toBeTruthy();
+    expect(screen.getByLabelText('Volume')).toBeTruthy();
   });
 
   it('clicking the Full Nutrition tab updates feedsState.current.mode', async () => {

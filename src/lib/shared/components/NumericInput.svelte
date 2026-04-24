@@ -19,9 +19,11 @@
 		min,
 		max,
 		step = 0.1,
+		typeStep,
 		showRangeHint = true,
 		showRangeError = true,
-		id = `numeric-input-${++idCounter}`
+		id = `numeric-input-${++idCounter}`,
+		onFocusChange
 	} = $props<{
 		value: number | null;
 		label?: string;
@@ -31,10 +33,23 @@
 		min?: number;
 		max?: number;
 		step?: number;
+		// Typing-precision override. When set, the HTML5 `step` attribute uses
+		// this value (so decimals finer than `step` can still be typed, e.g.
+		// weight entered as 2.37 kg). When omitted, falls back to `step`.
+		// Wheel/arrow nudges always use `step` (the coarser clinical increment).
+		typeStep?: number;
 		showRangeHint?: boolean;
 		showRangeError?: boolean;
 		id?: string;
+		// Fires with true on focus, false on blur. Used by parents that need to
+		// coordinate sibling widgets (e.g. suppress slider write-backs while the
+		// textbox is being typed into).
+		onFocusChange?: (focused: boolean) => void;
 	}>();
+
+	// Effective input-validation step: fine-grained if typeStep is set, else
+	// falls back to the clinical step.
+	let inputStep = $derived(typeStep ?? step);
 
 	let isFocused = $state(false);
 	let hasBlurred = $state(false);
@@ -90,6 +105,12 @@
 	function handleBlur(_e: FocusEvent) {
 		isFocused = false;
 		hasBlurred = true;
+		onFocusChange?.(false);
+	}
+
+	function handleFocus() {
+		isFocused = true;
+		onFocusChange?.(true);
 	}
 
 	// Svelte action to handle non-passive wheel events
@@ -136,13 +157,13 @@
 			inputmode="decimal"
 			value={value === null ? '' : value}
 			oninput={handleInput}
-			onfocus={() => (isFocused = true)}
+			onfocus={handleFocus}
 			onblur={handleBlur}
 			onkeydown={handleKeydown}
 			{placeholder}
 			min={min ?? undefined}
 			max={max ?? undefined}
-			{step}
+			step={inputStep}
 			class="num w-full rounded-xl border bg-[var(--color-surface-card)] py-3 pl-4 text-base font-medium text-[var(--color-text-primary)] shadow-sm transition-all outline-none {displayError
 				? 'border-[var(--color-error)] ring-1 ring-[var(--color-error)]'
 				: 'border-[var(--color-border)] focus:border-[var(--color-identity)] focus:ring-2 focus:ring-[var(--color-identity)]'} {isFocused

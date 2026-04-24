@@ -52,8 +52,9 @@ for (const viewport of [
         await page.keyboard.press('Escape');
       }
 
-      // Current GIR hero populated
-      await expect(page.getByText('CURRENT GIR')).toBeVisible();
+      // Post-shape refactor: Current GIR is now a quiet state line (title
+      // case in DOM, uppercased via CSS). Assert on the DOM text.
+      await expect(page.getByText('Current GIR')).toBeVisible();
       await expect(page.getByText('mg/kg/min').first()).toBeVisible();
 
       // Titration grid rendered — see Wave 0 note above: 6 at both viewports
@@ -85,7 +86,7 @@ for (const viewport of [
       if (viewport.name === 'mobile') {
         await page.keyboard.press('Escape');
       }
-      await expect(page.getByText(/Enter weight, dextrose %, and fluid rate/)).toBeVisible();
+      await expect(page.getByText(/Enter weight, dextrose, and fluid rate to see GIR\./)).toBeVisible();
     });
 
     test('all three NumericInputs have inputmode="decimal"', async ({ page }) => {

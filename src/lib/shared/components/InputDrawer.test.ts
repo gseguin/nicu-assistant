@@ -31,15 +31,13 @@ beforeEach(() => {
 });
 
 describe('InputDrawer', () => {
-	it('T-01 collapsed renders summary handle with chevron and aria-expanded="false"', () => {
-		// Use the harness so the children Snippet type is satisfied without `as any`.
+	it('T-01 collapsed: no pinned handle, no children mounted, expanded=false', () => {
+		// The pinned collapsed handle was retired once InputsRecap became the tap target.
+		// Drawer is controlled purely via the `expanded` prop now.
 		render(InputDrawerHarness, { props: { initialExpanded: false } });
-		const handle = screen.getByRole('button', { name: /Open inputs drawer/i });
-		expect(handle).toBeTruthy();
-		expect(handle.getAttribute('aria-expanded')).toBe('false');
-		expect(handle.textContent).toContain('Weight 3.1 kg · 10% step');
-		// Chevron icon present (lucide renders an svg)
-		expect(handle.querySelector('svg')).toBeTruthy();
+		expect(screen.queryByRole('button', { name: /Open inputs drawer/i })).toBeNull();
+		expect(screen.queryByTestId('drawer-input')).toBeNull();
+		expect(screen.getByTestId('expanded-state').textContent).toBe('closed');
 	});
 
 	it('T-02 children NOT rendered when collapsed (gated by {#if expanded})', () => {
@@ -48,22 +46,22 @@ describe('InputDrawer', () => {
 		expect(screen.getByTestId('expanded-state').textContent).toBe('closed');
 	});
 
-	it('T-03 expanded renders dialog with title and children inside', async () => {
+	it('T-03 expanded renders dialog with title in header and children inside', async () => {
 		render(InputDrawerHarness, { props: { initialExpanded: true } });
 		await tick();
 		// Children inside the dialog are now mounted.
 		expect(screen.getByTestId('drawer-input')).toBeTruthy();
-		// Default title is "Inputs"
-		expect(screen.getByRole('heading', { name: 'Inputs' })).toBeTruthy();
-		// aria-expanded reflects open state on the handle button
-		const handle = screen.getByRole('button', { name: /Open inputs drawer/i });
-		expect(handle.getAttribute('aria-expanded')).toBe('true');
+		// Title now lives inside the header close-button (entire header row is the
+		// collapse affordance); the dialog carries it as aria-label at the root.
+		expect(screen.getByRole('button', { name: /Close inputs/i })).toBeTruthy();
 	});
 
-	it('T-04 chevron-down close button collapses the drawer (writes back via bind)', async () => {
+	it('T-04 header close button collapses the drawer (writes back via bind)', async () => {
 		render(InputDrawerHarness, { props: { initialExpanded: true } });
 		await tick();
-		const closeBtn = screen.getByRole('button', { name: /Close inputs drawer/i });
+		// The entire header row is the close button (larger tap target than an
+		// icon-only button); its accessible name is "Close {title.toLowerCase()}".
+		const closeBtn = screen.getByRole('button', { name: /Close inputs/i });
 		await fireEvent.click(closeBtn);
 		await tick();
 		expect(screen.getByTestId('expanded-state').textContent).toBe('closed');

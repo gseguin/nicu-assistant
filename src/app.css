@@ -171,6 +171,16 @@
     font-feature-settings: 'tnum';
   }
 
+  /* Eyebrow — small caps label above hero numerals, card titles, section
+     headers. Repeated enough (~25+ sites) to warrant its own class. Two
+     color variants: identity (on hero cards) and muted (on neutral surfaces). */
+  .eyebrow {
+    @apply text-2xs font-semibold tracking-wide uppercase text-[var(--color-identity)];
+  }
+  .eyebrow-muted {
+    @apply text-2xs font-semibold tracking-wide uppercase text-[var(--color-text-tertiary)];
+  }
+
   /* Shared result entrance animation — Morphine summary card + Formula hero */
   @keyframes result-pulse {
     0% {

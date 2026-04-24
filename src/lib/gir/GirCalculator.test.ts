@@ -10,13 +10,25 @@ describe('GirCalculator', () => {
 
   it('renders without crashing', () => {
     render(GirCalculator);
-    expect(screen.getByText('CURRENT GIR')).toBeTruthy();
+    // Post-shape refactor: Current GIR is now a quiet state line (title case
+    // text, rendered uppercase via CSS). Test the DOM text, not the display.
+    expect(screen.getByText('Current GIR')).toBeTruthy();
   });
 
-  it('shows Current GIR hero with default state values', () => {
+  it('shows current-state line with GIR + running rate, and an empty-titration prompt', () => {
     render(GirCalculator);
-    expect(screen.getByText('CURRENT GIR')).toBeTruthy();
-    expect(screen.getByText('INITIAL RATE')).toBeTruthy();
+    // The state line carries both the GIR mg/kg/min and the running ml/hr.
+    // Each unit/qualifier is its own text node so screen readers and tests can
+    // locate them independently.
+    expect(screen.getByText('Current GIR')).toBeTruthy();
+    expect(screen.getByText('mg/kg/min')).toBeTruthy();
+    expect(screen.getByText('running')).toBeTruthy();
+    expect(screen.getAllByText('ml/hr').length).toBeGreaterThan(0);
+    // With no bucket selected, the hero is the titration prompt.
+    expect(screen.getByText('TITRATION')).toBeTruthy();
+    expect(
+      screen.getByText('Select a glucose range below to see the adjustment.')
+    ).toBeTruthy();
   });
 
   it('shows empty-state hero when any input null', () => {
@@ -24,7 +36,7 @@ describe('GirCalculator', () => {
     girState.current.dextrosePct = null;
     girState.current.mlPerKgPerDay = null;
     render(GirCalculator);
-    expect(screen.getByText(/Enter weight, dextrose %, and fluid rate/)).toBeTruthy();
+    expect(screen.getByText(/Enter weight, dextrose, and fluid rate to see GIR\./)).toBeTruthy();
   });
 
   it('does NOT render the dextrose-input advisory itself (extracted to GirInputs in 42.1-05)', () => {

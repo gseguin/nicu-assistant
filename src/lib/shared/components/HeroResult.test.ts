@@ -33,22 +33,31 @@ describe('HeroResult', () => {
   });
 
   it('outer <section> carries aria-live="polite" AND aria-atomic="true"', () => {
-    render(HeroResult, { props: { eyebrow: 'A', value: '1' } });
-    const section = document.querySelector('section.animate-result-pulse');
+    const { container } = render(HeroResult, { props: { eyebrow: 'A', value: '1' } });
+    // Post-polish refactor: .animate-result-pulse moved from the <section> to
+    // an inner wrapper (preserves DOM identity across recalcs). The live-region
+    // attributes stay on the outer <section>.
+    const section = container.querySelector('section');
     expect(section).toBeTruthy();
     expect(section!.getAttribute('aria-live')).toBe('polite');
     expect(section!.getAttribute('aria-atomic')).toBe('true');
   });
 
-  it('changing pulseKey re-mounts the inner block (different node identity)', async () => {
-    const { rerender } = render(HeroResult, {
+  it('changing pulseKey preserves inner DOM identity (no remount) and retriggers the pulse class', async () => {
+    const { rerender, container } = render(HeroResult, {
       props: { eyebrow: 'EYEBROW', value: '1', pulseKey: 'a' }
     });
     const before = screen.getByText('1');
     await rerender({ eyebrow: 'EYEBROW', value: '1', pulseKey: 'b' });
     const after = screen.getByText('1');
-    // Different DOM node identity — {#key} re-mounted the block.
-    expect(after).not.toBe(before);
+    // Post-polish refactor: we toggle `.animate-result-pulse` on a stable
+    // wrapper instead of re-mounting via {#key}. DOM identity must persist so
+    // focus / selection / caret position inside the card survive recalc.
+    expect(after).toBe(before);
+    // The inner wrapper still carries the pulse class after the key change.
+    const pulseWrapper = container.querySelector('.animate-result-pulse');
+    expect(pulseWrapper).toBeTruthy();
+    expect(pulseWrapper!.contains(after)).toBe(true);
   });
 
   it('children Snippet override path replaces default body', () => {
@@ -96,6 +105,36 @@ describe('HeroResult', () => {
     // This test exists as a permanent reminder of the contract, and will pass
     // so long as it is written.
     expect(true).toBe(true);
+  });
+
+  it('numericValue ≥2× ratio jump surfaces the "Large change. Verify input." caption', async () => {
+    const { rerender } = render(HeroResult, {
+      props: { eyebrow: 'AMOUNT', value: '2.0', unit: 'tsp', numericValue: 2.0 }
+    });
+    // First render establishes the prev; no caption expected yet.
+    expect(screen.queryByText(/Large change/)).toBeNull();
+    // Jump to 5x — ratio 2.5, above the 2x threshold.
+    await rerender({
+      eyebrow: 'AMOUNT',
+      value: '5.0',
+      unit: 'tsp',
+      numericValue: 5.0
+    });
+    expect(screen.getByText('Large change. Verify input.')).toBeTruthy();
+  });
+
+  it('numericValue within 2× stays quiet (no caption for minor tweaks)', async () => {
+    const { rerender } = render(HeroResult, {
+      props: { eyebrow: 'AMOUNT', value: '2.0', unit: 'tsp', numericValue: 2.0 }
+    });
+    // 1.5× change — within threshold, no caption.
+    await rerender({
+      eyebrow: 'AMOUNT',
+      value: '3.0',
+      unit: 'tsp',
+      numericValue: 3.0
+    });
+    expect(screen.queryByText(/Large change/)).toBeNull();
   });
 
   it('value containing literal <script> is rendered as text (XSS-defense smoke)', () => {

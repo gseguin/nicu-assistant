@@ -32,37 +32,9 @@
 <div class="space-y-4">
 	<!-- Schedule content (single instance — reacts to morphineState via derived schedule) -->
 	{#if schedule.length > 0}
-		<!-- Summary: start → end dose (pulses on recalculation) -->
 		{@const first = schedule[0]}
 		{@const last = schedule[schedule.length - 1]}
 		{@const totalReduction = first.doseMg - last.doseMg}
-		<HeroResult
-			eyebrow="WEANING SUMMARY"
-			value=""
-			pulseKey={calcKey}
-			ariaLabel="Weaning summary"
-		>
-			{#snippet children()}
-				<div data-testid="morphine-summary" class="flex flex-col gap-2">
-					<span
-						class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
-					>
-						WEANING SUMMARY
-					</span>
-					<div class="flex items-baseline gap-2">
-						<span class="num text-display font-black text-[var(--color-text-primary)]"
-							>{formatPercent((totalReduction / first.doseMg) * 100)}</span
-						>
-						<span class="text-ui font-medium text-[var(--color-text-secondary)]">
-							Total reduction
-						</span>
-					</div>
-					<span class="num text-ui text-[var(--color-text-secondary)]">
-						Start {formatMg(first.doseMg)} to Step {last.step} {formatMg(last.doseMg)} mg
-					</span>
-				</div>
-			{/snippet}
-		</HeroResult>
 
 		<section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true">
 			<div class="space-y-2">
@@ -117,13 +89,43 @@
 				{/each}
 			</div>
 		</section>
+
+		<!-- Summary: start → end dose (pulses on recalculation). Sits at the bottom
+		     of the schedule so a clinician can close the loop after reading each step. -->
+		<HeroResult
+			eyebrow="WEANING SUMMARY"
+			value=""
+			pulseKey={calcKey}
+			ariaLabel="Weaning summary"
+		>
+			{#snippet children()}
+				<div data-testid="morphine-summary" class="flex flex-col gap-2">
+					<span
+						class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+					>
+						WEANING SUMMARY
+					</span>
+					<div class="flex items-baseline gap-2">
+						<span class="num text-display font-black text-[var(--color-text-primary)]"
+							>{formatPercent((totalReduction / first.doseMg) * 100)}</span
+						>
+						<span class="text-ui font-medium text-[var(--color-text-secondary)]">
+							Total reduction
+						</span>
+					</div>
+					<span class="num text-ui text-[var(--color-text-secondary)]">
+						Start {formatMg(first.doseMg)} to Step {last.step} {formatMg(last.doseMg)} mg
+					</span>
+				</div>
+			{/snippet}
+		</HeroResult>
 	{:else}
 		<div
 			class="rounded-2xl border border-dashed border-[var(--color-border)] px-6 py-8 text-center"
 			aria-hidden="true"
 		>
 			<p class="text-sm font-medium text-[var(--color-text-tertiary)]">
-				Enter values to generate weaning schedule.
+				Enter weight, max dose, and step to see the weaning schedule.
 			</p>
 		</div>
 	{/if}

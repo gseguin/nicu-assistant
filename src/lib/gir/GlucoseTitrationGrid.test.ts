@@ -64,11 +64,12 @@ function makeRows(overrides: Partial<GirTitrationRow>[] = []): GirTitrationRow[]
 }
 
 describe('GlucoseTitrationGrid', () => {
-  it('renders 6 radio rows (mobile + desktop render both)', () => {
+  it('renders 6 radio rows in the unified card-stack layout', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
     const radios = screen.getAllByRole('radio');
-    // Both the mobile and desktop layouts are in the DOM; 12 radios expected
-    expect(radios.length).toBe(12);
+    // Post-layout refactor: mobile and desktop share the same card-stack DOM
+    // (grid is decision surface only, hero above owns the action display).
+    expect(radios.length).toBe(6);
   });
 
   it('has no checked row by default', () => {
@@ -118,16 +119,18 @@ describe('GlucoseTitrationGrid', () => {
     expect(onselect).toHaveBeenCalledWith('gt70');
   });
 
-  it('Target GIR <= 0 renders STOP hero word in text-display font-black span', () => {
+  it('Target GIR <= 0 renders STOP bold action word inside the grid row', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
     const stops = screen.getAllByText(/^STOP$/);
     expect(stops.length).toBeGreaterThan(0);
-    // At least one STOP word must sit inside a hero-weight span
-    const heroStop = stops.find((el) => {
+    // Post-layout refactor: grid rows carry ui-size bold actions (the hero
+    // above owns the display-size numeral). The word STOP must still be in
+    // a bold span so it stands out within the row.
+    const boldStop = stops.find((el) => {
       const cls = el.className || '';
-      return cls.includes('text-display') && cls.includes('font-black');
+      return cls.includes('font-bold');
     });
-    expect(heroStop).toBeTruthy();
+    expect(boldStop).toBeTruthy();
     // aria-label on the severe-neuro row starts with "Severe neuro" and mentions "stop dextrose infusion"
     const radios = screen.getAllByRole('radio');
     const severe = radios.filter((r) => /^Severe neuro/i.test(r.getAttribute('aria-label') || ''));
@@ -151,18 +154,19 @@ describe('GlucoseTitrationGrid', () => {
     expect(screen.getAllByText('(decrease)').length).toBeGreaterThan(0);
   });
 
-  it('zero delta renders "Hold" hero in text-display font-black span (em-dash ban)', () => {
+  it('zero delta renders "Hold" bold action word inside the grid row (em-dash ban)', () => {
     const rows = makeRows([{}, {}, {}, { deltaRateMlHr: 0 }, {}, {}]);
     render(GlucoseTitrationGrid, { rows, selectedBucketId: null, onselect: () => {} });
-    // 42.1-followup: em-dash purged per DESIGN.md absolute ban; zero-delta now
-    // renders "Hold" as the clinical action word at display size.
+    // 42.1-followup: em-dash purged per DESIGN.md absolute ban; zero-delta
+    // renders "Hold" as the clinical action word. Post layout refactor it
+    // sits in the grid row at ui-size bold (hero above owns display-size).
     const holds = screen.getAllByText('Hold');
     expect(holds.length).toBeGreaterThan(0);
-    const heroHold = holds.find((el) => {
+    const boldHold = holds.find((el) => {
       const cls = el.className || '';
-      return cls.includes('text-display') && cls.includes('font-black');
+      return cls.includes('font-bold');
     });
-    expect(heroHold).toBeTruthy();
+    expect(boldHold).toBeTruthy();
     // aria-label on the Δ=0 row (50-60 bucket) contains "no change"
     const radios = screen.getAllByRole('radio');
     const zeroRow = radios.find((r) => /Glucose 50-60/i.test(r.getAttribute('aria-label') || ''));
@@ -170,22 +174,22 @@ describe('GlucoseTitrationGrid', () => {
     expect((zeroRow!.getAttribute('aria-label') || '').toLowerCase()).toContain('no change');
   });
 
-  it('non-zero non-stop row renders Δ rate hero with glyph + abs in text-display font-black', () => {
+  it('non-zero non-stop row renders Δ rate with glyph + abs in bold base-size spans', () => {
     render(GlucoseTitrationGrid, { rows: makeRows(), selectedBucketId: null, onselect: () => {} });
-    // Find a ▲ span that is in a hero-weight element
+    // Post layout refactor: grid rows render delta at text-base font-bold (hero
+    // above owns the display-size numeral for the selected row).
     const glyphs = screen.getAllByText('▲');
-    const heroGlyph = glyphs.find((el) => {
+    const boldGlyph = glyphs.find((el) => {
       const cls = el.className || '';
-      return cls.includes('text-display') && cls.includes('font-black');
+      return cls.includes('text-base') && cls.includes('font-bold');
     });
-    expect(heroGlyph).toBeTruthy();
-    // And the abs value 1.3 (from lt40) sits in a hero span too (mobile layout)
+    expect(boldGlyph).toBeTruthy();
     const absSpans = screen.getAllByText('1.3');
-    const heroAbs = absSpans.find((el) => {
+    const boldAbs = absSpans.find((el) => {
       const cls = el.className || '';
-      return cls.includes('text-display') && cls.includes('font-black');
+      return cls.includes('text-base') && cls.includes('font-bold');
     });
-    expect(heroAbs).toBeTruthy();
+    expect(boldAbs).toBeTruthy();
   });
 
   it('ariaLabelFor on normal bucket announces direction + ml/hr BEFORE mg/kg/min', () => {
@@ -201,22 +205,16 @@ describe('GlucoseTitrationGrid', () => {
     );
   });
 
-  it('desktop header row text order is Range | Δ rate (post 32-01 simplification)', () => {
+  it('single unified radiogroup (no separate mobile + desktop DOM)', () => {
     const { container } = render(GlucoseTitrationGrid, {
       rows: makeRows(),
       selectedBucketId: null,
       onselect: () => {}
     });
+    // Post layout refactor: only one radiogroup renders; mobile and desktop
+    // share the same card-stack structure. No column-header row.
     const grids = container.querySelectorAll('[role="radiogroup"]');
-    expect(grids.length).toBe(2);
-    const desktop = grids[1];
-    const headerDivs = Array.from(desktop.querySelectorAll(':scope > div')).filter((el) => {
-      const cls = (el as HTMLElement).className || '';
-      return cls.includes('text-ui') && cls.includes('font-semibold');
-    });
-    expect(headerDivs.length).toBe(2);
-    const texts = headerDivs.map((el) => (el.textContent || '').trim());
-    expect(texts).toEqual(['Range', 'Δ rate']);
+    expect(grids.length).toBe(1);
   });
 
   it('ArrowUp moves selection backward (wraps to end from first)', async () => {

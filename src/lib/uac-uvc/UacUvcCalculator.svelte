@@ -30,6 +30,7 @@
 			unit={result ? 'cm' : undefined}
 			pulseKey={result ? pulseKey : 'empty-uac'}
 			ariaLabel="UAC depth, arterial"
+			numericValue={result?.uacCm ?? null}
 		>
 			{#snippet children()}
 				<div class="flex flex-col gap-2">
@@ -54,7 +55,7 @@
 						</div>
 					{:else}
 						<p class="text-ui text-[var(--color-text-secondary)]">
-							Enter weight to compute depth
+							Enter weight to see catheter depth.
 						</p>
 					{/if}
 				</div>
@@ -66,6 +67,7 @@
 			unit={result ? 'cm' : undefined}
 			pulseKey={result ? pulseKey : 'empty-uvc'}
 			ariaLabel="UVC depth, venous"
+			numericValue={result?.uvcCm ?? null}
 		>
 			{#snippet children()}
 				<div class="flex flex-col gap-2">
@@ -90,7 +92,7 @@
 						</div>
 					{:else}
 						<p class="text-ui text-[var(--color-text-secondary)]">
-							Enter weight to compute depth
+							Enter weight to see catheter depth.
 						</p>
 					{/if}
 				</div>

@@ -10,7 +10,7 @@ test.describe('Morphine Wean Calculator', () => {
   });
 
   test('pre-fills default values from config', async ({ page }) => {
-    await expect(page.getByLabel('Dosing weight')).toHaveValue('3.1');
+    await expect(page.getByLabel('Dosing weight')).toHaveValue('3');
     await expect(page.getByLabel('Max morphine dose')).toHaveValue('0.04');
     await expect(page.getByLabel('Decrease per step')).toHaveValue('10');
   });
@@ -53,7 +53,7 @@ test.describe('Morphine Wean Calculator', () => {
     await page.getByLabel('Dosing weight').fill('7.5');
     // Clear resets to defaults, not empty
     await page.getByRole('button', { name: 'Clear inputs' }).click();
-    await expect(page.getByLabel('Dosing weight')).toHaveValue('3.1');
+    await expect(page.getByLabel('Dosing weight')).toHaveValue('3');
     await expect(page.getByLabel('Max morphine dose')).toHaveValue('0.04');
     await expect(page.getByLabel('Decrease per step')).toHaveValue('10');
   });

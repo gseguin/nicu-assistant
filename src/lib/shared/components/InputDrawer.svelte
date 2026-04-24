@@ -3,32 +3,40 @@
 
   Mobile-only inputs drawer for the D-08 hero-fills-viewport shell (Plan 42.1-05).
 
-  Composition:
-    - A fixed handle button pinned ABOVE the bottom nav (respects env(safe-area-inset-bottom)
-      + Plan 1's `pb-[calc(theme(spacing.16)+env(safe-area-inset-bottom,0px)+1rem)]` clearance).
-    - A native <dialog> that opens as a bottom sheet (~80dvh) when expanded.
+  Drawer is opened by the <InputsRecap> strip below each calculator's title
+  (the pinned collapsed-handle above the bottom nav was retired once the recap
+  block took over as the tap target — it sat in the wrong reading position).
 
-  Why native <dialog>: focus trap + Esc + scrim are free, identical to HamburgerMenu's drawer
-  pattern. The slide-up animation is gated on `prefers-reduced-motion`.
+  When expanded, the native <dialog> opens as a bottom sheet that covers the
+  bottom nav (top-layer showModal() puts it above NavShell). The slide-up
+  animation is gated on `prefers-reduced-motion`.
 
-  Desktop (md+) hides both the handle and the sheet — calculator routes render their inputs
+  Desktop (md+) hides the sheet — calculator routes render their inputs
   in a sticky right column instead. The drawer is a mobile-only affordance.
 -->
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { ChevronUp, ChevronDown } from '@lucide/svelte';
+	import { ChevronDown } from '@lucide/svelte';
 
 	let {
-		summary,
 		title = 'Inputs',
 		expanded = $bindable(false),
+		onClear,
 		children
 	}: {
-		summary: string;
 		title?: string;
 		expanded?: boolean;
+		// Optional per-calculator reset. When provided, a "Clear" text button
+		// renders at the left of the header — clicking resets state to defaults
+		// and closes the drawer. Omitted on calculators without meaningful reset.
+		onClear?: () => void;
 		children: Snippet;
 	} = $props();
+
+	function handleClear() {
+		onClear?.();
+		expanded = false;
+	}
 
 	let dialog = $state<HTMLDialogElement | null>(null);
 
@@ -36,16 +44,33 @@
 		if (!dialog) return;
 		if (expanded && !dialog.open) {
 			dialog.showModal();
+			// Move focus from the drawer's header close-button to the first actual
+			// input once the dialog is open. showModal() auto-focuses the first
+			// focusable child (which is the "Clear" or close button in our header),
+			// but clinicians landing on "Close" and having to tab is a wasted step.
+			queueMicrotask(() => {
+				if (!sheet) return;
+				const firstInput = sheet.querySelector<HTMLElement>(
+					'input:not([type="hidden"]), select, textarea, [role="slider"]'
+				);
+				firstInput?.focus();
+			});
 		}
 		if (!expanded && dialog.open) {
 			dialog.close();
 		}
 	});
 
+	let sheet = $state<HTMLDivElement | null>(null);
+
 	function handleDialogClick(e: MouseEvent) {
-		if (e.target === dialog) {
-			expanded = false;
-		}
+		// Only close on backdrop taps (the empty flex space above the sheet).
+		// If the click lands inside the sheet — including inputs, buttons,
+		// slider thumbs — leave it alone. Using `contains()` is iOS-safe
+		// whereas `e.target === dialog` can miss on WebKit tap-bubble quirks.
+		if (!sheet) return;
+		if (sheet.contains(e.target as Node)) return;
+		expanded = false;
 	}
 
 	function handleClose() {
@@ -53,39 +78,44 @@
 	}
 </script>
 
-<!-- Collapsed handle: pinned above the mobile bottom nav (md:hidden so desktop has its own layout). -->
-<button
-	type="button"
-	class="fixed right-0 left-0 z-20 flex min-h-14 items-center justify-between gap-3 border-t border-[var(--color-border)] bg-[var(--color-surface-card)]/95 px-4 py-2 text-ui font-medium text-[var(--color-text-primary)] shadow-md backdrop-blur transition-colors hover:bg-[var(--color-surface-card)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)] md:hidden"
-	style="bottom: calc(env(safe-area-inset-bottom, 0px) + 3.5rem + 1px);"
-	aria-label="Open inputs drawer"
-	aria-expanded={expanded}
-	onclick={() => (expanded = true)}
->
-	<span class="min-w-0 flex-1 truncate text-[var(--color-text-primary)]">{summary}</span>
-	<ChevronUp size={20} aria-hidden="true" />
-</button>
-
 <dialog
 	bind:this={dialog}
-	class="input-drawer-dialog bg-[var(--color-surface-card)] text-[var(--color-text-primary)] shadow-2xl"
+	class="input-drawer-dialog"
 	aria-label={title}
 	onclick={handleDialogClick}
 	onclose={handleClose}
 >
 	{#if expanded}
-		<div class="flex flex-col" style="max-height: 100%;">
-			<header
-				class="flex items-center justify-between border-b border-[var(--color-border)] px-5 py-4"
-			>
-				<h2 class="text-base font-semibold text-[var(--color-text-primary)]">{title}</h2>
+		<div
+			bind:this={sheet}
+			class="input-drawer-sheet flex flex-col bg-[var(--color-surface-card)] text-[var(--color-text-primary)] shadow-2xl"
+		>
+			<!-- Header holds two siblings: optional Clear on the left, collapse
+			     button on the right. Collapse dominates the row; Clear stays quiet
+			     at ui-size secondary text. No nested interactives. -->
+			<header class="flex min-h-[56px] items-stretch border-b border-[var(--color-border)]">
+				{#if onClear}
+					<button
+						type="button"
+						class="flex items-center px-5 text-ui font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)] active:text-[var(--color-text-primary)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)]"
+						aria-label="Clear {title.toLowerCase()}"
+						onclick={handleClear}
+					>
+						Clear
+					</button>
+				{/if}
 				<button
 					type="button"
-					class="icon-btn min-h-[48px] min-w-[48px]"
-					aria-label="Close inputs drawer"
+					class="flex min-h-[56px] flex-1 items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-[var(--color-surface-alt)] active:bg-[var(--color-surface-alt)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)]"
+					aria-label="Close {title.toLowerCase()}"
 					onclick={() => (expanded = false)}
 				>
-					<ChevronDown size={20} aria-hidden="true" />
+					<span class="text-base font-semibold text-[var(--color-text-primary)]">{title}</span>
+					<ChevronDown
+						size={20}
+						class="shrink-0 text-[var(--color-text-tertiary)]"
+						aria-hidden="true"
+					/>
 				</button>
 			</header>
 			<div class="flex-1 overflow-y-auto px-4 py-4">
@@ -96,25 +126,35 @@
 </dialog>
 
 <style>
-	/* Reset default <dialog> centering — anchor as a bottom sheet. */
+	/* Bottom-sheet dialog, iOS Safari compatible. Dialog fills the viewport
+	   invisibly via 100dvh; the visible sheet sits inside via flex-end. This
+	   avoids the top-layer positioning bugs that break `position: fixed;
+	   bottom: 0` on iOS (the scrim shows but the sheet collapses to 0 height). */
 	.input-drawer-dialog {
 		margin: 0;
 		padding: 0;
 		border: 0;
-		position: fixed;
-		/* Anchor flush above the mobile bottom nav.
-		   NavShell nav has `min-h-14` tabs (3.5rem = 56px) PLUS a 1px border-t,
-		   so the nav's top edge is 3.5rem + 1px above the safe-area bottom.
-		   Matches collapsed-handle offset so neither state overlaps the border. */
-		bottom: calc(env(safe-area-inset-bottom, 0px) + 3.5rem + 1px);
-		left: 0;
-		right: 0;
-		top: auto;
+		background: transparent;
+		width: 100vw;
+		max-width: 100vw;
+		height: 100vh;
+		max-height: 100vh;
+		height: 100dvh;
+		max-height: 100dvh;
+		overflow: hidden;
+	}
+	.input-drawer-dialog[open] {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+	}
+	.input-drawer-sheet {
 		width: 100%;
-		max-width: 100%;
-		/* Drawer auto-fits to content; 80dvh is the ceiling, not the target. */
 		max-height: 80vh;
 		max-height: 80dvh;
+		overflow: hidden;
+		/* Clear the iOS home indicator when overlaying the nav. */
+		padding-bottom: env(safe-area-inset-bottom, 0px);
 		border-top-left-radius: 1rem;
 		border-top-right-radius: 1rem;
 	}
@@ -122,7 +162,7 @@
 		background: var(--color-scrim);
 	}
 	@media (prefers-reduced-motion: no-preference) {
-		.input-drawer-dialog[open] {
+		.input-drawer-dialog[open] .input-drawer-sheet {
 			animation: slide-up 200ms cubic-bezier(0.22, 1, 0.36, 1);
 		}
 		.input-drawer-dialog[open]::backdrop {

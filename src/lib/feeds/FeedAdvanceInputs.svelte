@@ -85,7 +85,8 @@
 			min={inputs.weightKg.min}
 			max={inputs.weightKg.max}
 			step={inputs.weightKg.step}
-			placeholder="1.94"
+			typeStep={0.01}
+			placeholder="3.0"
 			id="feeds-weight"
 		/>
 		<SegmentedToggle
@@ -99,48 +100,66 @@
 	</section>
 
 	{#if feedsState.current.mode === 'bedside'}
-		<!-- BEDSIDE INPUTS -->
-		<section class="card flex flex-col gap-4">
-			<RangedNumericInput
-				bind:value={feedsState.current.trophicMlKgDay}
-				label="Trophic"
-				suffix="ml/kg/d"
-				min={inputs.trophicMlKgDay.min}
-				max={inputs.trophicMlKgDay.max}
-				step={inputs.trophicMlKgDay.step}
-				placeholder="20"
-				id="feeds-trophic"
-			/>
-			<RangedNumericInput
-				bind:value={feedsState.current.advanceMlKgDay}
-				label="Advance"
-				suffix="ml/kg/d"
-				min={inputs.advanceMlKgDay.min}
-				max={inputs.advanceMlKgDay.max}
-				step={inputs.advanceMlKgDay.step}
-				placeholder="30"
-				id="feeds-advance"
-			/>
-			<RangedNumericInput
-				bind:value={feedsState.current.goalMlKgDay}
-				label="Goal"
-				suffix="ml/kg/d"
-				min={inputs.goalMlKgDay.min}
-				max={inputs.goalMlKgDay.max}
-				step={inputs.goalMlKgDay.step}
-				placeholder="160"
-				id="feeds-goal"
-			/>
-			<SelectPicker
-				label="Feed frequency"
-				bind:value={feedsState.current.trophicFrequency}
-				options={frequencySelectOptions}
-			/>
-			<SelectPicker
-				label="Advance cadence"
-				bind:value={feedsState.current.advanceCadence}
-				options={cadenceSelectOptions}
-			/>
+		<!-- BEDSIDE INPUTS — grouped so the three ml/kg/d volumes (easy to
+		     transpose when stacked identically) sit under one legend, and the
+		     schedule controls sit under another. -->
+		<section class="card flex flex-col gap-5 px-5 py-5">
+			<fieldset class="flex flex-col gap-3">
+				<legend
+					class="mb-1 text-2xs font-semibold tracking-wide text-[var(--color-text-tertiary)] uppercase"
+				>
+					Volume goals (ml/kg/d)
+				</legend>
+				<RangedNumericInput
+					bind:value={feedsState.current.trophicMlKgDay}
+					label="Trophic"
+					suffix="ml/kg/d"
+					min={inputs.trophicMlKgDay.min}
+					max={inputs.trophicMlKgDay.max}
+					step={inputs.trophicMlKgDay.step}
+					placeholder="20"
+					id="feeds-trophic"
+				/>
+				<RangedNumericInput
+					bind:value={feedsState.current.advanceMlKgDay}
+					label="Advance"
+					suffix="ml/kg/d"
+					min={inputs.advanceMlKgDay.min}
+					max={inputs.advanceMlKgDay.max}
+					step={inputs.advanceMlKgDay.step}
+					placeholder="30"
+					id="feeds-advance"
+				/>
+				<RangedNumericInput
+					bind:value={feedsState.current.goalMlKgDay}
+					label="Goal"
+					suffix="ml/kg/d"
+					min={inputs.goalMlKgDay.min}
+					max={inputs.goalMlKgDay.max}
+					step={inputs.goalMlKgDay.step}
+					placeholder="160"
+					id="feeds-goal"
+				/>
+			</fieldset>
+
+			<fieldset class="flex flex-col gap-3">
+				<legend
+					class="mb-1 text-2xs font-semibold tracking-wide text-[var(--color-text-tertiary)] uppercase"
+				>
+					Schedule
+				</legend>
+				<SelectPicker
+					label="Feed frequency"
+					bind:value={feedsState.current.trophicFrequency}
+					options={frequencySelectOptions}
+				/>
+				<SelectPicker
+					label="Advance cadence"
+					bind:value={feedsState.current.advanceCadence}
+					options={cadenceSelectOptions}
+				/>
+			</fieldset>
+
 			<RangedNumericInput
 				bind:value={feedsState.current.totalFluidsMlHr}
 				label="Total fluids (for IV backfill)"
@@ -153,14 +172,22 @@
 			/>
 		</section>
 	{:else}
-		<!-- FULL NUTRITION INPUTS -->
-		<section class="card flex flex-col gap-4 px-5 py-5">
-			<fieldset class="space-y-3">
-				<legend class="text-ui font-semibold text-[var(--color-text-primary)]">TPN Line 1</legend>
+		<!-- FULL NUTRITION INPUTS — grouped into three visual chunks so the
+		     clinician navigates "where in the recipe" by landmark, not line number:
+		       1. Parenteral (TPN lines 1 + 2)
+		       2. Lipid (SMOF)
+		       3. Enteral (volume + caloric density) -->
+		<section class="card flex flex-col gap-5 px-5 py-5">
+			<fieldset class="flex flex-col gap-3">
+				<legend
+					class="mb-1 text-2xs font-semibold tracking-wide text-[var(--color-text-tertiary)] uppercase"
+				>
+					Parenteral (TPN)
+				</legend>
 				<div class="flex gap-3">
 					<NumericInput
 						bind:value={feedsState.current.tpnDex1Pct}
-						label="Dextrose"
+						label="Line 1 · dextrose"
 						suffix="%"
 						min={inputs.tpnDexPct.min}
 						max={inputs.tpnDexPct.max}
@@ -172,7 +199,7 @@
 					/>
 					<NumericInput
 						bind:value={feedsState.current.tpnMl1Hr}
-						label="Rate"
+						label="Line 1 · rate"
 						suffix="ml/hr"
 						min={inputs.tpnMlHr.min}
 						max={inputs.tpnMlHr.max}
@@ -183,13 +210,10 @@
 						showRangeError={true}
 					/>
 				</div>
-			</fieldset>
-			<fieldset class="space-y-3">
-				<legend class="text-ui font-semibold text-[var(--color-text-primary)]">TPN Line 2</legend>
 				<div class="flex gap-3">
 					<NumericInput
 						bind:value={feedsState.current.tpnDex2Pct}
-						label="Dextrose"
+						label="Line 2 · dextrose"
 						suffix="%"
 						min={inputs.tpnDexPct.min}
 						max={inputs.tpnDexPct.max}
@@ -201,7 +225,7 @@
 					/>
 					<NumericInput
 						bind:value={feedsState.current.tpnMl2Hr}
-						label="Rate"
+						label="Line 2 · rate"
 						suffix="ml/hr"
 						min={inputs.tpnMlHr.min}
 						max={inputs.tpnMlHr.max}
@@ -213,31 +237,47 @@
 					/>
 				</div>
 			</fieldset>
-			<RangedNumericInput
-				bind:value={feedsState.current.smofMl}
-				label="SMOF 20% lipid"
-				suffix="ml"
-				min={inputs.smofMl.min}
-				max={inputs.smofMl.max}
-				step={inputs.smofMl.step}
-				placeholder="0"
-				id="feeds-smof"
-			/>
-			<RangedNumericInput
-				bind:value={feedsState.current.enteralMl}
-				label="Enteral volume"
-				suffix="ml"
-				min={inputs.enteralMl.min}
-				max={inputs.enteralMl.max}
-				step={inputs.enteralMl.step}
-				placeholder="200"
-				id="feeds-enteral-ml"
-			/>
-			<SelectPicker
-				label="Enteral caloric density"
-				bind:value={kcalPerOzStr}
-				options={kcalPerOzOptions}
-			/>
+
+			<fieldset class="flex flex-col gap-3">
+				<legend
+					class="mb-1 text-2xs font-semibold tracking-wide text-[var(--color-text-tertiary)] uppercase"
+				>
+					Lipid
+				</legend>
+				<RangedNumericInput
+					bind:value={feedsState.current.smofMl}
+					label="SMOF 20%"
+					suffix="ml"
+					min={inputs.smofMl.min}
+					max={inputs.smofMl.max}
+					step={inputs.smofMl.step}
+					placeholder="0"
+					id="feeds-smof"
+				/>
+			</fieldset>
+
+			<fieldset class="flex flex-col gap-3">
+				<legend
+					class="mb-1 text-2xs font-semibold tracking-wide text-[var(--color-text-tertiary)] uppercase"
+				>
+					Enteral
+				</legend>
+				<RangedNumericInput
+					bind:value={feedsState.current.enteralMl}
+					label="Volume"
+					suffix="ml"
+					min={inputs.enteralMl.min}
+					max={inputs.enteralMl.max}
+					step={inputs.enteralMl.step}
+					placeholder="200"
+					id="feeds-enteral-ml"
+				/>
+				<SelectPicker
+					label="Caloric density"
+					bind:value={kcalPerOzStr}
+					options={kcalPerOzOptions}
+				/>
+			</fieldset>
 		</section>
 	{/if}
 </div>

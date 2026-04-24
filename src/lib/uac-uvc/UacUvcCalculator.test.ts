@@ -5,7 +5,7 @@ import { uacUvcState } from './state.svelte.js';
 
 // Plan 42.1-05 (D-08): inputs (NumericInput textbox + bits-ui Slider, bidirectionally
 // synced) were extracted into UacUvcInputs.svelte. The calculator now renders the
-// UAC + UVC hero grid only. The bidirectional-sync + sessionStorage round-trip
+// UAC + UVC hero grid only. The bidirectional-sync + localStorage round-trip
 // coverage moved to UacUvcInputs.test.ts.
 
 describe('UacUvcCalculator', () => {
@@ -21,10 +21,10 @@ describe('UacUvcCalculator', () => {
     expect(screen.queryByRole('slider')).toBeNull();
   });
 
-  it('empty state: shows "Enter weight to compute depth" in both hero cards when weightKg is null', () => {
+  it('empty state: shows "Enter weight to see catheter depth." in both hero cards when weightKg is null', () => {
     uacUvcState.current.weightKg = null;
     render(UacUvcCalculator);
-    const emptyStates = screen.getAllByText('Enter weight to compute depth');
+    const emptyStates = screen.getAllByText('Enter weight to see catheter depth.');
     expect(emptyStates).toHaveLength(2); // one per card
   });
 
@@ -46,11 +46,11 @@ describe('UacUvcCalculator', () => {
     expect(screen.getAllByText('cm').length).toBeGreaterThanOrEqual(2);
   });
 
-  it('sessionStorage round-trip: persist then init restores weightKg', () => {
-    // reset() clears sessionStorage as part of its contract, so the naive
+  it('localStorage round-trip: persist then init restores weightKg', () => {
+    // reset() clears localStorage as part of its contract, so the naive
     // persist → reset → init chain would lose the persisted value at reset.
-    // Simulate reload directly: write to sessionStorage, then call init().
-    sessionStorage.setItem('nicu_uac_uvc_state', JSON.stringify({ weightKg: 7.5 }));
+    // Simulate reload directly: write to localStorage, then call init().
+    localStorage.setItem('nicu_uac_uvc_state', JSON.stringify({ weightKg: 7.5 }));
     uacUvcState.init();
 
     expect(uacUvcState.current.weightKg).toBe(7.5);
