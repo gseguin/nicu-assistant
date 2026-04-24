@@ -27,7 +27,9 @@ describe('FeedAdvanceCalculator', () => {
     expect(screen.getByText('Advance step')).toBeTruthy();
     // "Goal" appears as both input label and output heading
     expect(screen.getAllByText('Goal').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('ml/feed').length).toBe(3);
+    // Post-D-07: HeroResult adds a "ml/feed" unit on the GOAL ML/FEED hero
+    // above the existing 3-row breakdown (3 + 1 = 4).
+    expect(screen.getAllByText('ml/feed').length).toBe(4);
   });
 
   it('shows ml/kg/d echo next to each output', () => {
