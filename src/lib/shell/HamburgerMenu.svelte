@@ -107,7 +107,7 @@
 						</a>
 						<button
 							type="button"
-							class="flex h-12 w-12 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-identity)] {capBlocked
+							class="flex h-12 w-12 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)] {capBlocked
 								? 'cursor-not-allowed opacity-60'
 								: ''}"
 							aria-pressed={isFavorite}
@@ -124,8 +124,8 @@
 								size={20}
 								fill={isFavorite ? 'currentColor' : 'none'}
 								style="color: {isFavorite
-									? 'var(--color-identity)'
-									: 'var(--color-text-secondary)'}"
+									? 'var(--color-text-primary)'
+									: 'var(--color-text-tertiary)'}"
 								aria-hidden="true"
 							/>
 						</button>
