@@ -69,7 +69,7 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
 - [ ] **Phase 40: Favorites Store + Hamburger Menu** — `favoritesStore` with localStorage persistence, 4-cap enforcement, schema-safe recovery, first-run defaults `['morphine', 'formula', 'gir', 'feeds']`; hamburger button in title bar; full-screen/side-sheet menu listing every registered calculator with star toggles; keyboard nav + reduced-motion honored. Store unit tests + hamburger component tests.
 - [ ] **Phase 41: Favorites-Driven Navigation** — NavShell rewritten so mobile bottom bar and desktop top nav render favorites only (in favorite order); non-favorited active routes do NOT add temporary tabs; `aria-current="page"` semantics preserved. Playwright E2E for full add/remove/persist flow + axe sweep of open hamburger.
 - [ ] **Phase 42: UAC/UVC Calculator** — Wave-0 architecture (`CalculatorId` union + registry + NavShell ternary + `/uac-uvc` route); identity hue research + OKLCH token pair passing 4.5:1 on first sweep; pure calculation logic in `src/lib/uac-uvc/` matching `uac-uvc-calculator.xlsx`; weight input with textbox↔slider bidirectional sync; two visually distinct hero cards (UAC + UVC); out-of-range advisory; sessionStorage persistence; AboutSheet entry. Parity tests + component tests + Playwright E2E + axe sweeps in both themes.
-- [ ] **Phase 43: Release v1.13.0** — `package.json` → 1.13.0; PROJECT.md Validated list updated; final gate sweep (svelte-check 0/0, vitest green, `pnpm build` ✓, Playwright E2E + extended axe suite green).
+- [x] **Phase 43: Release v1.13.0** — `package.json` → 1.13.0; PROJECT.md Validated list updated; final gate sweep (svelte-check 0/0, vitest green, `pnpm build` ✓, Playwright E2E + extended axe suite green). (completed 2026-04-24)
 
 ## Phase Details
 
@@ -145,7 +145,7 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
   2. A reader of PROJECT.md can see every v1.13 accomplishment captured in the Validated list with the milestone tag
   3. The full quality gate is green: svelte-check 0/0, vitest fully green, `pnpm build` succeeds, Playwright E2E passes, and the axe suite (extended with UAC/UVC + hamburger variants) passes in both themes
 **Plans**: 1 plan
-  - [ ] 43-01-PLAN.md — Release v1.13.0: version bump + PROJECT.md + REQUIREMENTS.md (41 IDs) + ROADMAP.md + orphan cleanup + verification triage + 2 pre-bump Playwright fixes + full clinical gate
+  - [x] 43-01-PLAN.md — Release v1.13.0: version bump + PROJECT.md + REQUIREMENTS.md (41 IDs) + ROADMAP.md + orphan cleanup + verification triage + 2 pre-bump Playwright fixes + full clinical gate
 
 ## Progress
 
@@ -161,7 +161,7 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
 | 41. Favorites-Driven Nav | v1.13 | 2/2 | Complete | 2026-04-23 |
 | 42. UAC/UVC Calculator | v1.13 | 3/3 | Complete | 2026-04-23 |
 | 42.1. Design Polish + Redesign Sweep | v1.13 | 6/6 | Complete | 2026-04-24 |
-| 43. Release v1.13.0 | v1.13 | 1/1 | Complete | 2026-04-24 |
+| 43. Release v1.13.0 | v1.13 | 1/1 | Complete    | 2026-04-24 |
 
 ## Order Rationale
 
