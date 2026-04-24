@@ -191,5 +191,20 @@ Status is `human_needed` (not `passed`) because 4 visual/behavioral items listed
 
 ---
 
+## Phase 43 Triage (D-07 / D-08)
+
+**Triaged:** 2026-04-24 (pre-release)
+
+| # | Item (summary) | Triage Status | Rationale |
+|---|---|---|---|
+| 1 | Mobile bottom bar visual identity + safe-area padding (375px, un-favorite Feeds → 3 tabs) | `manual-QA-needed` | Color token rendering (`--color-identity` per identity class), safe-area correctness on real iOS Safari, and absence of layout shift cannot be asserted programmatically. Routed to v1.13.1 release-notes reminder per D-13; v1.14 backlog candidate if iOS-specific test coverage becomes worth automating. |
+| 2 | Non-favorited active route — bottom bar inactive visual state (color vs inactive color) | `manual-QA-needed` | `aria-selected="false"` verified by FAV-TEST-03-4 (Playwright E2E) + T-05 (vitest), but the color rendering distinction between active-tab and inactive-tab states is a visual check. Ships as v1.13.1 release-notes reminder. |
+| 3 | Desktop top nav identity indicators (border-b-2 + identity color, active tab visual) | `manual-QA-needed` | Desktop-specific visual identity (border-b-2 indicator, identity class color) requires visual inspection at 1280px. v1.14 backlog if not done pre-deploy; non-blocking for v1.13.0 per D-12. |
+| 4 | "2 pre-existing navigation.spec.ts failures" (About button stale locator) | `verified-via-grep` / now-obsolete | **Both pre-existing failures are now passing.** `pnpm exec playwright test --list` confirms the spec at line 81 now reads `navigation.spec.ts:81:3 › Navigation (v1.2 restructure) › hamburger drawer About row opens the about sheet` — the stale `/about/i` locator was replaced by the hamburger drawer About row flow in commit `c2800df` ("test(42.1-05): adapt e2e specs for hero-drawer shell on mobile"). The title-bar spec at line 17 was similarly updated to "shows app name, hamburger, and theme toggle" (no About button). Both Phase-40-regression failures cleared. |
+
+**Disposition:** 1 verified-via-grep (now-obsolete per commit `c2800df`), 3 manual-QA-needed (deferred to v1.13.1 release-notes reminder + v1.14 backlog), 0 fix-required.
+
+---
+
 _Verified: 2026-04-23T22:00:00Z_
 _Verifier: Claude (gsd-verifier)_
