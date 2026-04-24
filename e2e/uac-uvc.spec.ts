@@ -57,11 +57,12 @@ for (const viewport of [
 				.click({ timeout: 2000 })
 				.catch(() => {});
 			// Plan 42.1-05 (D-08): on mobile (<md), inputs (textbox + slider) live behind
-			// the InputDrawer bottom-sheet. Open the drawer once so subsequent
-			// .getByLabel(...) finds visible inputs. On desktop the handle has md:hidden,
-			// so this is a no-op.
+			// the InputDrawer bottom-sheet. The trigger is now the InputsRecap button
+			// (commit 0558253 + 390aba6) — its composed aria-label ends with
+			// "Tap to edit inputs." on mobile and is hidden (md:hidden) on desktop.
+			// Open the drawer once so subsequent .getByLabel(...) finds visible inputs.
 			if (viewport.name === 'mobile') {
-				await page.getByLabel('Open inputs drawer').click();
+				await page.getByRole('button', { name: /tap to edit inputs/i }).click();
 			}
 		});
 
