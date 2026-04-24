@@ -18,7 +18,8 @@ export default defineConfig({
       manifest: {
         name: 'NICU Assistant',
         short_name: 'NICU Assist',
-        description: 'Clinical PERT dosing and infant formula recipe calculator for NICU staff.',
+        description:
+          'Clinical calculator hub for NICU staff: morphine weaning schedules, infant formula fortification, glucose infusion rate titration, feed advance volumes, and UAC/UVC catheter depth.',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
