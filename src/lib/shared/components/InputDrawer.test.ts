@@ -32,17 +32,12 @@ beforeEach(() => {
 
 describe('InputDrawer', () => {
 	it('T-01 collapsed renders summary handle with chevron and aria-expanded="false"', () => {
-		render(InputDrawer, {
-			props: {
-				summary: 'Weight 3.1 kg',
-				expanded: false,
-				children: () => 'noop'
-			}
-		});
+		// Use the harness so the children Snippet type is satisfied without `as any`.
+		render(InputDrawerHarness, { props: { initialExpanded: false } });
 		const handle = screen.getByRole('button', { name: /Open inputs drawer/i });
 		expect(handle).toBeTruthy();
 		expect(handle.getAttribute('aria-expanded')).toBe('false');
-		expect(handle.textContent).toContain('Weight 3.1 kg');
+		expect(handle.textContent).toContain('Weight 3.1 kg · 10% step');
 		// Chevron icon present (lucide renders an svg)
 		expect(handle.querySelector('svg')).toBeTruthy();
 	});
@@ -99,4 +94,8 @@ describe('InputDrawer', () => {
 		expect(src).toMatch(/@media \(prefers-reduced-motion: no-preference\)/);
 		expect(src).toMatch(/@keyframes slide-up/);
 	});
+
+	// Reference InputDrawer to keep the static import (used by future test scenarios that
+	// render the bare component with a typed Snippet via its own harness).
+	void InputDrawer;
 });

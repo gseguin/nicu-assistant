@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { calculateLinearSchedule } from '$lib/morphine/calculations.js';
 	import { morphineState } from '$lib/morphine/state.svelte.js';
-	import NumericInput from '$lib/shared/components/NumericInput.svelte';
 	import HeroResult from '$lib/shared/components/HeroResult.svelte';
 	import { formatMg, formatPercent } from './format.js';
-	import type { WeanStep, MorphineInputRanges } from '$lib/morphine/types.js';
-	import config from '$lib/morphine/morphine-config.json';
+	import type { WeanStep } from '$lib/morphine/types.js';
 
-	const inputs = config.inputs as MorphineInputRanges;
+	// Plan 42.1-05 (D-08): inputs were extracted into MorphineWeanInputs.svelte so the route
+	// can place them in the desktop sticky right column or the mobile <InputDrawer>. The
+	// calculator now renders the hero + schedule only — the result is the interface.
 
 	// 42.1-04 D-16: Dock-style scroll magnification was removed (DESIGN.md "no scroll-driven
 	// animation" rule). The active step is now selected by tap, expressed via aria-current="step"
@@ -27,61 +27,10 @@
 	let calcKey = $derived(
 		schedule.length > 0 ? `${schedule[0].doseMg}-${schedule[schedule.length - 1].doseMg}` : ''
 	);
-
-	// Persist state on change
-	$effect(() => {
-		JSON.stringify(morphineState.current);
-		morphineState.persist();
-	});
-
-	// Clear button visibility
-	let hasValues = $derived(
-		morphineState.current.weightKg !== null ||
-			morphineState.current.maxDoseMgKgDose !== null ||
-			morphineState.current.decreasePct !== null
-	);
-
-	function clearInputs() {
-		morphineState.reset();
-	}
 </script>
 
-<div class="space-y-6">
-	<!-- Inputs Card -->
-	<section class="card flex flex-col gap-4">
-		<NumericInput
-			bind:value={morphineState.current.weightKg}
-			label="Dosing weight"
-			suffix="kg"
-			min={inputs.weightKg.min}
-			max={inputs.weightKg.max}
-			step={inputs.weightKg.step}
-			placeholder="3.1"
-			id="morphine-weight"
-		/>
-		<NumericInput
-			bind:value={morphineState.current.maxDoseMgKgDose}
-			label="Max morphine dose"
-			suffix="mg/kg/dose"
-			min={inputs.maxDoseMgKgDose.min}
-			max={inputs.maxDoseMgKgDose.max}
-			step={inputs.maxDoseMgKgDose.step}
-			placeholder="0.04"
-			id="morphine-max-dose"
-		/>
-		<NumericInput
-			bind:value={morphineState.current.decreasePct}
-			label="Decrease per step"
-			suffix="%"
-			min={inputs.decreasePct.min}
-			max={inputs.decreasePct.max}
-			step={inputs.decreasePct.step}
-			placeholder="10"
-			id="morphine-decrease"
-		/>
-	</section>
-
-	<!-- Schedule content (single instance — reacts to activeMode via derived schedule) -->
+<div class="space-y-4">
+	<!-- Schedule content (single instance — reacts to morphineState via derived schedule) -->
 	{#if schedule.length > 0}
 		<!-- Summary: start → end dose (pulses on recalculation) -->
 		{@const first = schedule[0]}
@@ -94,10 +43,7 @@
 			ariaLabel="Weaning summary"
 		>
 			{#snippet children()}
-				<div
-					data-testid="morphine-summary"
-					class="flex items-center justify-between"
-				>
+				<div data-testid="morphine-summary" class="flex items-center justify-between">
 					<div class="flex flex-col">
 						<span class="text-2xs font-semibold text-[var(--color-identity)]">Start</span>
 						<span class="num text-base font-bold text-[var(--color-text-primary)]"
@@ -106,13 +52,17 @@
 					</div>
 					<div class="text-lg text-[var(--color-text-tertiary)]">→</div>
 					<div class="flex flex-col items-end">
-						<span class="text-2xs font-semibold text-[var(--color-identity)]">Step {last.step}</span>
+						<span class="text-2xs font-semibold text-[var(--color-identity)]"
+							>Step {last.step}</span
+						>
 						<span class="num text-base font-bold text-[var(--color-text-primary)]"
 							>{formatMg(last.doseMg)} mg</span
 						>
 					</div>
 					<div class="flex flex-col items-end">
-						<span class="text-2xs font-semibold text-[var(--color-identity)]">Total reduction</span>
+						<span class="text-2xs font-semibold text-[var(--color-identity)]"
+							>Total reduction</span
+						>
 						<span class="num text-sm font-semibold text-[var(--color-text-primary)]"
 							>{formatPercent((totalReduction / first.doseMg) * 100)}</span
 						>
@@ -121,7 +71,7 @@
 			{/snippet}
 		</HeroResult>
 
-		<section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true" class="mt-4">
+		<section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true">
 			<div class="space-y-2">
 				{#each schedule as step, i}
 					{@const isFirst = step.step === 1}
@@ -180,21 +130,8 @@
 			aria-hidden="true"
 		>
 			<p class="text-sm font-medium text-[var(--color-text-tertiary)]">
-				Enter values above to generate weaning schedule.
+				Enter values to generate weaning schedule.
 			</p>
-		</div>
-	{/if}
-
-	<!-- Clear Button -->
-	{#if hasValues}
-		<div class="flex justify-center">
-			<button
-				type="button"
-				onclick={clearInputs}
-				class="min-h-[36px] rounded-lg px-3 py-1.5 text-2xs font-medium text-[var(--color-text-secondary)] transition-colors hover:text-[var(--color-text-primary)]"
-			>
-				Clear inputs
-			</button>
 		</div>
 	{/if}
 </div>

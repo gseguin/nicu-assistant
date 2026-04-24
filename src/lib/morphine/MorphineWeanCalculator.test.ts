@@ -29,14 +29,14 @@ describe('MorphineWeanCalculator', () => {
     expect(screen.queryByRole('tab')).toBeNull();
   });
 
-  it('renders three input fields with correct labels', () => {
+  it('does not render input fields itself (extracted to MorphineWeanInputs in 42.1-05)', () => {
+    // Plan 42.1-05 (D-08): inputs were extracted into MorphineWeanInputs.svelte so the
+    // route can compose them in the desktop sticky right column or the mobile
+    // <InputDrawer>. The calculator now renders the hero + schedule only.
+    // See MorphineWeanInputs.test.ts for input field coverage.
     render(MorphineWeanCalculator);
-    const spinbuttons = screen.getAllByRole('spinbutton');
-    expect(spinbuttons).toHaveLength(3);
-
-    expect(screen.getByLabelText('Dosing weight')).toBeTruthy();
-    expect(screen.getByLabelText('Max morphine dose')).toBeTruthy();
-    expect(screen.getByLabelText('Decrease per step')).toBeTruthy();
+    expect(screen.queryAllByRole('spinbutton')).toHaveLength(0);
+    expect(screen.queryByLabelText('Dosing weight')).toBeNull();
   });
 
   it('shows schedule with valid inputs', () => {
@@ -53,7 +53,9 @@ describe('MorphineWeanCalculator', () => {
 
   it('shows empty state placeholder without inputs', () => {
     render(MorphineWeanCalculator);
-    expect(screen.getByText('Enter values above to generate weaning schedule.')).toBeTruthy();
+    // Copy updated in 42.1-05: dropped "above" since on mobile the inputs now live in a
+    // sticky drawer below the schedule, not above it.
+    expect(screen.getByText('Enter values to generate weaning schedule.')).toBeTruthy();
   });
 
   describe('Phase 23-01: result feedback', () => {
@@ -170,11 +172,11 @@ describe('MorphineWeanCalculator', () => {
       expect(stepCard!.className).not.toContain('border-l-');
     });
 
-    it('clear inputs button uses secondary text color, not tertiary', () => {
+    it('clear inputs button no longer lives on the calculator (moved to MorphineWeanInputs)', () => {
+      // Plan 42.1-05 (D-08): the Clear inputs button moved with the inputs into
+      // MorphineWeanInputs.svelte. See MorphineWeanInputs.test.ts for coverage.
       render(MorphineWeanCalculator);
-      const clearBtn = screen.getByText('Clear inputs');
-      expect(clearBtn.className).toContain('text-secondary');
-      expect(clearBtn.className).not.toContain('text-tertiary');
+      expect(screen.queryByText('Clear inputs')).toBeNull();
     });
   });
 });
