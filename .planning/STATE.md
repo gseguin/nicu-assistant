@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.13
 milestone_name: UAC/UVC Calculator + Favorites Nav
-status: executing
-stopped_at: Phase 42.1 context gathered
-last_updated: "2026-04-24T05:11:25.642Z"
-last_activity: 2026-04-24 -- Phase --phase execution started
+status: ready-to-release
+stopped_at: Phase 42.1 complete — ready for Phase 43 release
+last_updated: "2026-04-24T09:10:00.000Z"
+last_activity: 2026-04-24 — Phase 42.1 complete (6/6 plans, ~50 commits across 5 waves)
 progress:
-  total_phases: 4
-  completed_phases: 3
-  total_plans: 14
-  completed_plans: 8
-  percent: 57
+  total_phases: 5
+  completed_phases: 4
+  total_plans: 20
+  completed_plans: 14
+  percent: 70
 ---
 
 # Project State
@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-23)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase --phase — 42
+**Current focus:** Phase 43 — Release v1.13.0 (Phase 42.1 just shipped: design polish + structural redesign sweep, 6 plans complete)
 
 ## Current Position
 
