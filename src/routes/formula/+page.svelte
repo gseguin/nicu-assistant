@@ -25,8 +25,8 @@
 	const drawerSummary = $derived.by(() => {
 		const s = fortificationState.current;
 		const formula = getFormulaById(s.formulaId);
-		const formulaName = formula?.name ?? '—';
-		const volStr = s.volumeMl === null ? '—' : `${s.volumeMl}`;
+		const formulaName = formula?.name ?? '·';
+		const volStr = s.volumeMl === null ? '·' : `${s.volumeMl}`;
 		return `${formulaName} · ${volStr} mL · ${s.targetKcalOz} kcal/oz`;
 	});
 </script>

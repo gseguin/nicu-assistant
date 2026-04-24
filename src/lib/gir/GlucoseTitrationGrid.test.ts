@@ -151,16 +151,18 @@ describe('GlucoseTitrationGrid', () => {
     expect(screen.getAllByText('(decrease)').length).toBeGreaterThan(0);
   });
 
-  it('zero delta renders em-dash hero in text-display font-black span', () => {
+  it('zero delta renders "Hold" hero in text-display font-black span (em-dash ban)', () => {
     const rows = makeRows([{}, {}, {}, { deltaRateMlHr: 0 }, {}, {}]);
     render(GlucoseTitrationGrid, { rows, selectedBucketId: null, onselect: () => {} });
-    const dashes = screen.getAllByText('—');
-    expect(dashes.length).toBeGreaterThan(0);
-    const heroDash = dashes.find((el) => {
+    // 42.1-followup: em-dash purged per DESIGN.md absolute ban; zero-delta now
+    // renders "Hold" as the clinical action word at display size.
+    const holds = screen.getAllByText('Hold');
+    expect(holds.length).toBeGreaterThan(0);
+    const heroHold = holds.find((el) => {
       const cls = el.className || '';
       return cls.includes('text-display') && cls.includes('font-black');
     });
-    expect(heroDash).toBeTruthy();
+    expect(heroHold).toBeTruthy();
     // aria-label on the Δ=0 row (50-60 bucket) contains "no change"
     const radios = screen.getAllByRole('radio');
     const zeroRow = radios.find((r) => /Glucose 50-60/i.test(r.getAttribute('aria-label') || ''));

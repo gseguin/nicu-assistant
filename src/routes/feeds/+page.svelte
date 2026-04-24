@@ -22,7 +22,7 @@
 	// confirm what's loaded (mode + weight) without expanding the drawer.
 	const drawerSummary = $derived.by(() => {
 		const w = feedsState.current.weightKg;
-		const wStr = w === null ? '—' : `${w}`;
+		const wStr = w === null ? '·' : `${w}`;
 		const mode = feedsState.current.mode === 'bedside' ? 'Bedside' : 'Full Nutrition';
 		return `Mode: ${mode} · Weight ${wStr} kg`;
 	});

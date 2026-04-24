@@ -20,11 +20,12 @@
 
 	// One-line summary for the drawer handle. Tracks live state so a clinician can
 	// confirm what's loaded without expanding the drawer.
+	// 42.1-followup: middle-dot fallback for null values (DESIGN.md em-dash ban).
 	const drawerSummary = $derived.by(() => {
 		const w = morphineState.current.weightKg;
 		const d = morphineState.current.decreasePct;
-		const wStr = w === null ? '—' : `${w}`;
-		const dStr = d === null ? '—' : `${d}%`;
+		const wStr = w === null ? '·' : `${w}`;
+		const dStr = d === null ? '·' : `${d}%`;
 		return `Weight ${wStr} kg · ${dStr} step`;
 	});
 </script>

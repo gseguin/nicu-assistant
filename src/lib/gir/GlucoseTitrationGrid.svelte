@@ -139,9 +139,10 @@
 			{:else if row.deltaRateMlHr === 0}
 				<div class="mt-1 flex items-baseline gap-2">
 					<span
-						class="num text-display font-black text-[var(--color-text-tertiary)]"
-						aria-hidden="true">—</span
+						class="text-display font-black tracking-wider text-[var(--color-text-tertiary)] uppercase"
+						>Hold</span
 					>
+					<span class="text-ui text-[var(--color-text-tertiary)]">rate (no change)</span>
 				</div>
 			{:else}
 				<div class="mt-1 flex items-baseline gap-2">
@@ -200,11 +201,8 @@
 					>
 				</div>
 			{:else if row.deltaRateMlHr === 0}
-				<div
-					class="num text-base font-semibold text-[var(--color-text-tertiary)]"
-					aria-hidden="true"
-				>
-					—
+				<div class="text-base font-semibold text-[var(--color-text-tertiary)]">
+					Hold rate <span class="font-normal text-[var(--color-text-tertiary)]">(no change)</span>
 				</div>
 			{:else}
 				<div class="num text-base font-semibold text-[var(--color-text-primary)]">

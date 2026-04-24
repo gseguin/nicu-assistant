@@ -24,9 +24,9 @@
 		const w = girState.current.weightKg;
 		const d = girState.current.dextrosePct;
 		const f = girState.current.mlPerKgPerDay;
-		const wStr = w === null ? '—' : `${w}`;
-		const dStr = d === null ? '—' : `${d}%`;
-		const fStr = f === null ? '—' : `${f}`;
+		const wStr = w === null ? '·' : `${w}`;
+		const dStr = d === null ? '·' : `${d}%`;
+		const fStr = f === null ? '·' : `${f}`;
 		return `Weight ${wStr} kg · ${dStr} dextrose · ${fStr} ml/kg/day`;
 	});
 </script>

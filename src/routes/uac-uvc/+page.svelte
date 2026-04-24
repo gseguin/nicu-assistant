@@ -22,7 +22,7 @@
 	// confirm what's loaded without expanding the drawer.
 	const drawerSummary = $derived.by(() => {
 		const w = uacUvcState.current.weightKg;
-		const wStr = w === null ? '—' : `${w}`;
+		const wStr = w === null ? '·' : `${w}`;
 		return `Weight ${wStr} kg`;
 	});
 </script>
