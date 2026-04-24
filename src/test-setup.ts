@@ -1,5 +1,15 @@
 import '@testing-library/jest-dom/vitest';
 
+// jsdom does not implement ResizeObserver — bits-ui Slider uses it internally to
+// size its thumb track. Provide a no-op shim so component tests can render sliders.
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  globalThis.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
+}
+
 // jsdom does not implement matchMedia; stub to report prefers-reduced-motion
 // so Svelte slide transitions collapse to duration 0 in tests.
 if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {

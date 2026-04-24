@@ -30,26 +30,29 @@ describe('UacUvcCalculator', () => {
     expect(screen.getAllByText('cm').length).toBeGreaterThanOrEqual(2);
   });
 
-  it('bidirectional sync — slider to textbox: dragging slider to 5 updates state and textbox', async () => {
+  it('bidirectional sync — slider to textbox: slider ArrowRight step updates state and textbox', async () => {
+    uacUvcState.current.weightKg = 5;
     render(UacUvcCalculator);
-    const slider = screen.getByLabelText('Weight slider') as HTMLInputElement;
-    await fireEvent.input(slider, { target: { value: '5' } });
+    const thumb = screen.getByRole('slider') as HTMLElement;
 
-    expect(uacUvcState.current.weightKg).toBe(5);
-    // Textbox should reflect the new value via bind:value
+    // bits-ui Slider moves by `step` on ArrowRight (step = 0.1 → 5.1)
+    thumb.focus();
+    await fireEvent.keyDown(thumb, { key: 'ArrowRight' });
+
+    expect(uacUvcState.current.weightKg).toBeCloseTo(5.1, 5);
+    // Textbox reflects the new value via bind:value on NumericInput
     const textbox = screen.getByLabelText('Weight') as HTMLInputElement;
-    expect(textbox.value).toBe('5');
+    expect(parseFloat(textbox.value)).toBeCloseTo(5.1, 5);
   });
 
-  it('bidirectional sync — textbox to slider: typing 1.0 in textbox updates state and slider value', async () => {
+  it('bidirectional sync — textbox to slider: typing 1.0 in textbox updates state and slider aria-valuenow', async () => {
     render(UacUvcCalculator);
     const textbox = screen.getByLabelText('Weight') as HTMLInputElement;
     await fireEvent.input(textbox, { target: { value: '1.0' } });
 
     expect(uacUvcState.current.weightKg).toBe(1.0);
-    const slider = screen.getByLabelText('Weight slider') as HTMLInputElement;
-    // Slider displays the stepped value; 1.0 is on a step boundary so comparison is stable
-    expect(parseFloat(slider.value)).toBe(1.0);
+    const thumb = screen.getByRole('slider') as HTMLElement;
+    expect(Number(thumb.getAttribute('aria-valuenow'))).toBe(1.0);
   });
 
   it('sessionStorage round-trip: persist then reset-and-init restores weightKg', () => {

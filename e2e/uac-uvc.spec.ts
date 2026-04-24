@@ -77,9 +77,15 @@ for (const viewport of [
 			);
 		});
 
-		test('slider drag updates textbox (bidirectional sync, E2E layer)', async ({ page }) => {
-			// Playwright's fill() on a range input sets the value and dispatches input.
-			await page.getByLabel('Weight slider').fill('5');
+		test('slider keyboard step updates textbox (bidirectional sync, E2E layer)', async ({
+			page
+		}) => {
+			// Seed a known value via the textbox, then step the slider with ArrowRight.
+			// bits-ui Slider exposes the thumb as role=slider; focus + ArrowRight advances by `step` (0.1).
+			await page.getByLabel('Weight', { exact: true }).fill('4.9');
+			const thumb = page.getByRole('slider', { name: 'Weight slider' });
+			await thumb.focus();
+			await thumb.press('ArrowRight');
 
 			// Textbox reflects the slider-driven value in lockstep.
 			await expect(page.getByLabel('Weight', { exact: true })).toHaveValue('5');

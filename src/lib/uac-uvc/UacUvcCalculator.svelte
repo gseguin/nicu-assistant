@@ -4,8 +4,15 @@
 	import NumericInput from '$lib/shared/components/NumericInput.svelte';
 	import config from './uac-uvc-config.json';
 	import type { UacUvcInputRanges } from './types.js';
+	import { Slider } from 'bits-ui';
 
 	const inputs = config.inputs as UacUvcInputRanges;
+
+	// bits-ui Slider binds a number; we mirror it to/from the nullable state field.
+	let sliderValue = $derived(uacUvcState.current.weightKg ?? inputs.weightKg.min);
+	function onSliderChange(v: number) {
+		uacUvcState.current.weightKg = v;
+	}
 
 	let result = $derived(calculateUacUvc(uacUvcState.current));
 	let pulseKey = $derived(uacUvcState.current.weightKg?.toFixed(2) ?? '');
@@ -32,17 +39,31 @@
 			showRangeHint={true}
 			showRangeError={true}
 		/>
-		<input
-			type="range"
+		<Slider.Root
+			type="single"
+			value={sliderValue}
+			onValueChange={onSliderChange}
 			min={inputs.weightKg.min}
 			max={inputs.weightKg.max}
 			step={inputs.weightKg.step}
-			value={uacUvcState.current.weightKg ?? inputs.weightKg.min}
-			oninput={(e) =>
-				(uacUvcState.current.weightKg = parseFloat((e.currentTarget as HTMLInputElement).value))}
 			aria-label="Weight slider"
-			class="range-uac mt-2 w-full"
-		/>
+			class="slider-root relative mt-1 flex h-12 w-full touch-none items-center select-none"
+		>
+			<span
+				class="relative h-1.5 w-full grow overflow-hidden rounded-full"
+				style="background: var(--color-identity-hero);"
+			>
+				<Slider.Range
+					class="absolute h-full rounded-full"
+					style="background: var(--color-identity);"
+				/>
+			</span>
+			<Slider.Thumb
+				index={0}
+				class="block h-6 w-6 rounded-full border-2 bg-[var(--color-surface)] shadow-md transition-transform focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-110"
+				style="border-color: var(--color-identity); --tw-ring-color: var(--color-identity); --tw-ring-offset-color: var(--color-surface);"
+			/>
+		</Slider.Root>
 	</section>
 
 	<!-- HERO GRID: UAC first (top stripe), UVC second (bottom stripe). Stack on mobile, side-by-side on md+. -->
@@ -123,11 +144,3 @@
 	</div>
 </div>
 
-<style>
-	.range-uac {
-		accent-color: var(--color-identity);
-		min-height: 48px;
-		touch-action: manipulation;
-		width: 100%;
-	}
-</style>
