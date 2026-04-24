@@ -3,6 +3,7 @@
 	import { girState } from './state.svelte.js';
 	import GlucoseTitrationGrid from './GlucoseTitrationGrid.svelte';
 	import NumericInput from '$lib/shared/components/NumericInput.svelte';
+	import HeroResult from '$lib/shared/components/HeroResult.svelte';
 	import config from './gir-config.json';
 	import type { GirInputRanges, GlucoseBucket } from './types.js';
 	import { AlertTriangle, Info } from '@lucide/svelte';
@@ -99,13 +100,8 @@
 	</section>
 
 	<!-- CURRENT GIR HERO -->
-	{#key pulseKey}
-		<section
-			class="card animate-result-pulse px-5 py-5"
-			style="background: var(--color-identity-hero);"
-			aria-live="polite"
-			aria-atomic="true"
-		>
+	<HeroResult eyebrow="" value="" pulseKey={pulseKey} ariaLabel="Glucose infusion rate result">
+		{#snippet children()}
 			{#if result}
 				<div class="flex flex-col gap-3">
 					<div>
@@ -140,8 +136,8 @@
 					Enter weight, dextrose %, and fluid rate to compute GIR
 				</p>
 			{/if}
-		</section>
-	{/key}
+		{/snippet}
+	</HeroResult>
 
 	<!-- Tier 2 advisories -->
 	{#if showGirHighAdvisory}
