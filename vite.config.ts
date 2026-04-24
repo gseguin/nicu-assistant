@@ -64,7 +64,7 @@ export default defineConfig({
     setupFiles: ['src/test-setup.ts']
   },
   server: {
-    allowedHosts: ['nicu-assistant-dev.heartsmiles.io'],
+    allowedHosts: ['nicu-assistant-dev.heartsmiles.io', 'nicu-assistant-preview.heartsmiles.io'],
     watch: {
       ignored: ['**/.planning/**', '**/.claude/**', '**/.remember/**', '**/.playwright-mcp/**']
     }
