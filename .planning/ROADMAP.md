@@ -144,7 +144,8 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
   1. User opening the About dialog sees version `1.13.0` (sourced via the existing `__APP_VERSION__` build-time constant)
   2. A reader of PROJECT.md can see every v1.13 accomplishment captured in the Validated list with the milestone tag
   3. The full quality gate is green: svelte-check 0/0, vitest fully green, `pnpm build` succeeds, Playwright E2E passes, and the axe suite (extended with UAC/UVC + hamburger variants) passes in both themes
-**Plans**: TBD
+**Plans**: 1 plan
+  - [ ] 43-01-PLAN.md — Release v1.13.0: version bump + PROJECT.md + REQUIREMENTS.md (41 IDs) + ROADMAP.md + orphan cleanup + verification triage + 2 pre-bump Playwright fixes + full clinical gate
 
 ## Progress
 
