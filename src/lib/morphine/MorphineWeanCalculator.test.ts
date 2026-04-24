@@ -118,12 +118,24 @@ describe('MorphineWeanCalculator', () => {
       mockState.decreasePct = 10;
     });
 
-    it('summary card shows start dose, end dose, and total reduction percentage', () => {
+    it('summary card promotes total-reduction percentage as the display numeral (post-42.1 contract)', () => {
+      // Post-42.1 critique follow-up: the summary HeroResult was redesigned so the
+      // "Total reduction" percentage is the single text-display numeral. Start and
+      // Step N doses live on a subordinate secondary line. See DESIGN.md
+      // "The Hero Result (signature pattern)" + HeroResult display-numeral contract.
       render(MorphineWeanCalculator);
-      expect(screen.getByText('Start')).toBeTruthy();
+      const summary = screen.getByTestId('morphine-summary');
+      expect(summary).toBeTruthy();
+      // Display numeral renders the total-reduction percentage (90% for the
+      // default 3.1 / 0.04 / 10 case). formatPercent rounds to 2 decimals.
+      const displayNumeral = summary.querySelector('.text-display');
+      expect(displayNumeral).toBeTruthy();
+      expect(displayNumeral!.textContent).toMatch(/%/);
+      // "Total reduction" label sits beside the numeral in ui weight.
       expect(screen.getByText('Total reduction')).toBeTruthy();
-      // Summary card contains the start dose value rendered via formatMg (3 decimals).
-      expect(screen.getAllByText('0.124 mg').length).toBeGreaterThanOrEqual(1);
+      // Secondary line carries the Start/Step N doses readable in one phrase.
+      expect(summary.textContent).toContain('0.124');
+      expect(summary.textContent).toContain('Step');
     });
 
     it('reduction amounts show percentage alongside mg value', () => {

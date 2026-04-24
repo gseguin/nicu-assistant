@@ -43,30 +43,23 @@
 			ariaLabel="Weaning summary"
 		>
 			{#snippet children()}
-				<div data-testid="morphine-summary" class="flex items-center justify-between">
-					<div class="flex flex-col">
-						<span class="text-2xs font-semibold text-[var(--color-identity)]">Start</span>
-						<span class="num text-base font-bold text-[var(--color-text-primary)]"
-							>{formatMg(first.doseMg)} mg</span
-						>
-					</div>
-					<div class="text-lg text-[var(--color-text-tertiary)]">→</div>
-					<div class="flex flex-col items-end">
-						<span class="text-2xs font-semibold text-[var(--color-identity)]"
-							>Step {last.step}</span
-						>
-						<span class="num text-base font-bold text-[var(--color-text-primary)]"
-							>{formatMg(last.doseMg)} mg</span
-						>
-					</div>
-					<div class="flex flex-col items-end">
-						<span class="text-2xs font-semibold text-[var(--color-identity)]"
-							>Total reduction</span
-						>
-						<span class="num text-sm font-semibold text-[var(--color-text-primary)]"
+				<div data-testid="morphine-summary" class="flex flex-col gap-2">
+					<span
+						class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+					>
+						WEANING SUMMARY
+					</span>
+					<div class="flex items-baseline gap-2">
+						<span class="num text-display font-black text-[var(--color-text-primary)]"
 							>{formatPercent((totalReduction / first.doseMg) * 100)}</span
 						>
+						<span class="text-ui font-medium text-[var(--color-text-secondary)]">
+							Total reduction
+						</span>
 					</div>
+					<span class="num text-ui text-[var(--color-text-secondary)]">
+						Start {formatMg(first.doseMg)} to Step {last.step} {formatMg(last.doseMg)} mg
+					</span>
 				</div>
 			{/snippet}
 		</HeroResult>
