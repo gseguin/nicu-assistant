@@ -1,0 +1,9 @@
+{
+  "cases": [
+    { "input": { "weightKg": 0.3 },  "expected": { "uacCm": 9.90,  "uvcCm": 4.95  } },
+    { "input": { "weightKg": 1.0 },  "expected": { "uacCm": 12.00, "uvcCm": 6.00  } },
+    { "input": { "weightKg": 2.5 },  "expected": { "uacCm": 16.50, "uvcCm": 8.25  } },
+    { "input": { "weightKg": 5.0 },  "expected": { "uacCm": 24.00, "uvcCm": 12.00 } },
+    { "input": { "weightKg": 10.0 }, "expected": { "uacCm": 39.00, "uvcCm": 19.50 } }
+  ]
+}
