@@ -71,6 +71,16 @@ describe('MorphineWeanCalculator', () => {
       expect(summary!.getAttribute('aria-atomic')).toBe('true');
     });
 
+    it('hero is now a HeroResult consumer (single .animate-result-pulse <section>)', () => {
+      render(MorphineWeanCalculator);
+      // After D-07 refactor, the summary chip is wrapped by a single
+      // <section class="animate-result-pulse"> owned by HeroResult.
+      // The schedule region keeps its own aria-live (separate purpose).
+      const heroSections = document.querySelectorAll('section.animate-result-pulse');
+      expect(heroSections.length).toBe(1);
+      expect(heroSections[0].getAttribute('aria-live')).toBe('polite');
+    });
+
     it('summary card uses shared .animate-result-pulse class (old class removed)', () => {
       render(MorphineWeanCalculator);
       expect(document.querySelector('.animate-result-pulse')).toBeTruthy();
@@ -110,15 +120,15 @@ describe('MorphineWeanCalculator', () => {
       render(MorphineWeanCalculator);
       expect(screen.getByText('Start')).toBeTruthy();
       expect(screen.getByText('Total reduction')).toBeTruthy();
-      // Summary card contains both start and end dose values
-      expect(screen.getAllByText('0.1240 mg').length).toBeGreaterThanOrEqual(1);
+      // Summary card contains the start dose value rendered via formatMg (3 decimals).
+      expect(screen.getAllByText('0.124 mg').length).toBeGreaterThanOrEqual(1);
     });
 
     it('reduction amounts show percentage alongside mg value', () => {
       render(MorphineWeanCalculator);
-      // Every step has a fixed 10.0% reduction relative to the prior dose.
-      // Step 2 should show "-0.0124 mg (10.0%)"
-      expect(screen.getByText(/-0\.0124 mg \(10\.0%\)/)).toBeTruthy();
+      // Every step has a fixed 10% reduction relative to the prior dose.
+      // Step 2 should show "-0.012 mg (10.00%)" via formatMg + formatPercent.
+      expect(screen.getByText(/-0\.012 mg \(10\.00%\)/)).toBeTruthy();
     });
 
     it('reduction amounts do NOT use error/red color class', () => {
