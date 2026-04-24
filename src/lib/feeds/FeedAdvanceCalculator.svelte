@@ -300,18 +300,23 @@
 	{/if}
 
 	<!-- ADVISORIES -->
+	<!--
+	  Per DESIGN.md "The Amber-as-Semantic Rule": Amber is reserved exclusively for
+	  the BMF fortifier mode in the formula calculator. Feeds advisories cover TPN
+	  dextrose %, total kcal/kg/d, weight floors, etc. — NOT BMF semantics. Render
+	  on a neutral surface with an AlertTriangle in secondary text.
+	-->
 	{#each triggeredAdvisories as advisory (advisory.id)}
 		<div
-			class="flex items-start gap-3 rounded-xl border px-4 py-3"
-			style="background: var(--color-bmf-50); border-color: var(--color-bmf-300);"
+			class="flex items-start gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-alt)] px-4 py-3"
 			role="note"
 		>
 			<AlertTriangle
 				size={20}
-				class="mt-0.5 shrink-0 text-[var(--color-bmf-600)]"
+				class="mt-0.5 shrink-0 text-[var(--color-text-secondary)]"
 				aria-hidden="true"
 			/>
-			<p class="text-base font-semibold text-[var(--color-text-primary)]">{advisory.message}</p>
+			<p class="text-ui font-semibold text-[var(--color-text-primary)]">{advisory.message}</p>
 		</div>
 	{/each}
 </div>
