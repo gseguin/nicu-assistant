@@ -16,7 +16,7 @@
     "enteralKcalPerOz": 24
   },
   "inputs": {
-    "weightKg": { "min": 0.4, "max": 6.0, "step": 0.01 },
+    "weightKg": { "min": 0.3, "max": 10, "step": 0.1 },
     "trophicMlKgDay": { "min": 10, "max": 30, "step": 1 },
     "advanceMlKgDay": { "min": 10, "max": 40, "step": 1 },
     "goalMlKgDay": { "min": 120, "max": 180, "step": 5 },

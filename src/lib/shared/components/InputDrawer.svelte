@@ -62,12 +62,7 @@
 	aria-expanded={expanded}
 	onclick={() => (expanded = true)}
 >
-	<span class="flex min-w-0 flex-1 items-center gap-2">
-		<span class="text-2xs font-semibold tracking-wide text-[var(--color-text-tertiary)] uppercase"
-			>Inputs</span
-		>
-		<span class="truncate text-[var(--color-text-primary)]">{summary}</span>
-	</span>
+	<span class="min-w-0 flex-1 truncate text-[var(--color-text-primary)]">{summary}</span>
 	<ChevronUp size={20} aria-hidden="true" />
 </button>
 

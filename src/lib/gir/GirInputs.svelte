@@ -11,7 +11,7 @@
   travels with the input wherever the drawer renders.
 -->
 <script lang="ts">
-	import NumericInput from '$lib/shared/components/NumericInput.svelte';
+	import RangedNumericInput from '$lib/shared/components/RangedNumericInput.svelte';
 	import { girState } from '$lib/gir/state.svelte.js';
 	import config from '$lib/gir/gir-config.json';
 	import type { GirInputRanges } from '$lib/gir/types.js';
@@ -32,7 +32,7 @@
 </script>
 
 <section class="card flex flex-col gap-4">
-	<NumericInput
+	<RangedNumericInput
 		bind:value={girState.current.weightKg}
 		label="Weight"
 		suffix="kg"
@@ -44,7 +44,7 @@
 		showRangeHint={true}
 		showRangeError={true}
 	/>
-	<NumericInput
+	<RangedNumericInput
 		bind:value={girState.current.dextrosePct}
 		label="Dextrose"
 		suffix="%"
@@ -59,13 +59,12 @@
 
 	{#if showDexAdvisory}
 		<div
-			class="flex items-start gap-3 rounded-xl border px-4 py-3"
-			style="background: var(--color-bmf-50); border-color: var(--color-bmf-300);"
+			class="flex items-start gap-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-alt)] px-4 py-3"
 			role="note"
 		>
 			<AlertTriangle
 				size={20}
-				class="mt-0.5 shrink-0 text-[var(--color-bmf-600)]"
+				class="mt-0.5 shrink-0 text-[var(--color-text-secondary)]"
 				aria-hidden="true"
 			/>
 			<p class="text-base font-semibold text-[var(--color-text-primary)]">
@@ -74,7 +73,7 @@
 		</div>
 	{/if}
 
-	<NumericInput
+	<RangedNumericInput
 		bind:value={girState.current.mlPerKgPerDay}
 		label="Fluid order"
 		suffix="ml/kg/day"

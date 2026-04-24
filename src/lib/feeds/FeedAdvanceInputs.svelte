@@ -25,6 +25,7 @@
 		cadenceOptions
 	} from './feeds-config.js';
 	import NumericInput from '$lib/shared/components/NumericInput.svelte';
+	import RangedNumericInput from '$lib/shared/components/RangedNumericInput.svelte';
 	import SelectPicker from '$lib/shared/components/SelectPicker.svelte';
 	import SegmentedToggle from '$lib/shared/components/SegmentedToggle.svelte';
 	import type { SelectOption } from '$lib/shared/types.js';
@@ -77,7 +78,7 @@
 	<!-- SHARED: Weight input + mode toggle (D-27: toggle moved INTO the weight card so it's
 	     always visible above the per-mode inputs card, not isolated between cards) -->
 	<section class="card flex flex-col gap-4">
-		<NumericInput
+		<RangedNumericInput
 			bind:value={feedsState.current.weightKg}
 			label="Weight"
 			suffix="kg"
@@ -86,8 +87,6 @@
 			step={inputs.weightKg.step}
 			placeholder="1.94"
 			id="feeds-weight"
-			showRangeHint={true}
-			showRangeError={true}
 		/>
 		<SegmentedToggle
 			label="Calculator mode"
@@ -102,7 +101,7 @@
 	{#if feedsState.current.mode === 'bedside'}
 		<!-- BEDSIDE INPUTS -->
 		<section class="card flex flex-col gap-4">
-			<NumericInput
+			<RangedNumericInput
 				bind:value={feedsState.current.trophicMlKgDay}
 				label="Trophic"
 				suffix="ml/kg/d"
@@ -111,10 +110,8 @@
 				step={inputs.trophicMlKgDay.step}
 				placeholder="20"
 				id="feeds-trophic"
-				showRangeHint={true}
-				showRangeError={true}
 			/>
-			<NumericInput
+			<RangedNumericInput
 				bind:value={feedsState.current.advanceMlKgDay}
 				label="Advance"
 				suffix="ml/kg/d"
@@ -123,10 +120,8 @@
 				step={inputs.advanceMlKgDay.step}
 				placeholder="30"
 				id="feeds-advance"
-				showRangeHint={true}
-				showRangeError={true}
 			/>
-			<NumericInput
+			<RangedNumericInput
 				bind:value={feedsState.current.goalMlKgDay}
 				label="Goal"
 				suffix="ml/kg/d"
@@ -135,8 +130,6 @@
 				step={inputs.goalMlKgDay.step}
 				placeholder="160"
 				id="feeds-goal"
-				showRangeHint={true}
-				showRangeError={true}
 			/>
 			<SelectPicker
 				label="Feed frequency"
@@ -148,7 +141,7 @@
 				bind:value={feedsState.current.advanceCadence}
 				options={cadenceSelectOptions}
 			/>
-			<NumericInput
+			<RangedNumericInput
 				bind:value={feedsState.current.totalFluidsMlHr}
 				label="Total fluids (for IV backfill)"
 				suffix="ml/hr"
@@ -157,8 +150,6 @@
 				step={inputs.totalFluidsMlHr.step}
 				placeholder="12"
 				id="feeds-total-fluids"
-				showRangeHint={true}
-				showRangeError={true}
 			/>
 		</section>
 	{:else}
@@ -222,7 +213,7 @@
 					/>
 				</div>
 			</fieldset>
-			<NumericInput
+			<RangedNumericInput
 				bind:value={feedsState.current.smofMl}
 				label="SMOF 20% lipid"
 				suffix="ml"
@@ -231,10 +222,8 @@
 				step={inputs.smofMl.step}
 				placeholder="0"
 				id="feeds-smof"
-				showRangeHint={true}
-				showRangeError={true}
 			/>
-			<NumericInput
+			<RangedNumericInput
 				bind:value={feedsState.current.enteralMl}
 				label="Enteral volume"
 				suffix="ml"
@@ -243,8 +232,6 @@
 				step={inputs.enteralMl.step}
 				placeholder="200"
 				id="feeds-enteral-ml"
-				showRangeHint={true}
-				showRangeError={true}
 			/>
 			<SelectPicker
 				label="Enteral caloric density"

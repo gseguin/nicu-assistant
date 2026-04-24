@@ -9,7 +9,7 @@
   the previous inline inputs section.
 -->
 <script lang="ts">
-	import NumericInput from '$lib/shared/components/NumericInput.svelte';
+	import RangedNumericInput from '$lib/shared/components/RangedNumericInput.svelte';
 	import { morphineState } from '$lib/morphine/state.svelte.js';
 	import config from '$lib/morphine/morphine-config.json';
 	import type { MorphineInputRanges } from '$lib/morphine/types.js';
@@ -35,7 +35,7 @@
 </script>
 
 <section class="card flex flex-col gap-4">
-	<NumericInput
+	<RangedNumericInput
 		bind:value={morphineState.current.weightKg}
 		label="Dosing weight"
 		suffix="kg"
@@ -47,7 +47,7 @@
 		showRangeHint={true}
 		showRangeError={true}
 	/>
-	<NumericInput
+	<RangedNumericInput
 		bind:value={morphineState.current.maxDoseMgKgDose}
 		label="Max morphine dose"
 		suffix="mg/kg/dose"
@@ -59,7 +59,7 @@
 		showRangeHint={true}
 		showRangeError={true}
 	/>
-	<NumericInput
+	<RangedNumericInput
 		bind:value={morphineState.current.decreasePct}
 		label="Decrease per step"
 		suffix="%"
