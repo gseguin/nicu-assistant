@@ -19,7 +19,7 @@ export interface CalculatorEntry {
 export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
   {
     id: 'morphine-wean',
-    label: 'Morphine Wean',
+    label: 'Morphine',
     href: '/morphine-wean',
     icon: Syringe,
     description: 'Morphine weaning schedule calculator',

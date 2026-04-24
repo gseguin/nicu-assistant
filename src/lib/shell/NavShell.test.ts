@@ -87,7 +87,7 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
     const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
     const tabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(tabs).toHaveLength(4);
-    expect(tabs[0].textContent).toMatch(/Morphine Wean/i);
+    expect(tabs[0].textContent).toMatch(/Morphine/i);
     expect(tabs[1].textContent).toMatch(/Formula/i);
     expect(tabs[2].textContent).toMatch(/GIR/i);
     expect(tabs[3].textContent).toMatch(/Feeds/i);
@@ -101,7 +101,7 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
     const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
     const tabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(tabs).toHaveLength(2);
-    expect(tabs[0].textContent).toMatch(/Morphine Wean/i);
+    expect(tabs[0].textContent).toMatch(/Morphine/i);
     expect(tabs[1].textContent).toMatch(/Formula/i);
   });
 
@@ -148,7 +148,7 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
     const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
     const tabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(tabs).toHaveLength(4);
-    expect(tabs[0].textContent).toMatch(/Morphine Wean/i);
+    expect(tabs[0].textContent).toMatch(/Morphine/i);
     expect(tabs[1].textContent).toMatch(/Formula/i);
     expect(tabs[2].textContent).toMatch(/GIR/i);
     expect(tabs[3].textContent).toMatch(/Feeds/i);

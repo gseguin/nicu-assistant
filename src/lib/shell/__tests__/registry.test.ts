@@ -12,7 +12,7 @@ describe('CALCULATOR_REGISTRY', () => {
 
   it('includes Morphine Wean calculator as first entry', () => {
     expect(CALCULATOR_REGISTRY[0].id).toBe('morphine-wean');
-    expect(CALCULATOR_REGISTRY[0].label).toBe('Morphine Wean');
+    expect(CALCULATOR_REGISTRY[0].label).toBe('Morphine');
     expect(CALCULATOR_REGISTRY[0].href).toBe('/morphine-wean');
   });
 
