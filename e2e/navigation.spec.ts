@@ -81,3 +81,30 @@ test.describe('Navigation (v1.2 restructure)', () => {
     await expect(page.getByRole('dialog').getByText('Morphine Wean Calculator')).toBeVisible();
   });
 });
+
+test.describe('Root redirect (D-19)', () => {
+  test('root path redirects to /morphine-wean via meta refresh', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.removeItem('nicu:favorites');
+    });
+    await page.goto('/');
+    // Either the meta-refresh or SvelteKit hydration lands us at /morphine-wean.
+    await expect(page).toHaveURL(/morphine-wean/, { timeout: 5000 });
+  });
+
+  test('deep link to /uac-uvc does NOT redirect to /morphine-wean (pathname gate)', async ({
+    page
+  }) => {
+    await page.addInitScript(() => {
+      localStorage.removeItem('nicu:favorites');
+    });
+    // Adapter-static `fallback: 'index.html'` serves the prerendered root page for
+    // deep links until SvelteKit hydrates. The inline pathname-gate script must
+    // remove the meta-refresh tag before the browser acts on it; otherwise this
+    // navigation would be yanked to /morphine-wean.
+    await page.goto('/uac-uvc');
+    // Give hydration a moment, then assert URL is still /uac-uvc.
+    await page.waitForLoadState('networkidle');
+    await expect(page).toHaveURL(/uac-uvc/);
+  });
+});
