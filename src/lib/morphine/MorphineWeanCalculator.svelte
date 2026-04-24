@@ -3,6 +3,8 @@
 	import { calculateLinearSchedule } from '$lib/morphine/calculations.js';
 	import { morphineState } from '$lib/morphine/state.svelte.js';
 	import NumericInput from '$lib/shared/components/NumericInput.svelte';
+	import HeroResult from '$lib/shared/components/HeroResult.svelte';
+	import { formatMg, formatPercent } from './format.js';
 	import type { WeanStep, MorphineInputRanges } from '$lib/morphine/types.js';
 	import config from '$lib/morphine/morphine-config.json';
 
@@ -168,34 +170,39 @@
 		{@const first = schedule[0]}
 		{@const last = schedule[schedule.length - 1]}
 		{@const totalReduction = first.doseMg - last.doseMg}
-		{#key calcKey}
-			<div
-				data-testid="morphine-summary"
-				class="card animate-result-pulse flex items-center justify-between bg-[var(--color-identity-hero)] px-4 py-3"
-				aria-live="polite"
-				aria-atomic="true"
-			>
-				<div class="flex flex-col">
-					<span class="text-2xs font-semibold text-[var(--color-identity)]">Start</span>
-					<span class="num text-base font-bold text-[var(--color-text-primary)]"
-						>{first.doseMg.toFixed(4)} mg</span
-					>
+		<HeroResult
+			eyebrow="WEANING SUMMARY"
+			value=""
+			pulseKey={calcKey}
+			ariaLabel="Weaning summary"
+		>
+			{#snippet children()}
+				<div
+					data-testid="morphine-summary"
+					class="flex items-center justify-between"
+				>
+					<div class="flex flex-col">
+						<span class="text-2xs font-semibold text-[var(--color-identity)]">Start</span>
+						<span class="num text-base font-bold text-[var(--color-text-primary)]"
+							>{formatMg(first.doseMg)} mg</span
+						>
+					</div>
+					<div class="text-lg text-[var(--color-text-tertiary)]">→</div>
+					<div class="flex flex-col items-end">
+						<span class="text-2xs font-semibold text-[var(--color-identity)]">Step {last.step}</span>
+						<span class="num text-base font-bold text-[var(--color-text-primary)]"
+							>{formatMg(last.doseMg)} mg</span
+						>
+					</div>
+					<div class="flex flex-col items-end">
+						<span class="text-2xs font-semibold text-[var(--color-identity)]">Total reduction</span>
+						<span class="num text-sm font-semibold text-[var(--color-text-primary)]"
+							>{formatPercent((totalReduction / first.doseMg) * 100)}</span
+						>
+					</div>
 				</div>
-				<div class="text-lg text-[var(--color-text-tertiary)]">→</div>
-				<div class="flex flex-col items-end">
-					<span class="text-2xs font-semibold text-[var(--color-identity)]">Step {last.step}</span>
-					<span class="num text-base font-bold text-[var(--color-text-primary)]"
-						>{last.doseMg.toFixed(4)} mg</span
-					>
-				</div>
-				<div class="flex flex-col items-end border-l border-[var(--color-border)] pl-3">
-					<span class="text-2xs font-semibold text-[var(--color-identity)]">Total reduction</span>
-					<span class="num text-sm font-semibold text-[var(--color-text-primary)]"
-						>{((totalReduction / first.doseMg) * 100).toFixed(1)}%</span
-					>
-				</div>
-			</div>
-		{/key}
+			{/snippet}
+		</HeroResult>
 
 		<section aria-label="Weaning schedule" aria-live="polite" aria-atomic="true" class="mt-4">
 			<div class="space-y-2" bind:this={scheduleContainer}>
@@ -217,7 +224,7 @@
 							</span>
 							{#if step.reductionMg > 0}
 								<span class="pr-1 text-2xs font-medium text-[var(--color-text-tertiary)]"
-									>-{step.reductionMg.toFixed(4)} mg ({reductionPct.toFixed(1)}%)</span
+									>-{formatMg(step.reductionMg)} mg ({formatPercent(reductionPct)})</span
 								>
 							{/if}
 						</div>
@@ -226,12 +233,12 @@
 								class="{isFirst
 									? 'text-xl'
 									: 'text-lg'} num font-bold text-[var(--color-text-primary)]"
-								>{step.doseMg.toFixed(4)}</span
+								>{formatMg(step.doseMg)}</span
 							>
 							<span class="text-sm text-[var(--color-text-tertiary)]">mg</span>
 						</div>
 						<div class="num text-2xs font-medium text-[var(--color-text-secondary)]">
-							{step.doseMgKgDose.toFixed(4)} mg/kg/dose
+							{formatMg(step.doseMgKgDose)} mg/kg/dose
 						</div>
 					</div>
 				{/each}
