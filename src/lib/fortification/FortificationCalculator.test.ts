@@ -32,8 +32,9 @@ function getSelectTrigger(label: string): HTMLElement {
 
 // Escape to find the hero numeric value specifically inside the hero card
 // (which has aria-atomic="true" and aria-live="polite").
+// Post-D-07: HeroResult uses UPPERCASE eyebrow string ("AMOUNT TO ADD").
 function getHeroCard(): HTMLElement {
-  const heroLabel = screen.getByText('Amount to Add');
+  const heroLabel = screen.getByText('AMOUNT TO ADD');
   return heroLabel.closest('section') as HTMLElement;
 }
 
@@ -58,8 +59,9 @@ describe('FortificationCalculator', () => {
     render(FortificationCalculator);
     const hero = getHeroCard();
     expect(hero).toBeTruthy();
-    // Hero numeric: "2" inside the hero card
-    expect(within(hero).getByText(/^\s*2\s*$/)).toBeTruthy();
+    // Hero numeric: "2.0" inside the hero card (D-23: keep one decimal so
+    // .num tabular alignment holds — '2.0' not '2').
+    expect(within(hero).getByText(/^\s*2\.0\s*$/)).toBeTruthy();
     // Hero unit label: "Teaspoons" inside the hero card (the Unit select
     // trigger outside also contains the word, so scope to the hero)
     expect(within(hero).getByText('Teaspoons')).toBeTruthy();
@@ -72,12 +74,12 @@ describe('FortificationCalculator', () => {
   it('UI-02: live recalc when volumeMl mutates after render', async () => {
     render(FortificationCalculator);
     const hero = getHeroCard();
-    expect(within(hero).getByText(/^\s*2\s*$/)).toBeTruthy();
+    expect(within(hero).getByText(/^\s*2\.0\s*$/)).toBeTruthy();
 
     mockState.volumeMl = 360;
     await tick();
 
-    expect(within(hero).getByText(/^\s*4\s*$/)).toBeTruthy();
+    expect(within(hero).getByText(/^\s*4\.0\s*$/)).toBeTruthy();
     expect(screen.getByText('367.0 mL')).toBeTruthy();
     expect(screen.getByText('23.5 kcal/oz')).toBeTruthy();
     expect(screen.getByText('360 (12.2 oz)')).toBeTruthy();
@@ -128,7 +130,7 @@ describe('FortificationCalculator', () => {
     expect(mockState.unit).toBe('teaspoons');
     expect(screen.queryByText(/Packets is only available for Similac HMF/)).toBeNull();
     const hero = getHeroCard();
-    expect(within(hero).getByText(/^\s*2\s*$/)).toBeTruthy();
+    expect(within(hero).getByText(/^\s*2\.0\s*$/)).toBeTruthy();
     expect(within(hero).getByText('Teaspoons')).toBeTruthy();
   });
 
@@ -189,21 +191,20 @@ describe('FortificationCalculator', () => {
       expect(hero.getAttribute('aria-atomic')).toBe('true');
     });
 
-    it('hero inner wrapper has .animate-result-pulse class when result present', () => {
+    it('hero <section> carries .animate-result-pulse class when result present', () => {
       render(FortificationCalculator);
       const hero = getHeroCard();
-      expect(hero.querySelector('.animate-result-pulse')).toBeTruthy();
+      // Post-D-07: HeroResult owns animate-result-pulse on the outer <section>.
+      expect(hero.classList.contains('animate-result-pulse')).toBe(true);
     });
 
-    it('hero inner wrapper re-mounts when result changes ({#key calcKey})', async () => {
+    it('hero inner block re-mounts when result changes ({#key pulseKey})', async () => {
       render(FortificationCalculator);
-      const hero = getHeroCard();
-      const before = hero.querySelector('.animate-result-pulse');
-      expect(before).toBeTruthy();
+      const before = screen.getByText(/^\s*2\.0\s*$/);
       mockState.volumeMl = 360;
       await tick();
-      const after = hero.querySelector('.animate-result-pulse');
-      expect(after).toBeTruthy();
+      const after = screen.getByText(/^\s*4\.0\s*$/);
+      // Different DOM nodes — HeroResult's {#key pulseKey} re-mounted the inner block.
       expect(after).not.toBe(before);
     });
 
