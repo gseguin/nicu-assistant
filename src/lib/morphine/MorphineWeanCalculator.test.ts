@@ -47,8 +47,8 @@ describe('MorphineWeanCalculator', () => {
 
     render(MorphineWeanCalculator);
 
-    // The schedule should show "Step 1 — Starting dose" text
-    expect(screen.getByText(/Step 1 — Starting dose/)).toBeTruthy();
+    // The schedule should show "Step 1: Starting dose" text
+    expect(screen.getByText(/Step 1: Starting dose/)).toBeTruthy();
   });
 
   it('shows empty state placeholder without inputs', () => {

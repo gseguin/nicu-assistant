@@ -47,7 +47,7 @@
 		if (!hasBlurred) return '';
 		const belowMin = min !== undefined && value < min;
 		const aboveMax = max !== undefined && value > max;
-		if (belowMin || aboveMax) return 'Outside expected range — verify';
+		if (belowMin || aboveMax) return 'Outside expected range. Verify.';
 		return '';
 	});
 

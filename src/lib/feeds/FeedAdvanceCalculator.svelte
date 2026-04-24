@@ -336,7 +336,7 @@
 						<span class="text-ui text-[var(--color-text-secondary)]">ml/hr</span>
 					</div>
 					<p class="mt-1 text-2xs text-[var(--color-text-tertiary)]">
-						Institution-specific — verify against your unit protocol
+						Institution-specific. Verify against your unit protocol.
 					</p>
 				</div>
 			{/if}

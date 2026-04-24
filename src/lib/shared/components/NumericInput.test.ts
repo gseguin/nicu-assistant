@@ -43,7 +43,7 @@ describe('NumericInput', () => {
     await fireEvent.blur(input);
     expect(input.value).toBe('150');
     expect(input.getAttribute('aria-invalid')).toBe('true');
-    expect(screen.getByText('Outside expected range — verify')).toBeTruthy();
+    expect(screen.getByText('Outside expected range. Verify.')).toBeTruthy();
   });
 
   it('shows inline error when value is below min', async () => {
@@ -54,7 +54,7 @@ describe('NumericInput', () => {
     await fireEvent.blur(input);
     expect(input.value).toBe('-5');
     expect(input.getAttribute('aria-invalid')).toBe('true');
-    expect(screen.getByText('Outside expected range — verify')).toBeTruthy();
+    expect(screen.getByText('Outside expected range. Verify.')).toBeTruthy();
   });
 
   it('T-03: renders both-bounds range hint with suffix', () => {
@@ -110,7 +110,7 @@ describe('NumericInput', () => {
       props: { value: 500, label: 'Weight', min: 0.1, max: 200 }
     });
     const input = screen.getByLabelText('Weight') as HTMLInputElement;
-    expect(screen.queryByText('Outside expected range — verify')).toBeNull();
+    expect(screen.queryByText('Outside expected range. Verify.')).toBeNull();
     expect(input.getAttribute('aria-invalid')).toBe('false');
     expect(screen.getByText('0.1–200')).toBeTruthy();
   });
@@ -121,7 +121,7 @@ describe('NumericInput', () => {
     });
     const input = screen.getByLabelText('Weight') as HTMLInputElement;
     await fireEvent.blur(input);
-    expect(screen.getByText('Outside expected range — verify')).toBeTruthy();
+    expect(screen.getByText('Outside expected range. Verify.')).toBeTruthy();
     expect(input.getAttribute('aria-invalid')).toBe('true');
     expect(screen.queryByText('0.1–200')).toBeNull();
   });
@@ -132,7 +132,7 @@ describe('NumericInput', () => {
     });
     const input = screen.getByLabelText('Weight') as HTMLInputElement;
     await fireEvent.blur(input);
-    expect(screen.getByText('Outside expected range — verify')).toBeTruthy();
+    expect(screen.getByText('Outside expected range. Verify.')).toBeTruthy();
   });
 
   it('T-11: returning to range clears advisory immediately on next input', async () => {
@@ -141,9 +141,9 @@ describe('NumericInput', () => {
     });
     const input = screen.getByLabelText('Weight') as HTMLInputElement;
     await fireEvent.blur(input);
-    expect(screen.getByText('Outside expected range — verify')).toBeTruthy();
+    expect(screen.getByText('Outside expected range. Verify.')).toBeTruthy();
     await fireEvent.input(input, { target: { value: '50' } });
-    expect(screen.queryByText('Outside expected range — verify')).toBeNull();
+    expect(screen.queryByText('Outside expected range. Verify.')).toBeNull();
     expect(input.getAttribute('aria-invalid')).toBe('false');
     expect(screen.getByText('0.1–200')).toBeTruthy();
   });
@@ -163,9 +163,9 @@ describe('NumericInput', () => {
     });
     const input = screen.getByLabelText('Weight') as HTMLInputElement;
     await fireEvent.input(input, { target: { value: '9999' } });
-    expect(screen.queryByText('Outside expected range — verify')).toBeNull();
+    expect(screen.queryByText('Outside expected range. Verify.')).toBeNull();
     await fireEvent.blur(input);
-    expect(screen.getByText('Outside expected range — verify')).toBeTruthy();
+    expect(screen.getByText('Outside expected range. Verify.')).toBeTruthy();
   });
 
   it('preserves null when input is cleared', async () => {

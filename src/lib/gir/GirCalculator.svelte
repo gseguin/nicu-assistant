@@ -152,7 +152,7 @@
 				aria-hidden="true"
 			/>
 			<p class="text-ui text-[var(--color-text-secondary)]">
-				GIR &gt;12 mg/kg/min — consider hyperinsulinism workup / central access
+				GIR &gt;12 mg/kg/min. Consider hyperinsulinism workup or central access.
 			</p>
 		</div>
 	{/if}
@@ -174,7 +174,7 @@
 		<section class="space-y-2">
 			<h2 class="text-ui font-semibold text-[var(--color-text-primary)]">If current glucose is…</h2>
 			<p class="text-2xs text-[var(--color-text-tertiary)]">
-				Institutional titration helper — verify against your protocol before acting.
+				Institutional titration helper. Verify against your protocol before acting.
 			</p>
 			<GlucoseTitrationGrid
 				rows={result.titration}

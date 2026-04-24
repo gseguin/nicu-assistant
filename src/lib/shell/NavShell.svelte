@@ -67,7 +67,7 @@
                  {isActive
 						? 'border-[var(--color-identity)] text-[var(--color-identity)]'
 						: 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
-					aria-label="{calc.label} — {calc.description}"
+					aria-label="{calc.label}. {calc.description}"
 					aria-selected={isActive}
 					role="tab"
 				>
@@ -114,7 +114,7 @@
                {isActive
 					? 'font-semibold text-[var(--color-identity)]'
 					: 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}"
-				aria-label="{calc.label} — {calc.description}"
+				aria-label="{calc.label}. {calc.description}"
 				aria-selected={isActive}
 				role="tab"
 			>

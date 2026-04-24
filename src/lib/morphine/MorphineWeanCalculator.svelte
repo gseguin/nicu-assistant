@@ -213,7 +213,7 @@
 							<span
 								class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
 							>
-								{isFirst ? 'Step 1 — Starting dose' : `Step ${step.step}`}
+								{isFirst ? 'Step 1: Starting dose' : `Step ${step.step}`}
 							</span>
 							{#if step.reductionMg > 0}
 								<span class="pr-1 text-2xs font-medium text-[var(--color-text-tertiary)]"

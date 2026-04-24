@@ -20,7 +20,7 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     notes: [
       'Each step reduces the dose by weight × max dose × decrease % (a constant mg reduction across all 10 steps).',
       'Default parameters: 3.1 kg weight, 0.04 mg/kg/dose max dose, 10% decrease per step.',
-      'Source: morphine-wean-calculator.xlsx Sheet1. Results are a starting point — clinical judgment required.'
+      'Source: morphine-wean-calculator.xlsx Sheet1. Results are a starting point; clinical judgment required.'
     ]
   },
   formula: {
@@ -42,7 +42,7 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     notes: [
       'Formula: Current GIR = (Dex% × rate ml/hr × 10) / (Weight × 60); Initial rate = (Weight × ml/kg/day) / 24.',
       'Source spreadsheet: GIR-Wean-Calculator.xlsx (CALC tab). Formula validated against MDCalc and Hawkes et al., J Perinatol 2020 (PMC7286731).',
-      "The 6-bucket titration adjustment values are an institutional protocol — verify against your unit's own protocol before acting.",
+      "The 6-bucket titration adjustment values are an institutional protocol. Verify against your unit's own protocol before acting.",
       'Dextrose >12.5% requires central venous access. GIR >12 mg/kg/min warrants hyperinsulinism workup.'
     ]
   },
@@ -54,7 +54,7 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     notes: [
       'Bedside mode: trophic/advance/goal ml per feed from weight and ml/kg/d targets, with frequency (q2h-q6h) and cadence (every feed to once daily) dropdowns.',
       'Full nutrition mode: total kcal/kg/d from dual TPN dextrose lines, SMOF lipid, and enteral feeds. Hero output is total kcal/kg/d.',
-      'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement). Results are advisory — clinical judgment required.'
+      'Source: nutrition-calculator.xlsx Sheet1 (TPN full nutrition) + Sheet2 (bedside advancement). Results are advisory; clinical judgment required.'
     ]
   },
   'uac-uvc': {
@@ -65,7 +65,7 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     notes: [
       'Formulas: UAC depth = weight × 3 + 9 (cm); UVC depth = (weight × 3 + 9) / 2 (cm).',
       'Source: uac-uvc-calculator.xlsx (cells B3 and B7).',
-      'Rule-of-thumb estimate only — final placement MUST be confirmed by imaging (chest/abdominal X-ray) per institutional protocol before use.'
+      'Rule-of-thumb estimate only. Final placement MUST be confirmed by imaging (chest/abdominal X-ray) per institutional protocol before use.'
     ]
   }
 };

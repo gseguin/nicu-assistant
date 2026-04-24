@@ -77,7 +77,7 @@
 					</h2>
 					{#if favorites.isFull}
 						<span class="text-2xs text-[var(--color-text-secondary)]">
-							{FAVORITES_MAX} of {FAVORITES_MAX} favorites — remove one to add another.
+							{FAVORITES_MAX} of {FAVORITES_MAX} favorites. Remove one to add another.
 						</span>
 					{/if}
 				</div>
@@ -114,7 +114,7 @@
 							aria-label={isFavorite
 								? `Remove ${calc.label} from favorites`
 								: capBlocked
-									? `Add ${calc.label} to favorites (limit reached — remove one to add another)`
+									? `Add ${calc.label} to favorites (limit reached. Remove one to add another.)`
 									: `Add ${calc.label} to favorites`}
 							disabled={capBlocked}
 							aria-disabled={capBlocked ? 'true' : undefined}

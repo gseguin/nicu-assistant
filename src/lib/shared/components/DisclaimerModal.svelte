@@ -26,7 +26,7 @@
 			>
 				<p>
 					This app provides dosing and recipe calculations as decision support tools for licensed
-					clinical professionals. Results are intended to assist — not replace — clinical judgment.
+					clinical professionals. Results are intended to assist, not replace, clinical judgment.
 					All outputs must be reviewed by qualified NICU staff before administration.
 				</p>
 				<p>
@@ -47,7 +47,7 @@
 					class="min-h-[3.25rem] w-full rounded-[0.625rem] bg-[var(--color-accent-result)] px-4 py-3 text-base font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-light)]"
 					onclick={() => disclaimer.acknowledge()}
 				>
-					I Understand — Continue
+					I Understand
 				</button>
 			</div>
 		</Dialog.Content>
