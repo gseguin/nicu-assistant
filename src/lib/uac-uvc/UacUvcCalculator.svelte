@@ -2,9 +2,11 @@
 	import { calculateUacUvc } from './calculations.js';
 	import { uacUvcState } from './state.svelte.js';
 	import NumericInput from '$lib/shared/components/NumericInput.svelte';
+	import HeroResult from '$lib/shared/components/HeroResult.svelte';
 	import config from './uac-uvc-config.json';
 	import type { UacUvcInputRanges } from './types.js';
 	import { Slider } from 'bits-ui';
+	import { ArrowDownToLine, ArrowUpFromLine } from '@lucide/svelte';
 
 	const inputs = config.inputs as UacUvcInputRanges;
 
@@ -17,7 +19,7 @@
 	let result = $derived(calculateUacUvc(uacUvcState.current));
 	let pulseKey = $derived(uacUvcState.current.weightKg?.toFixed(2) ?? '');
 
-	// Persist on change — mirrors GirCalculator.svelte pattern exactly
+	// Persist on change: mirrors GirCalculator.svelte pattern exactly
 	$effect(() => {
 		JSON.stringify(uacUvcState.current);
 		uacUvcState.persist();
@@ -66,81 +68,68 @@
 		</Slider.Root>
 	</section>
 
-	<!-- HERO GRID: UAC first (top stripe), UVC second (bottom stripe). Stack on mobile, side-by-side on md+. -->
+	<!-- HERO GRID: UAC + UVC side-by-side on md+, stacked on mobile.
+	     Eyebrows use middle-dot U+00B7 (·) per em-dash ban (commit 917ecf2). -->
 	<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-		<!-- UAC HERO CARD -->
-		{#key pulseKey}
-			<section
-				class="card animate-result-pulse px-5 py-5 ring-1 ring-inset"
-				style="background: var(--color-identity-hero); --tw-ring-color: var(--color-identity);"
-				aria-live="polite"
-				aria-atomic="true"
-			>
-				{#if result}
-					<div class="flex flex-col gap-3">
-						<div class="flex flex-col">
-							<div
-								class="text-title font-black tracking-tight text-[var(--color-identity)]"
+		{#if result}
+			<HeroResult
+				eyebrow="UAC DEPTH · ARTERIAL"
+				value={result.uacCm.toFixed(1)}
+				unit="cm"
+				icon={ArrowDownToLine}
+				pulseKey={pulseKey}
+			/>
+			<HeroResult
+				eyebrow="UVC DEPTH · VENOUS"
+				value={result.uvcCm.toFixed(1)}
+				unit="cm"
+				icon={ArrowUpFromLine}
+				pulseKey={pulseKey}
+			/>
+		{:else}
+			<HeroResult eyebrow="UAC DEPTH · ARTERIAL" value="" pulseKey="empty-uac">
+				{#snippet children()}
+					<div class="flex flex-col gap-2">
+						<div class="flex items-center gap-2">
+							<ArrowDownToLine
+								size={24}
+								class="text-[var(--color-identity)]"
+								aria-hidden="true"
+							/>
+							<span
+								class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
 							>
-								UAC
-							</div>
-							<div
-								class="text-2xs font-semibold tracking-wide text-[var(--color-text-secondary)] uppercase"
-							>
-								Arterial depth
-							</div>
+								UAC DEPTH · ARTERIAL
+							</span>
 						</div>
-						<div class="flex items-baseline gap-2">
-							<span class="num text-display font-black text-[var(--color-text-primary)]"
-								>{result.uacCm.toFixed(1)}</span
-							>
-							<span class="text-ui text-[var(--color-text-secondary)]">cm</span>
-						</div>
+						<p class="text-ui text-[var(--color-text-secondary)]">
+							Enter weight to compute depth
+						</p>
 					</div>
-				{:else}
-					<p class="text-ui text-[var(--color-text-secondary)]">
-						Enter weight to compute depth
-					</p>
-				{/if}
-			</section>
-		{/key}
-
-		<!-- UVC HERO CARD -->
-		{#key pulseKey}
-			<section
-				class="card animate-result-pulse px-5 py-5 ring-1 ring-inset"
-				style="background: var(--color-identity-hero); --tw-ring-color: var(--color-identity);"
-				aria-live="polite"
-				aria-atomic="true"
-			>
-				{#if result}
-					<div class="flex flex-col gap-3">
-						<div class="flex flex-col">
-							<div
-								class="text-title font-black tracking-tight text-[var(--color-identity)]"
+				{/snippet}
+			</HeroResult>
+			<HeroResult eyebrow="UVC DEPTH · VENOUS" value="" pulseKey="empty-uvc">
+				{#snippet children()}
+					<div class="flex flex-col gap-2">
+						<div class="flex items-center gap-2">
+							<ArrowUpFromLine
+								size={24}
+								class="text-[var(--color-identity)]"
+								aria-hidden="true"
+							/>
+							<span
+								class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
 							>
-								UVC
-							</div>
-							<div
-								class="text-2xs font-semibold tracking-wide text-[var(--color-text-secondary)] uppercase"
-							>
-								Venous depth
-							</div>
+								UVC DEPTH · VENOUS
+							</span>
 						</div>
-						<div class="flex items-baseline gap-2">
-							<span class="num text-display font-black text-[var(--color-text-primary)]"
-								>{result.uvcCm.toFixed(1)}</span
-							>
-							<span class="text-ui text-[var(--color-text-secondary)]">cm</span>
-						</div>
+						<p class="text-ui text-[var(--color-text-secondary)]">
+							Enter weight to compute depth
+						</p>
 					</div>
-				{:else}
-					<p class="text-ui text-[var(--color-text-secondary)]">
-						Enter weight to compute depth
-					</p>
-				{/if}
-			</section>
-		{/key}
+				{/snippet}
+			</HeroResult>
+		{/if}
 	</div>
 </div>
 
