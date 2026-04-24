@@ -487,7 +487,7 @@ Single commit per D-11. Suggested commit subject:
 | A4 | The `Pending` count in REQUIREMENTS.md traceability table (41) matches the 41 v1.13 IDs verbatim. | Pitfalls §1 | [VERIFIED in this session via grep] — count is exactly 41 Pending rows, all v1.13 IDs. No risk. |
 | A5 | The morphine-wean advisory axe failure is a token regression (Amber rescope or RangedNumericInput unification) not a structural a11y bug. | Pitfalls §2 | Not investigated; could be a missing `aria-label` or focus-ring contrast issue requiring more than a token tweak. Recommend the fix task starts with `pnpm exec playwright test e2e/morphine-wean-a11y.spec.ts -g "advisory"` to read the axe violation output before assuming a fix shape. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should the 2 pre-existing Playwright failures live in their own
    pre-bump-fix plan, or as Tasks within the single Phase 43 plan?**
