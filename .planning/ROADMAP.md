@@ -113,7 +113,10 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
   3. User sees UAC depth (`weight × 3 + 9` cm) and UVC depth (`(weight × 3 + 9) / 2` cm) in two visually distinct hero cards — a clinician cannot confuse them at a glance
   4. User entering an out-of-range weight sees a blur-gated advisory (no auto-clamp), and the AboutSheet entry cites `uac-uvc-calculator.xlsx` with the imaging-confirmation caveat
   5. `/uac-uvc` passes axe sweeps in light + dark on first run (identity hue researched before PR) and all parity tests match the spreadsheet within 1% epsilon
-**Plans**: TBD
+**Plans**: 3 plans
+  - [ ] 42-01-PLAN.md — Wave 0: CalculatorId + registry + .identity-uac OKLCH tokens + AboutSheet entry + src/lib/uac-uvc/ module (types, config, state, calculations + parity fixtures + tests) + /uac-uvc route shell
+  - [ ] 42-02-PLAN.md — Wave 1: UacUvcCalculator.svelte (textbox + slider bidirectional sync + two hero cards with D-05 three-cue distinction) + 5-scenario component test + wire component into route
+  - [ ] 42-03-PLAN.md — Wave 2: Playwright E2E (e2e/uac-uvc.spec.ts — 375 + 1280 + favorites round-trip + cap-full + reload + slider drag) + axe sweeps (e2e/uac-uvc-a11y.spec.ts — light + dark)
 **UI hint**: yes
 
 ### Phase 43: Release v1.13.0
@@ -138,7 +141,7 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
 | 36-39 | v1.12 | 7/7 | Complete | 2026-04-10 |
 | 40. Favorites Store + Hamburger | v1.13 | 3/3 | Complete | 2026-04-23 |
 | 41. Favorites-Driven Nav | v1.13 | 2/2 | Complete | 2026-04-23 |
-| 42. UAC/UVC Calculator | v1.13 | 0/? | Not started | — |
+| 42. UAC/UVC Calculator | v1.13 | 0/3 | Not started | — |
 | 43. Release v1.13.0 | v1.13 | 0/? | Not started | — |
 
 ## Order Rationale
