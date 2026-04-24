@@ -97,9 +97,10 @@
 </header>
 
 <!-- Mobile bottom tab bar: calculator tabs only, hidden on md+ -->
+<!-- D-11: sole glassmorphism license in the system per DESIGN.md - do not propagate -->
 <nav
 	class="fixed right-0 bottom-0 left-0 z-10 border-t
-         border-[var(--color-border)] bg-[var(--color-surface)] pb-[env(safe-area-inset-bottom,0px)]
+         border-[var(--color-border)] bg-[var(--color-surface)]/95 backdrop-blur pb-[env(safe-area-inset-bottom,0px)]
          md:hidden"
 	aria-label="Calculator navigation"
 >
