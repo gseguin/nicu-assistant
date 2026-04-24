@@ -72,7 +72,7 @@
     --color-border: oklch(63% 0.01 220); /* WCAG fix: was 80%, now 3:1+ on surface & card */
     --color-text-primary: oklch(18% 0.012 230);
     --color-text-secondary: oklch(35% 0.01 225);
-    --color-text-tertiary: oklch(50% 0.008 225);
+    --color-text-tertiary: oklch(47% 0.008 225); /* WCAG fix: darkened from 50% to clear 4.5:1 on --color-surface-alt (severe-neuro GIR card tint) */
     --color-accent: oklch(49% 0.17 220); /* clinical-600 — UI text accent */
     --color-accent-light: oklch(86% 0.08 220); /* clinical-200 */
     --color-accent-result: oklch(
