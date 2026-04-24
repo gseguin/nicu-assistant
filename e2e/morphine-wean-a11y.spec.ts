@@ -51,7 +51,7 @@ test.describe('Morphine Wean Accessibility', () => {
     await page.getByLabel('Decrease per step').fill('10');
 
     // Wait for schedule to render
-    await expect(page.getByText(/Step 1 — Starting dose/)).toBeVisible();
+    await expect(page.getByText(/Step 1: Starting dose/)).toBeVisible();
 
     // Render the identity focus ring so axe can see it
     await page.getByLabel('Dosing weight').focus();
@@ -75,7 +75,7 @@ test.describe('Morphine Wean Accessibility', () => {
     await page.getByLabel('Dosing weight').fill('3.1');
     await page.getByLabel('Max morphine dose').fill('0.04');
     await page.getByLabel('Decrease per step').fill('10');
-    await expect(page.getByText(/Step 1 — Starting dose/)).toBeVisible();
+    await expect(page.getByText(/Step 1: Starting dose/)).toBeVisible();
 
     // Render the identity focus ring so axe can see it
     await page.getByLabel('Dosing weight').focus();

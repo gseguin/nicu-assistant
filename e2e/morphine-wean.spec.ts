@@ -16,7 +16,7 @@ test.describe('Morphine Wean Calculator', () => {
   });
 
   test('displays 10-step weaning schedule with defaults', async ({ page }) => {
-    await expect(page.getByText(/Step 1 — Starting dose/)).toBeVisible();
+    await expect(page.getByText(/Step 1: Starting dose/)).toBeVisible();
     // Check a few key steps are present (avoid strict mode with Step 10 matching Step 1)
     const scheduleRegion = page.locator('[aria-label="Weaning schedule"]');
     await expect(scheduleRegion.locator('[data-step-index]')).toHaveCount(10);
