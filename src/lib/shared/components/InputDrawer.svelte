@@ -57,7 +57,7 @@
 <button
 	type="button"
 	class="fixed right-0 left-0 z-20 flex min-h-14 items-center justify-between gap-3 border-t border-[var(--color-border)] bg-[var(--color-surface-card)]/95 px-4 py-2 text-ui font-medium text-[var(--color-text-primary)] shadow-md backdrop-blur transition-colors hover:bg-[var(--color-surface-card)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)] md:hidden"
-	style="bottom: calc(env(safe-area-inset-bottom, 0px) + 3.5rem);"
+	style="bottom: calc(env(safe-area-inset-bottom, 0px) + 3.5rem + 1px);"
 	aria-label="Open inputs drawer"
 	aria-expanded={expanded}
 	onclick={() => (expanded = true)}
@@ -102,10 +102,11 @@
 		padding: 0;
 		border: 0;
 		position: fixed;
-		/* Anchor flush above the mobile bottom nav so there's no hairline gap.
-		   NavShell mobile tabs are `min-h-14` (3.5rem = 56px); the drawer's
-		   bottom sits exactly on the nav's top edge. */
-		bottom: calc(env(safe-area-inset-bottom, 0px) + 3.5rem);
+		/* Anchor flush above the mobile bottom nav.
+		   NavShell nav has `min-h-14` tabs (3.5rem = 56px) PLUS a 1px border-t,
+		   so the nav's top edge is 3.5rem + 1px above the safe-area bottom.
+		   Matches collapsed-handle offset so neither state overlaps the border. */
+		bottom: calc(env(safe-area-inset-bottom, 0px) + 3.5rem + 1px);
 		left: 0;
 		right: 0;
 		top: auto;
