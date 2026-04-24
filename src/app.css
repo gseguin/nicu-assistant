@@ -127,8 +127,17 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Smooth theme transition — calm, not flashy */
-  html:not(.no-transition) * {
+  /* Smooth theme transition — calm, not flashy.
+     42.1-04 D-17: scoped to explicit theme-aware surfaces (was global `*` glob).
+     Reduces paint cost on slow devices; theme toggle still transitions cards/buttons/inputs. */
+  html:not(.no-transition) body,
+  html:not(.no-transition) .card,
+  html:not(.no-transition) button,
+  html:not(.no-transition) [role="tab"],
+  html:not(.no-transition) [role="dialog"],
+  html:not(.no-transition) input,
+  html:not(.no-transition) select,
+  html:not(.no-transition) [data-theme-aware] {
     transition:
       background-color 200ms ease-out,
       color 200ms ease-out,

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { GirTitrationRow } from './types.js';
 
 	interface Props {
@@ -20,91 +19,10 @@
 	});
 
 	let rowRefs: (HTMLDivElement | null)[] = $state([]);
-	let gridContainer: HTMLElement | undefined = $state();
 
-	// Dock-style magnification: scroll-driven scaling of mobile bucket cards.
-	// Cloned verbatim from MorphineWeanCalculator.svelte (Phase 5) — extraction to
-	// $lib/shared was considered and rejected in Phase 33 planning: only 2 call sites,
-	// both small, extraction would be premature abstraction. If a 3rd call site lands,
-	// extract then. See .planning/phases/33-gir-dock-magnification/33-01-PLAN.md.
-	// Guards: mobile-only (window.innerWidth < 768) AND !prefers-reduced-motion.
-	onMount(() => {
-		if (!gridContainer) return;
-
-		const prefersReducedMotion =
-			typeof window.matchMedia === 'function'
-				? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-				: false;
-		const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 768;
-
-		// Dock-style magnification: continuous floating index driven by scroll progress.
-		// Maps total scroll position to a floating index (0.0 → n-1) so the magnification
-		// slides smoothly through cards in the scroll direction, like the macOS Dock.
-		const MAX_SCALE = 1.06;
-		const MAX_SHADOW_BOOST = 4;
-
-		let rafId: number | null = null;
-
-		function updateMagnification() {
-			const cards = gridContainer?.querySelectorAll<HTMLElement>('[data-bucket-index]');
-			if (!cards?.length) return;
-
-			if (prefersReducedMotion || !isMobile()) {
-				cards.forEach((card) => {
-					card.style.transform = '';
-					card.style.boxShadow = '';
-					card.style.zIndex = '';
-				});
-				return;
-			}
-
-			const n = cards.length;
-			const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
-			// Map scroll position to a continuous floating index across all cards
-			// scrollY=0 → index 0, scrollY=max → index n-1
-			const scrollProgress = scrollMax > 0 ? window.scrollY / scrollMax : 0;
-			const floatingIdx = scrollProgress * (n - 1);
-
-			cards.forEach((card, i) => {
-				// Continuous distance from the floating index
-				const dist = Math.abs(i - floatingIdx);
-				// 0 → full (1.06), 1 → medium (1.03), 2 → slight, 3+ → none
-				// Use radius of 2.5 so 3 cards are always visibly magnified
-				const t = Math.max(0, 1 - dist / 2.5);
-				const scale = 1 + (MAX_SCALE - 1) * t;
-				const shadowBoost = MAX_SHADOW_BOOST * t;
-
-				card.style.transform = `scale(${scale})`;
-				card.style.boxShadow =
-					shadowBoost > 0.5
-						? `0 ${1 + shadowBoost}px ${4 + shadowBoost * 2}px rgba(0,0,0,${0.04 + 0.06 * t})`
-						: '';
-				card.style.zIndex = t > 0.3 ? '1' : '';
-			});
-		}
-
-		function onScroll() {
-			if (rafId !== null) return;
-			rafId = requestAnimationFrame(() => {
-				updateMagnification();
-				rafId = null;
-			});
-		}
-
-		window.addEventListener('scroll', onScroll, { passive: true });
-		// Initial pass
-		updateMagnification();
-
-		// Re-run when cards change (severe-neuro gating, row-set updates)
-		const mutObserver = new MutationObserver(() => updateMagnification());
-		mutObserver.observe(gridContainer, { childList: true, subtree: true });
-
-		return () => {
-			window.removeEventListener('scroll', onScroll);
-			if (rafId !== null) cancelAnimationFrame(rafId);
-			mutObserver.disconnect();
-		};
-	});
+	// 42.1-04 D-16 (extended): Dock-style scroll magnification removed. The roving-tabindex
+	// `selectedBucketId` already drives the active-row UX via aria-checked + ring-inset,
+	// so no replacement wiring is needed beyond cleaning up the side effects.
 
 	function formatDelta(delta: number): { glyph: string; abs: string; word: string } {
 		if (delta > 0) return { glyph: '▲', abs: delta.toFixed(1), word: '(increase)' };
@@ -182,7 +100,6 @@
 
 <!-- Mobile: vertical card stack (<480px) -->
 <div
-	bind:this={gridContainer}
 	class="flex flex-col gap-3 sm:hidden"
 	role="radiogroup"
 	aria-label="Glucose range titration helper"
@@ -193,12 +110,11 @@
 		{@const d = formatDelta(row.deltaRateMlHr)}
 		<div
 			bind:this={rowRefs[i]}
-			data-bucket-index={i}
 			role="radio"
 			aria-checked={selected}
 			aria-label={ariaLabelFor(row)}
 			tabindex={i === focusIndex ? 0 : -1}
-			class="card min-h-[88px] cursor-pointer px-4 py-4 transition-colors transition-transform outline-none
+			class="card min-h-[88px] cursor-pointer px-4 py-4 transition-colors outline-none
              focus-visible:ring-2 focus-visible:ring-[var(--color-identity)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]
              {row.bucketId === 'severe-neuro' && !selected
 				? 'bg-[var(--color-surface-alt)]'

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/svelte';
+import { render, screen, fireEvent } from '@testing-library/svelte';
 
 // Import a $state-backed mock from a .svelte.ts helper so bind:value bindings
 // see reactive properties and don't trigger binding_property_non_reactive warnings.
@@ -140,11 +140,27 @@ describe('MorphineWeanCalculator', () => {
       expect(errorElements.length).toBe(0);
     });
 
-    it('step cards have will-change-transform for GPU acceleration', () => {
+    it('clicking a schedule row sets aria-current="step" only on that row (D-16)', async () => {
       render(MorphineWeanCalculator);
-      const stepCard = document.querySelector('[data-step-index="0"]');
-      expect(stepCard).toBeTruthy();
-      expect(stepCard!.className).toContain('will-change-transform');
+      const rowZero = document.querySelector('[data-step-index="0"]') as HTMLElement;
+      const rowTwo = document.querySelector('[data-step-index="2"]') as HTMLElement;
+      expect(rowZero).toBeTruthy();
+      expect(rowTwo).toBeTruthy();
+
+      // Initially no row is current.
+      expect(rowZero.getAttribute('aria-current')).toBeNull();
+      expect(rowTwo.getAttribute('aria-current')).toBeNull();
+
+      // Click row 2 — it becomes the current step.
+      await fireEvent.click(rowTwo);
+      expect(rowTwo.getAttribute('aria-current')).toBe('step');
+      expect(rowZero.getAttribute('aria-current')).toBeNull();
+
+      // The active row gains the inset identity ring.
+      expect(rowTwo.className).toContain('ring-1');
+      expect(rowTwo.className).toContain('ring-inset');
+      expect(rowTwo.className).toContain('ring-[var(--color-identity)]');
+      expect(rowZero.className).not.toContain('ring-1');
     });
 
     it('Step 1 does not have a left accent border', () => {

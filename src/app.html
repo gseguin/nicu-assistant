@@ -48,6 +48,19 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="NICU Assist" />
+    <!-- 42.1-04 D-19: Static root redirect to /morphine-wean.
+         Runs synchronously before the rest of the page parses, so visitors
+         landing on `/` see /morphine-wean immediately — without waiting on
+         SvelteKit hydration. Adapter-static (fallback: 'index.html') means
+         this same shell is served for deep links like /uac-uvc, so we gate
+         the redirect on `location.pathname === '/'` to leave deep-link
+         visits untouched. The meta-refresh + canonical fallback live in
+         src/routes/+page.svelte for no-JS clients. -->
+    <script>
+      if (window.location.pathname === '/') {
+        window.location.replace('/morphine-wean');
+      }
+    </script>
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">
