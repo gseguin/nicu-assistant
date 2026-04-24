@@ -35,7 +35,7 @@ for (const viewport of [
       // content is the active (visible) copy. On desktop the handle has
       // md:hidden, so this is a no-op.
       if (viewport.name === 'mobile') {
-        await page.getByLabel('Open inputs drawer').click();
+        await page.getByRole('button', { name: /tap to edit inputs/i }).click();
       }
     });
 
@@ -43,9 +43,9 @@ for (const viewport of [
       page
     }) => {
       const scope = getInputsScope(page, viewport.name);
-      await scope.getByLabel('Weight').fill('3.1');
-      await scope.getByLabel('Dextrose').fill('12.5');
-      await scope.getByLabel('Fluid order').fill('80');
+      await scope.getByLabel('Weight', { exact: true }).fill('3.1');
+      await scope.getByLabel('Dextrose', { exact: true }).fill('12.5');
+      await scope.getByLabel('Fluid order', { exact: true }).fill('80');
 
       // On mobile, close the drawer so the hero + titration grid become visible.
       if (viewport.name === 'mobile') {
@@ -80,9 +80,9 @@ for (const viewport of [
 
     test('empty-state hero renders when inputs null', async ({ page }) => {
       const scope = getInputsScope(page, viewport.name);
-      await scope.getByLabel('Weight').fill('');
-      await scope.getByLabel('Dextrose').fill('');
-      await scope.getByLabel('Fluid order').fill('');
+      await scope.getByLabel('Weight', { exact: true }).fill('');
+      await scope.getByLabel('Dextrose', { exact: true }).fill('');
+      await scope.getByLabel('Fluid order', { exact: true }).fill('');
       if (viewport.name === 'mobile') {
         await page.keyboard.press('Escape');
       }
@@ -91,9 +91,9 @@ for (const viewport of [
 
     test('all three NumericInputs have inputmode="decimal"', async ({ page }) => {
       const scope = getInputsScope(page, viewport.name);
-      await expect(scope.getByLabel('Weight')).toHaveAttribute('inputmode', 'decimal');
-      await expect(scope.getByLabel('Dextrose')).toHaveAttribute('inputmode', 'decimal');
-      await expect(scope.getByLabel('Fluid order')).toHaveAttribute('inputmode', 'decimal');
+      await expect(scope.getByLabel('Weight', { exact: true })).toHaveAttribute('inputmode', 'decimal');
+      await expect(scope.getByLabel('Dextrose', { exact: true })).toHaveAttribute('inputmode', 'decimal');
+      await expect(scope.getByLabel('Fluid order', { exact: true })).toHaveAttribute('inputmode', 'decimal');
     });
   });
 }

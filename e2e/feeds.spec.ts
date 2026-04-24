@@ -32,13 +32,13 @@ for (const viewport of [
       // content is the active (visible) copy. On desktop the handle has
       // md:hidden, so this is a no-op.
       if (viewport.name === 'mobile') {
-        await page.getByLabel('Open inputs drawer').click();
+        await page.getByRole('button', { name: /tap to edit inputs/i }).click();
       }
     });
 
     test('bedside mode: enter weight -> three outputs visible', async ({ page }) => {
       const scope = getInputsScope(page, viewport.name);
-      await scope.getByLabel('Weight').fill('1.94');
+      await scope.getByLabel('Weight', { exact: true }).fill('1.94');
       // On mobile, close the drawer so the output region is visible above the
       // sheet. On desktop the drawer never opens; this is a no-op safety net.
       if (viewport.name === 'mobile') {
@@ -56,7 +56,7 @@ for (const viewport of [
 
     test('bedside mode: empty state when weight cleared', async ({ page }) => {
       const scope = getInputsScope(page, viewport.name);
-      await scope.getByLabel('Weight').fill('');
+      await scope.getByLabel('Weight', { exact: true }).fill('');
       if (viewport.name === 'mobile') {
         await page.keyboard.press('Escape');
       }
@@ -67,7 +67,7 @@ for (const viewport of [
       const scope = getInputsScope(page, viewport.name);
       // Switch to Full Nutrition mode (toggle now lives inside the inputs card).
       await scope.getByRole('tab', { name: /Full Nutrition/i }).click();
-      await scope.getByLabel('Weight').fill('1.74');
+      await scope.getByLabel('Weight', { exact: true }).fill('1.74');
       // TPN Line 1 fields — IDs are unique to each copy; the dialog overlay is
       // on top so the visible one is the drawer's when mobile.
       await scope.locator('#feeds-dex1-pct').fill('10');
@@ -81,18 +81,18 @@ for (const viewport of [
 
     test('mode toggle preserves weight', async ({ page }) => {
       const scope = getInputsScope(page, viewport.name);
-      await scope.getByLabel('Weight').fill('2.5');
+      await scope.getByLabel('Weight', { exact: true }).fill('2.5');
       // Switch to Full Nutrition
       await scope.getByRole('tab', { name: /Full Nutrition/i }).click();
-      await expect(scope.getByLabel('Weight')).toHaveValue('2.5');
+      await expect(scope.getByLabel('Weight', { exact: true })).toHaveValue('2.5');
       // Switch back to Bedside Advancement
       await scope.getByRole('tab', { name: /Bedside Advancement/i }).click();
-      await expect(scope.getByLabel('Weight')).toHaveValue('2.5');
+      await expect(scope.getByLabel('Weight', { exact: true })).toHaveValue('2.5');
     });
 
     test('all NumericInputs have inputmode="decimal"', async ({ page }) => {
       const scope = getInputsScope(page, viewport.name);
-      await expect(scope.getByLabel('Weight')).toHaveAttribute('inputmode', 'decimal');
+      await expect(scope.getByLabel('Weight', { exact: true })).toHaveAttribute('inputmode', 'decimal');
     });
   });
 }

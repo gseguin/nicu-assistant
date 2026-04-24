@@ -24,8 +24,13 @@ test.describe('Formula Calculator (desktop)', () => {
   test('renders recipe numeric output with defaults', async ({ page }) => {
     // Defaults load a valid formula — the recipe card should show a numeric result
     // (validates the full calculator wiring without depending on stale copy).
-    await expect(page.getByLabel('Starting Volume')).toBeVisible();
-    await expect(page.getByText(/ml/i).first()).toBeVisible();
+    // Scope to the desktop aside because the mobile drawer (hidden at md+) also
+    // mounts a copy of FortificationInputs, producing duplicate visibility hits.
+    const aside = page.locator('aside[aria-label="Formula inputs"]');
+    await expect(aside.getByLabel('Starting Volume')).toBeVisible();
+    // Recipe card lives in main; use visible locator so we don't pick the
+    // off-screen drawer dialog copy.
+    await expect(page.getByText(/ml/i).locator('visible=true').first()).toBeVisible();
   });
 });
 
@@ -41,7 +46,10 @@ test.describe('Formula Calculator (mobile)', () => {
   });
 
   test('inputs live behind the drawer handle; tap opens the sheet', async ({ page }) => {
-    const handle = page.getByLabel('Open inputs drawer');
+    // Plan 42.1-05 + 390aba6 (recap desktop-hide): the drawer trigger is now the
+    // InputsRecap button (md:hidden on desktop), whose composed aria-label ends
+    // with "Tap to edit inputs." The old "Open inputs drawer" handle was retired.
+    const handle = page.getByRole('button', { name: /tap to edit inputs/i });
     await expect(handle).toBeVisible();
     await expect(handle).toHaveAttribute('aria-expanded', 'false');
     // Tap the handle -> drawer expands, inputs become visible inside the dialog.

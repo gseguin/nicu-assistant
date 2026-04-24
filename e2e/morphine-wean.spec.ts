@@ -10,9 +10,9 @@ test.describe('Morphine Wean Calculator', () => {
   });
 
   test('pre-fills default values from config', async ({ page }) => {
-    await expect(page.getByLabel('Dosing weight')).toHaveValue('3');
-    await expect(page.getByLabel('Max morphine dose')).toHaveValue('0.04');
-    await expect(page.getByLabel('Decrease per step')).toHaveValue('10');
+    await expect(page.getByLabel('Dosing weight', { exact: true })).toHaveValue('3');
+    await expect(page.getByLabel('Max morphine dose', { exact: true })).toHaveValue('0.04');
+    await expect(page.getByLabel('Decrease per step', { exact: true })).toHaveValue('10');
   });
 
   test('displays 10-step weaning schedule with defaults', async ({ page }) => {
@@ -50,18 +50,18 @@ test.describe('Morphine Wean Calculator', () => {
 
   test('clear inputs resets to default values', async ({ page }) => {
     // Change a value first
-    await page.getByLabel('Dosing weight').fill('7.5');
+    await page.getByLabel('Dosing weight', { exact: true }).fill('7.5');
     // Clear resets to defaults, not empty
     await page.getByRole('button', { name: 'Clear inputs' }).click();
-    await expect(page.getByLabel('Dosing weight')).toHaveValue('3');
-    await expect(page.getByLabel('Max morphine dose')).toHaveValue('0.04');
-    await expect(page.getByLabel('Decrease per step')).toHaveValue('10');
+    await expect(page.getByLabel('Dosing weight', { exact: true })).toHaveValue('3');
+    await expect(page.getByLabel('Max morphine dose', { exact: true })).toHaveValue('0.04');
+    await expect(page.getByLabel('Decrease per step', { exact: true })).toHaveValue('10');
   });
 
   test('custom inputs produce correct starting dose', async ({ page }) => {
-    await page.getByLabel('Dosing weight').fill('5');
-    await page.getByLabel('Max morphine dose').fill('0.08');
-    await page.getByLabel('Decrease per step').fill('20');
+    await page.getByLabel('Dosing weight', { exact: true }).fill('5');
+    await page.getByLabel('Max morphine dose', { exact: true }).fill('0.08');
+    await page.getByLabel('Decrease per step', { exact: true }).fill('20');
     // Starting dose = 5 * 0.08 = 0.400 (formatMg → 3 decimals)
     const scheduleRegion = page.locator('[aria-label="Weaning schedule"]');
     await expect(scheduleRegion).toContainText('0.400');
