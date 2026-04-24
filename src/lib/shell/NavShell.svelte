@@ -107,7 +107,7 @@
 			<a
 				href={calc.href}
 				class="{calc.identityClass} flex min-h-14 flex-1 flex-col items-center justify-center
-               gap-1 py-2 text-ui font-medium transition-colors
+               gap-1 px-1 py-1 text-ui font-medium transition-colors
                focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-accent)]
                {isActive
 					? 'font-semibold text-[var(--color-accent)]'
@@ -116,7 +116,7 @@
 				aria-selected={isActive}
 				role="tab"
 			>
-				<calc.icon size={22} aria-hidden="true" />
+				<calc.icon size={18} aria-hidden="true" />
 				<span>{calc.label}</span>
 			</a>
 		{/each}
