@@ -45,45 +45,46 @@
 </script>
 
 <div class="space-y-6">
-	<!-- CURRENT GIR HERO -->
-	<HeroResult eyebrow="" value="" pulseKey={pulseKey} ariaLabel="Glucose infusion rate result">
-		{#snippet children()}
-			{#if result}
-				<div class="flex flex-col gap-3">
-					<div>
-						<div
-							class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
-						>
-							CURRENT GIR
-						</div>
-						<div class="flex items-baseline gap-2">
-							<span class="num text-display font-black text-[var(--color-text-primary)]"
-								>{result.currentGirMgKgMin.toFixed(1)}</span
-							>
-							<span class="text-ui text-[var(--color-text-secondary)]">mg/kg/min</span>
-						</div>
-					</div>
-					<div>
-						<div
-							class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
-						>
-							INITIAL RATE
-						</div>
-						<div class="flex items-baseline gap-2">
-							<span class="num text-title font-bold text-[var(--color-text-primary)]"
-								>{result.initialRateMlHr.toFixed(1)}</span
-							>
-							<span class="text-ui text-[var(--color-text-secondary)]">ml/hr</span>
-						</div>
-					</div>
+	<!-- PAIRED HEROES: Current GIR + Initial rate (mirrors UAC/UVC paired pattern).
+	     Each hero owns its own text-display numeral per the HeroResult contract. -->
+	{#if result}
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+			<HeroResult
+				eyebrow="CURRENT GIR"
+				value={result.currentGirMgKgMin.toFixed(1)}
+				unit="mg/kg/min"
+				pulseKey={pulseKey}
+				ariaLabel="Current glucose infusion rate"
+			/>
+			<HeroResult
+				eyebrow="INITIAL RATE"
+				value={result.initialRateMlHr.toFixed(1)}
+				unit="ml/hr"
+				pulseKey={pulseKey}
+				ariaLabel="Initial fluid rate"
+			/>
+		</div>
+	{:else}
+		<HeroResult
+			eyebrow="CURRENT GIR"
+			value=""
+			pulseKey="empty-gir"
+			ariaLabel="Glucose infusion rate result"
+		>
+			{#snippet children()}
+				<div class="flex flex-col gap-2">
+					<span
+						class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+					>
+						CURRENT GIR
+					</span>
+					<p class="text-ui text-[var(--color-text-secondary)]">
+						Enter weight, dextrose %, and fluid rate to compute GIR
+					</p>
 				</div>
-			{:else}
-				<p class="text-ui text-[var(--color-text-secondary)]">
-					Enter weight, dextrose %, and fluid rate to compute GIR
-				</p>
-			{/if}
-		{/snippet}
-	</HeroResult>
+			{/snippet}
+		</HeroResult>
+	{/if}
 
 	<!-- Tier 2 advisories -->
 	{#if showGirHighAdvisory}
