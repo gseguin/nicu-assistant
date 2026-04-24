@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Formula Calculator', () => {
+// Plan 42.1-05 (D-08): inputs live behind the InputDrawer on mobile. The
+// default spec runs in Playwright's desktop viewport (1280x720), so the inputs
+// render in the sticky right column and the tablist / Volume input are directly
+// visible. A small mobile block verifies the drawer affordance at 375x667.
+test.describe('Formula Calculator (desktop)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/formula');
     await page
@@ -20,7 +24,36 @@ test.describe('Formula Calculator', () => {
   test('renders recipe numeric output with defaults', async ({ page }) => {
     // Defaults load a valid formula — the recipe card should show a numeric result
     // (validates the full calculator wiring without depending on stale copy).
-    await expect(page.getByLabel('Volume')).toBeVisible();
+    await expect(page.getByLabel('Starting Volume')).toBeVisible();
     await expect(page.getByText(/ml/i).first()).toBeVisible();
+  });
+});
+
+test.describe('Formula Calculator (mobile)', () => {
+  test.use({ viewport: { width: 375, height: 667 } });
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/formula');
+    await page
+      .getByRole('button', { name: /understand/i })
+      .click({ timeout: 2000 })
+      .catch(() => {});
+  });
+
+  test('inputs live behind the drawer handle; tap opens the sheet', async ({ page }) => {
+    const handle = page.getByLabel('Open inputs drawer');
+    await expect(handle).toBeVisible();
+    await expect(handle).toHaveAttribute('aria-expanded', 'false');
+    // Tap the handle -> drawer expands, inputs become visible inside the dialog.
+    // NOTE: both the desktop aside (hidden via CSS `hidden md:block`) AND the
+    // drawer mount the SAME FortificationInputs component, so two DOM nodes share
+    // the aria-label. Scope to the open dialog to disambiguate.
+    await handle.click();
+    const dialog = page.getByRole('dialog', { name: 'Formula inputs' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByLabel('Starting Volume')).toBeVisible();
+    // Esc collapses
+    await page.keyboard.press('Escape');
+    await expect(handle).toHaveAttribute('aria-expanded', 'false');
   });
 });

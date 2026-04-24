@@ -28,12 +28,24 @@
 //   The regex substring-match /add uac\/uvc to favorites \(limit reached/i
 //   handles the cap-full variant regardless of trailing punctuation.
 
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+// Plan 42.1-05 (D-08): the route renders the SAME inputs twice — once in the
+// desktop sticky aside (hidden via CSS `hidden md:block`) and once inside the
+// mobile <InputDrawer>. This helper returns the input scoped to whichever
+// container is active at the current viewport so strict-mode locators resolve
+// to exactly one element.
+function getInputsScope(page: Page, viewport: 'mobile' | 'desktop') {
+	if (viewport === 'mobile') {
+		return page.getByRole('dialog', { name: 'UAC/UVC inputs' });
+	}
+	return page.locator('aside[aria-label="UAC/UVC inputs"]');
+}
 
 // ─── Happy path @ mobile (375) + desktop (1280) ────────────────────────────
 for (const viewport of [
-	{ name: 'mobile', width: 375, height: 667 },
-	{ name: 'desktop', width: 1280, height: 800 }
+	{ name: 'mobile' as const, width: 375, height: 667 },
+	{ name: 'desktop' as const, width: 1280, height: 800 }
 ]) {
 	test.describe(`UAC/UVC happy path (${viewport.name})`, () => {
 		test.use({ viewport: { width: viewport.width, height: viewport.height } });
@@ -44,16 +56,29 @@ for (const viewport of [
 				.getByRole('button', { name: /understand/i })
 				.click({ timeout: 2000 })
 				.catch(() => {});
+			// Plan 42.1-05 (D-08): on mobile (<md), inputs (textbox + slider) live behind
+			// the InputDrawer bottom-sheet. Open the drawer once so subsequent
+			// .getByLabel(...) finds visible inputs. On desktop the handle has md:hidden,
+			// so this is a no-op.
+			if (viewport.name === 'mobile') {
+				await page.getByLabel('Open inputs drawer').click();
+			}
 		});
 
 		test('renders heading + both hero cards + computed values at weight 2.5', async ({
 			page
 		}) => {
+			const scope = getInputsScope(page, viewport.name);
 			await expect(
 				page.getByRole('heading', { name: 'UAC/UVC Catheter Depth' })
 			).toBeVisible();
 
-			await page.getByLabel('Weight', { exact: true }).fill('2.5');
+			await scope.getByLabel('Weight', { exact: true }).fill('2.5');
+
+			// On mobile, close the drawer so the hero pair is visible above the sheet.
+			if (viewport.name === 'mobile') {
+				await page.keyboard.press('Escape');
+			}
 
 			// Post-D-07: HeroResult uses promoted UAC/UVC labels with quieter "Arterial depth" / "Venous depth" qualifier.
 			await expect(page.getByText('UAC', { exact: true })).toBeVisible();
@@ -71,7 +96,8 @@ for (const viewport of [
 		});
 
 		test('weight textbox has inputmode="decimal" (regression guard)', async ({ page }) => {
-			await expect(page.getByLabel('Weight', { exact: true })).toHaveAttribute(
+			const scope = getInputsScope(page, viewport.name);
+			await expect(scope.getByLabel('Weight', { exact: true })).toHaveAttribute(
 				'inputmode',
 				'decimal'
 			);
@@ -80,15 +106,21 @@ for (const viewport of [
 		test('slider keyboard step updates textbox (bidirectional sync, E2E layer)', async ({
 			page
 		}) => {
+			const scope = getInputsScope(page, viewport.name);
 			// Seed a known value via the textbox, then step the slider with ArrowRight.
 			// bits-ui Slider exposes the thumb as role=slider; focus + ArrowRight advances by `step` (0.1).
-			await page.getByLabel('Weight', { exact: true }).fill('4.9');
-			const thumb = page.getByRole('slider', { name: 'Weight slider' });
+			await scope.getByLabel('Weight', { exact: true }).fill('4.9');
+			const thumb = scope.getByRole('slider', { name: 'Weight slider' });
 			await thumb.focus();
 			await thumb.press('ArrowRight');
 
 			// Textbox reflects the slider-driven value in lockstep.
-			await expect(page.getByLabel('Weight', { exact: true })).toHaveValue('5');
+			await expect(scope.getByLabel('Weight', { exact: true })).toHaveValue('5');
+
+			// On mobile, close the drawer so the hero pair becomes visible above the sheet.
+			if (viewport.name === 'mobile') {
+				await page.keyboard.press('Escape');
+			}
 
 			// And both hero values update: UAC = 5*3+9 = 24.0 ; UVC = 12.0
 			await expect(page.getByText('24.0')).toBeVisible();
