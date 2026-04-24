@@ -43,16 +43,18 @@ describe('FortificationCalculator', () => {
     resetMockState();
   });
 
-  it('UI-01: renders all 5 inputs with correct labels', () => {
+  it('UI-01: does not render input fields itself (extracted to FortificationInputs in 42.1-05)', () => {
+    // Plan 42.1-05 (D-08): inputs were extracted into FortificationInputs.svelte so the
+    // route can compose them in the desktop sticky right column or the mobile
+    // <InputDrawer>. The calculator now renders the hero + verification card only.
+    // See FortificationInputs.test.ts for input field coverage.
     render(FortificationCalculator);
-    // NumericInput uses <label for=> → getByLabelText works
-    expect(screen.getByLabelText('Starting Volume')).toBeTruthy();
-    // SelectPickers: match the trigger by its aria-label prefix
-    expect(getSelectTrigger('Base')).toBeTruthy();
-    expect(getSelectTrigger('Formula')).toBeTruthy();
-    expect(getSelectTrigger('Target Calorie')).toBeTruthy();
-    expect(getSelectTrigger('Unit')).toBeTruthy();
-    expect(screen.getAllByRole('spinbutton')).toHaveLength(1);
+    expect(screen.queryAllByRole('spinbutton')).toHaveLength(0);
+    expect(screen.queryByLabelText('Starting Volume')).toBeNull();
+    expect(screen.queryByLabelText('Base')).toBeNull();
+    expect(screen.queryByLabelText('Formula')).toBeNull();
+    expect(screen.queryByLabelText('Target Calorie')).toBeNull();
+    expect(screen.queryByLabelText('Unit')).toBeNull();
   });
 
   it('UI-02: renders default outputs (Neocate parity case)', () => {
@@ -62,8 +64,9 @@ describe('FortificationCalculator', () => {
     // Hero numeric: "2.0" inside the hero card (D-23: keep one decimal so
     // .num tabular alignment holds — '2.0' not '2').
     expect(within(hero).getByText(/^\s*2\.0\s*$/)).toBeTruthy();
-    // Hero unit label: "Teaspoons" inside the hero card (the Unit select
-    // trigger outside also contains the word, so scope to the hero)
+    // Hero unit label: "Teaspoons" inside the hero card. Post-42.1-05 the Unit
+    // SelectPicker no longer lives on the calculator (extracted to inputs fragment),
+    // so "Teaspoons" only appears once — in the hero unit slot.
     expect(within(hero).getByText('Teaspoons')).toBeTruthy();
     // Verification values
     expect(screen.getByText('183.5 mL')).toBeTruthy();
@@ -85,102 +88,39 @@ describe('FortificationCalculator', () => {
     expect(screen.getByText('360 (12.2 oz)')).toBeTruthy();
   });
 
-  it('UI-03: Packets option is hidden from the Unit picker when formula is not Similac HMF', async () => {
-    mockState.formulaId = 'neocate-infant';
-    render(FortificationCalculator);
-    await tick();
-
-    // The Unit picker trigger displays the currently-selected option label.
-    // Packets must not appear as the trigger value or in any select item for non-HMF.
-    const unitTrigger = screen.getByLabelText('Unit');
-    expect(unitTrigger.textContent ?? '').not.toContain('Packets');
-
-    // Defensive: scan the entire DOM. The only place "Packets" should appear
-    // for a non-HMF formula is in the source code (via grep), not in any
-    // rendered text node.
-    expect(screen.queryByText(/^Packets$/)).toBeNull();
-  });
-
-  it('UI-03: Packets option is available in the Unit picker when formula is Similac HMF', async () => {
+  // UI-03 packets-availability tests now live in FortificationInputs.test.ts (the
+  // Unit SelectPicker was extracted in 42.1-05). The auto-reset / AUTO-01..03
+  // behaviors are state-driven (the $effect runs in whichever component owns the
+  // state binding). With the inputs extracted, the auto-reset $effect lives in
+  // FortificationInputs — covered there.
+  //
+  // The calculator-level coverage that remains is the hero/verification-only
+  // surface: when the state mutates, the hero re-renders the correct unit label
+  // ("Teaspoons" / "Packets" / etc.) without owning any input controls.
+  it('UI-03 (calculator): hero unit label tracks state.unit reactively', async () => {
     mockState.formulaId = 'similac-hmf';
     mockState.unit = 'packets';
     render(FortificationCalculator);
     await tick();
-
-    // With formula = Similac HMF and unit = packets, the Unit picker trigger
-    // should show "Packets" as the selected value.
-    const unitTrigger = screen.getByLabelText('Unit');
-    expect(unitTrigger.textContent ?? '').toContain('Packets');
-  });
-
-  it('UI-03: auto-reset on similac-hmf → non-HMF transition while Packets selected', async () => {
-    mockState.formulaId = 'similac-hmf';
-    mockState.unit = 'packets';
-    render(FortificationCalculator);
-    await tick();
-    await tick();
-    // HMF + packets is valid — not blocked
-    expect(screen.queryByText(/Packets is only available for Similac HMF/)).toBeNull();
-
-    // Transition to non-HMF — should auto-reset unit to teaspoons
-    mockState.formulaId = 'neocate-infant';
-    await tick();
-    await tick();
-
-    expect(mockState.unit).toBe('teaspoons');
-    expect(screen.queryByText(/Packets is only available for Similac HMF/)).toBeNull();
     const hero = getHeroCard();
-    expect(within(hero).getByText(/^\s*2\.0\s*$/)).toBeTruthy();
+    expect(within(hero).getByText('Packets')).toBeTruthy();
+
+    // Switch state away from packets — the hero unit label updates.
+    mockState.unit = 'teaspoons';
+    await tick();
     expect(within(hero).getByText('Teaspoons')).toBeTruthy();
   });
 
-  it('AUTO-01: switching TO similac-hmf auto-selects packets', async () => {
-    mockState.formulaId = 'neocate-infant';
-    mockState.unit = 'teaspoons';
+  it('UI-04: calculator no longer renders inputs (extracted to FortificationInputs)', () => {
     render(FortificationCalculator);
-    await tick();
-    expect(mockState.unit).toBe('teaspoons');
-
-    mockState.formulaId = 'similac-hmf';
-    await tick();
-    await tick();
-
-    expect(mockState.unit).toBe('packets');
-  });
-
-  it('AUTO-02: switching FROM similac-hmf while packets selected resets unit (regression)', async () => {
-    mockState.formulaId = 'similac-hmf';
-    mockState.unit = 'packets';
-    render(FortificationCalculator);
-    await tick();
-
-    mockState.formulaId = 'neocate-infant';
-    await tick();
-    await tick();
-
-    expect(mockState.unit).toBe('teaspoons');
-  });
-
-  it('AUTO-03: initial mount with persisted similac-hmf does NOT clobber saved unit', async () => {
-    mockState.formulaId = 'similac-hmf';
-    mockState.unit = 'grams';
-    render(FortificationCalculator);
-    await tick();
-    await tick();
-
-    expect(mockState.unit).toBe('grams');
-  });
-
-  it('UI-04: reuses NumericInput + SelectPicker + SegmentedToggle (3 select triggers + 1 numeric + 1 toggle)', () => {
-    render(FortificationCalculator);
-    // 3 SelectPicker triggers remaining (Formula, kcal, Unit) — Base is now a SegmentedToggle
+    // Plan 42.1-05 (D-08): no SelectPicker triggers, no NumericInput, no
+    // SegmentedToggle inside the calculator. All inputs live in
+    // FortificationInputs.svelte (composed by the route).
     const triggers = document.querySelectorAll('[data-select-trigger]');
-    expect(triggers).toHaveLength(3);
-    expect(screen.getAllByRole('spinbutton')).toHaveLength(1);
-    // Base SegmentedToggle renders a tablist with 2 tabs
+    expect(triggers).toHaveLength(0);
+    expect(screen.queryAllByRole('spinbutton')).toHaveLength(0);
     const tablists = document.querySelectorAll('[role="tablist"]');
-    expect(tablists).toHaveLength(1);
-    expect(document.querySelectorAll('[role="tab"]')).toHaveLength(2);
+    expect(tablists).toHaveLength(0);
   });
 
   describe('Phase 23-01: result feedback', () => {
