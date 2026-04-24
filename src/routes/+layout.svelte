@@ -82,9 +82,10 @@
 <div class="flex min-h-screen flex-col">
 	<NavShell bind:aboutOpen />
 	<DisclaimerBanner onShowFull={() => (aboutOpen = true)} />
-	<!-- pb clearance: 4rem nav + 3.5rem InputDrawer handle + env(safe-area-inset-bottom) + 1rem visual breathing room.
+	<!-- pb clearance: 3.5rem nav (min-h-14 tabs) + 3.5rem InputDrawer handle (min-h-14)
+	     + env(safe-area-inset-bottom) + 1rem visual breathing room.
 	     Desktop (md+) hides the drawer handle so only the md:pb-0 branch applies. -->
-	<main class="flex-1 pb-[calc(theme(spacing.16)+theme(spacing.14)+env(safe-area-inset-bottom,0px)+1rem)] md:pb-0">
+	<main class="flex-1 pb-[calc(theme(spacing.14)+theme(spacing.14)+env(safe-area-inset-bottom,0px)+1rem)] md:pb-0">
 		{@render children()}
 	</main>
 </div>
