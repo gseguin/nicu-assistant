@@ -74,7 +74,7 @@
 	onclose={handleClose}
 >
 	{#if expanded}
-		<div class="flex flex-col" style="padding-bottom: env(safe-area-inset-bottom, 0px); max-height: 100%;">
+		<div class="flex flex-col" style="max-height: 100%;">
 			<header
 				class="flex items-center justify-between border-b border-[var(--color-border)] px-5 py-4"
 			>
@@ -102,7 +102,9 @@
 		padding: 0;
 		border: 0;
 		position: fixed;
-		bottom: 0;
+		/* Anchor above the mobile bottom nav so the drawer never competes with
+		   it for space. Matches the collapsed handle's offset. */
+		bottom: calc(env(safe-area-inset-bottom, 0px) + 4rem);
 		left: 0;
 		right: 0;
 		top: auto;
