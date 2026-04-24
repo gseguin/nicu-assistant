@@ -161,7 +161,7 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
 | 41. Favorites-Driven Nav | v1.13 | 2/2 | Complete | 2026-04-23 |
 | 42. UAC/UVC Calculator | v1.13 | 3/3 | Complete | 2026-04-23 |
 | 42.1. Design Polish + Redesign Sweep | v1.13 | 6/6 | Complete | 2026-04-24 |
-| 43. Release v1.13.0 | v1.13 | 0/? | Not started | — |
+| 43. Release v1.13.0 | v1.13 | 1/1 | Complete | 2026-04-24 |
 
 ## Order Rationale
 

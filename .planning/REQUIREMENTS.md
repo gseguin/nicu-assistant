@@ -105,44 +105,44 @@ Filled during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| UAC-01 | Phase 42 | Pending |
-| UAC-02 | Phase 42 | Pending |
-| UAC-03 | Phase 42 | Pending |
-| UAC-04 | Phase 42 | Pending |
-| UAC-05 | Phase 42 | Pending |
-| UAC-06 | Phase 42 | Pending |
-| UAC-07 | Phase 42 | Pending |
-| UAC-08 | Phase 42 | Pending |
-| UAC-09 | Phase 42 | Pending |
-| UAC-ARCH-01 | Phase 42 | Pending |
-| UAC-ARCH-02 | Phase 42 | Pending |
-| UAC-ARCH-03 | Phase 42 | Pending |
-| UAC-ARCH-04 | Phase 42 | Pending |
-| UAC-ARCH-05 | Phase 42 | Pending |
-| UAC-TEST-01 | Phase 42 | Pending |
-| UAC-TEST-02 | Phase 42 | Pending |
-| UAC-TEST-03 | Phase 42 | Pending |
-| UAC-TEST-04 | Phase 42 | Pending |
-| NAV-HAM-01 | Phase 40 | Pending |
-| NAV-HAM-02 | Phase 40 | Pending |
-| NAV-HAM-03 | Phase 40 | Pending |
-| NAV-HAM-04 | Phase 40 | Pending |
-| NAV-HAM-05 | Phase 40 | Pending |
-| FAV-01 | Phase 40 | Pending |
-| FAV-02 | Phase 40 | Pending |
-| FAV-03 | Phase 40 | Pending |
-| FAV-04 | Phase 40 | Pending |
-| FAV-05 | Phase 40 | Pending |
-| FAV-06 | Phase 40 | Pending |
-| FAV-07 | Phase 40 | Pending |
-| NAV-FAV-01 | Phase 41 | Pending |
-| NAV-FAV-02 | Phase 41 | Pending |
-| NAV-FAV-03 | Phase 41 | Pending |
-| NAV-FAV-04 | Phase 41 | Pending |
-| FAV-TEST-01 | Phase 40 | Pending |
-| FAV-TEST-02 | Phase 40 | Pending |
-| FAV-TEST-03 | Phase 41 | Pending |
-| FAV-TEST-04 | Phase 41 | Pending |
+| UAC-01 | Phase 42 | ✓ Validated |
+| UAC-02 | Phase 42 | ✓ Validated |
+| UAC-03 | Phase 42 | ✓ Validated |
+| UAC-04 | Phase 42 | ✓ Validated |
+| UAC-05 | Phase 42 | ✓ Validated |
+| UAC-06 | Phase 42 | ✓ Validated |
+| UAC-07 | Phase 42 | ✓ Validated |
+| UAC-08 | Phase 42 | ✓ Validated |
+| UAC-09 | Phase 42 | ✓ Validated |
+| UAC-ARCH-01 | Phase 42 | ✓ Validated |
+| UAC-ARCH-02 | Phase 42 | ✓ Validated |
+| UAC-ARCH-03 | Phase 42 | ✓ Validated |
+| UAC-ARCH-04 | Phase 42 | ✓ Validated |
+| UAC-ARCH-05 | Phase 42 | ✓ Validated |
+| UAC-TEST-01 | Phase 42 | ✓ Validated |
+| UAC-TEST-02 | Phase 42 | ✓ Validated |
+| UAC-TEST-03 | Phase 42 | ✓ Validated |
+| UAC-TEST-04 | Phase 42 | ✓ Validated |
+| NAV-HAM-01 | Phase 40 | ✓ Validated |
+| NAV-HAM-02 | Phase 40 | ✓ Validated |
+| NAV-HAM-03 | Phase 40 | ✓ Validated |
+| NAV-HAM-04 | Phase 40 | ✓ Validated |
+| NAV-HAM-05 | Phase 40 | ✓ Validated |
+| FAV-01 | Phase 40 | ✓ Validated |
+| FAV-02 | Phase 40 | ✓ Validated |
+| FAV-03 | Phase 40 | ✓ Validated |
+| FAV-04 | Phase 40 | ✓ Validated |
+| FAV-05 | Phase 40 | ✓ Validated |
+| FAV-06 | Phase 40 | ✓ Validated |
+| FAV-07 | Phase 40 | ✓ Validated |
+| NAV-FAV-01 | Phase 41 | ✓ Validated |
+| NAV-FAV-02 | Phase 41 | ✓ Validated |
+| NAV-FAV-03 | Phase 41 | ✓ Validated |
+| NAV-FAV-04 | Phase 41 | ✓ Validated |
+| FAV-TEST-01 | Phase 40 | ✓ Validated |
+| FAV-TEST-02 | Phase 40 | ✓ Validated |
+| FAV-TEST-03 | Phase 41 | ✓ Validated |
+| FAV-TEST-04 | Phase 41 | ✓ Validated |
 | REL-01 | Phase 43 | Pending |
 | REL-02 | Phase 43 | Pending |
 | REL-03 | Phase 43 | Pending |
@@ -160,4 +160,4 @@ Filled during roadmap creation.
 
 ---
 *Requirements defined: 2026-04-23*
-*Last updated: 2026-04-23 — traceability populated by roadmap (Phases 40-43)*
+*Last updated: 2026-04-24 — all v1.13 requirements validated at release (Phase 43)*
