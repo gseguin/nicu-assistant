@@ -19,6 +19,9 @@
       per xlsx parity; JSON keys (oral.lipasePerKgPerMeal,
       tubeFeed.lipasePerKgPerDay) UNCHANGED to keep the Phase-1-frozen state
       schema intact.
+    - Phase 3.1 D-01 (KI-1 resolution): SelectPicker bridges use Svelte 5.9+
+      function bindings inline at each `<SelectPicker>` site. No string-bridge
+      $state proxies, no bidirectional $effect race. See script section below.
 
   No imports from ./calculations. Pure inputs surface, calc-layer separation
   per CONTEXT D-01.
@@ -71,71 +74,21 @@
 			: []
 	);
 
-	// String-bridge proxies for the three SelectPickers. SelectPicker.value is
-	// $bindable<string>, but our state holds (string | null) for medication/formula
-	// and (number | null) for strength. We CANNOT use `as string` casts inside
-	// bind:value: Svelte 5's writable-lvalue requirement rejects that. The
-	// canonical pattern (mirrors src/lib/feeds/FeedAdvanceInputs.svelte:55-74)
-	// is a $state proxy + a read-direction $effect (state -> string) + a
-	// write-direction $effect (string -> state).
-
-	// medicationId <-> medicationIdStr
-	let medicationIdStr = $state<string>(pertState.current.medicationId ?? '');
-	$effect(() => {
-		const next = pertState.current.medicationId ?? '';
-		if (next !== medicationIdStr) {
-			medicationIdStr = next;
-		}
-	});
-	$effect(() => {
-		const next = medicationIdStr === '' ? null : medicationIdStr;
-		if (next !== pertState.current.medicationId) {
-			pertState.current.medicationId = next;
-		}
-	});
-
-	// strengthValue <-> strengthStr
-	let strengthStr = $state<string>(
-		pertState.current.strengthValue === null ? '' : String(pertState.current.strengthValue)
-	);
-	$effect(() => {
-		const next =
-			pertState.current.strengthValue === null ? '' : String(pertState.current.strengthValue);
-		if (next !== strengthStr) {
-			strengthStr = next;
-		}
-	});
-	$effect(() => {
-		if (strengthStr === '') {
-			if (pertState.current.strengthValue !== null) {
-				pertState.current.strengthValue = null;
-			}
-			return;
-		}
-		const parsed = parseInt(strengthStr, 10);
-		if (Number.isFinite(parsed) && parsed !== pertState.current.strengthValue) {
-			pertState.current.strengthValue = parsed;
-		}
-	});
-
-	// formulaId <-> formulaIdStr
-	let formulaIdStr = $state<string>(pertState.current.tubeFeed.formulaId ?? '');
-	$effect(() => {
-		const next = pertState.current.tubeFeed.formulaId ?? '';
-		if (next !== formulaIdStr) {
-			formulaIdStr = next;
-		}
-	});
-	$effect(() => {
-		const next = formulaIdStr === '' ? null : formulaIdStr;
-		if (next !== pertState.current.tubeFeed.formulaId) {
-			pertState.current.tubeFeed.formulaId = next;
-		}
-	});
+	// D-01 (Phase 3.1 / KI-1 resolution): SelectPicker bridges use Svelte 5.9+
+	// function bindings inline at each <SelectPicker> site (see template below).
+	// The getter reads pertState.current.* reactively; the setter writes
+	// synchronously inside SelectPicker's select(v) callback. There is no
+	// $effect in the bridge path, so there is no effect-registration race.
+	// External mutations to pertState (reset(), init() rehydration, D-11
+	// cascade) propagate into the picker UI on the next microtask flush
+	// because the getter re-evaluates when its dependency changes. The
+	// standalone D-11 lastMedId effect below is preserved byte-identical;
+	// it operates on pertState.current.medicationId and is fully compatible
+	// with the function-binding bridges (no shared $state proxy to clobber).
 
 	// D-11: medication change resets strengthValue to null. Track last seen
 	// medicationId; on change, force-clear strengthValue (which propagates through
-	// the strengthStr $effect above to clear the SelectPicker).
+	// the strength SelectPicker's getter to clear the picker UI).
 	let lastMedId = $state<string | null>(pertState.current.medicationId);
 	$effect(() => {
 		const cur = pertState.current.medicationId;
@@ -200,7 +153,10 @@
 		<section class="card flex flex-col gap-3 px-5 py-5">
 			<SelectPicker
 				label="Formula"
-				bind:value={formulaIdStr}
+				bind:value={
+					() => pertState.current.tubeFeed.formulaId ?? '',
+					(v: string) => { pertState.current.tubeFeed.formulaId = v === '' ? null : v; }
+				}
 				options={formulaOptions}
 				searchable={true}
 				placeholder="Select formula"
@@ -232,13 +188,30 @@
 	<section class="card flex flex-col gap-3 px-5 py-5">
 		<SelectPicker
 			label="Medication"
-			bind:value={medicationIdStr}
+			bind:value={
+				() => pertState.current.medicationId ?? '',
+				(v: string) => { pertState.current.medicationId = v === '' ? null : v; }
+			}
 			options={medicationOptions}
 			placeholder="Select medication"
 		/>
 		<SelectPicker
 			label="Strength"
-			bind:value={strengthStr}
+			bind:value={
+				() => (pertState.current.strengthValue === null
+					? ''
+					: String(pertState.current.strengthValue)),
+				(v: string) => {
+					if (v === '') {
+						pertState.current.strengthValue = null;
+						return;
+					}
+					const parsed = parseInt(v, 10);
+					if (Number.isFinite(parsed)) {
+						pertState.current.strengthValue = parsed;
+					}
+				}
+			}
 			options={strengthOptions}
 			placeholder={pertState.current.medicationId
 				? 'Select strength'
