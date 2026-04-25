@@ -13,6 +13,11 @@
 		CALCULATOR_REGISTRY.map((c) => [c.id, c])
 	);
 
+	// Phase 45 D-02: desktop top toolbar always renders the full registry. Module-scope const
+	// (not $derived) because CALCULATOR_REGISTRY is `readonly` and never mutates at runtime —
+	// matches the byId pattern above. Iteration order = registry declaration order.
+	const desktopVisibleCalculators: readonly CalculatorEntry[] = [...CALCULATOR_REGISTRY];
+
 	// 42.1-03 D-15: About sheet hoisted to +layout.svelte; aboutOpen now lives at the layout
 	// level so DisclaimerBanner's "More" link can also open it. NavShell binds the prop so
 	// the hamburger menu's About callback continues to work.
@@ -21,10 +26,50 @@
 	let menuOpen = $state(false);
 	let menuTriggerBtn = $state<HTMLButtonElement | null>(null);
 
-	// D-01: render only favorited calculators in registry order
-	const visibleCalculators = $derived(
+	// Phase 45 D-07/D-08: refs and state for the desktop tablist scroll affordances.
+	// tablistEl is the inner scrollable <div role="tablist">; isOverflowing toggles
+	// the right-edge mask fade when scrollWidth > clientWidth.
+	let tablistEl = $state<HTMLElement | null>(null);
+	let isOverflowing = $state(false);
+
+	// Phase 45 D-01: mobile bottom bar = favorites-driven, registry-ordered (Phase 41 contract preserved verbatim — only renamed for symmetry with desktopVisibleCalculators)
+	const mobileVisibleCalculators = $derived(
 		favorites.current.map((id) => byId.get(id)).filter((c): c is CalculatorEntry => c !== undefined)
 	);
+
+	// Phase 45 D-07 / UI-SPEC A2: auto-scroll active tab into view on route change and on
+	// first mount. inline:'nearest' means in-view tabs do not animate (steady-state no-op).
+	// Reduced-motion override per UI-SPEC AUTO-4 (WCAG 2.3.3).
+	$effect(() => {
+		const _path = page.url.pathname; // dependency for re-run on navigation
+		if (!tablistEl) return;
+		const active = tablistEl.querySelector<HTMLElement>('[aria-selected="true"]');
+		if (!active) return;
+		const reduce =
+			typeof window !== 'undefined' &&
+			typeof window.matchMedia === 'function' &&
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		active.scrollIntoView({
+			inline: 'nearest',
+			block: 'nearest',
+			behavior: reduce ? 'auto' : 'smooth'
+		});
+	});
+
+	// Phase 45 D-08 / UI-SPEC A3: detect horizontal overflow on the tablist and toggle the
+	// is-overflowing class so the mask fade appears only when content exceeds container.
+	// ResizeObserver covers viewport resize, theme toggle reflow, and font-load layout shift.
+	$effect(() => {
+		if (!tablistEl) return;
+		const el = tablistEl;
+		const update = () => {
+			isOverflowing = el.scrollWidth > el.clientWidth;
+		};
+		update();
+		const ro = new ResizeObserver(update);
+		ro.observe(el);
+		return () => ro.disconnect();
+	});
 </script>
 
 <!-- Top title bar: always visible on all viewports -->
@@ -53,8 +98,13 @@
 
 	<!-- Desktop calculator tabs (hidden on mobile) -->
 	<nav class="ml-4 hidden gap-2 md:flex" aria-label="Calculator navigation">
-		<div class="flex gap-2" role="tablist">
-			{#each visibleCalculators as calc}
+		<div
+			bind:this={tablistEl}
+			class="tablist-scroll flex gap-2"
+			class:is-overflowing={isOverflowing}
+			role="tablist"
+		>
+			{#each desktopVisibleCalculators as calc}
 				{@const isActive = page.url.pathname.startsWith(calc.href)}
 				<a
 					href={calc.href}
@@ -102,7 +152,7 @@
 	aria-label="Calculator navigation"
 >
 	<div class="flex" role="tablist">
-		{#each visibleCalculators as calc}
+		{#each mobileVisibleCalculators as calc}
 			{@const isActive = page.url.pathname.startsWith(calc.href)}
 			<a
 				href={calc.href}
@@ -128,3 +178,22 @@
 	bind:open={menuOpen}
 	onAbout={() => (aboutOpen = true)}
 />
+
+<style>
+	/* Phase 45 A1: horizontal scroll affordance on the desktop tablist.
+	   Tabs stay at full padding / full label / 48 px touch target at every viewport. */
+	.tablist-scroll {
+		overflow-x: auto;
+		scrollbar-width: thin;
+		scrollbar-color: var(--color-border) transparent;
+		scroll-behavior: smooth;
+	}
+
+	/* Phase 45 A3: 24 px right-edge gradient fade. Class is toggled from JS via the
+	   ResizeObserver $effect so the fade is invisible when content fits. mask-image
+	   preserves tab interactivity beneath the fade — no pointer-events override needed. */
+	.tablist-scroll.is-overflowing {
+		mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
+		-webkit-mask-image: linear-gradient(to right, black calc(100% - 24px), transparent);
+	}
+</style>

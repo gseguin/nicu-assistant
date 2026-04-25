@@ -10,6 +10,13 @@ if (typeof globalThis.ResizeObserver === 'undefined') {
   } as unknown as typeof ResizeObserver;
 }
 
+// jsdom does not implement Element.scrollIntoView — Phase 45 NavShell.svelte calls it
+// in its auto-scroll-active-tab $effect on every render with an aria-selected tab.
+// No-op shim so component tests don't throw when the effect fires under jsdom.
+if (typeof Element !== 'undefined' && !Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = function () {};
+}
+
 // jsdom does not implement matchMedia; stub to report prefers-reduced-motion
 // so Svelte slide transitions collapse to duration 0 in tests.
 if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {

@@ -84,7 +84,11 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
   it('T-01 default favorites (4): bottom nav renders 4 tabs', async () => {
     const { container } = render(NavShell);
     await tick();
-    const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
+    // Phase 45: desktop nav now renders the full registry while mobile renders favorites.
+    // `:last-of-type` is unreliable across parents (desktop is in <header>, mobile at body) —
+    // switch to index-based selection: navs[0] = desktop (in header), navs[1] = mobile bottom bar.
+    const navs = container.querySelectorAll('nav[aria-label="Calculator navigation"]');
+    const bottomNav = navs[navs.length - 1]!;
     const tabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(tabs).toHaveLength(4);
     expect(tabs[0].textContent).toMatch(/Morphine/i);
@@ -98,22 +102,30 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
     favorites.init();
     const { container } = render(NavShell);
     await tick();
-    const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
+    // Phase 45: desktop nav now renders the full registry while mobile renders favorites.
+    // `:last-of-type` is unreliable across parents (desktop is in <header>, mobile at body) —
+    // switch to index-based selection: navs[0] = desktop (in header), navs[1] = mobile bottom bar.
+    const navs = container.querySelectorAll('nav[aria-label="Calculator navigation"]');
+    const bottomNav = navs[navs.length - 1]!;
     const tabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(tabs).toHaveLength(2);
     expect(tabs[0].textContent).toMatch(/Morphine/i);
     expect(tabs[1].textContent).toMatch(/Formula/i);
   });
 
-  it('T-03 zero favorites: both bars render no tabs and throw no error', async () => {
+  it('T-03 zero favorites: bottom nav renders no tabs and throws no error', async () => {
+    // Phase 45: desktop nav is registry-driven (always 5) — only the bottom (mobile)
+    // nav is favorites-driven, so the zero-tabs assertion is scoped to it.
     favorites.toggle('morphine-wean');
     favorites.toggle('formula');
     favorites.toggle('gir');
     favorites.toggle('feeds');
     const { container } = render(NavShell);
     await tick();
-    const allTabs = container.querySelectorAll('[role="tab"]');
-    expect(allTabs).toHaveLength(0);
+    const navs = container.querySelectorAll('nav[aria-label="Calculator navigation"]');
+    const bottomNav = navs[navs.length - 1]!;
+    const bottomTabs = bottomNav.querySelectorAll('[role="tab"]');
+    expect(bottomTabs).toHaveLength(0);
   });
 
   it('T-04 active route matches favorited tab: that tab has aria-selected=true', async () => {
@@ -133,7 +145,11 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
     const { container } = render(NavShell);
     await tick();
     // Both nav bars (desktop + mobile) render tabs; check each renders 3 (feeds excluded)
-    const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
+    // Phase 45: desktop nav now renders the full registry while mobile renders favorites.
+    // `:last-of-type` is unreliable across parents (desktop is in <header>, mobile at body) —
+    // switch to index-based selection: navs[0] = desktop (in header), navs[1] = mobile bottom bar.
+    const navs = container.querySelectorAll('nav[aria-label="Calculator navigation"]');
+    const bottomNav = navs[navs.length - 1]!;
     const bottomTabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(bottomTabs).toHaveLength(3); // feeds is not rendered in bottom bar
     const selected = Array.from(bottomTabs).filter((t) => t.getAttribute('aria-selected') === 'true');
@@ -145,7 +161,11 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
     favorites.init();
     const { container } = render(NavShell);
     await tick();
-    const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
+    // Phase 45: desktop nav now renders the full registry while mobile renders favorites.
+    // `:last-of-type` is unreliable across parents (desktop is in <header>, mobile at body) —
+    // switch to index-based selection: navs[0] = desktop (in header), navs[1] = mobile bottom bar.
+    const navs = container.querySelectorAll('nav[aria-label="Calculator navigation"]');
+    const bottomNav = navs[navs.length - 1]!;
     const tabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(tabs).toHaveLength(4);
     expect(tabs[0].textContent).toMatch(/Morphine/i);
