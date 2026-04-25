@@ -18,6 +18,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 - [ ] **Phase 1: Architecture, Identity Hue & Clinical Data** — Foundations: registry entry, `/pert` route shell, `.identity-pert` OKLCH tokens, `pert-config.json`, AboutSheet entry, NavShell ternary extension. Wave 0 latent-bug prep so downstream phases compile cleanly.
 - [ ] **Phase 2: Calculator Core (Both Modes + Safety)** — Oral mode, Tube-Feed mode, SegmentedToggle mode switching, shared inputs across modes, max-lipase safety advisory, range advisories, empty-state messaging.
 - [ ] **Phase 3: Tests** — Spreadsheet-parity vitest (Oral + Tube-Feed fixture matrices), config shape tests, component tests, Playwright E2E mobile + desktop, 2 axe sweeps (light + dark) added to extended axe suite.
+- [ ] **Phase 3.1: KI-1 Resolution — SelectPicker Click-Revert Bug Fix** (INSERTED 2026-04-25) — Fix the bidirectional `bind:value` race in `<PertInputs />` SelectPicker bridges so clicks persist instead of silently reverting. Closes the 4 picker-driven happy-path e2e tests deferred from Phase 3 (PERT-TEST-05 partial).
 - [ ] **Phase 4: Design Polish (`/impeccable` Critique Sweep)** — Light + dark × mobile + desktop critique pass, P1 fixes pre-merge, DESIGN.md / DESIGN.json contract enforcement, ≥35/40 score target.
 - [ ] **Phase 5: Release** — Version bump, AboutSheet version reflect, full clinical gate, PROJECT.md / ROADMAP / main-PROJECT integration, workstream-completion artifacts.
 
@@ -60,9 +61,23 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
   4. Two new axe sweeps for `/pert` (light + dark) join the existing extended axe suite, taking it from 33/33 to 35/35 green on first run with no `disableRules` escape hatches (research-before-PR contract).
 **Plans**: TBD
 
+### Phase 3.1: KI-1 Resolution — SelectPicker Click-Revert Bug Fix (INSERTED 2026-04-25)
+**Goal**: A clinician can click any option in any of the three `<PertInputs />` SelectPickers (medication / strength / formula) and the selection persists — the picker no longer silently reverts to its placeholder. After this phase, the 4 picker-driven happy-path e2e tests deferred from Phase 3 (PERT-TEST-05 partial closure per KI-1) ship green, closing PERT-TEST-05 fully before v1.15 release.
+**Depends on**: Phase 3 (PARTIAL)
+**Requirements**: closes the PERT-TEST-05 partial gap from Phase 3 + restores PertInputs.svelte clinical UX. No new PERT-* requirement IDs (KI-1 is a Phase-2-origin defect surfaced + deferred during Phase 3).
+**Success Criteria** (what must be TRUE):
+  1. A clinician at `/pert` clicks "Creon" in the medication SelectPicker → `pertState.current.medicationId === 'creon'` AND the picker trigger displays "Creon" (not the "Select medication" placeholder). Same for strength + formula pickers.
+  2. The D-11 contract from Phase 2 still holds: changing `medicationId` (whether via picker click OR external mutation) clears `strengthValue` to `null` and clears the strength picker UI to "Choose medication first" / "Select strength" placeholder.
+  3. External mutations to `pertState.current.medicationId` / `strengthValue` / `tubeFeed.formulaId` (from `pertState.reset()`, from localStorage rehydration on load, from D-11 cascade) propagate into the SelectPicker UI on the next microtask flush. No write-effect-clobbers-external-write race.
+  4. Phase 3 Wave 1 + Wave 2 tests (`PertCalculator.test.ts` 10 cases, `PertInputs.test.ts` 7 cases including D-11 reset, `calculations.test.ts` 45 cases including parity matrix) all stay green.
+  5. The 2 picker-driven happy-path e2e tests deferred from Plan 03-04 (Oral mode + Tube-Feed mode happy paths × 2 viewports = 4 tests) get unskipped and pass cleanly under `CI=1 pnpm exec playwright test pert.spec` — taking the count from 8/8 to 12/12.
+**Plans**: TBD
+**Resolution recommendation** (per KI-1 known-issue analysis): Option 2 — `$derived`-backed binding wrapper for SelectPicker `bind:value` in PertInputs.svelte. Eliminates the bidirectional `$effect` race at the source; smallest blast radius; no shared-component change. Alternative: Option 1 (add `onValueChange` callback prop to SelectPicker — touches a shared component used by feeds/gir/uac-uvc, larger scope).
+**Origin**: Bug originated Phase 2 plan 02-03 (`3171b06`); discovered Phase 3 plan 03-04 e2e execution (2026-04-25); two failed hotfix attempts during Phase 3 confirmed the fix requires architectural change rather than effect-order tweak. Full root-cause + 3 candidate paths documented at `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1).
+
 ### Phase 4: Design Polish (`/impeccable` Critique Sweep)
 **Goal**: The `/pert` UI passes a critique sweep at the v1.13 Phase 42.2 bar (≥35/40), the design-contract rules from DESIGN.md / DESIGN.json hold across both modes, and no P1 finding ships to release.
-**Depends on**: Phase 3
+**Depends on**: Phase 3.1 (was Phase 3 pre-2026-04-25 KI-1 insertion)
 **Requirements**: PERT-DESIGN-01, PERT-DESIGN-02, PERT-DESIGN-03, PERT-DESIGN-04, PERT-DESIGN-05, PERT-DESIGN-06
 **Success Criteria** (what must be TRUE):
   1. A clinician viewing `/pert` in light + dark themes at mobile 375 + desktop 1280 sees the `<HeroResult>` shared component owning the above-the-fold viewport on mount in both Oral and Tube-Feed modes, with the sticky `<InputDrawer>` collapsibility consistent with v1.13 cross-route adoption.

@@ -7,21 +7,21 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 3 — Tests — **PARTIAL-WITH-KI-1**
-Plan: 5/5 plans complete across 4 waves (03-01+03-03 W1 parallel, 03-02 W2, 03-04 W3 partial, 03-05 W4)
-Status: Phase 3 verified PARTIAL — 3.5/4 success criteria, 5/6 reqs FULL + PERT-TEST-05 PARTIAL via KI-1; ready for KI-1-resolution follow-up phase OR Phase 4 design polish (verifier recommends inserting KI-1 fix first)
-Last activity: 2026-04-25 — Phase 3 executed and verified (3.5/4 success criteria; 6/6 requirements claimed = 5 FULL + 1 PARTIAL-VIA-KI-1; 7/7 quality gates green; 1 known-issue surfaced + properly deferred)
+Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **INSERTED 2026-04-25, NOT YET STARTED**
+Plan: Phase 3 PARTIAL-WITH-KI-1 (5/5 plans across 4 waves; 6/6 reqs claimed = 5 FULL + 1 PARTIAL-VIA-KI-1); Phase 3.1 inserted into ROADMAP between Phase 3 and Phase 4 to close PERT-TEST-05 partial gap before v1.15 release
+Status: Phase 3.1 ROADMAP entry + directory created; CONTEXT/RESEARCH/PLAN not yet written
+Last activity: 2026-04-25 — Inserted Phase 3.1 (URGENT — KI-1 resolution: SelectPicker click-revert bug fix via $derived-backed binding wrapper); Phase 4 dependency updated from "Phase 3" to "Phase 3.1"
 
 ## Progress
 
-**Phases Complete:** 2.5 / 5 (Phase 3 PARTIAL via KI-1)
-**Current Plan:** KI-1 resolution OR Phase 4 — Design Polish (`/impeccable` Critique Sweep)
+**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 inserted but not started)
+**Current Plan:** Phase 3.1 — needs `/gsd-discuss-phase 3.1 --ws pert` to capture resolution approach (recommended: $derived-backed binding wrapper per KI-1 option 2)
 
 ## Session Continuity
 
-**Stopped At:** Phase 3 complete + verified PARTIAL-WITH-KI-1 (HEAD = 27dc39c)
-**Resume File:** `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1 SelectPicker click-revert bug — recommended next phase)
-**Next Action:** Insert a KI-1-resolution phase (recommended fix: $derived-backed binding wrapper per KI-1 option 2), OR proceed to `/gsd-plan-phase 4 --ws pert` and treat KI-1 as a Phase 4 design-polish input.
+**Stopped At:** Phase 3.1 inserted into ROADMAP (HEAD = pending Phase 3.1 commit)
+**Resume File:** `.planning/workstreams/pert/ROADMAP.md` (Phase 3.1 entry) + `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1 root-cause + 3 candidate resolution paths)
+**Next Action:** `/gsd-discuss-phase 3.1 --ws pert` (capture KI-1 resolution decisions: bridge architecture choice, scope of SelectPicker contract change, regression test strategy), then `/gsd-plan-phase 3.1 --ws pert`, then `/gsd-execute-phase 3.1 --ws pert`. After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
 
 ## Phase 3 outcomes (HEAD 27dc39c, baseline e14f425 → 7 commits)
 
