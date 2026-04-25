@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.14
 milestone_name: Kendamil Formulas + Desktop Full Nav
-status: verifying
-stopped_at: .planning/phases/45-desktop-full-nav-divergence/45-UI-SPEC.md
-last_updated: "2026-04-25T04:36:57.647Z"
+status: executing
+stopped_at: Completed 45-01-PLAN.md
+last_updated: "2026-04-25T04:48:02.875Z"
 last_activity: 2026-04-25
 progress:
   total_phases: 2
   completed_phases: 1
   total_plans: 7
-  completed_plans: 4
-  percent: 57
+  completed_plans: 5
+  percent: 71
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-25)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase 44 — Kendamil Formula Family
+**Current focus:** Phase 45 — Desktop Full-Nav Divergence
 
 ## Current Position
 
-Phase: 44 (Kendamil Formula Family) — EXECUTING
-Plan: 4 of 4
-Status: Phase complete — ready for verification
+Phase: 45 (Desktop Full-Nav Divergence) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
 Last activity: 2026-04-25
 
 ## Performance Metrics
@@ -58,6 +58,8 @@ Last activity: 2026-04-25
 - [v1.14]: Mobile bottom bar is explicitly UNCHANGED — favorites-driven, 4-cap, hamburger-managed. Only the desktop top toolbar diverges to render the full registry.
 - [44-01]: Used HCP-printed displacement_factor 0.77 for all three Kendamil variants (D-03 derivation rounds to 0.77 anyway; matches REQUIREMENTS KEND-01 + 2dp config style)
 - [44-01]: JSDoc audit-trail header at top of fortification-config.ts; per-variant lines carry URL + region + ISO date only (raw HCP values stay in PLAN/RESEARCH per D-14)
+- [45-01] Phase 45 Plan 01 — Desktop top toolbar diverged from mobile bottom bar via desktopVisibleCalculators const + mobileVisibleCalculators rename. Auto-scroll active tab + ResizeObserver mask-fade affordances added inline.
+- [45-01] Element.prototype.scrollIntoView shimmed in test-setup.ts (jsdom polyfill convention) — no-op shim alongside ResizeObserver / matchMedia / Element.animate.
 
 ### Roadmap Evolution
 
@@ -76,8 +78,8 @@ None.
 
 ## Session Continuity
 
-Last session: Phase 45 UI-SPEC approved
-Stopped at: .planning/phases/45-desktop-full-nav-divergence/45-UI-SPEC.md
+Last session: 2026-04-25T04:47:55.681Z
+Stopped at: Completed 45-01-PLAN.md
 Resume file: None
 
 **Planned Phase:** 45 () — 0 plans — 2026-04-25T04:36:57.642Z

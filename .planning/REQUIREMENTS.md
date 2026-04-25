@@ -28,16 +28,22 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Desktop Full-Nav Divergence
 
-- [ ] **NAV-ALL-01**: Desktop top toolbar (md+ breakpoint) renders **every registered calculator** from the registry, regardless of favorites state — split `visibleCalculators` in `NavShell.svelte` into `mobileVisibleCalculators` (favorites-driven, 4-cap) and `desktopVisibleCalculators` (registry-driven, all)
-- [ ] **NAV-ALL-02**: Mobile bottom bar behavior is **unchanged** from v1.13 — still favorites-driven, still 4-cap, still hamburger-managed (no regressions to Phase 41 NAV-FAV-01..04)
-- [ ] **NAV-ALL-03**: Desktop top toolbar preserves all v1.13 visual contracts — identity color indicators (`identityClass`, border-b-2 on active), focus-visible outlines, `aria-current="page"` on the active route, 48px touch targets
-- [ ] **NAV-ALL-04**: Hamburger menu button remains visible on desktop (md+) so users can re-read the disclaimer / open AboutSheet via the existing v1.13 NAV-FAV-04 routing
-- [ ] **NAV-ALL-05**: Desktop layout reflows gracefully at common widths (768px / 1024px / 1280px) — no horizontal overflow, no truncated labels, no layout shift on hydration; tested at all 5 currently-registered calculators
+- [x] **NAV-ALL-01
+**: Desktop top toolbar (md+ breakpoint) renders **every registered calculator** from the registry, regardless of favorites state — split `visibleCalculators` in `NavShell.svelte` into `mobileVisibleCalculators` (favorites-driven, 4-cap) and `desktopVisibleCalculators` (registry-driven, all)
+- [x] **NAV-ALL-02
+**: Mobile bottom bar behavior is **unchanged** from v1.13 — still favorites-driven, still 4-cap, still hamburger-managed (no regressions to Phase 41 NAV-FAV-01..04)
+- [x] **NAV-ALL-03
+**: Desktop top toolbar preserves all v1.13 visual contracts — identity color indicators (`identityClass`, border-b-2 on active), focus-visible outlines, `aria-current="page"` on the active route, 48px touch targets
+- [x] **NAV-ALL-04
+**: Hamburger menu button remains visible on desktop (md+) so users can re-read the disclaimer / open AboutSheet via the existing v1.13 NAV-FAV-04 routing
+- [x] **NAV-ALL-05
+**: Desktop layout reflows gracefully at common widths (768px / 1024px / 1280px) — no horizontal overflow, no truncated labels, no layout shift on hydration; tested at all 5 currently-registered calculators
 
 ### Desktop Full-Nav Testing
 
 - [ ] **NAV-ALL-TEST-01**: Playwright E2E spec at desktop 1280 verifies all 5 registered calculators are visible in the top toolbar regardless of favorites state (toggle a non-favorite calculator off via hamburger, assert it remains in the desktop top bar but disappears from mobile bottom bar at 375)
-- [ ] **NAV-ALL-TEST-02**: Component / Vitest spec for `NavShell` covers the new `desktopVisibleCalculators` derived computation — asserts it equals the full registry order regardless of `favorites.current` state (including 0 favorites edge case)
+- [x] **NAV-ALL-TEST-02
+**: Component / Vitest spec for `NavShell` covers the new `desktopVisibleCalculators` derived computation — asserts it equals the full registry order regardless of `favorites.current` state (including 0 favorites edge case)
 - [ ] **NAV-ALL-TEST-03**: Playwright axe sweep extended to cover the desktop top toolbar with all 5 calculators rendered (light + dark) — no contrast regressions from added calculator labels
 
 ### Release v1.14.0
