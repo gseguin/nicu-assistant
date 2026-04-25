@@ -15,7 +15,8 @@
 - [v1.10 GIR Simplification + Dock + Tech Debt](milestones/v1.10-ROADMAP.md) - Phases 32-34 (shipped 2026-04-10)
 - [v1.11 Morphine Mode Removal — Single Source of Truth](milestones/v1.11-ROADMAP.md) - Phase 35 (shipped 2026-04-09)
 - [v1.12 Feed Advance Calculator](milestones/v1.12-ROADMAP.md) - Phases 36-39 (shipped 2026-04-10)
-- **v1.13 UAC/UVC Calculator + Favorites Nav** - Phases 40-43 (in progress, started 2026-04-23)
+- [v1.13 UAC/UVC Calculator + Favorites Nav](milestones/v1.13-ROADMAP.md) - Phases 40-43 (shipped 2026-04-24)
+- **v1.14 Kendamil Formulas + Desktop Full Nav** - Phases 44-46 (in progress, started 2026-04-25)
 
 ## Phases
 
@@ -64,88 +65,61 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
 
 </details>
 
-### v1.13 UAC/UVC Calculator + Favorites Nav (Phases 40-43) — IN PROGRESS
+<details>
+<summary>v1.13 UAC/UVC Calculator + Favorites Nav (Phases 40-43) — SHIPPED 2026-04-24</summary>
 
-- [ ] **Phase 40: Favorites Store + Hamburger Menu** — `favoritesStore` with localStorage persistence, 4-cap enforcement, schema-safe recovery, first-run defaults `['morphine', 'formula', 'gir', 'feeds']`; hamburger button in title bar; full-screen/side-sheet menu listing every registered calculator with star toggles; keyboard nav + reduced-motion honored. Store unit tests + hamburger component tests.
-- [ ] **Phase 41: Favorites-Driven Navigation** — NavShell rewritten so mobile bottom bar and desktop top nav render favorites only (in favorite order); non-favorited active routes do NOT add temporary tabs; `aria-current="page"` semantics preserved. Playwright E2E for full add/remove/persist flow + axe sweep of open hamburger.
-- [ ] **Phase 42: UAC/UVC Calculator** — Wave-0 architecture (`CalculatorId` union + registry + NavShell ternary + `/uac-uvc` route); identity hue research + OKLCH token pair passing 4.5:1 on first sweep; pure calculation logic in `src/lib/uac-uvc/` matching `uac-uvc-calculator.xlsx`; weight input with textbox↔slider bidirectional sync; two visually distinct hero cards (UAC + UVC); out-of-range advisory; sessionStorage persistence; AboutSheet entry. Parity tests + component tests + Playwright E2E + axe sweeps in both themes.
-- [x] **Phase 43: Release v1.13.0** — `package.json` → 1.13.0; PROJECT.md Validated list updated; final gate sweep (svelte-check 0/0, vitest green, `pnpm build` ✓, Playwright E2E + extended axe suite green). (completed 2026-04-24)
+- [x] **Phase 40: Favorites Store + Hamburger Menu** — `favoritesStore` with localStorage persistence, 4-cap enforcement, schema-safe recovery, first-run defaults `['morphine-wean', 'formula', 'gir', 'feeds']`; hamburger button in title bar; full-screen/side-sheet menu listing every registered calculator with star toggles. (3/3 plans)
+- [x] **Phase 41: Favorites-Driven Navigation** — NavShell rewritten so mobile bottom bar and desktop top nav render favorites only; Playwright E2E + axe sweep. (2/2 plans)
+- [x] **Phase 42: UAC/UVC Calculator** — Wave-0 architecture, identity hue, pure calculation logic, weight input + slider sync, two distinct hero cards, AboutSheet entry, parity + component + E2E + axe tests. (3/3 plans)
+- [x] **Phase 42.1: Design Polish + Redesign Sweep (INSERTED)** — DESIGN.md / DESIGN.json contract, shared `<HeroResult>`, mobile-nav clearance, Identity-Inside Rule, DisclaimerBanner v2, dock removal, root `/` redirect, em-dash purge, RangedNumericInput, 42.2 critique sweep, STOP-red carve-out. (6/6 plans)
+- [x] **Phase 43: Release v1.13.0** — Version bump, PROJECT.md, REQUIREMENTS traceability (41 IDs), full clinical gate (svelte-check 0/0, vitest 340/340, Playwright 99/3 skipped, axe 33/33). (1/1 plan)
+
+See [milestones/v1.13-ROADMAP.md](milestones/v1.13-ROADMAP.md) for full phase details.
+
+</details>
+
+### v1.14 Kendamil Formulas + Desktop Full Nav (Phases 44-46) — IN PROGRESS
+
+- [ ] **Phase 44: Kendamil Formula Family** — Add three Kendamil infant-formula entries (Organic, Classic, Goat) to `fortification-config.json` under a "Kendamil" manufacturer grouping with `packetsSupported: false`; spec sourced from hcp.kendamil.com per variant; spreadsheet-parity unit tests for each variant within 1% epsilon; SelectPicker grouping test extended; existing fortification axe sweeps re-run with a Kendamil variant selected.
+- [ ] **Phase 45: Desktop Full-Nav Divergence** — Split `visibleCalculators` in `NavShell.svelte` into `mobileVisibleCalculators` (favorites-driven, 4-cap, unchanged from v1.13) and `desktopVisibleCalculators` (registry-driven, all calculators); preserve every v1.13 visual contract on desktop (identity color indicators, focus rings, `aria-current` semantics, 48px touch targets); hamburger remains visible on desktop for AboutSheet routing; Vitest covers the new derived computation; Playwright E2E at 1280 verifies every registered calculator is visible regardless of favorites state; axe sweep extended to cover the desktop full toolbar in both themes.
+- [ ] **Phase 46: Release v1.14.0** — `package.json` → 1.14.0; PROJECT.md Validated list updated with v1.14 entries; REQUIREMENTS.md traceability flipped to ✓ Validated for all v1.14 IDs; full clinical gate green (svelte-check 0/0, vitest green, `pnpm build` ✓, Playwright E2E + extended axe suite green in both themes).
 
 ## Phase Details
 
-### Phase 40: Favorites Store + Hamburger Menu
-**Goal**: Clinicians can open a hamburger menu, see every calculator, and star/unstar calculators to control what appears in their nav — with the cap enforced and their choices surviving across sessions.
-**Depends on**: Nothing (first phase of v1.13; builds on shipped v1.12 registry)
-**Requirements**: FAV-01, FAV-02, FAV-03, FAV-04, FAV-05, FAV-06, FAV-07, NAV-HAM-01, NAV-HAM-02, NAV-HAM-03, NAV-HAM-04, NAV-HAM-05, FAV-TEST-01, FAV-TEST-02
+### Phase 44: Kendamil Formula Family
+**Goal**: Clinicians can pick a Kendamil Organic, Classic, or Goat formula in the fortification calculator and get a spreadsheet-parity result, with the new manufacturer grouped naturally alongside Abbott / Mead Johnson / Nestlé / Nutricia.
+**Depends on**: Nothing (first phase of v1.14; touches `src/lib/fortification/` only, no NavShell coupling)
+**Requirements**: KEND-01, KEND-02, KEND-03, KEND-04, KEND-05, KEND-TEST-01, KEND-TEST-02, KEND-TEST-03
 **Success Criteria** (what must be TRUE):
-  1. User can tap the hamburger button in the title bar and see every registered calculator listed with its icon and name
-  2. User can tap a star on any calculator row to add/remove it from favorites, and removing a favorite updates the nav immediately
-  3. When 4 calculators are already favorited, non-favorite star buttons become disabled with an accessible reason explaining the cap
-  4. A clinician reloading the app (or reopening it days later) sees the same favorites they last chose, and a brand-new install opens with Morphine / Formula / GIR / Feeds favorited
-  5. User can open, navigate, star, and close the hamburger entirely by keyboard, with focus returning to the hamburger button on close
-**Plans**: 3 plans
-  - [ ] 40-01-PLAN.md — Favorites store (reactive singleton + 19 unit tests)
-  - [ ] 40-02-PLAN.md — HamburgerMenu component (native <dialog> + 13 component tests)
-  - [ ] 40-03-PLAN.md — NavShell title-bar integration + layout init wiring
+  1. User opening the formula picker on `/formula` sees a "Kendamil" manufacturer group containing all three variants (Organic, Classic, Goat) rendered alongside the existing manufacturer groups
+  2. User selecting any Kendamil variant, entering a starting volume, and choosing a target calorie sees an "Amount to Add" hero result that matches a hand-computed expected value within the ~1% epsilon used by every other formula in `fortification.test.ts`
+  3. User selecting a Kendamil variant sees the Packets unit hidden from the unit picker (consistent with v1.3 non-HMF behavior — `packetsSupported: false`)
+  4. The fortification page passes axe sweeps in light + dark with a Kendamil variant selected (no contrast regression from the new manufacturer label)
+  5. Each Kendamil variant's `calorie_concentration`, `displacement_factor`, and `grams_per_scoop` values are documented in the plan with the source URL from hcp.kendamil.com captured for clinical audit
+**Plans**: TBD (run `/gsd-plan-phase 44` to break down)
+
+### Phase 45: Desktop Full-Nav Divergence
+**Goal**: Clinicians on a desktop workstation see every registered calculator in the top toolbar — never hidden behind the hamburger — while mobile clinicians keep the unchanged favorites-driven 4-cap bottom bar.
+**Depends on**: Nothing structural (Phase 45 only touches `NavShell.svelte` + new tests; can run before, after, or in parallel with Phase 44)
+**Requirements**: NAV-ALL-01, NAV-ALL-02, NAV-ALL-03, NAV-ALL-04, NAV-ALL-05, NAV-ALL-TEST-01, NAV-ALL-TEST-02, NAV-ALL-TEST-03
+**Success Criteria** (what must be TRUE):
+  1. User on desktop (md+) sees every registered calculator (currently 5: Morphine, Formula, GIR, Feeds, UAC/UVC) in the top toolbar regardless of which calculators they have favorited — toggling a calculator off via the hamburger removes it from the mobile bottom bar but leaves it in the desktop top bar
+  2. User on mobile (< md) sees identical favorites-driven behavior as v1.13 — same 4-cap, same hamburger management, same `['morphine-wean', 'formula', 'gir', 'feeds']` first-run defaults; zero behavioral regressions to Phase 41 NAV-FAV-01..04
+  3. User on desktop sees each calculator tab carry its identity color indicator (`identityClass`, `border-b-2` on active), focus-visible outlines, `aria-current="page"` on the active route, and a 48px touch target — every v1.13 visual contract preserved
+  4. User on desktop sees the hamburger button remain in the title bar so they can re-read the disclaimer / open AboutSheet via the v1.13 NAV-FAV-04 routing
+  5. User resizing the browser at 768px / 1024px / 1280px sees the desktop top toolbar reflow gracefully with all 5 calculators — no horizontal overflow, no truncated labels, no layout shift on hydration
+**Plans**: TBD (run `/gsd-plan-phase 45` to break down)
 **UI hint**: yes
 
-### Phase 41: Favorites-Driven Navigation
-**Goal**: Clinicians see only their favorited calculators in the mobile bottom bar and desktop top nav, with the hamburger remaining the way to reach anything they haven't favorited.
-**Depends on**: Phase 40
-**Requirements**: NAV-FAV-01, NAV-FAV-02, NAV-FAV-03, NAV-FAV-04, FAV-TEST-03, FAV-TEST-04
-**Success Criteria** (what must be TRUE):
-  1. User sees exactly their favorited calculators in the mobile bottom bar (in favorite order), preserving shell styling (`min-h-14`, safe-area padding, focus outlines)
-  2. User sees the same favorites in the desktop top nav with each tab's identity indicator intact
-  3. When user navigates to a non-favorited calculator via the hamburger, the bottom bar and top nav do NOT grow a temporary tab — the current route is indicated by the title/header instead
-  4. User can complete the end-to-end flow (open hamburger → unfavorite one tab → favorite another → reload) and see favorites persisted and nav updated, with the open hamburger passing axe sweeps in both themes
-**Plans**: 2 plans
-  - [ ] 41-01-PLAN.md — NavShell flip + store seed + activeCalculatorId cleanup + component tests + navigation.spec.ts guard
-  - [ ] 41-02-PLAN.md — Playwright E2E (favorites-nav.spec.ts) + Playwright axe (favorites-nav-a11y.spec.ts)
-**UI hint**: yes
-
-### Phase 42: UAC/UVC Calculator
-**Goal**: Clinicians can open the UAC/UVC calculator from the hamburger, enter a weight, and get two distinct trustworthy depth values (UAC and UVC) that match the source spreadsheet.
-**Depends on**: Phase 40, Phase 41
-**Requirements**: UAC-01, UAC-02, UAC-03, UAC-04, UAC-05, UAC-06, UAC-07, UAC-08, UAC-09, UAC-ARCH-01, UAC-ARCH-02, UAC-ARCH-03, UAC-ARCH-04, UAC-ARCH-05, UAC-TEST-01, UAC-TEST-02, UAC-TEST-03, UAC-TEST-04
-**Success Criteria** (what must be TRUE):
-  1. User can find UAC/UVC in the hamburger list (it is a registered, non-favorited calculator by default), star it, and see it join the bottom bar — exercising the Phase 40/41 end-to-end flow
-  2. User can enter a weight (0.3–10 kg) via the textbox OR the slider and both stay in sync, with the value persisting across sessionStorage reloads
-  3. User sees UAC depth (`weight × 3 + 9` cm) and UVC depth (`(weight × 3 + 9) / 2` cm) in two visually distinct hero cards — a clinician cannot confuse them at a glance
-  4. User entering an out-of-range weight sees a blur-gated advisory (no auto-clamp), and the AboutSheet entry cites `uac-uvc-calculator.xlsx` with the imaging-confirmation caveat
-  5. `/uac-uvc` passes axe sweeps in light + dark on first run (identity hue researched before PR) and all parity tests match the spreadsheet within 1% epsilon
-**Plans**: 3 plans
-  - [ ] 42-01-PLAN.md — Wave 0: CalculatorId + registry + .identity-uac OKLCH tokens + AboutSheet entry + src/lib/uac-uvc/ module (types, config, state, calculations + parity fixtures + tests) + /uac-uvc route shell
-  - [ ] 42-02-PLAN.md — Wave 1: UacUvcCalculator.svelte (textbox + slider bidirectional sync + two hero cards with D-05 three-cue distinction) + 5-scenario component test + wire component into route
-  - [ ] 42-03-PLAN.md — Wave 2: Playwright E2E (e2e/uac-uvc.spec.ts — 375 + 1280 + favorites round-trip + cap-full + reload + slider drag) + axe sweeps (e2e/uac-uvc-a11y.spec.ts — light + dark)
-**UI hint**: yes
-
-### Phase 42.1: Design Polish + Redesign Sweep (Impeccable Critique Remainder) (INSERTED)
-
-**Goal:** Close the complete /impeccable critique residual after Phase 42 — every screen honors DESIGN.md (the new design contract), the result owns the viewport, the mobile bottom nav stops clipping content, identity hue stays inside calculator surfaces (Identity-Inside Rule), the disclaimer becomes a dismissable banner with re-read in AboutSheet, decorative motion is removed, and the 42-UI-REVIEW spec drift is reconciled.
-**Requirements**: TBD (captured as D-01 through D-33 in 42.1-CONTEXT.md)
-**Depends on:** Phase 42
-**Success Criteria** (what must be TRUE):
-  1. Mobile bottom nav clears content on every calculator at 375 + 414 viewports (no occlusion); single-line tab labels; backdrop-blur on nav surface
-  2. Identity hue is restricted to inside-the-route surfaces only (eyebrow, hero tint, slider track, calculator-input focus ring); chrome (top tab underline, bottom nav active state, hamburger drawer star icons) carries Clinical Blue or neutral
-  3. Every calculator (5 today + future) renders its result through the shared `<HeroResult>` component; hero owns above-the-fold viewport on mount; inputs collapse to a sticky drawer above the bottom nav
-  4. Disclaimer is a dismissable banner (no first-paint-blocking modal); the full text is re-readable from AboutSheet; existing acknowledgments auto-migrate
-  5. Morphine schedule shows 3-decimal mg precision (no `0.0620` noise); dock-style scroll magnification removed; CSS transitions scoped to specific selectors; root `/` ships a static-HTML meta refresh redirect
-  6. 42-UI-REVIEW residue closed: D-05 third cue restored on UAC/UVC (directional arrows), `42-UI-SPEC.md` amended retrospectively for post-em-dash-purge eyebrow + bits-ui Slider substitution
-  7. DESIGN.md / DESIGN.json (project root) is the design contract every change honors; all named rules (Identity-Inside, Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong, Five-Roles-Only, Tabular-Numbers, Eyebrow-Above-Numeral, 11 px Floor, Tonal-Depth, Flat-Card-Default) enforced by review
-  8. All 281 existing unit tests + parity tests + Playwright E2E + axe sweeps stay green; new tests added for `<HeroResult>`, `formatMg`/`formatPercent`, `<DisclaimerBanner>` migration, and mobile-nav clearance Playwright check
-**Plans:** TBD (run /gsd-plan-phase 42.1 to break down — context locked in 42.1-CONTEXT.md)
-**UI hint**: yes
-
-### Phase 43: Release v1.13.0
-**Goal**: v1.13 is shipped: version reflected in the AboutSheet, PROJECT.md tells the story of what landed, and the full clinical quality gate is green.
-**Depends on**: Phase 40, Phase 41, Phase 42, Phase 42.1
+### Phase 46: Release v1.14.0
+**Goal**: v1.14 is shipped: the Kendamil family is selectable, desktop renders the full registry, the AboutSheet shows v1.14.0, PROJECT.md tells the story of what landed, and the full clinical quality gate is green.
+**Depends on**: Phase 44, Phase 45
 **Requirements**: REL-01, REL-02, REL-03
 **Success Criteria** (what must be TRUE):
-  1. User opening the About dialog sees version `1.13.0` (sourced via the existing `__APP_VERSION__` build-time constant)
-  2. A reader of PROJECT.md can see every v1.13 accomplishment captured in the Validated list with the milestone tag
-  3. The full quality gate is green: svelte-check 0/0, vitest fully green, `pnpm build` succeeds, Playwright E2E passes, and the axe suite (extended with UAC/UVC + hamburger variants) passes in both themes
-**Plans**: 1 plan
-  - [x] 43-01-PLAN.md — Release v1.13.0: version bump + PROJECT.md + REQUIREMENTS.md (41 IDs) + ROADMAP.md + orphan cleanup + verification triage + 2 pre-bump Playwright fixes + full clinical gate
+  1. User opening the About dialog sees version `1.14.0` (sourced via the existing `__APP_VERSION__` build-time constant — zero hardcoded version strings)
+  2. A reader of PROJECT.md can see every v1.14 accomplishment captured in the Validated list with the milestone tag (Kendamil entries per ID, NAV-ALL entries per ID, REL entries)
+  3. The full quality gate is green: svelte-check 0/0, vitest fully green (including the new Kendamil parity tests, the SelectPicker grouping test, and the NavShell `desktopVisibleCalculators` derived test), `pnpm build` succeeds, Playwright E2E passes (including the new desktop-full-nav E2E spec), and the axe suite passes in both themes (extended with the desktop full toolbar + Kendamil variant fortification sweeps)
+**Plans**: TBD (run `/gsd-plan-phase 46` to break down)
 
 ## Progress
 
@@ -157,16 +131,17 @@ See [milestones/v1.12-ROADMAP.md](milestones/v1.12-ROADMAP.md) for full phase de
 | 32-34 | v1.10 | 3/3 | Complete | 2026-04-10 |
 | 35 | v1.11 | 1/1 | Complete | 2026-04-09 |
 | 36-39 | v1.12 | 7/7 | Complete | 2026-04-10 |
-| 40. Favorites Store + Hamburger | v1.13 | 3/3 | Complete | 2026-04-23 |
-| 41. Favorites-Driven Nav | v1.13 | 2/2 | Complete | 2026-04-23 |
-| 42. UAC/UVC Calculator | v1.13 | 3/3 | Complete | 2026-04-23 |
-| 42.1. Design Polish + Redesign Sweep | v1.13 | 6/6 | Complete | 2026-04-24 |
-| 43. Release v1.13.0 | v1.13 | 1/1 | Complete    | 2026-04-24 |
+| 40-43 | v1.13 | 15/15 | Complete | 2026-04-24 |
+| 44. Kendamil Formula Family | v1.14 | 0/TBD | Not started | — |
+| 45. Desktop Full-Nav Divergence | v1.14 | 0/TBD | Not started | — |
+| 46. Release v1.14.0 | v1.14 | 0/TBD | Not started | — |
 
 ## Order Rationale
 
-**Why favorites-nav first, UAC/UVC second:** Shipping UAC/UVC as the 5th bottom-bar tab would overflow the mobile bar at 375px (48px touch targets × 5 tabs + safe-area = cramped labels) and create throwaway navigation code that Phase 41 would then rip out. Shipping favorites-nav into the existing 4 calculators first (with first-run defaults `['morphine', 'formula', 'gir', 'feeds']` preserving the current v1.12 bottom bar) means existing users see zero visible change at the Phase 41 cut, and UAC/UVC then lands in Phase 42 as a non-favorited 5th calculator. This exercises the end-to-end flow naturally (star to add to bottom bar, disabled-at-cap when the user tries to favorite without removing another) rather than inventing that workflow only after shipping a bar overflow.
+**Why Kendamil and Desktop Full-Nav as two independent phases (not combined):** The two scopes touch entirely separate files — Kendamil is JSON-only (`fortification-config.json`) plus colocated parity tests inside `src/lib/fortification/`, while Desktop Full-Nav is `NavShell.svelte` plus colocated component tests plus Playwright specs. Zero shared code paths, zero shared test surfaces, zero ordering dependency. Splitting keeps each phase independently verifiable, lets failures in one not block the other, and matches the project's established "one feature area per phase" pattern (v1.3 fortification-only, v1.8 GIR-only, v1.12 feeds-only). At granularity `coarse` (3-5 phase target), 3 phases is the right floor — combining feature work into one phase would risk a sprawling commit and lose the clean phase-transition checkpoint between them.
 
-**Why store + hamburger before favorites-driven nav:** The store is the contract the NavShell depends on. Phase 40 delivers a visible, testable hamburger menu that writes favorites — but NavShell still renders all registered calculators unchanged (preserving current behavior). Phase 41 flips NavShell over to read from the store. This split keeps each phase independently verifiable and lets us gate the nav flip on a passing favorites store.
+**Why Phase 44 before Phase 45 (or parallel):** Either order works — they are structurally independent. The roadmap orders Kendamil first because it is the smaller, more contained change (add 3 entries to a JSON + tests) and lands faster, leaving a clear plate for the more design-sensitive NavShell refactor. If a contributor wants to flip the order or run them in parallel, nothing blocks that — `/gsd-plan-phase 45` can run before Phase 44 ships.
 
-**Why UAC/UVC architecture + hue + logic + UI in one phase:** UAC/UVC is a small calculator (single weight input, two closed-form formulas, ~1% parity). Splitting it into ARCH / LOGIC / UI / TESTS would over-fragment (v1.12 used 3 phases for Feed Advance, which has 2 modes, 9 advisories, dual TPN lines, frequency/cadence matrices — not comparable). Instead we follow the v1.8 Wave-0 pattern within the phase: `CalculatorId` / registry / `NavShell.activeCalculatorId` / identity hue tokens land first-commit, then logic, then UI, then tests.
+**Why Phase 46 (release) gates on both:** REL-01 bumps the package version to 1.14.0 — that bump should only land once both feature phases are green so the AboutSheet version reflects the full v1.14 surface. REL-03's clinical gate (svelte-check, vitest, build, Playwright + axe) by definition requires all v1.14 code in place. Standard release-phase pattern from v1.8 / v1.10 / v1.11 / v1.12 / v1.13.
+
+**Why no urgent decimal-phase risk anticipated:** v1.13's Phase 42.1 was inserted because /impeccable critique surfaced cross-cutting design-contract gaps. v1.14 is a tightly scoped milestone (a JSON addition + a NavShell branch split) with no new identity hues, no new design tokens, no new components, no DESIGN.md changes (explicitly Out of Scope per REQUIREMENTS.md). Decimal-phase insertions remain available if a critique sweep surfaces something unexpected, but the scope is small enough that the most likely path is a clean 44 → 45 → 46 sequence.

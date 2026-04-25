@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.14
 milestone_name: Kendamil Formulas + Desktop Full Nav
-status: defining_requirements
-stopped_at: Milestone v1.14 started
+status: roadmap_complete
+stopped_at: Phase 44 ready to plan
 last_updated: "2026-04-25T00:00:00.000Z"
-last_activity: 2026-04-25 -- Milestone v1.14 started
+last_activity: 2026-04-25 -- ROADMAP.md drafted with Phases 44-46 (19/19 requirements mapped)
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,20 +21,21 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-25)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Milestone v1.14 — defining requirements
+**Current focus:** Milestone v1.14 — roadmap complete; Phase 44 (Kendamil Formula Family) ready to plan
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 44 — Kendamil Formula Family (not started)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-25 — Milestone v1.14 started
+Status: Roadmap complete; awaiting `/gsd-plan-phase 44`
+Last activity: 2026-04-25 — ROADMAP.md drafted with Phases 44, 45, 46
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed (all milestones): 41
+- Total plans completed (all milestones): 56
+- v1.13: 15 plans across 5 phases (40, 41, 42, 42.1, 43), shipped 2026-04-24
 - v1.12: 7 plans across 4 phases (36-39), 52 commits
 - v1.11: 1 plan, 1 commit
 - v1.10: 3 plans across 3 phases (32-34)
@@ -51,15 +52,21 @@ Last activity: 2026-04-25 — Milestone v1.14 started
 - [v1.8]: Spreadsheet parity tests with ~1% epsilon (clinical calculators must match source authority)
 - [v1.8]: Wave 0 latent-bug fixes before feature work (CalculatorId + NavShell + registry)
 - [v1.13]: Ship favorites-nav BEFORE UAC/UVC to avoid bottom-bar overflow at 375px and throwaway code. Phase 40 delivers the store + hamburger (NavShell unchanged), Phase 41 flips NavShell to read from the store, Phase 42 lands UAC/UVC as a non-favorited 5th calculator that exercises the add/disable-at-cap flow end-to-end.
-- [v1.13]: First-run favorites default `['morphine', 'formula', 'gir', 'feeds']` preserves the current v1.12 bottom bar so existing users see zero visible change at the Phase 41 cut.
+- [v1.13]: First-run favorites default `['morphine-wean', 'formula', 'gir', 'feeds']` preserves the v1.12 bottom bar so existing users see zero visible change at the Phase 41 cut.
+- [v1.13]: DESIGN.md / DESIGN.json (project root) is the design contract — all named rules (Identity-Inside, Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong, Five-Roles-Only, Tabular-Numbers, Eyebrow-Above-Numeral, 11px Floor, Tonal-Depth, Flat-Card-Default) enforced by review. v1.14 explicitly declares NO new tokens, NO rule additions.
+- [v1.14]: Kendamil and Desktop Full-Nav are independently structured phases (Phase 44, Phase 45) with no shared code paths — split rather than combined to keep each phase independently verifiable and to match the project's "one feature area per phase" pattern.
+- [v1.14]: Mobile bottom bar is explicitly UNCHANGED — favorites-driven, 4-cap, hamburger-managed. Only the desktop top toolbar diverges to render the full registry.
 
 ### Roadmap Evolution
 
-- Phase 42.1 inserted after Phase 42: design-polish-sweep (URGENT) — captures the 7-command /impeccable critique remainder (onboard, colorize, layout, adapt, harden, quieter, final). Commits `2378d29` (polish: stripes) and `917ecf2` (clarify: em dashes) already shipped outside the GSD workflow per user authorization on 2026-04-23; 42.1 carries the remaining scope. Ships IN v1.13 (release 43 now depends on 42.1). 2-week follow-up routine `trig_014XUDEDwK7ve2dKS5dP8JZQ` fires 2026-05-07 and will re-score regardless of release timing.
+- v1.13 archived to `.planning/milestones/v1.13-ROADMAP.md`; main ROADMAP.md collapses v1.13 under `<details>` consistent with the v1.10/v1.11/v1.12 archive convention.
+- v1.14 phases 44-46 added as the active section. No decimal phases anticipated (scope is JSON-only Kendamil + NavShell branch split, with explicit "no DESIGN.md changes" / "no new identity hues" Out of Scope guards).
 
 ### Pending Todos
 
-None.
+- Run `/gsd-plan-phase 44` to break Phase 44 (Kendamil Formula Family) into plans.
+- Run `/gsd-plan-phase 45` to break Phase 45 (Desktop Full-Nav Divergence) into plans (can run before, after, or in parallel with Phase 44).
+- Run `/gsd-plan-phase 46` to break Phase 46 (Release v1.14.0) into plans after both feature phases are green.
 
 ### Blockers/Concerns
 
@@ -67,8 +74,8 @@ None.
 
 ## Session Continuity
 
-Last session: --stopped-at
-Stopped at: Phase 43 context gathered
-Resume file: --resume-file
+Last session: 2026-04-25 (roadmap creation)
+Stopped at: Phase 44 ready to plan
+Resume file: .planning/ROADMAP.md
 
-**Planned Phase:** 43 (Release v1.13.0) — 1 plans — 2026-04-24T22:34:46.373Z
+**Planned Phase:** 44 (Kendamil Formula Family) — TBD plans — 2026-04-25T00:00:00.000Z

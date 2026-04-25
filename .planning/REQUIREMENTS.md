@@ -65,29 +65,29 @@ Explicit exclusions for v1.14:
 
 | Requirement ID | Phase | Status |
 |---|---|---|
-| KEND-01 | TBD | Pending |
-| KEND-02 | TBD | Pending |
-| KEND-03 | TBD | Pending |
-| KEND-04 | TBD | Pending |
-| KEND-05 | TBD | Pending |
-| KEND-TEST-01 | TBD | Pending |
-| KEND-TEST-02 | TBD | Pending |
-| KEND-TEST-03 | TBD | Pending |
-| NAV-ALL-01 | TBD | Pending |
-| NAV-ALL-02 | TBD | Pending |
-| NAV-ALL-03 | TBD | Pending |
-| NAV-ALL-04 | TBD | Pending |
-| NAV-ALL-05 | TBD | Pending |
-| NAV-ALL-TEST-01 | TBD | Pending |
-| NAV-ALL-TEST-02 | TBD | Pending |
-| NAV-ALL-TEST-03 | TBD | Pending |
-| REL-01 | TBD | Pending |
-| REL-02 | TBD | Pending |
-| REL-03 | TBD | Pending |
+| KEND-01 | Phase 44 | Pending |
+| KEND-02 | Phase 44 | Pending |
+| KEND-03 | Phase 44 | Pending |
+| KEND-04 | Phase 44 | Pending |
+| KEND-05 | Phase 44 | Pending |
+| KEND-TEST-01 | Phase 44 | Pending |
+| KEND-TEST-02 | Phase 44 | Pending |
+| KEND-TEST-03 | Phase 44 | Pending |
+| NAV-ALL-01 | Phase 45 | Pending |
+| NAV-ALL-02 | Phase 45 | Pending |
+| NAV-ALL-03 | Phase 45 | Pending |
+| NAV-ALL-04 | Phase 45 | Pending |
+| NAV-ALL-05 | Phase 45 | Pending |
+| NAV-ALL-TEST-01 | Phase 45 | Pending |
+| NAV-ALL-TEST-02 | Phase 45 | Pending |
+| NAV-ALL-TEST-03 | Phase 45 | Pending |
+| REL-01 | Phase 46 | Pending |
+| REL-02 | Phase 46 | Pending |
+| REL-03 | Phase 46 | Pending |
 
 **Coverage:**
 - v1.14 requirements: 19 total
-- Mapped to phases: 0 (filled by roadmapper)
+- Mapped to phases: 19 (Phase 44: 8 / Phase 45: 8 / Phase 46: 3) ✓ 100%
 
 ---
-*Requirements defined: 2026-04-25*
+*Requirements defined: 2026-04-25 — Traceability filled by roadmapper 2026-04-25*
