@@ -7,21 +7,21 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **CONTEXT CAPTURED 2026-04-26, PLAN PENDING**
-Plan: Phase 3 PARTIAL-WITH-KI-1 (5/5 plans across 4 waves; 6/6 reqs claimed = 5 FULL + 1 PARTIAL-VIA-KI-1); Phase 3.1 CONTEXT.md committed with D-01..D-09 (Option 2: $derived-backed binding wrapper, zero shared-component change, unskip 4 deferred e2e tests + 2 new component tests)
-Status: Phase 3.1 CONTEXT.md + DISCUSSION-LOG.md committed (c18b7da); RESEARCH/PLAN not yet written
-Last activity: 2026-04-26 — Ran /gsd-discuss-phase 3.1 --ws pert --auto; auto-resolved 9 gray areas grounded in KI-1 root-cause analysis; ready for /gsd-plan-phase 3.1 --ws pert
+Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **PLANNED 2026-04-26, READY TO EXECUTE**
+Plan: Phase 3.1 has 4 plans across 3 waves (Wave 1: 03.1-01 bridge fix; Wave 2: 03.1-02 component tests + 03.1-03 e2e tests parallel; Wave 3: 03.1-04 clinical gate). PERT-TEST-05 fully covered. Plan-checker VERIFICATION PASSED on all 10 dimensions.
+Status: RESEARCH.md (D-09 PASS, HIGH confidence) + 4 PLAN.md files committed; ready for execution.
+Last activity: 2026-04-26 — Completed /gsd-discuss-phase + /gsd-plan-phase 3.1 --ws pert --auto chain; spawning /gsd-execute-phase 3.1 --ws pert next.
 
 ## Progress
 
-**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 CONTEXT captured, plan pending)
-**Current Plan:** Phase 3.1 — CONTEXT.md committed (c18b7da); next step `/gsd-plan-phase 3.1 --ws pert`
+**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 PLANNED, ready to execute)
+**Current Plan:** Phase 3.1 — 4 plans across 3 waves committed; next step `/gsd-execute-phase 3.1 --ws pert`
 
 ## Session Continuity
 
-**Stopped At:** Phase 3.1 CONTEXT captured (HEAD c18b7da)
-**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-CONTEXT.md` (D-01..D-09) + `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1 root-cause)
-**Next Action:** `/gsd-plan-phase 3.1 --ws pert` (researcher verifies D-09 Svelte 5.55 function-binding syntax; planner builds wave plan around D-01 derived-binding wrapper, D-02 zero-SelectPicker-change, D-05 e2e unskip, D-06 2 new component tests). Then `/gsd-execute-phase 3.1 --ws pert`. After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
+**Stopped At:** Phase 3.1 PLANNED (RESEARCH + 4 PLAN.md files + ROADMAP update committed)
+**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/` (CONTEXT D-01..D-09 + RESEARCH §D-09 PASS + 4 plans 03.1-01..03.1-04)
+**Next Action:** `/gsd-execute-phase 3.1 --ws pert` — Wave 1: 03.1-01 bridge fix (PertInputs.svelte function-binding wrappers, −24 LOC); Wave 2 parallel: 03.1-02 component tests (+2 cases) + 03.1-03 e2e tests (author 4 runner cases, delete prose block); Wave 3: 03.1-04 clinical gate (svelte-check, vitest ≥425, build, pert-a11y, pert.spec 12/12, full Playwright, negative-space audit). After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
 
 ## Phase 3 outcomes (HEAD 27dc39c, baseline e14f425 → 7 commits)
 
