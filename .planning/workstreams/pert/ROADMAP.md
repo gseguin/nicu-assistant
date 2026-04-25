@@ -71,7 +71,11 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
   3. External mutations to `pertState.current.medicationId` / `strengthValue` / `tubeFeed.formulaId` (from `pertState.reset()`, from localStorage rehydration on load, from D-11 cascade) propagate into the SelectPicker UI on the next microtask flush. No write-effect-clobbers-external-write race.
   4. Phase 3 Wave 1 + Wave 2 tests (`PertCalculator.test.ts` 10 cases, `PertInputs.test.ts` 7 cases including D-11 reset, `calculations.test.ts` 45 cases including parity matrix) all stay green.
   5. The 2 picker-driven happy-path e2e tests deferred from Plan 03-04 (Oral mode + Tube-Feed mode happy paths × 2 viewports = 4 tests) get unskipped and pass cleanly under `CI=1 pnpm exec playwright test pert.spec` — taking the count from 8/8 to 12/12.
-**Plans**: TBD
+**Plans**: 4 plans
+  - [ ] 03.1-01-PLAN.md — Replace SelectPicker string-bridge proxies in PertInputs.svelte with Svelte 5 function bindings (KI-1 root-cause fix)
+  - [ ] 03.1-02-PLAN.md — Add D-01 click-persist + D-04 external-mutation regression-guard component tests to PertInputs.test.ts
+  - [ ] 03.1-03-PLAN.md — Author 2 picker-driven happy-path e2e tests in pert.spec.ts (Oral + Tube-Feed); delete deferred prose comment block
+  - [ ] 03.1-04-PLAN.md — Clinical gate (verification only): 7-gate sequence + PERT-TEST-05 FULL closure record
 **Resolution recommendation** (per KI-1 known-issue analysis): Option 2 — `$derived`-backed binding wrapper for SelectPicker `bind:value` in PertInputs.svelte. Eliminates the bidirectional `$effect` race at the source; smallest blast radius; no shared-component change. Alternative: Option 1 (add `onValueChange` callback prop to SelectPicker — touches a shared component used by feeds/gir/uac-uvc, larger scope).
 **Origin**: Bug originated Phase 2 plan 02-03 (`3171b06`); discovered Phase 3 plan 03-04 e2e execution (2026-04-25); two failed hotfix attempts during Phase 3 confirmed the fix requires architectural change rather than effect-order tweak. Full root-cause + 3 candidate paths documented at `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1).
 
@@ -105,6 +109,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 | 1. Architecture, Identity Hue & Clinical Data | 0/0 | Not started | - |
 | 2. Calculator Core (Both Modes + Safety) | 0/0 | Not started | - |
 | 3. Tests | 0/0 | Not started | - |
+| 3.1. KI-1 Resolution (SelectPicker bridge) | 0/4 | Not started | - |
 | 4. Design Polish (`/impeccable` Critique Sweep) | 0/0 | Not started | - |
 | 5. Release | 0/0 | Not started | - |
 
