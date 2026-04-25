@@ -84,6 +84,36 @@ test.describe('Fortification Calculator Accessibility', () => {
     expect(results.violations).toEqual([]);
   });
 
+  // KEND-TEST-03: re-run axe with a Kendamil variant selected. The new
+  // contrast surface is the manufacturer-group label "Kendamil" in the
+  // SelectPicker dropdown — identical for all three variants, so one
+  // variant (Organic) covers the new surface in both themes.
+  for (const theme of ['light', 'dark'] as const) {
+    test(`fortification page has no axe violations with Kendamil Organic selected (${theme})`, async ({
+      page
+    }) => {
+      await page.evaluate((t) => {
+        document.documentElement.classList.add('no-transition');
+        document.documentElement.classList.toggle('dark', t === 'dark');
+        document.documentElement.classList.toggle('light', t === 'light');
+        document.documentElement.setAttribute('data-theme', t);
+      }, theme);
+      if (theme === 'dark') await page.waitForTimeout(250);
+
+      // Open the Formula SelectPicker and choose Kendamil Organic.
+      // The searchable Formula SelectPicker trigger renders as <button role="combobox">
+      // with aria-labelledby="<label> <value>", so the accessible name starts with "Formula".
+      await page.getByRole('combobox', { name: /^Formula/ }).click();
+      await page.getByRole('option', { name: 'Kendamil Organic' }).click();
+
+      // Confirm the calculator re-rendered with the new selection.
+      await expect(page.getByText('Amount to Add')).toBeVisible();
+
+      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+      expect(results.violations).toEqual([]);
+    });
+  }
+
   // Advisory-message a11y sweep is covered by morphine-wean-a11y.spec.ts (light + dark).
   // Fortification's only NumericInput (Starting Volume) opts out of the range advisory
   // via `showRangeError={false}` per v1.7 UX decision, so there's no Formula-surface to
