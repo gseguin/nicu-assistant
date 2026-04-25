@@ -280,4 +280,13 @@
     --color-identity: oklch(80% 0.10 350);
     --color-identity-hero: oklch(24% 0.05 350);
   }
+  .identity-pert {
+    --color-identity: oklch(42% 0.12 285);
+    --color-identity-hero: oklch(96% 0.03 285);
+  }
+  .dark .identity-pert,
+  [data-theme='dark'] .identity-pert {
+    --color-identity: oklch(80% 0.10 285);
+    --color-identity-hero: oklch(22% 0.045 285);
+  }
 }
