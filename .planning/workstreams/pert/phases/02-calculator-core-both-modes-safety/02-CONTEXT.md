@@ -27,7 +27,7 @@ Phase 2 lands the actual capsule-counting math (Oral B11 + Tube-Feed B13/B14 wit
 <decisions>
 ## Implementation Decisions
 
-All Phase 2 decisions below are **[auto-recommended]** by the orchestrator under `/gsd-discuss-phase --auto`. User should skim and override any that look wrong before `/gsd-plan-phase 2 --ws pert` locks them into plans.
+**Status:** /gsd-discuss-phase --auto produced D-01..D-14 [auto-recommended] on 2026-04-25. Phase 2 research (`02-RESEARCH.md`) surfaced material xlsx-formula conflicts; user resolved them via AskUserQuestion 2026-04-25, locking **D-02, D-12, D-15, D-16, D-17, D-18, D-19, D-20** as [user-locked] — these override the original auto-recommended math semantics with xlsx-canonical fat-based dosing + Math.round. The remaining auto-recommended decisions (D-01, D-03..D-11, D-13) are still flagged [auto] but consistent with the user's xlsx-parity intent. Planner should treat all D-XX as authoritative.
 
 ### Math module shape
 
@@ -35,7 +35,7 @@ All Phase 2 decisions below are **[auto-recommended]** by the orchestrator under
 
 ### Rounding semantics
 
-- **D-02 [auto]:** All capsule-count outputs use `Math.ceil` (= xlsx ROUNDUP / CEILING). Result-object fields default to `0` if any required input is `null`, `NaN`, ≤ `0`, or division-by-zero — never produce `Infinity` or `NaN` in the result. The empty-state gate (D-08) prevents these conditions from rendering anyway, but the math layer is defensive. **Why:** xlsx parity is the contract; clinical intent is "always round up to whole capsules" (you can't dose half a capsule).
+- **D-02 [user-locked 2026-04-25]:** All capsule-count outputs use **`Math.round`** (= xlsx ROUND, NOT ROUNDUP / CEILING). Result-object fields default to `0` if any required input is `null`, `NaN`, ≤ `0`, or division-by-zero — never produce `Infinity` or `NaN` in the result. The empty-state gate (D-08) prevents these conditions from rendering anyway, but the math layer is defensive. **Why:** xlsx parity is the contract per ROADMAP success criteria + REQUIREMENTS PERT-TEST-01/02 ±1% gate. The xlsx oral B10 = `=ROUND(B9/B8, 0)` and tube B14 = `=ROUND(B12/B11, 0)` (verified live via openpyxl during Phase 2 research). The original `Math.ceil` recommendation was based on a misread of the xlsx formula; corrected here. The 10,000 units/kg/day STOP-red cap (PERT-SAFE-01) catches the dangerous direction; ROUND-vs-CEIL is a tractable difference within the safe envelope. See 02-RESEARCH.md §Q-01 for full evidence.
 
 ### Max-lipase advisory threshold expression
 
@@ -45,10 +45,34 @@ All Phase 2 decisions below are **[auto-recommended]** by the orchestrator under
 
 - **D-04 [auto]:** STOP-red advisory renders as a **separate card below the hero** (NOT inline in the hero). Card structure: `border-[var(--color-error)]` + `bg-[var(--color-surface-card)]` + `<AlertOctagon size={20} class="text-[var(--color-error)]" />` from `@lucide/svelte` + bold message text in `text-[var(--color-error)]`. Distinct from neutral warning advisories (which keep the existing feeds pattern: neutral card + `AlertTriangle` icon + secondary-text message). Hero stays identity-purple (Identity-Inside Rule from DESIGN.md preserved). **Why:** v1.13 GIR `8fde90e` set the STOP-red precedent for this app; PERT mirrors at the advisory level rather than the hero level because PERT's hero shows the capsule count, not a STOP word. The carve-out is "red means error / out-of-range, with one named exception per calculator: the safety cap."
 
+### Per-mode capsule formulas (USER-LOCKED — adopt xlsx-canonical, NOT REQUIREMENTS-as-written)
+
+- **D-15 [user-locked 2026-04-25]:** **Oral formula** uses xlsx-canonical fat-based dosing. Calc layer:
+  - `totalLipase = oral.fatGrams × oral.lipasePerKgPerMeal` (the JSON key keeps the legacy name `lipasePerKgPerMeal` for state-schema continuity, but it represents **lipase units per gram of fat** in the calculation; UI label updates to "Lipase per gram of fat" — see D-17).
+  - `capsulesPerDose = Math.round(totalLipase / strengthValue)` (matches xlsx B10 = `=ROUND(B9/B8, 0)`).
+  - `lipasePerDose = capsulesPerDose × strengthValue` (display secondary; matches xlsx-style derivation).
+  - **Why:** xlsx is the named parity authority across CONTEXT canonical_refs / ROADMAP / REQUIREMENTS. The xlsx oral B9 = `=B5*B6` where B5 = "Fat (g)" and B6 = "Lipase units per g" (verified via openpyxl during Phase 2 research). REQUIREMENTS PERT-ORAL-06's `(weight × lipasePerKg) / strength` is a misreading of the xlsx; the workstream parity authority and the CFF clinical guideline ("500–2500 units lipase / g of dietary fat / meal") agree on fat-based dosing. The reference app `dosing.ts:51-56` also confirms `fatGrams × lipaseUnitsPerGram`. See 02-RESEARCH.md §Q-02 for full evidence.
+  - **Action item for Phase 2 planner:** Phase 2 ships fat-based math + UI label "Lipase per gram of fat". Phase 5 (release) updates REQUIREMENTS PERT-ORAL-06 wording to match.
+
+- **D-16 [user-locked 2026-04-25]:** **Tube-Feed formula** uses xlsx-canonical tube semantics. Calc layer:
+  - `totalFatG = (formula.fatGPerL × tubeFeed.volumePerDayMl) / 1000`.
+  - `totalLipase = totalFatG × tubeFeed.lipasePerKgPerDay` (the JSON key keeps the legacy name; in the calc this represents **lipase units per gram of fat for tube-feed**; UI label updates per D-17).
+  - `capsulesPerDay = Math.round(totalLipase / strengthValue)` (matches xlsx B14 = `=ROUND(B12/B11, 0)`).
+  - `lipasePerKg = totalLipase / weightKg` (matches xlsx B13 — secondary output, NOT the formula divisor).
+  - `capsulesPerMonth = Math.round(capsulesPerDay × 30)` (per D-12 — locked to × 30 not × 30.4).
+  - **Why:** xlsx tube B12 = `=B8*B9` where B8 is total fat g and B9 is lipase units per g (verified live). REQUIREMENTS PERT-TUBE-06's "× weight" multiplier is a misreading. xlsx B13 (lipase-per-kg) is a downstream display metric, not the formula divisor.
+  - **Action item:** Phase 5 release updates REQUIREMENTS PERT-TUBE-06 wording to match.
+
+- **D-17 [user-locked 2026-04-25]:** **UI labels for the lipase-rate inputs change** to reflect fat-based semantics, but **JSON keys do NOT change** (state schema stays Phase-1-frozen):
+  - Oral input UI label: "Lipase per gram of fat" (was "Lipase per kg per meal" in REQUIREMENTS spec text).
+  - Tube-Feed input UI label: "Lipase per gram of fat" (same).
+  - JSON keys stay: `oral.lipasePerKgPerMeal`, `tubeFeed.lipasePerKgPerDay` (renaming would invalidate Phase-1 `state.test.ts` and break stored localStorage on existing-user reload).
+  - Default values stay: `1000` for both (numerically valid for fat-based dosing per CFF guideline 500–2500 range; xlsx defaults to 2000 but our 1000 default is conservative and within range).
+
 ### Daily-lipase computation across modes
 
-- **D-05 [auto]:** Per-mode `dailyLipase`:
-  - Oral: `dailyLipase = capsulesPerDose × strengthValue × 3` (3 meals/day, matches xlsx "Estimated daily total" assumption).
+- **D-05 [auto]:** Per-mode `dailyLipase` (used to check the 10,000 cap, not displayed):
+  - Oral: `dailyLipase = capsulesPerDose × strengthValue × 3` (3 meals/day; xlsx has no oral daily-lipase cell, so this is our clinical-convention extension).
   - Tube-Feed: `dailyLipase = capsulesPerDay × strengthValue` (already a daily total).
   - Both compared against `weightKg × 10000` to decide if the `max-lipase-cap` advisory fires.
 - The advisory check runs in `getTriggeredAdvisories(mode, inputs, result, advisoryConfig)` — separated from the result-producing function so that callers can render the result object without re-running the full advisory pass. Mirrors `src/lib/feeds/calculations.ts:198`.
@@ -84,7 +108,7 @@ All Phase 2 decisions below are **[auto-recommended]** by the orchestrator under
 
 ### Capsules-per-month rounding
 
-- **D-12 [auto]:** `capsulesPerMonth = Math.ceil(capsulesPerDay × 30)`. Locked to `× 30` to match xlsx `B14` exactly (NOT calendar-month average `× 30.4`). Phase 3 spreadsheet-parity tests will assert this equality.
+- **D-12 [user-locked 2026-04-25]:** `capsulesPerMonth = Math.round(capsulesPerDay × 30)`. Locked to `× 30` to match xlsx exactly (NOT calendar-month average `× 30.4`). Rounding aligned with D-02 (`Math.round`, not `Math.ceil`). `capsulesPerDay` is already a `Math.round` integer per D-16; multiplying an integer by 30 produces an integer, so the outer `Math.round` is defensive-only but kept for symmetry with D-02. Phase 3 spreadsheet-parity tests will assert this equality.
 
 ### Volume input unit
 
@@ -92,7 +116,24 @@ All Phase 2 decisions below are **[auto-recommended]** by the orchestrator under
 
 ### Range advisory binding (NumericInput contract)
 
-- **D-14 [auto-pending-research]:** PERT-SAFE-02/03 say "blur-gated 'Outside expected range — verify' via `<NumericInput showRangeHint>`". The actual prop name on the existing component is unverified at discuss-time. **Action for the planner:** read `src/lib/shared/components/NumericInput.svelte` and bind to whatever prop the component actually exposes (likely `showRangeHint`, `rangeAdvisory`, or similar). If no such prop exists, the planner adds one to NumericInput as a Wave-0 latent-bug fix (mirrors v1.8 / Phase 1 pattern). Don't fabricate the prop name in CONTEXT.md.
+- **D-14 [closed 2026-04-25]:** Resolved during UI-SPEC research and Phase 2 research. The existing `<NumericInput>` component at `src/lib/shared/components/NumericInput.svelte` already exposes both `showRangeHint` (line 23, defaults `true`) and `showRangeError` (line 24, defaults `true`). Phase 2 leaves both at defaults — no new prop, no Wave-0 latent-bug fix needed. PERT-SAFE-02 / PERT-SAFE-03 are satisfied by binding `<NumericInput min={config.inputs.weightKg.min} max={config.inputs.weightKg.max} step={...} />` and letting the component fire the blur-gated "Outside expected range. Verify." string. (Note: range message strings are also subject to the em-dash audit per D-19.)
+
+### xlsx parity authority (physical location)
+
+- **D-18 [user-locked 2026-04-25]:** The canonical xlsx parity authority is **`epi-pert-calculator.xlsx` at the workstream root** (`/home/ghislain/gsd-workspaces/pert/nicu-assistant/epi-pert-calculator.xlsx`), copied 2026-04-25 from the reference clone (`/home/ghislain/src/pert-calculator/pert-calculator-pediatric-updated.xlsx`). Phase 2 hand-codes the xlsx formulas in TS (D-15 + D-16) and does NOT load the workbook at runtime. Phase 3 fixture authoring reads the workstream-root copy. **Why a workstream-root copy:** colocates the parity authority with the workstream so future researchers + fixture authors don't have to chase the reference clone, and isolates the workstream from upstream changes to the reference repo.
+
+### Em-dash advisory message audit (UI-SPEC carry-over)
+
+- **D-19 [user-locked 2026-04-25 via UI-SPEC]:** Four advisory message strings in `src/lib/pert/pert-config.json` (lines 99, 108, 117, 126) currently use em-dash `" — "`, which violates DESIGN.md's em-dash ban for user-rendered strings. Phase 2 Wave 0 mechanically replaces them per UI-SPEC §Copywriting Contract:
+  - Line 99 (`max-lipase-cap`): `"Exceeds 10,000 units/kg/day cap. Verify with prescriber"`
+  - Line 108 (`weight-out-of-range`): `"Outside expected pediatric range. Verify."`
+  - Line 117 (`fat-out-of-range`): `"Outside expected fat range. Verify."`
+  - Line 126 (`volume-out-of-range`): `"Outside expected volume range. Verify."`
+  - **No behavior change.** The Phase-1-frozen `state.test.ts` and `config.test.ts` do NOT assert these strings (config.test.ts only asserts shape + count + STOP severity). Wave 0 doesn't break them.
+
+### Lucide icon import name (UI-SPEC carry-over)
+
+- **D-20 [user-locked 2026-04-25 via UI-SPEC]:** The Lucide export name for the STOP-red advisory icon is `OctagonAlert` (NOT `AlertOctagon` as D-04 originally wrote). Verified against `src/lib/gir/GirCalculator.svelte:8` (`import { Info, OctagonAlert } from '@lucide/svelte'`). Phase 2 imports as `OctagonAlert`. D-04's rendering decision (separate card below hero, `--color-error` border + bold red message) stands; only the import-name token corrects.
 
 ### Claude's Discretion
 
