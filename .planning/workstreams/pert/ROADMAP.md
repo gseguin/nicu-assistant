@@ -73,7 +73,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
   5. The 2 picker-driven happy-path e2e tests deferred from Plan 03-04 (Oral mode + Tube-Feed mode happy paths × 2 viewports = 4 tests) get unskipped and pass cleanly under `CI=1 pnpm exec playwright test pert.spec` — taking the count from 8/8 to 12/12.
 **Plans**: 4 plans
   - [x] 03.1-01-PLAN.md — Replace SelectPicker string-bridge proxies in PertInputs.svelte with Svelte 5 function bindings (KI-1 root-cause fix) — **COMPLETE 2026-04-25 (commit `f2da16d`)**: PertInputs.svelte 248 -> 221 LOC, svelte-check 0/0, vitest 423/423, D-11 reset test green without modification per D-03
-  - [ ] 03.1-02-PLAN.md — Add D-01 click-persist + D-04 external-mutation regression-guard component tests to PertInputs.test.ts
+  - [x] 03.1-02-PLAN.md — Add D-01 click-persist + D-04 external-mutation regression-guard component tests to PertInputs.test.ts — **COMPLETE 2026-04-25 (commit `dfb6a62`)**: PertInputs.test.ts 96 -> 153 LOC (+57 additive), 7 -> 9 it() cases, full vitest 425/425 (was 423; +2 new), svelte-check 0/0, existing 7 cases byte-identical per D-03 (verified zero removed lines)
   - [ ] 03.1-03-PLAN.md — Author 2 picker-driven happy-path e2e tests in pert.spec.ts (Oral + Tube-Feed); delete deferred prose comment block
   - [ ] 03.1-04-PLAN.md — Clinical gate (verification only): 7-gate sequence + PERT-TEST-05 FULL closure record
 **Resolution recommendation** (per KI-1 known-issue analysis): Option 2 — `$derived`-backed binding wrapper for SelectPicker `bind:value` in PertInputs.svelte. Eliminates the bidirectional `$effect` race at the source; smallest blast radius; no shared-component change. Alternative: Option 1 (add `onValueChange` callback prop to SelectPicker — touches a shared component used by feeds/gir/uac-uvc, larger scope).
@@ -109,7 +109,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 | 1. Architecture, Identity Hue & Clinical Data | 0/0 | Not started | - |
 | 2. Calculator Core (Both Modes + Safety) | 0/0 | Not started | - |
 | 3. Tests | 0/0 | Not started | - |
-| 3.1. KI-1 Resolution (SelectPicker bridge) | 1/4 | In progress | 2026-04-25 (Wave 1 — plan 01) |
+| 3.1. KI-1 Resolution (SelectPicker bridge) | 2/4 | In progress | 2026-04-25 (Wave 2 — plan 02 component tests) |
 | 4. Design Polish (`/impeccable` Critique Sweep) | 0/0 | Not started | - |
 | 5. Release | 0/0 | Not started | - |
 
@@ -145,4 +145,4 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 - Plan numbering inside each phase will follow `01-*`, `02-*`, etc. and is decided at `/gsd-plan-phase` time.
 
 ---
-*Last updated: 2026-04-25 — Phase 3.1 Wave 1 (plan 03.1-01) complete; commit `f2da16d`*
+*Last updated: 2026-04-25 — Phase 3.1 Wave 2 component tests (plan 03.1-02) complete; commit `dfb6a62`*

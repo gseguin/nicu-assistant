@@ -7,21 +7,21 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **WAVE 1 COMPLETE 2026-04-25, WAVE 2 NEXT**
-Plan: 03.1-01 (Wave 1) COMPLETE — function-binding bridge fix shipped at commit `f2da16d`. svelte-check 0/0; vitest 423/423; D-11 reset test green WITHOUT modification per D-03. Wave 2 parallel-eligible: 03.1-02 component tests + 03.1-03 e2e tests. Wave 3: 03.1-04 clinical gate.
-Status: 1 of 4 plans complete (25%). PertInputs.svelte 248 -> 221 LOC (-27 net). Function-binding 2-arg form established as codebase pattern (first usage).
-Last activity: 2026-04-25 — Completed /gsd-execute-phase 3.1 plan 01 (Wave 1 bridge fix). Wave 2 next.
+Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **WAVE 2 (component tests) COMPLETE 2026-04-25, WAVE 2 (e2e) + WAVE 3 NEXT**
+Plan: 03.1-02 (Wave 2 — component tests) COMPLETE — 2 new KI-1 regression-guard tests shipped at commit `dfb6a62`. PertInputs.test.ts 96 -> 153 LOC (+57); 7 -> 9 it() cases. svelte-check 0/0; vitest 425/425 (was 423; +2 new = 425 exactly). Existing 7 cases byte-identical per D-03 (verified zero removed lines in git diff). Wave 2 sibling 03.1-03 (e2e tests) is the next plan; Wave 3: 03.1-04 clinical gate.
+Status: 2 of 4 plans complete (50%). Component-tier coverage of the function-binding bridge mechanism shipped (D-01 click-persist + D-04 external-mutation propagation). E2e-tier coverage of the user-visible symptom is next.
+Last activity: 2026-04-25 — Completed /gsd-execute-phase 3.1 plan 02 (Wave 2 component tests). Wave 2 e2e (03.1-03) next.
 
 ## Progress
 
-**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 IN PROGRESS — 1/4 plans complete)
-**Current Plan:** Phase 3.1 — Wave 1 done; next step Wave 2 (03.1-02 + 03.1-03 parallel)
+**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 IN PROGRESS — 2/4 plans complete)
+**Current Plan:** Phase 3.1 — Wave 2 component tests done; next step Wave 2 e2e (03.1-03) then Wave 3 clinical gate (03.1-04)
 
 ## Session Continuity
 
-**Stopped At:** Phase 3.1 Wave 1 COMPLETE — 03.1-01 SUMMARY + STATE update committed
-**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-01-SUMMARY.md` (Wave 1 outcomes), `03.1-02-PLAN.md` + `03.1-03-PLAN.md` (Wave 2 next, parallel-eligible)
-**Next Action:** Continue `/gsd-execute-phase 3.1 --ws pert` — Wave 2 parallel: 03.1-02 component tests (+2 cases against the fixed bridge) + 03.1-03 e2e tests (author 4 runner cases, delete prose block); Wave 3: 03.1-04 clinical gate (svelte-check, vitest ≥425, build, pert-a11y, pert.spec 12/12, full Playwright, negative-space audit). After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
+**Stopped At:** Phase 3.1 Wave 2 (component tests) COMPLETE — 03.1-02 SUMMARY + STATE update committed
+**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-02-SUMMARY.md` (Wave 2 component test outcomes), `03.1-03-PLAN.md` (Wave 2 sibling — e2e tests), `03.1-04-PLAN.md` (Wave 3 — clinical gate)
+**Next Action:** Continue `/gsd-execute-phase 3.1 --ws pert` — Plan 03.1-03 (e2e tests: author 2 happy-path tests × 2 viewports = 4 runner cases, delete prose block, take pert.spec from 8/8 to 12/12). Then Plan 03.1-04 (clinical gate: 7-gate sequence). After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
 
 ## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
 
@@ -30,9 +30,16 @@ Last activity: 2026-04-25 — Completed /gsd-execute-phase 3.1 plan 01 (Wave 1 b
 - **Quality gates:** svelte-check 0/0; vitest 423/423 (Phase 3 baseline preserved exactly — PertInputs.test.ts 7/7 including D-11 reset test green WITHOUT modification per D-03; PertCalculator.test.ts 10/10; calculations.test.ts 45/45).
 - **Negative-space audit:** `git diff --name-only HEAD~1 -- src/ e2e/` returns ONLY `src/lib/pert/PertInputs.svelte`. SelectPicker.svelte byte-identical (D-02), FeedAdvanceInputs.svelte byte-identical (D-07), state.svelte.ts byte-identical (Phase-1-frozen).
 
+## Phase 3.1 Wave 2 (component tests) outcomes (HEAD dfb6a62, baseline 080b0d2 → 1 commit)
+
+- **Wave 2 (component tests) — Plan 03.1-02 (`dfb6a62`):** EDITED `src/lib/pert/PertInputs.test.ts` (96 → 153 LOC, net +57; from 7 to 9 it() cases). Added 2 KI-1 regression-guard tests INSIDE the existing `describe('PertInputs input wiring', ...)` block (purely additive — D-03 byte-identity contract on existing 7 cases verified via empty `git diff | grep '^-'` removed-line scan). Test 8 (`D-01: clicking medication picker option persists selection`): mounts PertInputs, fires `fireEvent.click` on the medication trigger to open the dialog, finds `Creon` via `getAllByRole('option')`, fires click, asserts BOTH `pertState.current.medicationId === 'creon'` AND `trigger.textContent.toContain('Creon')` — Pitfall 4 protection. Test 9 (`D-04: external mutation to pertState.medicationId propagates to picker UI`): mounts PertInputs, asserts initial `Select medication` placeholder, writes `pertState.current.medicationId = 'creon'` directly (mimics localStorage rehydration), double-flushes via `await tick(); await Promise.resolve();`, asserts trigger reflects `Creon`; writes `null` (mimics `pertState.reset()`), double-flushes, asserts placeholder restored — Pitfall 5 protection precedented at the existing D-11 reset test.
+- **Quality gates:** svelte-check 0/0 (4586 files); PertInputs.test.ts 9/9 (was 7/7); PertCalculator.test.ts 10/10; calculations.test.ts 45/45; full vitest 425/425 (Phase 3 baseline 423 + 2 new = 425, exactly as expected by the plan); em-dash + en-dash count: 0 / 0.
+- **Negative-space audit:** `git diff --name-only HEAD~1 -- src/ e2e/` returns ONLY `src/lib/pert/PertInputs.test.ts`. PertInputs.svelte byte-identical, state.svelte.ts byte-identical, SelectPicker.svelte byte-identical (all empty diffs verified).
+
 ## Phase 3.1 deviations applied (all auto, none Rule-4)
 
 - 03.1-01: Two plan-side line-oriented grep gates returned 0 because the function-binding wrappers span multiple lines (`bind:value={` on its own line, `() => ...` on the next). Verified semantically with `perl -0777` multi-line aware count → 3 function bindings present (Formula 154/156, Medication 189/191, Strength 198/200). Pitfall 3 guard verified at line 205. svelte-check 0/0 confirms compile-time acceptance. The plan's verify regex assumes single-line layout; recommend updating to multi-line aware grep for future similar plans. D-11 doc-comment phrase update (lines 89-91) authorized explicitly by the plan's STEP C ("Default: update the comment as shown above"); code inside the effect is byte-identical.
+- 03.1-02: [Rule 1 - Bug] Plan-recommended selector `getByRole('button', { name: /Medication/i })` matched 2 buttons in the rendered DOM (Medication picker accessible name `"Medication Select medication"` AND Strength picker accessible name `"Strength Choose medication first"` — both contain "medication"), causing `getMultipleElementsFoundError`. Fixed both new tests by switching to anchored regex `/^Medication/`, which mirrors the canonical helper at `SelectPicker.test.ts:24` (`new RegExp('^' + label)`). Outcome assertions unchanged; the regex change is purely selector hardening. RESEARCH §Test Strategy did not enumerate the Strength picker's placeholder text in its DOM-shape inventory; recommend documenting the anchored form (`/^Label/`) as the default for SelectPicker trigger lookup in any future plan that mounts a component with sibling pickers whose placeholders share keywords.
 
 ## Phase 3 outcomes (HEAD 27dc39c, baseline e14f425 → 7 commits)
 
