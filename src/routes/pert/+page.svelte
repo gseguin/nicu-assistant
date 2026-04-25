@@ -2,7 +2,9 @@
 	import { onMount } from 'svelte';
 	import { setCalculatorContext } from '$lib/shared/context.js';
 	import { pertState } from '$lib/pert/state.svelte.js';
+	import { getFormulaById } from '$lib/pert/config.js';
 	import PertCalculator from '$lib/pert/PertCalculator.svelte';
+	import PertInputs from '$lib/pert/PertInputs.svelte';
 	import InputDrawer from '$lib/shared/components/InputDrawer.svelte';
 	import InputsRecap, { type RecapItem } from '$lib/shared/components/InputsRecap.svelte';
 	import { Pill } from '@lucide/svelte';
@@ -15,19 +17,55 @@
 		pertState.init();
 	});
 
-	// Drawer expanded state — mobile-only affordance, driven by InputsRecap tap.
+	// Drawer expanded state: mobile-only affordance, driven by InputsRecap tap.
 	let drawerExpanded = $state(false);
 
-	// Phase 1 recap: only weight is shared across both modes; mode-specific
-	// inputs (fat / formula / volume) come in Phase 2.
-	const recapItems = $derived.by<RecapItem[]>(() => [
-		{
-			label: 'Weight',
-			value: pertState.current.weightKg === null ? null : `${pertState.current.weightKg}`,
-			unit: 'kg',
-			fullRow: true
+	// Recap surface: weight is shared across both modes (the patient anchor); the
+	// mode-specific addenda below cover Oral (Fat g) and Tube-Feed (Formula name +
+	// Volume mL) per UI-SPEC Copywriting Contract. Each mode contributes the
+	// inputs that drive its hero numeral so the recap reads "what I fed it"
+	// correctly across mode switches.
+	const recapItems = $derived.by<RecapItem[]>(() => {
+		const items: RecapItem[] = [
+			{
+				label: 'Weight',
+				value: pertState.current.weightKg === null ? null : `${pertState.current.weightKg}`,
+				unit: 'kg',
+				fullRow: true
+			}
+		];
+
+		if (pertState.current.mode === 'oral') {
+			items.push({
+				label: 'Fat',
+				value:
+					pertState.current.oral.fatGrams === null
+						? null
+						: `${pertState.current.oral.fatGrams}`,
+				unit: 'g'
+			});
+		} else {
+			const formula =
+				pertState.current.tubeFeed.formulaId === null
+					? null
+					: getFormulaById(pertState.current.tubeFeed.formulaId);
+			items.push({
+				label: 'Formula',
+				value: formula?.name ?? null,
+				fullRow: true
+			});
+			items.push({
+				label: 'Volume',
+				value:
+					pertState.current.tubeFeed.volumePerDayMl === null
+						? null
+						: `${pertState.current.tubeFeed.volumePerDayMl}`,
+				unit: 'mL'
+			});
 		}
-	]);
+
+		return items;
+	});
 </script>
 
 <svelte:head>
@@ -66,10 +104,7 @@
 
 			<aside class="hidden md:block" aria-label="PERT inputs">
 				<div class="sticky top-20">
-					<!-- Phase 2 will render <PertInputs /> here. Phase 1 placeholder. -->
-					<div class="text-ui text-[var(--color-text-secondary)]">
-						PERT inputs — coming in Phase 2.
-					</div>
+					<PertInputs />
 				</div>
 			</aside>
 		</div>
@@ -82,9 +117,6 @@
 	onClear={() => pertState.reset()}
 >
 	{#snippet children()}
-		<!-- Phase 2 will render <PertInputs /> here. Phase 1 placeholder. -->
-		<div class="text-ui text-[var(--color-text-secondary)]">
-			PERT inputs — coming in Phase 2.
-		</div>
+		<PertInputs />
 	{/snippet}
 </InputDrawer>
