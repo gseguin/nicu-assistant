@@ -7,21 +7,21 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **INSERTED 2026-04-25, NOT YET STARTED**
-Plan: Phase 3 PARTIAL-WITH-KI-1 (5/5 plans across 4 waves; 6/6 reqs claimed = 5 FULL + 1 PARTIAL-VIA-KI-1); Phase 3.1 inserted into ROADMAP between Phase 3 and Phase 4 to close PERT-TEST-05 partial gap before v1.15 release
-Status: Phase 3.1 ROADMAP entry + directory created; CONTEXT/RESEARCH/PLAN not yet written
-Last activity: 2026-04-25 — Inserted Phase 3.1 (URGENT — KI-1 resolution: SelectPicker click-revert bug fix via $derived-backed binding wrapper); Phase 4 dependency updated from "Phase 3" to "Phase 3.1"
+Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **CONTEXT CAPTURED 2026-04-26, PLAN PENDING**
+Plan: Phase 3 PARTIAL-WITH-KI-1 (5/5 plans across 4 waves; 6/6 reqs claimed = 5 FULL + 1 PARTIAL-VIA-KI-1); Phase 3.1 CONTEXT.md committed with D-01..D-09 (Option 2: $derived-backed binding wrapper, zero shared-component change, unskip 4 deferred e2e tests + 2 new component tests)
+Status: Phase 3.1 CONTEXT.md + DISCUSSION-LOG.md committed (c18b7da); RESEARCH/PLAN not yet written
+Last activity: 2026-04-26 — Ran /gsd-discuss-phase 3.1 --ws pert --auto; auto-resolved 9 gray areas grounded in KI-1 root-cause analysis; ready for /gsd-plan-phase 3.1 --ws pert
 
 ## Progress
 
-**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 inserted but not started)
-**Current Plan:** Phase 3.1 — needs `/gsd-discuss-phase 3.1 --ws pert` to capture resolution approach (recommended: $derived-backed binding wrapper per KI-1 option 2)
+**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 CONTEXT captured, plan pending)
+**Current Plan:** Phase 3.1 — CONTEXT.md committed (c18b7da); next step `/gsd-plan-phase 3.1 --ws pert`
 
 ## Session Continuity
 
-**Stopped At:** Phase 3.1 inserted into ROADMAP (HEAD = pending Phase 3.1 commit)
-**Resume File:** `.planning/workstreams/pert/ROADMAP.md` (Phase 3.1 entry) + `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1 root-cause + 3 candidate resolution paths)
-**Next Action:** `/gsd-discuss-phase 3.1 --ws pert` (capture KI-1 resolution decisions: bridge architecture choice, scope of SelectPicker contract change, regression test strategy), then `/gsd-plan-phase 3.1 --ws pert`, then `/gsd-execute-phase 3.1 --ws pert`. After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
+**Stopped At:** Phase 3.1 CONTEXT captured (HEAD c18b7da)
+**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-CONTEXT.md` (D-01..D-09) + `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1 root-cause)
+**Next Action:** `/gsd-plan-phase 3.1 --ws pert` (researcher verifies D-09 Svelte 5.55 function-binding syntax; planner builds wave plan around D-01 derived-binding wrapper, D-02 zero-SelectPicker-change, D-05 e2e unskip, D-06 2 new component tests). Then `/gsd-execute-phase 3.1 --ws pert`. After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
 
 ## Phase 3 outcomes (HEAD 27dc39c, baseline e14f425 → 7 commits)
 
