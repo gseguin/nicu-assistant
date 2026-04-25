@@ -89,6 +89,30 @@
       "grams_per_scoop": 8.7
     },
     {
+      "id": "kendamil-classic",
+      "name": "Kendamil Classic",
+      "manufacturer": "Kendamil",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 5.21,
+      "grams_per_scoop": 4.3
+    },
+    {
+      "id": "kendamil-goat",
+      "name": "Kendamil Goat",
+      "manufacturer": "Kendamil",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 5.09,
+      "grams_per_scoop": 4.3
+    },
+    {
+      "id": "kendamil-organic",
+      "name": "Kendamil Organic",
+      "manufacturer": "Kendamil",
+      "displacement_factor": 0.77,
+      "calorie_concentration": 5.12,
+      "grams_per_scoop": 4.3
+    },
+    {
       "id": "monogen",
       "name": "Monogen",
       "manufacturer": "Nutricia",
