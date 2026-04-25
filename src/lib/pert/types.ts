@@ -70,6 +70,16 @@ export interface Advisory {
   mode?: PertMode | 'both';
 }
 
+/**
+ * Output of getTriggeredAdvisories. Carries severity through to the render layer
+ * so PertCalculator can branch STOP-red vs neutral-warning per D-04 + D-10.
+ */
+export interface TriggeredAdvisory {
+  id: string;
+  message: string;
+  severity: AdvisorySeverity;
+}
+
 export interface ValidationMessages {
   emptyOral: string;
   emptyTubeFeed: string;
