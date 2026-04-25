@@ -7,21 +7,38 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 2 — Calculator Core (Both Modes + Safety) — **COMPLETE**
-Plan: 4/4 plans complete across 3 waves (02-01 W0, 02-02+02-03 W1, 02-04 W2)
-Status: Phase 2 verified — ready for Phase 3 (Tests)
-Last activity: 2026-04-25 — Phase 2 executed and verified (5/5 success criteria, 23/23 requirements, 4/4 quality gates green; 0 code defects; 4 minor doc-drift items pre-authorized for Phase 5 cleanup)
+Phase: Phase 3 — Tests — **PARTIAL-WITH-KI-1**
+Plan: 5/5 plans complete across 4 waves (03-01+03-03 W1 parallel, 03-02 W2, 03-04 W3 partial, 03-05 W4)
+Status: Phase 3 verified PARTIAL — 3.5/4 success criteria, 5/6 reqs FULL + PERT-TEST-05 PARTIAL via KI-1; ready for KI-1-resolution follow-up phase OR Phase 4 design polish (verifier recommends inserting KI-1 fix first)
+Last activity: 2026-04-25 — Phase 3 executed and verified (3.5/4 success criteria; 6/6 requirements claimed = 5 FULL + 1 PARTIAL-VIA-KI-1; 7/7 quality gates green; 1 known-issue surfaced + properly deferred)
 
 ## Progress
 
-**Phases Complete:** 2 / 5
-**Current Plan:** Phase 3 — Tests (PERT-TEST-01..06) — not yet planned
+**Phases Complete:** 2.5 / 5 (Phase 3 PARTIAL via KI-1)
+**Current Plan:** KI-1 resolution OR Phase 4 — Design Polish (`/impeccable` Critique Sweep)
 
 ## Session Continuity
 
-**Stopped At:** Phase 2 complete + verified (HEAD = 055a1f1)
-**Resume File:** `.planning/workstreams/pert/ROADMAP.md` (Phase 3 entry)
-**Next Action:** `/gsd-plan-phase 3 --ws pert`
+**Stopped At:** Phase 3 complete + verified PARTIAL-WITH-KI-1 (HEAD = 27dc39c)
+**Resume File:** `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1 SelectPicker click-revert bug — recommended next phase)
+**Next Action:** Insert a KI-1-resolution phase (recommended fix: $derived-backed binding wrapper per KI-1 option 2), OR proceed to `/gsd-plan-phase 4 --ws pert` and treat KI-1 as a Phase 4 design-polish input.
+
+## Phase 3 outcomes (HEAD 27dc39c, baseline e14f425 → 7 commits)
+
+- **Wave 1 (parallel-eligible) — fixtures (`5d1356f`):** NEW `src/lib/pert/pert-parity.fixtures.json` (152 lines, 28 hand-derived rows: 9 oral + 18 tube + 1 stopRedTrigger). Each row has `input` + `expected` + `_derivation`. Cell mapping cited explicitly: B10 (oral capsules), B11 (cap), B14 (tube capsules), B15 (capsules/month), B13 (lipase/kg display). Independent JS re-derivation cross-check passed for all 28 rows.
+- **Wave 1 (parallel-eligible) — component tests (`3d45c7e`):** NEW `src/lib/pert/PertCalculator.test.ts` (139 lines, 10 cases — empty-state, hero numerals, tertiary daily-total only-in-oral, STOP-red `role="alert"`, warning `role="note"`, secondaries hidden in empty state, hero `class="num"`) + NEW `src/lib/pert/PertInputs.test.ts` (96 lines, 7 cases — SegmentedToggle binding, D-11 strength reset on medication change, mode-switch state preservation, strength picker filtered, formula picker 17 options, UI labels "Lipase per gram of fat", inputmode="decimal").
+- **Wave 2 — calc parity matrix (`ad3bf36`):** NEW `src/lib/pert/calculations.test.ts` (347 lines, 45 tests). closeEnough helper inline (EPSILON=0.01 + ABS_FLOOR=0.5, copied verbatim from feeds analog). Oral parity 9 rows × 4 closeEnough = 36 assertions; Tube parity 18 rows × 5 = 90 assertions; defensive zero-return 8 tests; advisory engine 8 tests including STOP-red trigger; PERT-TEST-04 D-09 integration delta 2 tests with docstring citing Phase-1 coverage. **All 45 parity tests passed first run** — confirms Phase 2's user-locked xlsx-canonical math (D-15/D-16) was correct.
+- **Wave 3 — e2e PARTIAL (`c56abf7`):** NEW `e2e/pert.spec.ts` (197 lines, 4 unique tests × 2 viewports = 8/8 green). Covers mode-switch state preservation, inputmode="decimal" regression guard, localStorage round-trip (D-09 reinterpretation: `nicu_pert_state` NOT sessionStorage), favorites round-trip (D-13: `nicu:favorites` colon key, mirrors FAV-TEST-03-2 pattern). **2 picker-driven happy-path tests deferred per KI-1 SelectPicker click-revert bug** — 4 of 12 originally planned tests dropped, commented in-file with cross-ref.
+- **Wave 4 — clinical gate (`b83c0ea`):** verification-only, no code changes. All 7 gates green: svelte-check 0/0 (4586 files); vitest 423/423 (41 files; +62 new from Phase 3 vs Phase 2 baseline 361); pnpm build OK (PWA 49 entries / 576.48 KiB); CI=1 pert-a11y 4/4; CI=1 pert.spec 8/8; CI=1 full Playwright 113/114 (1 baseline flake on `disclaimer-banner.spec.ts:28`, same as Phase 1+2; +8 new from Phase 3 vs Phase 2 baseline 105 with zero new failures).
+- **KI-1 (NEW known-issue, Phase-2-origin):** SelectPicker click-revert bug in PertInputs.svelte discovered during Plan 03-04 e2e execution. Three SelectPicker proxies have a bidirectional `bind:value` race where the read-from-state `$effect` (registered first) overwrites the user's click before the write-to-state `$effect` propagates. Two hotfix attempts during Plan 03-04 (mechanical effect-order swap; folding D-11 into the strength write-effect) each broke either the D-11 unit test or external-write propagation — root cause is architectural, not effect-order. Documented at `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` with 3 candidate resolution paths (recommended: $derived-backed binding wrapper). Bug is clinically benign — fails LOUD (empty-state copy on click) rather than producing a wrong dose — but breaks calculator usability at point of care. Verifier recommends inserting a KI-1-resolution phase before Phase 4 design polish.
+
+## Phase 3 deviations applied (all auto, none Rule-4)
+
+- 03-01: none. RESEARCH §C fixture rows + plan must_haves agreed verbatim; independent JS cross-check passed.
+- 03-02: cast widening for fixture-row TypeScript (`{_derivation: string; input: any; expected: any}` per plan's CRITICAL rule); no production-code or fixture changes.
+- 03-03: comment em-dashes replaced with ASCII; double `Promise.resolve` flush in D-11 test as defensive guard against rune-batching variance across jsdom + node versions.
+- 03-04: PARTIAL closure on PERT-TEST-05; 2 picker-driven happy-path tests deferred to follow-up phase per KI-1; 8 of 12 planned tests ship green. Two in-flight hotfix attempts during execution were correctly reverted before commit (orchestrator-stopped per Rule 4 protection).
+- 03-05: 2 em-dash hits in `e2e/pert.spec.ts` DEFERRED comment block (lines 65, 70) flagged by 03-05 verifier; in-code comments (NOT user-rendered strings); precedent-carved-out per Phase 2 verifier reading. Marked as documentation-style hit, not a content violation.
 
 ## Phase 2 outcomes (HEAD 055a1f1, baseline 3f72dd0 → 7 commits)
 
