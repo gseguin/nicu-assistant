@@ -175,7 +175,7 @@ test.describe('PERT identity-hue pre-gate (synthetic surfaces)', () => {
 // file will be amended by 01-04 when the route lands.
 // ---------------------------------------------------------------------------
 
-const pertRouteReady = false; // flip to true after 01-04 lands the route shell
+const pertRouteReady = true; // flip to true after 01-04 lands the route shell
 
 test.describe('PERT Accessibility', () => {
   test.beforeEach(async ({ page }) => {

@@ -78,14 +78,18 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
     ],
     disclaimer: DISCLAIMER
   },
-  // Wave-0 placeholder — Plan 01-04 (D-24) replaces with full Pediatric EPI PERT copy.
-  // Present here only so `Record<CalculatorId, AboutContent>` typechecks after the
-  // CalculatorId union is extended in plan 01-01. Do not surface this copy in UI.
   pert: {
     title: 'Pediatric EPI PERT Calculator',
     version: appVersion,
-    description: 'Placeholder — full content lands in Phase 1 plan 01-04 (D-24).',
-    notes: ['Placeholder entry. See plan 01-04 for the final copy.'],
+    description:
+      'Calculates pancreatic enzyme replacement therapy capsule counts for pediatric patients with exocrine pancreatic insufficiency, in two modes: per-meal oral dosing and 24-hour tube-feed dosing. Supports five FDA-approved medications and 17 pediatric enteral formulas. Spreadsheet parity (~1% epsilon) with epi-pert-calculator.xlsx Pediatric tabs.',
+    notes: [
+      'Oral mode: capsules per meal = ROUNDUP((weight × lipase units/kg/meal) / capsule strength). Default lipase rate 1000 units/kg/meal (xlsx default).',
+      'Tube-feed mode: capsules per day = CEILING(total lipase / capsule strength), where total lipase = formula fat (g/L) × volume (L) × lipase units/kg × weight. Includes capsules/month and lipase per kg outputs.',
+      'Source data: epi-pert-calculator.xlsx Pediatric tabs (Pediatric Oral PERT Tool, Pediatric Tube Feed PERT). Medication strengths cross-checked against DailyMed FDA listings.',
+      'Safety: a STOP-style red advisory surfaces if computed daily lipase exceeds 10,000 units/kg/day (the published pediatric cap). All ranges are advisory — clinical judgment required.',
+      "Verify all values against your institution's PERT protocol before use."
+    ],
     disclaimer: DISCLAIMER
   }
 };
