@@ -22,9 +22,9 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Kendamil Testing & Documentation
 
-- [ ] **KEND-TEST-01**: Spreadsheet-parity unit tests added for the three Kendamil entries — at minimum one canonical fortification calculation per variant (e.g., Target Calorie 24 kcal/oz from a known starting volume) verified against a hand-computed expected value within the 1% epsilon used by other formulas in `fortification.test.ts`
-- [ ] **KEND-TEST-02**: SelectPicker grouping test extended to assert the "Kendamil" manufacturer group renders with all three variants in alphabetical-or-registry order
-- [ ] **KEND-TEST-03**: Existing Playwright fortification axe sweeps re-run with a Kendamil variant selected (light + dark) to verify no contrast regressions from the new manufacturer label
+- [x] **KEND-TEST-01**: Spreadsheet-parity unit tests added for the three Kendamil entries — at minimum one canonical fortification calculation per variant (e.g., Target Calorie 24 kcal/oz from a known starting volume) verified against a hand-computed expected value within the 1% epsilon used by other formulas in `fortification.test.ts`
+- [x] **KEND-TEST-02**: SelectPicker grouping test extended to assert the "Kendamil" manufacturer group renders with all three variants in alphabetical-or-registry order
+- [x] **KEND-TEST-03**: Existing Playwright fortification axe sweeps re-run with a Kendamil variant selected (light + dark) to verify no contrast regressions from the new manufacturer label
 
 ### Desktop Full-Nav Divergence
 
@@ -70,14 +70,14 @@ Explicit exclusions for v1.14:
 
 | Requirement ID | Phase | Status |
 |---|---|---|
-| KEND-01 | Phase 44 | Pending |
-| KEND-02 | Phase 44 | Pending |
-| KEND-03 | Phase 44 | Pending |
-| KEND-04 | Phase 44 | Pending |
-| KEND-05 | Phase 44 | Pending |
-| KEND-TEST-01 | Phase 44 | Pending |
-| KEND-TEST-02 | Phase 44 | Pending |
-| KEND-TEST-03 | Phase 44 | Pending |
+| KEND-01 | Phase 44 | Complete |
+| KEND-02 | Phase 44 | Complete |
+| KEND-03 | Phase 44 | Complete |
+| KEND-04 | Phase 44 | Complete |
+| KEND-05 | Phase 44 | Complete |
+| KEND-TEST-01 | Phase 44 | Complete |
+| KEND-TEST-02 | Phase 44 | Complete |
+| KEND-TEST-03 | Phase 44 | Complete |
 | NAV-ALL-01 | Phase 45 | Pending |
 | NAV-ALL-02 | Phase 45 | Pending |
 | NAV-ALL-03 | Phase 45 | Pending |
