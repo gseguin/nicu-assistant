@@ -9,11 +9,16 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Kendamil Formula Family
 
-- [ ] **KEND-01**: User can select **Kendamil Organic** from the formula picker — entry added to `src/lib/fortification/fortification-config.json` with manufacturer `"Kendamil"`, calorie_concentration ≈ 5.12 kcal/g (22 kcal ÷ 4.3 g per scoop), displacement_factor ≈ 0.77 mL/g (3.3 mL ÷ 4.3 g per scoop), grams_per_scoop 4.3 (sourced from hcp.kendamil.com Organic mixing chart)
-- [ ] **KEND-02**: User can select **Kendamil Classic** from the formula picker — entry added with manufacturer `"Kendamil"` and spec sourced from hcp.kendamil.com Classic mixing chart (calorie_concentration, displacement_factor, grams_per_scoop computed and documented in the plan, exact values verified against the manufacturer HCP page before commit)
-- [ ] **KEND-03**: User can select **Kendamil Goat** from the formula picker — entry added with manufacturer `"Kendamil"` and spec sourced from hcp.kendamil.com Goat mixing chart (calorie_concentration, displacement_factor, grams_per_scoop computed and documented in the plan, exact values verified against the manufacturer HCP page before commit)
-- [ ] **KEND-04**: All three Kendamil entries are grouped under a "Kendamil" manufacturer heading in the SelectPicker grouped view (consistent with existing Abbott / Mead Johnson / Nestlé / Nutricia grouping)
-- [ ] **KEND-05**: Each Kendamil entry uses the documented `packetsSupported` field correctly — set to `false` for non-HMF infant formulas (per v1.3 SelectPicker behavior that hides the Packets unit on non-HMF selection)
+- [x] **KEND-01
+**: User can select **Kendamil Organic** from the formula picker — entry added to `src/lib/fortification/fortification-config.json` with manufacturer `"Kendamil"`, calorie_concentration ≈ 5.12 kcal/g (22 kcal ÷ 4.3 g per scoop), displacement_factor ≈ 0.77 mL/g (3.3 mL ÷ 4.3 g per scoop), grams_per_scoop 4.3 (sourced from hcp.kendamil.com Organic mixing chart)
+- [x] **KEND-02
+**: User can select **Kendamil Classic** from the formula picker — entry added with manufacturer `"Kendamil"` and spec sourced from hcp.kendamil.com Classic mixing chart (calorie_concentration, displacement_factor, grams_per_scoop computed and documented in the plan, exact values verified against the manufacturer HCP page before commit)
+- [x] **KEND-03
+**: User can select **Kendamil Goat** from the formula picker — entry added with manufacturer `"Kendamil"` and spec sourced from hcp.kendamil.com Goat mixing chart (calorie_concentration, displacement_factor, grams_per_scoop computed and documented in the plan, exact values verified against the manufacturer HCP page before commit)
+- [x] **KEND-04
+**: All three Kendamil entries are grouped under a "Kendamil" manufacturer heading in the SelectPicker grouped view (consistent with existing Abbott / Mead Johnson / Nestlé / Nutricia grouping)
+- [x] **KEND-05
+**: Each Kendamil entry uses the documented `packetsSupported` field correctly — set to `false` for non-HMF infant formulas (per v1.3 SelectPicker behavior that hides the Packets unit on non-HMF selection)
 
 ### Kendamil Testing & Documentation
 

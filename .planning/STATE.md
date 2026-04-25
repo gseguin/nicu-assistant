@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.14
 milestone_name: Kendamil Formulas + Desktop Full Nav
-status: completed
-stopped_at: Phase 44 context gathered
-last_updated: "2026-04-25T03:07:37.762Z"
-last_activity: 2026-04-25 — ROADMAP.md drafted with Phases 44, 45, 46
+status: executing
+stopped_at: Completed 44-01-PLAN.md
+last_updated: "2026-04-25T03:25:45.302Z"
+last_activity: 2026-04-25
 progress:
   total_phases: 2
   completed_phases: 0
   total_plans: 4
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 25
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-25)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Milestone v1.14 — roadmap complete; Phase 44 (Kendamil Formula Family) ready to plan
+**Current focus:** Phase 44 — Kendamil Formula Family
 
 ## Current Position
 
-Phase: 44 — Kendamil Formula Family (not started)
-Plan: —
-Status: Roadmap complete; awaiting `/gsd-plan-phase 44`
-Last activity: 2026-04-25 — ROADMAP.md drafted with Phases 44, 45, 46
+Phase: 44 (Kendamil Formula Family) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
+Last activity: 2026-04-25
 
 ## Performance Metrics
 
@@ -56,6 +56,8 @@ Last activity: 2026-04-25 — ROADMAP.md drafted with Phases 44, 45, 46
 - [v1.13]: DESIGN.md / DESIGN.json (project root) is the design contract — all named rules (Identity-Inside, Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong, Five-Roles-Only, Tabular-Numbers, Eyebrow-Above-Numeral, 11px Floor, Tonal-Depth, Flat-Card-Default) enforced by review. v1.14 explicitly declares NO new tokens, NO rule additions.
 - [v1.14]: Kendamil and Desktop Full-Nav are independently structured phases (Phase 44, Phase 45) with no shared code paths — split rather than combined to keep each phase independently verifiable and to match the project's "one feature area per phase" pattern.
 - [v1.14]: Mobile bottom bar is explicitly UNCHANGED — favorites-driven, 4-cap, hamburger-managed. Only the desktop top toolbar diverges to render the full registry.
+- [44-01]: Used HCP-printed displacement_factor 0.77 for all three Kendamil variants (D-03 derivation rounds to 0.77 anyway; matches REQUIREMENTS KEND-01 + 2dp config style)
+- [44-01]: JSDoc audit-trail header at top of fortification-config.ts; per-variant lines carry URL + region + ISO date only (raw HCP values stay in PLAN/RESEARCH per D-14)
 
 ### Roadmap Evolution
 
@@ -74,8 +76,8 @@ None.
 
 ## Session Continuity
 
-Last session: --stopped-at
-Stopped at: Phase 44 context gathered
-Resume file: --resume-file
+Last session: 2026-04-25T03:25:45.298Z
+Stopped at: Completed 44-01-PLAN.md
+Resume file: None
 
 **Planned Phase:** 44 (Kendamil Formula Family) — 4 plans — 2026-04-25T03:07:37.759Z
