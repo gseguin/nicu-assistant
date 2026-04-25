@@ -1,0 +1,146 @@
+{
+  "defaults": {
+    "mode": "oral",
+    "weightKg": 3.0,
+    "medicationId": null,
+    "strengthValue": null,
+    "oral": {
+      "fatGrams": null,
+      "lipasePerKgPerMeal": 1000
+    },
+    "tubeFeed": {
+      "formulaId": null,
+      "volumePerDayMl": null,
+      "lipasePerKgPerDay": 1000
+    }
+  },
+  "inputs": {
+    "weightKg": { "min": 0.3, "max": 80, "step": 0.1 },
+    "fatGrams": { "min": 0, "max": 200, "step": 0.5 },
+    "volumePerDayMl": { "min": 0, "max": 3000, "step": 10 },
+    "lipasePerKgPerMeal": { "min": 500, "max": 4000, "step": 250 },
+    "lipasePerKgPerDay": { "min": 500, "max": 4000, "step": 250 }
+  },
+  "dropdowns": {
+    "medications": [
+      {
+        "id": "creon",
+        "brand": "Creon",
+        "strengths": [3000, 6000, 12000, 24000, 36000],
+        "source": {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=073201aa-556d-4a70-918e-84e9616fd88d",
+          "nda": "020725"
+        }
+      },
+      {
+        "id": "zenpep",
+        "brand": "Zenpep",
+        "strengths": [3000, 5000, 10000, 15000, 20000, 25000, 40000, 60000],
+        "source": {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7f16f2d4-8df6-4bd7-ac10-56994fa257b0",
+          "nda": "022210"
+        }
+      },
+      {
+        "id": "pancreaze",
+        "brand": "Pancreaze",
+        "strengths": [2600, 4200, 10500, 16800, 21000, 37000],
+        "source": {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e8f5d2fe-728d-42af-99a6-83dddc6539c5",
+          "nda": "022523"
+        }
+      },
+      {
+        "id": "pertzye",
+        "brand": "Pertzye",
+        "strengths": [4000, 8000, 16000, 24000],
+        "source": {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=481eec00-9abf-11dd-b71c-0002a5d5c51b",
+          "nda": "022175"
+        }
+      },
+      {
+        "id": "viokace",
+        "brand": "Viokace",
+        "strengths": [10440, 20880],
+        "source": {
+          "url": "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=58bdb8de-582d-44e6-9b72-8d5a42fdf501",
+          "nda": "022542"
+        }
+      }
+    ],
+    "formulas": [
+      { "id": "pediasure-grow-gain",        "name": "PediaSure Grow & Gain",             "fatGPerL": 38 },
+      { "id": "pediasure-enteral",          "name": "PediaSure Enteral",                 "fatGPerL": 38 },
+      { "id": "pediasure-peptide-10",       "name": "PediaSure Peptide 1.0",             "fatGPerL": 41 },
+      { "id": "compleat-pediatric",         "name": "Compleat Pediatric",                "fatGPerL": 38 },
+      { "id": "compleat-pediatric-organic", "name": "Compleat Pediatric Organic Blends", "fatGPerL": 53 },
+      { "id": "kate-farms-ped-std-12",      "name": "Kate Farms Pediatric Standard 1.2", "fatGPerL": 48 },
+      { "id": "kate-farms-ped-pep-15",      "name": "Kate Farms Pediatric Peptide 1.5",  "fatGPerL": 68 },
+      { "id": "nutren-junior",              "name": "Nutren Junior",                     "fatGPerL": 48 },
+      { "id": "nutren-junior-fiber",        "name": "Nutren Junior Fiber",               "fatGPerL": 48 },
+      { "id": "peptamen-junior",            "name": "Peptamen Junior",                   "fatGPerL": 38 },
+      { "id": "peptamen-junior-15",         "name": "Peptamen Junior 1.5",               "fatGPerL": 68 },
+      { "id": "peptamen-junior-fiber",      "name": "Peptamen Junior Fiber",             "fatGPerL": 38 },
+      { "id": "elecare-jr",                 "name": "EleCare Jr",                        "fatGPerL": 47 },
+      { "id": "neocate-junior",             "name": "Neocate Junior",                    "fatGPerL": 50 },
+      { "id": "puramino-jr",                "name": "PurAmino Jr",                       "fatGPerL": 51 },
+      { "id": "alfamino-junior",            "name": "Alfamino Junior",                   "fatGPerL": 44 },
+      { "id": "equacare-jr",                "name": "Equacare Jr",                       "fatGPerL": 45 }
+    ],
+    "lipaseRates": [500, 1000, 2000, 4000]
+  },
+  "advisories": [
+    {
+      "id": "max-lipase-cap",
+      "field": "computed",
+      "comparator": "gt",
+      "value": 0,
+      "message": "Exceeds 10,000 units/kg/day cap — verify with prescriber",
+      "severity": "stop",
+      "mode": "both"
+    },
+    {
+      "id": "weight-out-of-range",
+      "field": "weightKg",
+      "comparator": "outside",
+      "value": { "min": 0.5, "max": 50 },
+      "message": "Outside expected pediatric range — verify",
+      "severity": "warning",
+      "mode": "both"
+    },
+    {
+      "id": "fat-out-of-range",
+      "field": "fatGrams",
+      "comparator": "outside",
+      "value": { "min": 1, "max": 100 },
+      "message": "Outside expected fat range — verify",
+      "severity": "warning",
+      "mode": "oral"
+    },
+    {
+      "id": "volume-out-of-range",
+      "field": "volumePerDayMl",
+      "comparator": "outside",
+      "value": { "min": 100, "max": 2500 },
+      "message": "Outside expected volume range — verify",
+      "severity": "warning",
+      "mode": "tube-feed"
+    }
+  ],
+  "validationMessages": {
+    "emptyOral": "Enter weight and fat grams",
+    "emptyTubeFeed": "Enter weight and select a formula",
+    "invalidWeight": "Weight must be a positive number",
+    "invalidFatGrams": "Fat grams must be a positive number",
+    "invalidVolume": "Volume must be a positive number",
+    "invalidLipaseRate": "Lipase rate must be 500–4000"
+  },
+  "fdaAllowlist": {
+    "creon":     [3000, 6000, 12000, 24000, 36000],
+    "zenpep":    [3000, 5000, 10000, 15000, 20000, 25000, 40000, 60000],
+    "pancreaze": [2600, 4200, 10500, 16800, 21000, 37000],
+    "pertzye":   [4000, 8000, 16000, 24000],
+    "viokace":   [10440, 20880]
+  }
+}
