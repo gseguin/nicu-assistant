@@ -41,10 +41,10 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Desktop Full-Nav Testing
 
-- [ ] **NAV-ALL-TEST-01**: Playwright E2E spec at desktop 1280 verifies all 5 registered calculators are visible in the top toolbar regardless of favorites state (toggle a non-favorite calculator off via hamburger, assert it remains in the desktop top bar but disappears from mobile bottom bar at 375)
+- [x] **NAV-ALL-TEST-01**: Playwright E2E spec at desktop 1280 verifies all 5 registered calculators are visible in the top toolbar regardless of favorites state (toggle a non-favorite calculator off via hamburger, assert it remains in the desktop top bar but disappears from mobile bottom bar at 375)
 - [x] **NAV-ALL-TEST-02
 **: Component / Vitest spec for `NavShell` covers the new `desktopVisibleCalculators` derived computation — asserts it equals the full registry order regardless of `favorites.current` state (including 0 favorites edge case)
-- [ ] **NAV-ALL-TEST-03**: Playwright axe sweep extended to cover the desktop top toolbar with all 5 calculators rendered (light + dark) — no contrast regressions from added calculator labels
+- [x] **NAV-ALL-TEST-03**: Playwright axe sweep extended to cover the desktop top toolbar with all 5 calculators rendered (light + dark) — no contrast regressions from added calculator labels
 
 ### Release v1.14.0
 
@@ -84,14 +84,14 @@ Explicit exclusions for v1.14:
 | KEND-TEST-01 | Phase 44 | Complete |
 | KEND-TEST-02 | Phase 44 | Complete |
 | KEND-TEST-03 | Phase 44 | Complete |
-| NAV-ALL-01 | Phase 45 | Pending |
-| NAV-ALL-02 | Phase 45 | Pending |
-| NAV-ALL-03 | Phase 45 | Pending |
-| NAV-ALL-04 | Phase 45 | Pending |
-| NAV-ALL-05 | Phase 45 | Pending |
-| NAV-ALL-TEST-01 | Phase 45 | Pending |
-| NAV-ALL-TEST-02 | Phase 45 | Pending |
-| NAV-ALL-TEST-03 | Phase 45 | Pending |
+| NAV-ALL-01 | Phase 45 | Complete |
+| NAV-ALL-02 | Phase 45 | Complete |
+| NAV-ALL-03 | Phase 45 | Complete |
+| NAV-ALL-04 | Phase 45 | Complete |
+| NAV-ALL-05 | Phase 45 | Complete |
+| NAV-ALL-TEST-01 | Phase 45 | Complete |
+| NAV-ALL-TEST-02 | Phase 45 | Complete |
+| NAV-ALL-TEST-03 | Phase 45 | Complete |
 | REL-01 | Phase 46 | Pending |
 | REL-02 | Phase 46 | Pending |
 | REL-03 | Phase 46 | Pending |

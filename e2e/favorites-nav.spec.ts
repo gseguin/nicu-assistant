@@ -8,23 +8,19 @@
 //   register a SET script in the test body (before reload) — it runs AFTER the REMOVE, so SET wins.
 // - FAV-TEST-03-3 (persist) verifies via localStorage read rather than reload, because a reload
 //   would re-trigger the beforeEach addInitScript and clear the state.
-// - Desktop viewport (1280px) hides the mobile bottom nav (md:hidden). Use .first() for the
-//   desktop top nav; .last() for the mobile bottom nav. Both share aria-label="Calculator navigation".
+// - Phase 45 scope: FAV-TEST-03 is a MOBILE-ONLY contract. Desktop top nav is registry-driven
+//   (renders all 5 calculators regardless of favorites) per NAV-ALL-01. Desktop coverage of
+//   registry-driven rendering + favorites independence lives in e2e/desktop-full-nav.spec.ts.
 
 import { test, expect } from '@playwright/test';
 
 const viewports = [
-	{ name: 'mobile', width: 375, height: 667 },
-	{ name: 'desktop', width: 1280, height: 800 }
+	{ name: 'mobile', width: 375, height: 667 }
 ];
 
 for (const vp of viewports) {
 	test.describe(`Favorites nav — ${vp.name} (${vp.width}x${vp.height})`, () => {
 		test.use({ viewport: { width: vp.width, height: vp.height } });
-
-		// On mobile (< 768px), the bottom nav is visible (last nav).
-		// On desktop (>= 768px), the top nav in the header is used (first nav).
-		const isDesktop = vp.width >= 768;
 
 		test.beforeEach(async ({ page }) => {
 			// D-11: pre-clear both keys for order-independence.
@@ -55,10 +51,8 @@ for (const vp of viewports) {
 			await page.keyboard.press('Escape');
 			await page.getByRole('dialog').waitFor({ state: 'hidden' });
 
-			// Pick the correct nav bar: first() = desktop top nav, last() = mobile bottom nav
-			const nav = isDesktop
-				? page.locator('nav[aria-label="Calculator navigation"]').first()
-				: page.locator('nav[aria-label="Calculator navigation"]').last();
+			// Mobile bottom nav (Phase 45: FAV-TEST-03 is mobile-only)
+			const nav = page.locator('nav[aria-label="Calculator navigation"]').last();
 			await expect(nav.getByRole('tab')).toHaveCount(3);
 			await expect(nav.getByRole('tab', { name: /morphine wean/i })).toBeVisible();
 			await expect(nav.getByRole('tab', { name: /formula/i })).toBeVisible();
@@ -89,10 +83,8 @@ for (const vp of viewports) {
 			await page.keyboard.press('Escape');
 			await page.getByRole('dialog').waitFor({ state: 'hidden' });
 
-			// Bar shows 4 tabs in registry order
-			const nav = isDesktop
-				? page.locator('nav[aria-label="Calculator navigation"]').first()
-				: page.locator('nav[aria-label="Calculator navigation"]').last();
+			// Bar shows 4 tabs in registry order (mobile bottom nav)
+			const nav = page.locator('nav[aria-label="Calculator navigation"]').last();
 			const tabs = nav.getByRole('tab');
 			await expect(tabs).toHaveCount(4);
 			await expect(tabs.nth(0)).toContainText('Morphine');
@@ -111,10 +103,8 @@ for (const vp of viewports) {
 			await page.keyboard.press('Escape');
 			await page.getByRole('dialog').waitFor({ state: 'hidden' });
 
-			// Verify bar shows 3 tabs immediately (reactive)
-			const nav = isDesktop
-				? page.locator('nav[aria-label="Calculator navigation"]').first()
-				: page.locator('nav[aria-label="Calculator navigation"]').last();
+			// Verify mobile bar shows 3 tabs immediately (reactive)
+			const nav = page.locator('nav[aria-label="Calculator navigation"]').last();
 			await expect(nav.getByRole('tab')).toHaveCount(3);
 			await expect(nav.getByRole('tab', { name: /feeds/i })).toHaveCount(0);
 
@@ -147,10 +137,8 @@ for (const vp of viewports) {
 			await page.getByRole('link', { name: /feeds/i }).click();
 			await page.waitForURL(/\/feeds/);
 
-			// Bar shows 3 tabs (feeds not rendered)
-			const nav = isDesktop
-				? page.locator('nav[aria-label="Calculator navigation"]').first()
-				: page.locator('nav[aria-label="Calculator navigation"]').last();
+			// Mobile bar shows 3 tabs (feeds not rendered)
+			const nav = page.locator('nav[aria-label="Calculator navigation"]').last();
 			await expect(nav.getByRole('tab')).toHaveCount(3);
 
 			// No tab is active (aria-selected=true must not appear on any tab)
