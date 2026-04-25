@@ -5,6 +5,9 @@ import type { FortificationFormula } from './types.js';
 
 const neocate = getFormulaById('neocate-infant') as FortificationFormula;
 const hmf = getFormulaById('similac-hmf') as FortificationFormula;
+const kendamilOrganic = getFormulaById('kendamil-organic') as FortificationFormula;
+const kendamilClassic = getFormulaById('kendamil-classic') as FortificationFormula;
+const kendamilGoat = getFormulaById('kendamil-goat') as FortificationFormula;
 
 const SUGGESTED_RE = /^\d+ \(\d+(\.\d+)? oz\)$/;
 
