@@ -12,6 +12,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/svelte';
+import { tick } from 'svelte';
 import PertInputs from './PertInputs.svelte';
 import { pertState } from './state.svelte.js';
 
@@ -92,5 +93,61 @@ describe('PertInputs input wiring', () => {
     for (const input of numericInputs) {
       expect(input.getAttribute('inputmode')).toBe('decimal');
     }
+  });
+
+  // KI-1 click-persist regression guard (Phase 3.1 D-01 + D-06).
+  // Catches a regression to the function-binding bridge USER-INPUT direction
+  // (the original visible bug). Pitfall 4: assert BOTH state AND trigger text
+  // so we do not leak a half-fix.
+  it('D-01: clicking medication picker option persists selection (state + trigger UI)', async () => {
+    render(PertInputs);
+    // Anchor at start of accessible name to disambiguate from the Strength
+    // picker (whose placeholder "Choose medication first" otherwise matches
+    // a non-anchored /Medication/i regex). Mirrors SelectPicker.test.ts T-01
+    // helper getTrigger which uses `new RegExp('^' + label)`.
+    const trigger = screen.getByRole('button', { name: /^Medication/ });
+    // Open the picker dialog (uses src/test-setup.ts HTMLDialogElement polyfill).
+    await fireEvent.click(trigger);
+    await tick();
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    // Click the Creon option. Mirrors SelectPicker.test.ts T-07 pattern.
+    const creonOption = screen
+      .getAllByRole('option')
+      .find((o) => o.textContent?.includes('Creon')) as HTMLButtonElement;
+    expect(creonOption).toBeTruthy();
+    await fireEvent.click(creonOption);
+    await tick();
+    // Both halves matter: the bug specifically had state going to null AND the
+    // placeholder reverting. Both must hold post-fix.
+    expect(pertState.current.medicationId).toBe('creon');
+    expect(trigger.textContent).toContain('Creon');
+  });
+
+  // KI-1 external-mutation propagation regression guard (Phase 3.1 D-04 + D-06).
+  // Catches a regression to the function-binding bridge EXTERNAL-MUTATION
+  // direction (the second half of the bug; this is what the second hotfix
+  // attempt during Phase 3 broke). Mimics localStorage rehydration via direct
+  // pertState write, then mimics pertState.reset(). Pitfall 5: double-flush
+  // (await tick + await Promise.resolve) is precedented at the D-11 reset
+  // test above for jsdom rune-batching variance defense.
+  it('D-04: external mutation to pertState.medicationId propagates to picker UI', async () => {
+    render(PertInputs);
+    // See D-01 above for the `^Medication` anchor rationale (disambiguates from
+    // the Strength picker whose placeholder "Choose medication first" would
+    // otherwise match a non-anchored /Medication/i regex).
+    const trigger = screen.getByRole('button', { name: /^Medication/ });
+    // Initial state: nothing selected, placeholder visible.
+    expect(trigger.textContent).toContain('Select medication');
+    // Mimic localStorage rehydration / external write.
+    pertState.current.medicationId = 'creon';
+    await tick();
+    await Promise.resolve();
+    expect(trigger.textContent).toContain('Creon');
+    // Mimic pertState.reset() clearing medication; the function-binding getter
+    // re-reads pertState reactively, so the trigger should revert to placeholder.
+    pertState.current.medicationId = null;
+    await tick();
+    await Promise.resolve();
+    expect(trigger.textContent).toContain('Select medication');
   });
 });
