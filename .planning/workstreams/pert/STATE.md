@@ -7,20 +7,21 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: Phase 1 — Architecture, Identity Hue & Clinical Data — Not started
 Plan: —
-Status: Defining requirements for milestone v1.15
-Last activity: 2026-04-25 — Milestone v1.15 (Pediatric EPI PERT Calculator) started in workstream `pert`
+Status: Ready to plan Phase 1
+Last activity: 2026-04-25 — Roadmap created for milestone v1.15 (Pediatric EPI PERT Calculator); 54 requirements mapped across 5 phases
 
 ## Progress
 
-**Phases Complete:** 0
+**Phases Complete:** 0 / 5
 **Current Plan:** N/A
 
 ## Session Continuity
 
-**Stopped At:** N/A
+**Stopped At:** N/A — roadmap freshly created
 **Resume File:** None
+**Next Action:** `/gsd-plan-phase 1 --ws pert`
 
 ## Accumulated Context
 
@@ -28,3 +29,5 @@ Last activity: 2026-04-25 — Milestone v1.15 (Pediatric EPI PERT Calculator) st
 - **Reference codebase:** `/home/ghislain/src/pert-calculator` (SvelteKit 2 + Svelte 5, same family) — mine `dosing.ts`, `clinical-config.json` step-config pattern, SelectPicker formula picker, but NOT the adult tabs or Capacitor build
 - **Workstream scope:** parallel to main `v1.14` (Kendamil + desktop nav) — must not touch `src/lib/fortification/` or `src/lib/shell/NavShell.svelte` desktop branch beyond the registry-driven extension that adding a 6th calculator already provides
 - **Reuse first:** existing `<HeroResult>`, `<SegmentedToggle>`, `<NumericInput>`, `<SelectPicker>`, `<RangedNumericInput>`, sticky `<InputDrawer>` — no new shared components expected
+- **Phase shape:** 5 phases (Architecture+Hue+Data → Core+Modes+Safety → Tests → Design Polish → Release), mirroring v1.8 / v1.12 / v1.13 milestone cadence
+- **Quality bar inherited from v1.13:** svelte-check 0/0, vitest all green, `pnpm build` ✓, Playwright E2E + extended axe suite (currently 33/33, target 35/35 after `/pert` light + dark sweeps)

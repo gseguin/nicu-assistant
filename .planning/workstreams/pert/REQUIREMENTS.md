@@ -117,19 +117,63 @@ REQ-ID format: `PERT-[CATEGORY]-[NN]`. Numbering is workstream-local; integratio
 
 ## Traceability
 
-Phase mapping is filled by the roadmapper in the next step. Format:
+Phase mapping for milestone v1.15. Workstream-local phase numbering (1..5). All 54 v1.15 REQ-IDs map to exactly one phase.
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| PERT-ARCH-01..07 | TBD | Active |
-| PERT-HUE-01..03 | TBD | Active |
-| PERT-ORAL-01..08 | TBD | Active |
-| PERT-TUBE-01..07 | TBD | Active |
-| PERT-MODE-01..04 | TBD | Active |
-| PERT-DATA-01..04 | TBD | Active |
-| PERT-SAFE-01..04 | TBD | Active |
-| PERT-TEST-01..06 | TBD | Active |
-| PERT-DESIGN-01..06 | TBD | Active |
-| PERT-REL-01..05 | TBD | Active |
+| PERT-ARCH-01 | Phase 1 | Active |
+| PERT-ARCH-02 | Phase 1 | Active |
+| PERT-ARCH-03 | Phase 1 | Active |
+| PERT-ARCH-04 | Phase 1 | Active |
+| PERT-ARCH-05 | Phase 1 | Active |
+| PERT-ARCH-06 | Phase 1 | Active |
+| PERT-ARCH-07 | Phase 1 | Active |
+| PERT-HUE-01 | Phase 1 | Active |
+| PERT-HUE-02 | Phase 1 | Active |
+| PERT-HUE-03 | Phase 1 | Active |
+| PERT-DATA-01 | Phase 1 | Active |
+| PERT-DATA-02 | Phase 1 | Active |
+| PERT-DATA-03 | Phase 1 | Active |
+| PERT-DATA-04 | Phase 1 | Active |
+| PERT-ORAL-01 | Phase 2 | Active |
+| PERT-ORAL-02 | Phase 2 | Active |
+| PERT-ORAL-03 | Phase 2 | Active |
+| PERT-ORAL-04 | Phase 2 | Active |
+| PERT-ORAL-05 | Phase 2 | Active |
+| PERT-ORAL-06 | Phase 2 | Active |
+| PERT-ORAL-07 | Phase 2 | Active |
+| PERT-ORAL-08 | Phase 2 | Active |
+| PERT-TUBE-01 | Phase 2 | Active |
+| PERT-TUBE-02 | Phase 2 | Active |
+| PERT-TUBE-03 | Phase 2 | Active |
+| PERT-TUBE-04 | Phase 2 | Active |
+| PERT-TUBE-05 | Phase 2 | Active |
+| PERT-TUBE-06 | Phase 2 | Active |
+| PERT-TUBE-07 | Phase 2 | Active |
+| PERT-MODE-01 | Phase 2 | Active |
+| PERT-MODE-02 | Phase 2 | Active |
+| PERT-MODE-03 | Phase 2 | Active |
+| PERT-MODE-04 | Phase 2 | Active |
+| PERT-SAFE-01 | Phase 2 | Active |
+| PERT-SAFE-02 | Phase 2 | Active |
+| PERT-SAFE-03 | Phase 2 | Active |
+| PERT-SAFE-04 | Phase 2 | Active |
+| PERT-TEST-01 | Phase 3 | Active |
+| PERT-TEST-02 | Phase 3 | Active |
+| PERT-TEST-03 | Phase 3 | Active |
+| PERT-TEST-04 | Phase 3 | Active |
+| PERT-TEST-05 | Phase 3 | Active |
+| PERT-TEST-06 | Phase 3 | Active |
+| PERT-DESIGN-01 | Phase 4 | Active |
+| PERT-DESIGN-02 | Phase 4 | Active |
+| PERT-DESIGN-03 | Phase 4 | Active |
+| PERT-DESIGN-04 | Phase 4 | Active |
+| PERT-DESIGN-05 | Phase 4 | Active |
+| PERT-DESIGN-06 | Phase 4 | Active |
+| PERT-REL-01 | Phase 5 | Active |
+| PERT-REL-02 | Phase 5 | Active |
+| PERT-REL-03 | Phase 5 | Active |
+| PERT-REL-04 | Phase 5 | Active |
+| PERT-REL-05 | Phase 5 | Active |
 
-**Total:** 54 requirements across 10 categories.
+**Total:** 54 requirements across 10 categories. Coverage: 54 / 54 mapped, 0 orphans, 0 duplicates.
