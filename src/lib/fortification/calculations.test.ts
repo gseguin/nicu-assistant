@@ -153,3 +153,59 @@ describe('calculateFortification — invalid input (IFERROR parity)', () => {
     });
   });
 });
+
+describe('calculateFortification — Kendamil parity (KEND-TEST-01)', () => {
+  it('Kendamil Organic + breast milk + 180 + 24 + scoops', () => {
+    // disp=0.77, cal=5.12, gps=4.3
+    // denom = 29.57 * 5.12 - 0.77 * 24 = 132.9184
+    // grams = (180 * (24 - 20)) / 132.9184 = 5.416857259792473
+    // scoops = grams / 4.3 = 1.2597342464633658
+    const r = calculateFortification({
+      formula: kendamilOrganic,
+      base: 'breast-milk',
+      volumeMl: 180,
+      targetKcalOz: 24,
+      unit: 'scoops'
+    });
+    expect(r.amountToAdd).toBeCloseTo(1.2597342464633658, 4);
+    expect(r.yieldMl).toBeGreaterThan(180);
+    expect(Number.isFinite(r.exactKcalPerOz)).toBe(true);
+    expect(r.suggestedStartingVolumeMl).toMatch(SUGGESTED_RE);
+  });
+
+  it('Kendamil Classic + breast milk + 180 + 24 + scoops', () => {
+    // disp=0.77, cal=5.21, gps=4.3
+    // denom = 29.57 * 5.21 - 0.77 * 24 = 135.5797
+    // grams = (180 * (24 - 20)) / 135.5797 = 5.310529526175379
+    // scoops = grams / 4.3 = 1.2350068665524137
+    const r = calculateFortification({
+      formula: kendamilClassic,
+      base: 'breast-milk',
+      volumeMl: 180,
+      targetKcalOz: 24,
+      unit: 'scoops'
+    });
+    expect(r.amountToAdd).toBeCloseTo(1.2350068665524137, 4);
+    expect(r.yieldMl).toBeGreaterThan(180);
+    expect(Number.isFinite(r.exactKcalPerOz)).toBe(true);
+    expect(r.suggestedStartingVolumeMl).toMatch(SUGGESTED_RE);
+  });
+
+  it('Kendamil Goat + breast milk + 180 + 24 + scoops', () => {
+    // disp=0.77, cal=5.09, gps=4.3
+    // denom = 29.57 * 5.09 - 0.77 * 24 = 132.0313
+    // grams = (180 * (24 - 20)) / 132.0313 = 5.453252372732829
+    // scoops = grams / 4.3 = 1.268198226216937
+    const r = calculateFortification({
+      formula: kendamilGoat,
+      base: 'breast-milk',
+      volumeMl: 180,
+      targetKcalOz: 24,
+      unit: 'scoops'
+    });
+    expect(r.amountToAdd).toBeCloseTo(1.268198226216937, 4);
+    expect(r.yieldMl).toBeGreaterThan(180);
+    expect(Number.isFinite(r.exactKcalPerOz)).toBe(true);
+    expect(r.suggestedStartingVolumeMl).toMatch(SUGGESTED_RE);
+  });
+});
