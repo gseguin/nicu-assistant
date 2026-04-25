@@ -123,6 +123,13 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 - Hamburger button remains visible on desktop for About / disclaimer re-read (v1.13 NAV-FAV-04 routing preserved)
 - Zero regressions to v1.13 favorites store, hamburger menu, or the 5 existing calculators (Morphine, Formula, GIR, Feeds, UAC/UVC); WCAG 2.1 AA axe sweeps re-run in light + dark, both viewports
 
+## In Flight: v1.15 Pediatric EPI PERT Calculator (workstream `pert`)
+
+**Goal:** Add the sixth clinical calculator — Pediatric EPI PERT (Oral + Tube-Feed modes) — sourced from `epi-pert-calculator.xlsx` Pediatric tabs. Phases 1–5 in `.planning/workstreams/pert/`.
+
+**Phase 1 Wave-0 architectural side-effect (cross-cutting):**
+- **First-run favorites default reordered** (alphabetical: `[feeds, formula, gir, morphine-wean]`) at v1.15 cut as a side-effect of `CALCULATOR_REGISTRY` alphabetization (Phase 1 of pert workstream). Existing users' stored favorite order is preserved verbatim — this is a fresh-install change only. The v1.13 historical first-run order (`['morphine-wean', 'formula', 'gir', 'feeds']`) recorded above remains accurate for v1.13/v1.14 installs; the alphabetical default applies starting at v1.15. Decision rationale captured in `.planning/workstreams/pert/phases/01-architecture-identity-hue-clinical-data/01-CONTEXT.md` D-19/D-20/D-21.
+
 ### Out of Scope
 
 - Native app builds (Capacitor/iOS/Android) — deferred, PWA-only

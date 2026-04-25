@@ -77,5 +77,15 @@ export const aboutContent: Record<CalculatorId, AboutContent> = {
       'Rule-of-thumb estimate only. Final placement MUST be confirmed by imaging (chest/abdominal X-ray) per institutional protocol before use.'
     ],
     disclaimer: DISCLAIMER
+  },
+  // Wave-0 placeholder — Plan 01-04 (D-24) replaces with full Pediatric EPI PERT copy.
+  // Present here only so `Record<CalculatorId, AboutContent>` typechecks after the
+  // CalculatorId union is extended in plan 01-01. Do not surface this copy in UI.
+  pert: {
+    title: 'Pediatric EPI PERT Calculator',
+    version: appVersion,
+    description: 'Placeholder — full content lands in Phase 1 plan 01-04 (D-24).',
+    notes: ['Placeholder entry. See plan 01-04 for the final copy.'],
+    disclaimer: DISCLAIMER
   }
 };

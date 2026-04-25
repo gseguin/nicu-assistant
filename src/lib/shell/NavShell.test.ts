@@ -13,7 +13,8 @@ vi.mock('$app/state', () => ({ get page() { return mockPage; } }));
 beforeEach(() => {
   localStorage.clear();
   mockPage.url.pathname = '/morphine-wean';
-  favorites.init(); // seeds defaults: ['morphine-wean','formula','gir','feeds']
+  // D-20 (pert workstream Phase 1): defaults are alphabetical first 4 registry entries.
+  favorites.init(); // seeds defaults: ['feeds','formula','gir','morphine-wean']
 });
 
 // NavShell is difficult to render in jsdom (requires SvelteKit routing context).
@@ -81,16 +82,17 @@ describe('NavShell structure (v1.2 restructure)', () => {
 
 describe('NavShell — favorites-driven rendering (Phase 41)', () => {
 
-  it('T-01 default favorites (4): bottom nav renders 4 tabs', async () => {
+  it('T-01 default favorites (4): bottom nav renders 4 tabs in alphabetical default order', async () => {
     const { container } = render(NavShell);
     await tick();
     const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
     const tabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(tabs).toHaveLength(4);
-    expect(tabs[0].textContent).toMatch(/Morphine/i);
+    // D-20: alphabetical first 4 registry entries.
+    expect(tabs[0].textContent).toMatch(/Feeds/i);
     expect(tabs[1].textContent).toMatch(/Formula/i);
     expect(tabs[2].textContent).toMatch(/GIR/i);
-    expect(tabs[3].textContent).toMatch(/Feeds/i);
+    expect(tabs[3].textContent).toMatch(/Morphine/i);
   });
 
   it('T-02 reduced favorites (morphine-wean + formula): bottom nav renders 2 tabs', async () => {
@@ -140,7 +142,9 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
     expect(selected).toHaveLength(0);
   });
 
-  it('T-06 registry order preserved: tabs render morphine-wean→formula→gir→feeds regardless of insertion order', async () => {
+  it('T-06 stored order preserved verbatim: tabs render in the order the user stored (D-21)', async () => {
+    // D-21 (pert workstream Phase 1): recover() no longer re-sorts by registry order.
+    // The stored order — including any non-alphabetical user-chosen order — is honored as-is.
     localStorage.setItem('nicu:favorites', JSON.stringify({ v: 1, ids: ['feeds', 'gir', 'formula', 'morphine-wean'] }));
     favorites.init();
     const { container } = render(NavShell);
@@ -148,10 +152,10 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
     const bottomNav = container.querySelector('nav[aria-label="Calculator navigation"]:last-of-type')!;
     const tabs = bottomNav.querySelectorAll('[role="tab"]');
     expect(tabs).toHaveLength(4);
-    expect(tabs[0].textContent).toMatch(/Morphine/i);
-    expect(tabs[1].textContent).toMatch(/Formula/i);
-    expect(tabs[2].textContent).toMatch(/GIR/i);
-    expect(tabs[3].textContent).toMatch(/Feeds/i);
+    expect(tabs[0].textContent).toMatch(/Feeds/i);
+    expect(tabs[1].textContent).toMatch(/GIR/i);
+    expect(tabs[2].textContent).toMatch(/Formula/i);
+    expect(tabs[3].textContent).toMatch(/Morphine/i);
   });
 
 });

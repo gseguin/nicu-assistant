@@ -16,7 +16,7 @@ REQ-ID format: `PERT-[CATEGORY]-[NN]`. Numbering is workstream-local; integratio
 - [ ] **PERT-ARCH-04**: `src/lib/pert/` module created (types, config wrapper, state singleton, calculations, parity fixtures + tests, component)
 - [ ] **PERT-ARCH-05**: `NavShell.activeCalculatorId` ternary extended for `/pert` (preserves favorites + identity color logic)
 - [ ] **PERT-ARCH-06**: AboutSheet `pert` entry citing `epi-pert-calculator.xlsx` Pediatric tabs and DailyMed for medication strengths; institutional-protocol disclaimer matching GIR/UAC pattern
-- [ ] **PERT-ARCH-07**: First-run favorites defaults unchanged (`['morphine-wean', 'formula', 'gir', 'feeds']`); user can favorite `pert` via hamburger to bring it into the bottom-nav 4-cap
+- [ ] **PERT-ARCH-07**: First-run favorites defaults are the first 4 alphabetical registry entries (`['feeds', 'formula', 'gir', 'morphine-wean']`) — change from v1.13/v1.14 historical order, accepted in Phase 1 D-20 as a side-effect of alphabetizing `CALCULATOR_REGISTRY`. User can favorite `pert` via hamburger to bring it into the bottom-nav 4-cap.
 
 ### Identity Hue (`PERT-HUE-*`)
 

@@ -1,6 +1,6 @@
 // src/lib/shell/registry.ts
 import type { Component } from 'svelte';
-import { Syringe, Milk, Droplet, Baby, Ruler } from '@lucide/svelte';
+import { Syringe, Milk, Droplet, Baby, Ruler, Pill } from '@lucide/svelte';
 
 export interface CalculatorEntry {
   id: string; // Route segment — must match src/routes/{id}/
@@ -13,17 +13,18 @@ export interface CalculatorEntry {
     | 'identity-formula'
     | 'identity-gir'
     | 'identity-feeds'
-    | 'identity-uac';
+    | 'identity-uac'
+    | 'identity-pert';
 }
 
 export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
   {
-    id: 'morphine-wean',
-    label: 'Morphine',
-    href: '/morphine-wean',
-    icon: Syringe,
-    description: 'Morphine weaning schedule calculator',
-    identityClass: 'identity-morphine'
+    id: 'feeds',
+    label: 'Feeds',
+    href: '/feeds',
+    icon: Baby,
+    description: 'Feed advance calculator',
+    identityClass: 'identity-feeds'
   },
   {
     id: 'formula',
@@ -42,12 +43,20 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
     identityClass: 'identity-gir'
   },
   {
-    id: 'feeds',
-    label: 'Feeds',
-    href: '/feeds',
-    icon: Baby,
-    description: 'Feed advance calculator',
-    identityClass: 'identity-feeds'
+    id: 'morphine-wean',
+    label: 'Morphine',
+    href: '/morphine-wean',
+    icon: Syringe,
+    description: 'Morphine weaning schedule calculator',
+    identityClass: 'identity-morphine'
+  },
+  {
+    id: 'pert',
+    label: 'PERT',
+    href: '/pert',
+    icon: Pill,
+    description: 'Pediatric EPI PERT calculator',
+    identityClass: 'identity-pert'
   },
   {
     id: 'uac-uvc',

@@ -19,9 +19,10 @@ describe('favorites store', () => {
 		// Dynamic import to get fresh module state per test via the Svelte compiler
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		// D-20: first-run defaults are the first 4 alphabetical registry entries.
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 		const stored = JSON.parse(localStorage.getItem(STORAGE_KEY)!);
-		expect(stored).toEqual({ v: 1, ids: ['morphine-wean', 'formula', 'gir', 'feeds'] });
+		expect(stored).toEqual({ v: 1, ids: ['feeds', 'formula', 'gir', 'morphine-wean'] });
 	});
 
 	it('T-02 round-trip: write then re-init preserves favorites', async () => {
@@ -36,43 +37,43 @@ describe('favorites store', () => {
 		localStorage.setItem(STORAGE_KEY, '{malformed');
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 	});
 
 	it('T-04 recovery: missing v field → defaults', async () => {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify({ ids: ['gir'] }));
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 	});
 
 	it('T-05 recovery: wrong v value → defaults', async () => {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: 99, ids: ['gir'] }));
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 	});
 
 	it('T-06 recovery: ids not an array → defaults', async () => {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: 1, ids: 'gir' }));
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 	});
 
-	it('T-07 recovery: unknown id is silently filtered out', async () => {
+	it('T-07 recovery: unknown id is silently filtered out (preserves stored order)', async () => {
 		localStorage.setItem(
 			STORAGE_KEY,
 			JSON.stringify({ v: 1, ids: ['morphine-wean', 'ghost', 'gir'] })
 		);
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
+		// D-21: stored order preserved after filter; 'ghost' filtered out, but
+		// remaining ids stay in stored order — NOT re-sorted to registry order.
 		expect([...favorites.current]).toEqual(['morphine-wean', 'gir']);
 	});
 
 	it('T-08 recovery: over-cap ids are truncated to MAX', async () => {
-		// With only 4 registry calculators this edge case requires a contrived input,
-		// but the test documents the behavior so future (5+ calculator) regressions surface.
 		localStorage.setItem(
 			STORAGE_KEY,
 			JSON.stringify({
@@ -89,17 +90,20 @@ describe('favorites store', () => {
 		localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: 1, ids: ['ghost1', 'ghost2'] }));
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 	});
 
-	it('T-10 recovery: ids out of registry order are re-sorted on read', async () => {
+	it('T-10 recovery: preserves stored order verbatim (D-21 regression guard)', async () => {
+		// D-21: recover() no longer re-sorts by registry order. Whatever order the
+		// user stored is exactly what comes back, so a v1.13/v1.14 user's existing
+		// favorites order is honored on first v1.15 load (no snap-to-alphabetical).
 		localStorage.setItem(
 			STORAGE_KEY,
-			JSON.stringify({ v: 1, ids: ['feeds', 'morphine-wean'] })
+			JSON.stringify({ v: 1, ids: ['morphine-wean', 'gir', 'feeds', 'formula'] })
 		);
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
-		expect([...favorites.current]).toEqual(['morphine-wean', 'feeds']); // registry order
+		expect([...favorites.current]).toEqual(['morphine-wean', 'gir', 'feeds', 'formula']);
 	});
 
 	// Mutation API
@@ -111,7 +115,9 @@ describe('favorites store', () => {
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
 		favorites.toggle('gir');
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir']); // registry order
+		// toggle() still re-sorts the in-memory array by registry order (FAV-06 / D-07);
+		// post-D-19 alphabetization that's: feeds, formula, gir, morphine-wean, pert, uac-uvc.
+		expect([...favorites.current]).toEqual(['formula', 'gir', 'morphine-wean']);
 	});
 
 	it('T-12 toggle: remove from favorites', async () => {
@@ -119,15 +125,14 @@ describe('favorites store', () => {
 		favorites.init();
 		favorites.toggle('formula');
 		expect(favorites.current).not.toContain('formula');
-		expect([...favorites.current]).toEqual(['morphine-wean', 'gir', 'feeds']);
+		// Defaults are alphabetical: ['feeds','formula','gir','morphine-wean']; remove 'formula'.
+		expect([...favorites.current]).toEqual(['feeds', 'gir', 'morphine-wean']);
 	});
 
 	it('T-13 toggle: at cap, adding new id is a no-op (defense-in-depth)', async () => {
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init(); // 4 defaults, at cap
 		expect(favorites.isFull).toBe(true);
-		// There is no 5th registered calculator in Phase 40; Phase 42 will upgrade
-		// this test when UAC/UVC lands. For now assert cap invariants hold.
 		expect(favorites.current.length).toBe(FAVORITES_MAX);
 	});
 
@@ -136,7 +141,8 @@ describe('favorites store', () => {
 		favorites.init();
 		favorites.toggle('formula'); // remove
 		favorites.toggle('formula'); // re-add
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		// After alphabetization, registry-order add lands formula at index 1.
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 	});
 
 	// isFull, canAdd, has
@@ -172,7 +178,7 @@ describe('favorites store', () => {
 		});
 		const { favorites } = await import('./favorites.svelte.js');
 		favorites.init();
-		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 		spy.mockRestore();
 	});
 
@@ -194,6 +200,7 @@ describe('T-20 — module-scope default (D-07 regression guard)', () => {
 		// Dynamic import yields a fresh module instance — _ids initialized to defaultIds()
 		const { favorites: freshFavorites } = await import('./favorites.svelte.js');
 		// Do NOT call init()
-		expect([...freshFavorites.current]).toEqual(['morphine-wean', 'formula', 'gir', 'feeds']);
+		// D-20: alphabetical first 4 (post-D-19 registry alphabetization).
+		expect([...freshFavorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
 	});
 });
