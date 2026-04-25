@@ -108,7 +108,10 @@ See [milestones/v1.13-ROADMAP.md](milestones/v1.13-ROADMAP.md) for full phase de
   3. User on desktop sees each calculator tab carry its identity color indicator (`identityClass`, `border-b-2` on active), focus-visible outlines, `aria-current="page"` on the active route, and a 48px touch target — every v1.13 visual contract preserved
   4. User on desktop sees the hamburger button remain in the title bar so they can re-read the disclaimer / open AboutSheet via the v1.13 NAV-FAV-04 routing
   5. User resizing the browser at 768px / 1024px / 1280px sees the desktop top toolbar reflow gracefully with all 5 calculators — no horizontal overflow, no truncated labels, no layout shift on hydration
-**Plans**: TBD (run `/gsd-plan-phase 45` to break down)
+**Plans**: 3 plans
+- [ ] 45-01-PLAN.md — NavShell.svelte 9 verbatim edits (mobileVisibleCalculators rename + desktopVisibleCalculators const + 2 iteration updates + scroll-container restructure + ref/state + 2 $effects + scoped <style>) + NavShell.test.ts T-07..T-12 (NAV-ALL-01..05 + NAV-ALL-TEST-02)
+- [ ] 45-02-PLAN.md — Create e2e/desktop-full-nav.spec.ts with 4 tests (NAV-ALL-TEST-01a..d)
+- [ ] 45-03-PLAN.md — Create e2e/desktop-full-nav-a11y.spec.ts with 4 axe tests (NAV-ALL-TEST-03 — light/dark × 1280/768)
 **UI hint**: yes
 
 ### Phase 46: Release v1.14.0
@@ -133,7 +136,7 @@ See [milestones/v1.13-ROADMAP.md](milestones/v1.13-ROADMAP.md) for full phase de
 | 36-39 | v1.12 | 7/7 | Complete | 2026-04-10 |
 | 40-43 | v1.13 | 15/15 | Complete | 2026-04-24 |
 | 44. Kendamil Formula Family | v1.14 | 0/TBD | Not started | — |
-| 45. Desktop Full-Nav Divergence | v1.14 | 0/TBD | Not started | — |
+| 45. Desktop Full-Nav Divergence | v1.14 | 0/3 | Not started | — |
 | 46. Release v1.14.0 | v1.14 | 0/TBD | Not started | — |
 
 ## Order Rationale
