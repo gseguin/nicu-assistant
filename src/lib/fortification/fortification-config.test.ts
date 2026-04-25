@@ -81,3 +81,48 @@ describe('getFormulaById', () => {
     expect(getFormulaById('not-a-real-formula')).toBeUndefined();
   });
 });
+
+describe('Kendamil grouping (KEND-04 / KEND-TEST-02)', () => {
+  it('exposes exactly 3 Kendamil entries', () => {
+    const kendamils = getFortificationFormulas().filter((f) => f.manufacturer === 'Kendamil');
+    expect(kendamils).toHaveLength(3);
+  });
+
+  it('Kendamil entries appear in alphabetical order by name (Classic, Goat, Organic) after the picker sort', () => {
+    const names = getFortificationFormulas()
+      .filter((f) => f.manufacturer === 'Kendamil')
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map((f) => f.name);
+    expect(names).toEqual(['Kendamil Classic', 'Kendamil Goat', 'Kendamil Organic']);
+  });
+
+  it('each Kendamil variant resolvable by id (KEND-01/02/03)', () => {
+    expect(getFormulaById('kendamil-organic')?.name).toBe('Kendamil Organic');
+    expect(getFormulaById('kendamil-classic')?.name).toBe('Kendamil Classic');
+    expect(getFormulaById('kendamil-goat')?.name).toBe('Kendamil Goat');
+  });
+
+  it('no Kendamil variant supports packets — default-false via omitted field (KEND-05)', () => {
+    for (const f of getFortificationFormulas().filter((x) => x.manufacturer === 'Kendamil')) {
+      expect(f.packetsSupported).toBeUndefined();
+    }
+  });
+
+  it('Kendamil group sorts between Abbott and Mead Johnson (alphabetical localeCompare)', () => {
+    const manufacturers = Array.from(
+      new Set(
+        getFortificationFormulas()
+          .slice()
+          .sort((a, b) => a.manufacturer.localeCompare(b.manufacturer))
+          .map((f) => f.manufacturer)
+      )
+    );
+    const idxAbbott = manufacturers.indexOf('Abbott');
+    const idxKendamil = manufacturers.indexOf('Kendamil');
+    const idxMeadJohnson = manufacturers.indexOf('Mead Johnson');
+    expect(idxAbbott).toBeGreaterThanOrEqual(0);
+    expect(idxKendamil).toBe(idxAbbott + 1);
+    expect(idxMeadJohnson).toBe(idxKendamil + 1);
+  });
+});
