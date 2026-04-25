@@ -7,21 +7,32 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **PLANNED 2026-04-26, READY TO EXECUTE**
-Plan: Phase 3.1 has 4 plans across 3 waves (Wave 1: 03.1-01 bridge fix; Wave 2: 03.1-02 component tests + 03.1-03 e2e tests parallel; Wave 3: 03.1-04 clinical gate). PERT-TEST-05 fully covered. Plan-checker VERIFICATION PASSED on all 10 dimensions.
-Status: RESEARCH.md (D-09 PASS, HIGH confidence) + 4 PLAN.md files committed; ready for execution.
-Last activity: 2026-04-26 — Completed /gsd-discuss-phase + /gsd-plan-phase 3.1 --ws pert --auto chain; spawning /gsd-execute-phase 3.1 --ws pert next.
+Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **WAVE 1 COMPLETE 2026-04-25, WAVE 2 NEXT**
+Plan: 03.1-01 (Wave 1) COMPLETE — function-binding bridge fix shipped at commit `f2da16d`. svelte-check 0/0; vitest 423/423; D-11 reset test green WITHOUT modification per D-03. Wave 2 parallel-eligible: 03.1-02 component tests + 03.1-03 e2e tests. Wave 3: 03.1-04 clinical gate.
+Status: 1 of 4 plans complete (25%). PertInputs.svelte 248 -> 221 LOC (-27 net). Function-binding 2-arg form established as codebase pattern (first usage).
+Last activity: 2026-04-25 — Completed /gsd-execute-phase 3.1 plan 01 (Wave 1 bridge fix). Wave 2 next.
 
 ## Progress
 
-**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 PLANNED, ready to execute)
-**Current Plan:** Phase 3.1 — 4 plans across 3 waves committed; next step `/gsd-execute-phase 3.1 --ws pert`
+**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 IN PROGRESS — 1/4 plans complete)
+**Current Plan:** Phase 3.1 — Wave 1 done; next step Wave 2 (03.1-02 + 03.1-03 parallel)
 
 ## Session Continuity
 
-**Stopped At:** Phase 3.1 PLANNED (RESEARCH + 4 PLAN.md files + ROADMAP update committed)
-**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/` (CONTEXT D-01..D-09 + RESEARCH §D-09 PASS + 4 plans 03.1-01..03.1-04)
-**Next Action:** `/gsd-execute-phase 3.1 --ws pert` — Wave 1: 03.1-01 bridge fix (PertInputs.svelte function-binding wrappers, −24 LOC); Wave 2 parallel: 03.1-02 component tests (+2 cases) + 03.1-03 e2e tests (author 4 runner cases, delete prose block); Wave 3: 03.1-04 clinical gate (svelte-check, vitest ≥425, build, pert-a11y, pert.spec 12/12, full Playwright, negative-space audit). After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
+**Stopped At:** Phase 3.1 Wave 1 COMPLETE — 03.1-01 SUMMARY + STATE update committed
+**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-01-SUMMARY.md` (Wave 1 outcomes), `03.1-02-PLAN.md` + `03.1-03-PLAN.md` (Wave 2 next, parallel-eligible)
+**Next Action:** Continue `/gsd-execute-phase 3.1 --ws pert` — Wave 2 parallel: 03.1-02 component tests (+2 cases against the fixed bridge) + 03.1-03 e2e tests (author 4 runner cases, delete prose block); Wave 3: 03.1-04 clinical gate (svelte-check, vitest ≥425, build, pert-a11y, pert.spec 12/12, full Playwright, negative-space audit). After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
+
+## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
+
+- **Wave 1 — bridge fix (`f2da16d`):** EDITED `src/lib/pert/PertInputs.svelte` (248 → 221 LOC, net −27). Replaced 3 string-bridge `$state` proxies (medicationIdStr / strengthStr / formulaIdStr) + 6 bidirectional `$effect` blocks with Svelte 5.9+ function-binding wrappers `bind:value={() => getter, (v) => setter}` inline at each `<SelectPicker>` site (Formula at line 154-163, Medication at line 189-197, Strength at line 198-219 — Pitfall 3 empty-string guard at line 205). KI-1 root cause (bidirectional `$effect` registration race) structurally eliminated: zero `$effect` involvement in the bridge path. D-11 lastMedId effect, persist effect, and `strengthOptions` `$derived` preserved (D-11 doc-comment lightly updated since "propagates through the strengthStr `$effect`" became stale post-fix; code logic byte-identical per D-03).
+- **D-09 confirmed PASS:** svelte@5.55.4 accepts the function-binding 2-arg form with svelte-check 0 errors / 0 warnings (~4586 files). First codebase usage of this Svelte 5.9+ idiom; no fallback to `untrack()` pattern needed.
+- **Quality gates:** svelte-check 0/0; vitest 423/423 (Phase 3 baseline preserved exactly — PertInputs.test.ts 7/7 including D-11 reset test green WITHOUT modification per D-03; PertCalculator.test.ts 10/10; calculations.test.ts 45/45).
+- **Negative-space audit:** `git diff --name-only HEAD~1 -- src/ e2e/` returns ONLY `src/lib/pert/PertInputs.svelte`. SelectPicker.svelte byte-identical (D-02), FeedAdvanceInputs.svelte byte-identical (D-07), state.svelte.ts byte-identical (Phase-1-frozen).
+
+## Phase 3.1 deviations applied (all auto, none Rule-4)
+
+- 03.1-01: Two plan-side line-oriented grep gates returned 0 because the function-binding wrappers span multiple lines (`bind:value={` on its own line, `() => ...` on the next). Verified semantically with `perl -0777` multi-line aware count → 3 function bindings present (Formula 154/156, Medication 189/191, Strength 198/200). Pitfall 3 guard verified at line 205. svelte-check 0/0 confirms compile-time acceptance. The plan's verify regex assumes single-line layout; recommend updating to multi-line aware grep for future similar plans. D-11 doc-comment phrase update (lines 89-91) authorized explicitly by the plan's STEP C ("Default: update the comment as shown above"); code inside the effect is byte-identical.
 
 ## Phase 3 outcomes (HEAD 27dc39c, baseline e14f425 → 7 commits)
 

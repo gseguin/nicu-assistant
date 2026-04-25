@@ -72,7 +72,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
   4. Phase 3 Wave 1 + Wave 2 tests (`PertCalculator.test.ts` 10 cases, `PertInputs.test.ts` 7 cases including D-11 reset, `calculations.test.ts` 45 cases including parity matrix) all stay green.
   5. The 2 picker-driven happy-path e2e tests deferred from Plan 03-04 (Oral mode + Tube-Feed mode happy paths × 2 viewports = 4 tests) get unskipped and pass cleanly under `CI=1 pnpm exec playwright test pert.spec` — taking the count from 8/8 to 12/12.
 **Plans**: 4 plans
-  - [ ] 03.1-01-PLAN.md — Replace SelectPicker string-bridge proxies in PertInputs.svelte with Svelte 5 function bindings (KI-1 root-cause fix)
+  - [x] 03.1-01-PLAN.md — Replace SelectPicker string-bridge proxies in PertInputs.svelte with Svelte 5 function bindings (KI-1 root-cause fix) — **COMPLETE 2026-04-25 (commit `f2da16d`)**: PertInputs.svelte 248 -> 221 LOC, svelte-check 0/0, vitest 423/423, D-11 reset test green without modification per D-03
   - [ ] 03.1-02-PLAN.md — Add D-01 click-persist + D-04 external-mutation regression-guard component tests to PertInputs.test.ts
   - [ ] 03.1-03-PLAN.md — Author 2 picker-driven happy-path e2e tests in pert.spec.ts (Oral + Tube-Feed); delete deferred prose comment block
   - [ ] 03.1-04-PLAN.md — Clinical gate (verification only): 7-gate sequence + PERT-TEST-05 FULL closure record
@@ -109,7 +109,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 | 1. Architecture, Identity Hue & Clinical Data | 0/0 | Not started | - |
 | 2. Calculator Core (Both Modes + Safety) | 0/0 | Not started | - |
 | 3. Tests | 0/0 | Not started | - |
-| 3.1. KI-1 Resolution (SelectPicker bridge) | 0/4 | Not started | - |
+| 3.1. KI-1 Resolution (SelectPicker bridge) | 1/4 | In progress | 2026-04-25 (Wave 1 — plan 01) |
 | 4. Design Polish (`/impeccable` Critique Sweep) | 0/0 | Not started | - |
 | 5. Release | 0/0 | Not started | - |
 
@@ -145,4 +145,4 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 - Plan numbering inside each phase will follow `01-*`, `02-*`, etc. and is decided at `/gsd-plan-phase` time.
 
 ---
-*Last updated: 2026-04-25 — workstream `pert` v1.15 milestone roadmap created*
+*Last updated: 2026-04-25 — Phase 3.1 Wave 1 (plan 03.1-01) complete; commit `f2da16d`*
