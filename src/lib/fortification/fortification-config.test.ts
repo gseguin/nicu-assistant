@@ -13,8 +13,11 @@ const REQUIRED_KEYS = [
 describe('fortification-config loader', () => {
   const formulas = getFortificationFormulas();
 
-  it('contains exactly 30 formulas (xlsx Calculator A3:D35 row count)', () => {
-    expect(formulas).toHaveLength(30);
+  it('contains exactly 33 formulas (30 from xlsx Calculator A3:D35 + 3 Kendamil HCP)', () => {
+    // 30 entries transcribe recipe-calculator.xlsx Calculator tab A3:D35.
+    // 3 Kendamil entries (Organic, Classic, Goat) extend beyond xlsx —
+    // sourced from hcp.kendamil.com per Phase 44 PLAN.md audit trail.
+    expect(formulas).toHaveLength(33);
   });
 
   it('every entry has all required fields', () => {
