@@ -182,18 +182,19 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
 
 describe('NavShell — desktop full-nav divergence (Phase 45)', () => {
 
-  it('T-07 default favorites (4): desktop nav still renders all 5 calculators', async () => {
+  it('T-07 default favorites (4): desktop nav renders all registry calculators in registry order', async () => {
     const { container } = render(NavShell);
     await tick();
     // Desktop nav is the FIRST nav[aria-label="Calculator navigation"]
     const desktopNav = container.querySelector('nav[aria-label="Calculator navigation"]')!;
     const tabs = desktopNav.querySelectorAll('[role="tab"]');
-    expect(tabs).toHaveLength(5);
-    expect(tabs[0].textContent).toMatch(/Morphine/i);
+    expect(tabs).toHaveLength(6);
+    expect(tabs[0].textContent).toMatch(/Feeds/i);
     expect(tabs[1].textContent).toMatch(/Formula/i);
     expect(tabs[2].textContent).toMatch(/GIR/i);
-    expect(tabs[3].textContent).toMatch(/Feeds/i);
-    expect(tabs[4].textContent).toMatch(/UAC/i);
+    expect(tabs[3].textContent).toMatch(/Morphine/i);
+    expect(tabs[4].textContent).toMatch(/PERT/i);
+    expect(tabs[5].textContent).toMatch(/UAC/i);
   });
 
   it('T-08 reduced favorites (2): desktop nav unchanged, mobile nav reflects favorites', async () => {
@@ -205,11 +206,11 @@ describe('NavShell — desktop full-nav divergence (Phase 45)', () => {
     expect(navs).toHaveLength(2);
     const desktopTabs = navs[0].querySelectorAll('[role="tab"]');
     const mobileTabs = navs[1].querySelectorAll('[role="tab"]');
-    expect(desktopTabs).toHaveLength(5); // NAV-ALL-01: registry-driven, immune to favorites
+    expect(desktopTabs).toHaveLength(6); // NAV-ALL-01: registry-driven, immune to favorites
     expect(mobileTabs).toHaveLength(2);  // NAV-ALL-02: favorites-driven, Phase 41 contract
   });
 
-  it('T-09 zero favorites: desktop nav still renders all 5; mobile renders none', async () => {
+  it('T-09 zero favorites: desktop nav still renders full registry; mobile renders none', async () => {
     favorites.toggle('morphine-wean');
     favorites.toggle('formula');
     favorites.toggle('gir');
@@ -219,13 +220,13 @@ describe('NavShell — desktop full-nav divergence (Phase 45)', () => {
     const navs = container.querySelectorAll('nav[aria-label="Calculator navigation"]');
     const desktopTabs = navs[0].querySelectorAll('[role="tab"]');
     const mobileTabs = navs[1].querySelectorAll('[role="tab"]');
-    expect(desktopTabs).toHaveLength(5); // edge case: favorites empty, desktop still full
+    expect(desktopTabs).toHaveLength(6); // edge case: favorites empty, desktop still full
     expect(mobileTabs).toHaveLength(0);
   });
 
   it('T-10 active route on desktop: tab always lit (D-03)', async () => {
     // Even if the active route is non-favorited on mobile, the desktop tab is always
-    // present and aria-selected="true" because all 5 are rendered.
+    // present and aria-selected="true" because the full registry is rendered.
     localStorage.setItem('nicu:favorites', JSON.stringify({ v: 1, ids: ['morphine-wean', 'formula', 'gir'] }));
     favorites.init();
     mockPage.url.pathname = '/uac-uvc';
