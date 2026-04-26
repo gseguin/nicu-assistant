@@ -53,22 +53,84 @@ for (const viewport of [
 			}
 		});
 
-		// DEFERRED (Phase 3 known-issue): the Oral + Tube-Feed picker-driven
-		// happy-path tests are NOT included here because all three SelectPicker
-		// instances in PertInputs.svelte have a click-revert bug: clicking an
-		// option silently reverts the selection back to the placeholder.
-		// Root cause is an architectural collision between the bidirectional
-		// bind:value pattern and the D-11 strength-reset sibling effect; two
-		// fix attempts (mechanical effect-order swap; folding D-11 into the
-		// strength write-effect) each broke either D-11 or external-write
-		// propagation. Proper resolution requires a SelectPicker contract change
-		// (e.g. onValueChange callback prop, or $derived-backed binding) — out
-		// of Phase 3 scope. See:
-		//   .planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md
-		// Phase 3 ships the 8 below tests (mode-switch state preservation,
-		// inputmode regression guard, localStorage round-trip, favorites
-		// round-trip — none of which exercise the picker click path) and
-		// declares the picker happy-paths deferred to a follow-up phase.
+		// KI-1 closure (Phase 3.1 D-05 + D-06): picker-driven happy-paths.
+		// These were deferred from Phase 3 Plan 03-04 because the SelectPicker
+		// string-bridge proxies in PertInputs.svelte had a bidirectional $effect
+		// race that caused click-revert. Phase 3.1 Plan 03.1-01 replaced those
+		// proxies with Svelte 5 function bindings. These tests lock the symptom
+		// (visible click-then-result) at the e2e tier; the mechanism is locked
+		// at the component tier in PertInputs.test.ts D-01 + D-04.
+
+		test('Oral mode happy path: weight + fat + lipase + medication + strength produces capsulesPerDose=4', async ({
+			page
+		}) => {
+			const scope = getInputsScope(page, viewport.name);
+			// Oral is the default mode. Fill numeric inputs first.
+			await scope.getByLabel('Weight', { exact: true }).fill('10');
+			await scope.getByLabel('Fat per meal').fill('25');
+			await scope.getByLabel('Lipase per gram of fat').fill('2000');
+			// Open and select medication. Pitfall 6: scope-relative trigger,
+			// page-level option (the SelectPicker dialog is a top-level modal).
+			await scope.getByRole('button', { name: /^Medication/ }).click();
+			await page.getByRole('option', { name: /^Creon$/ }).click();
+			// D-11 cascade: medicationId change clears strengthValue. Wait for the
+			// strength picker placeholder to update to "Select strength" before
+			// clicking it (avoids racing a stale picker UI). Polled assertion.
+			await expect(scope.getByRole('button', { name: /^Strength/ })).toContainText(
+				/Select strength/
+			);
+			await scope.getByRole('button', { name: /^Strength/ }).click();
+			await page.getByRole('option', { name: /^12,000 units$/ }).click();
+			if (viewport.name === 'mobile') {
+				// Close the InputDrawer so the hero card under it is visible.
+				await page.keyboard.press('Escape');
+			}
+			// Hero asserts: capsulesPerDose = ROUND(25 * 2000 / 12000) = ROUND(4.167) = 4.
+			await expect(page.getByText('4', { exact: true }).first()).toBeVisible();
+			await expect(page.getByText('capsules/dose')).toBeVisible();
+		});
+
+		test('Tube-Feed mode happy path: weight + formula + volume + lipase + medication + strength produces capsulesPerDay=5 + capsulesPerMonth=150', async ({
+			page
+		}) => {
+			const scope = getInputsScope(page, viewport.name);
+			// Switch to Tube-Feed.
+			await scope.getByRole('tab', { name: /Tube-Feed/i }).click();
+			// Fill numerics.
+			await scope.getByLabel('Weight', { exact: true }).fill('15');
+			// Open and search the Formula picker (searchable=true). The
+			// SelectPicker trigger's accessible role is 'combobox' when
+			// searchable=true (SelectPicker.svelte:172), NOT 'button'. Only
+			// the non-searchable Medication + Strength triggers below are buttons.
+			await scope.getByRole('combobox', { name: /^Formula/ }).click();
+			// SelectPicker.svelte:199-208 renders <input type="text" aria-label="Filter Formula">
+			// (not type="search"), so its accessible role is 'textbox'. `getByRole('searchbox')`
+			// would not match. Plan deviation protocol fallback to aria-label-anchored textbox.
+			await page.getByRole('textbox', { name: /Filter Formula/i }).fill('Kate Farms');
+			await page.getByRole('option', { name: /Kate Farms Pediatric Standard 1\.2/ }).click();
+			await scope.getByLabel('Volume per day').fill('1500');
+			await scope.getByLabel('Lipase per gram of fat').fill('2500');
+			// Open and select medication.
+			await scope.getByRole('button', { name: /^Medication/ }).click();
+			await page.getByRole('option', { name: /^Pancreaze$/ }).click();
+			// D-11 cascade wait before opening strength.
+			await expect(scope.getByRole('button', { name: /^Strength/ })).toContainText(
+				/Select strength/
+			);
+			await scope.getByRole('button', { name: /^Strength/ }).click();
+			await page.getByRole('option', { name: /^37,000 units$/ }).click();
+			if (viewport.name === 'mobile') {
+				await page.keyboard.press('Escape');
+			}
+			// Hero: capsulesPerDay = ROUND(48 * 1500/1000 * 2500 / 37000) = ROUND(4.864) = 5.
+			// capsulesPerMonth = 5 * 30 = 150.
+			await expect(page.getByText('5', { exact: true }).first()).toBeVisible();
+			await expect(page.getByText('capsules/day')).toBeVisible();
+			await expect(page.getByText('Capsules per month')).toBeVisible();
+			// `{ exact: true }` so '150' (Capsules per month) doesn't also match the
+			// '1500' Volume per day input value as a substring (strict mode violation).
+			await expect(page.getByText('150', { exact: true })).toBeVisible();
+		});
 
 		test('mode-switch state preservation', async ({ page }) => {
 			const scope = getInputsScope(page, viewport.name);
