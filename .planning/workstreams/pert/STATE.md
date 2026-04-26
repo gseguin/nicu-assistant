@@ -3,23 +3,47 @@ gsd_state_version: 1.0
 milestone: v1.14
 milestone_name: Kendamil Formulas + Desktop Full Nav
 status: executing
-last_updated: "2026-04-26T04:20:39.684Z"
-last_activity: 2026-04-26 -- Phase 04 planning complete
+last_updated: "2026-04-26T05:00:00.000Z"
+last_activity: 2026-04-26 -- Phase 04 COMPLETE (Wave 3 plan 04-03 closed; PERT-DESIGN-01..06 Validated)
 progress:
-  total_phases: 3
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_phases: 6
+  completed_phases: 4
+  total_plans: 11
+  completed_plans: 11
 ---
 
-# Project State — Workstream `pert`
+# Project State - Workstream `pert`
 
 ## Current Position
 
-Phase: 04 (design-polish-impeccable) — EXECUTING
-Plan: 1 of 3
-Status: Ready to execute
-Last activity: 2026-04-26 -- Phase 04 planning complete
+Phase: 04 (design-polish-impeccable) -- COMPLETE 2026-04-26
+Plan: 3 of 3 (Wave 3 plan 04-03 closed)
+Status: Phase 4 closed. Phase 5 (release) is next.
+Last activity: 2026-04-26 -- Ran /gsd-execute-phase 4 wave 3; plan 04-03 closed Phase 4 with all 18 gates green; aggregate score 36.25/40 (Wave 1 baseline 35.6/40, delta +0.65); 8/8 contexts at >=35/40; zero unhandled P1; AUDIT.sh exit 0; PERT-DESIGN-01..06 flipped Active -> Validated.
+
+Phases Complete: 4 / 6
+
+## Phase 4 outcomes (HEAD pending Wave-3 Task-3 commit, baseline 4aec126 -> Wave 1 + Wave 2 + Wave 3)
+
+- **Wave 1 -- Plan 04-01 (commit `eec18c2` + `e1e60cb` + `72be821`):** Authored PRODUCT.md at the repo root (D-08a one-off skill-required setup artifact); dropped 04-AUDIT.sh skeleton at the phase directory; ran 8-context /impeccable critique sweep via LLM-Design-Review fallback driven by Playwright snapshots (orchestrator setup note #9 fallback path -- /impeccable skill not available in agent runtime); produced 8 04-CRITIQUE-{theme}-{viewport}-{mode}.md transcripts; ran deterministic CLI scan (`npx impeccable detect --json` returned `[]` clean); populated 04-FINDINGS.md triage table (5 unique findings + 1 informational CLI seed). Wave 1 aggregate: **35.6/40 (8/8 at >=35/40); 0 P1 / 3 P2 (1 fix-now F-03; 2 forced-defer F-01 + F-02) / 2 P3 (deferred)**. Wave 2 plan-count recommendation: 1 plan covering F-03 (Tube-Feed Capsules-per-month visual hierarchy bump).
+- **Wave 2 -- Plan 04-02 (commit `29306e7` + `136b624`):** Shipped F-03 fix-now finding via single-token swap on `src/lib/pert/PertCalculator.svelte` Tube-Feed Capsules-per-month numeral (`font-bold` -> `font-extrabold`; PERT-route only; +1 LOC delta; HTML comment expanded for fix-rationale annotation). Out-of-band commit `2dc7ae2` (`fix(pert): align weight slider range with other calculators (max 10 kg)` -- single-line edit to `src/lib/pert/pert-config.json`) acknowledged as in-phase scope (NOT scope creep). D-08b forced-defer for F-01 (NumericInput en-dash) and F-02 (NavShell sticky-overlay) carried forward as cross-calculator backlog (v1.15.x hotfix or v1.16 carrier).
+- **Out-of-band commit `5cd3386`:** `fix(pert/about): remove xlsx references from About sheet` -- user-authored single-calculator-scoped edit to `src/lib/shared/about-content.ts` (only the `pert: { ... }` entry of the AboutContent records map; other 5 entries byte-identical). Outside the strict D-08 PERT-route allowlist; acknowledged in 04-VERIFICATION.md as a D-08a-style amendment per the per-calculator-entry-scoped exception precedent (same shape as `2dc7ae2`, `src/app.css .identity-pert` block, `src/lib/shell/registry.ts` PERT entry).
+- **Wave 3 -- Plan 04-03 (commit `95e31b0` Task 1; `3001c2a` AUDIT.sh fix-in-place; `33695e1` partial-merge; this Task 3 commit pending):** Verification-only run; NO source/test/config edits inside `src/` or `e2e/`. Captured 8 04-CRITIQUE-FINAL-{theme}-{viewport}-{mode}.md transcripts re-running the critique against the post-Wave-2 UI per CONTEXT D-04. Captured 18-gate verification evidence at `/tmp/04-wave3-gates/gate-NN.log`. Authored 04-VERIFICATION.md (232 lines; 18-gate audit trail; per-context score table; final disposition counts; PERT-DESIGN closure mapping; raw evidence paste). Authored 04-03-SUMMARY.md (this plan's closure record). Updated STATE.md / ROADMAP.md / REQUIREMENTS.md (this paragraph + Phase 4 row Complete + PERT-DESIGN-01..06 Validated).
+- **All 18 gates green:** (1) `pnpm exec svelte-check` -> 0 errors / 0 warnings (4586 files); (2) `pnpm test:run` -> 425 passed; (3) `pnpm build` -> exit 0; PWA precache 49 entries / 575.99 KiB (-0.04 KiB vs Phase 3.1 baseline 576.03 KiB; well under +/-5 KiB tolerance); (4) `CI=1 pnpm exec playwright test pert-a11y` -> 4 passed; (5) `CI=1 pnpm exec playwright test pert.spec` -> 12 passed; (6) `CI=1 pnpm exec playwright test` -> 117 passed + 1 baseline flake on `disclaimer-banner.spec.ts:28` (same flake as Phase 1 + 2 + 3 + 3.1; verifier accepts per established precedent); (7) negative-space audit `git diff --name-only 4aec126..HEAD -- src/ e2e/` returns 3 files (`PertCalculator.svelte` Wave 2 + `pert-config.json` `2dc7ae2` + `about-content.ts` `5cd3386`); first 2 inside D-08 allowlist; third acknowledged as D-08a-style amendment in VERIFICATION.md; (8) AUDIT.sh exit 0 (after Rule 5 regex fix-in-place at `3001c2a`); (9) Identity-pert reservation manual check -- 11 hits all whitelisted; 0 chrome hits; (10) STOP-red carve-out manual check -- 3 hits all in PertCalculator.svelte stopAdvisories block; 0 in PertInputs.svelte / +page.svelte; (11) em-dash + en-dash sweep -- 0 em-dashes across 4 PERT-route files; 1 pre-existing en-dash at `pert-config.json:137` (`validationMessages.invalidLipaseRate`; pre-Phase-4; not a regression; backlog item for v1.16 alongside F-01); (12) tabular-numerals `.num` count = 9 (>= 5); (13) function-binding bridges -- 3 hits; 0 string-bridge proxies (Phase 3.1 D-01 invariants preserved); (14) 8 FINAL critique transcripts captured; (15) 0 unhandled P1; (16) 8/8 contexts at >= 35/40 (target >= 6/8); (17) aggregate 36.25/40 (target >= 35/40); (18) Watch Item 6 SelectPicker findings deferred per D-08b (no shared-component fix-now disposition).
+- **Wave 1 -> Wave 3 score deltas:** 4 of 4 Tube-Feed contexts shifted upward by +1 or +2 points each (F-03 Capsules-per-month hierarchy bump landed); 4 of 4 Oral contexts unchanged (no F-row touched Oral mode in Wave 2). Aggregate delta +0.65; 8/8 at >= 35/40 preserved.
+- **Per-context Wave-3 scores:** light-mobile-oral 36/40, light-mobile-tube-feed 37/40, light-desktop-oral 36/40, light-desktop-tube-feed 37/40, dark-mobile-oral 36/40, dark-mobile-tube-feed 37/40, dark-desktop-oral 35/40, dark-desktop-tube-feed 36/40.
+- **Files modified across phase:** `src/lib/pert/PertCalculator.svelte` (Wave 2 F-03), `src/lib/pert/pert-config.json` (out-of-band `2dc7ae2`), `src/lib/shared/about-content.ts` (out-of-band `5cd3386`; D-08a-style amendment), plus repo-root `PRODUCT.md` (Wave 1 D-08a one-off addition for /impeccable Setup gate). Zero source/test edits by Wave 1, Wave 3 (verification-only); Wave 2 ships 1 src file; out-of-band user commits during the phase ship 2 additional src files.
+- **PERT-DESIGN closure:** PERT-DESIGN-01 (8 transcripts captured) -> Validated via Plan 04-01 + Gate 14. PERT-DESIGN-02 (P1 fixes ship; cheap-P2 inline) -> Validated via Plan 04-02 + Gate 15 (0 P1; 1 P2 fix-now F-03 shipped; 4 P2/P3 deferred per D-08b + D-03). PERT-DESIGN-03 (DESIGN.md contract) -> Validated via Plans 04-02 + 04-03 + Gates 8, 9, 10, 11, 12. PERT-DESIGN-04 (HeroResult-owns-viewport) -> Validated via Plans 04-02 + 04-03 + Gates 16, 17 (Aesthetic + Recognition heuristic scores). PERT-DESIGN-05 (SegmentedToggle integration) -> Validated via Plans 04-02 + 04-03 + Gates 16, 17 (Consistency heuristic = 4/4 in 8/8 contexts). PERT-DESIGN-06 (>= 35/40 score target) -> Validated via Plan 04-03 + Gates 16, 17 (aggregate 36.25/40; 8/8 at >= 35/40).
+- **Backlog seeded by Phase 4 (cross-calculator items):** F-01 NumericInput template en-dash (~1 LOC; v1.15.x hotfix or v1.16 carrier); F-02 NavShell sticky-overlay layering (~5-15 LOC investigation; v1.16 carrier); pert-config.json:137 invalidLipaseRate en-dash (~1 LOC; same v1.16 carrier as F-01); F-04 mobile InputDrawer trigger pushes hero down (P3; D-08b boundary); F-05 desktop sticky-aside max-width tightening (P3; +page.svelte layout work). None block v1.15 release-readiness.
+- **Phase 4 vs Phase 3.1 baseline deltas:** svelte-check 0 (unchanged); vitest 425 (unchanged); pnpm build 575.99 KiB (-0.04 KiB; well within +/-5 KiB); pert-a11y 4 (unchanged); pert.spec 12 (unchanged); full Playwright 117 + 1 baseline flake (unchanged); files modified across phase 0 -> 3 src + 1 repo-root (additive). Phase 3.1 invariants intact: function-binding bridges 3, string-bridge proxies 0, em-dash 0 on PertCalculator.svelte, tabular-numerals 9, STOP-red carve-out byte-identical.
+
+## Phase 4 deviations applied (all auto, none Rule-4)
+
+- **04-01 (Wave 1):** 4 deviations -- (1) reused user's existing port-5173 dev server instead of starting/tearing down own (`--strictPort` collision avoidance); (2) `/impeccable` slash command + Skill tool not available -- applied LLM-Design-Review fallback per orchestrator setup note #9 via Playwright snapshot capture; (3) plan's verify regex `' -- |-'` is broken (matches every literal hyphen); reinterpreted intent as Workstream Q1 broad ban -- `grep -cP '\x{2014}|\x{2013}'` and verified 0/0 on PRODUCT.md / FINDINGS.md / 04-01-SUMMARY.md; (4) Pitfall 5 hard-guard regex false-positives on prose mentioning the rule (semantic intent: no F-row pairs fix-now with shared-component path; verified manually). Recommendations recorded for future plans.
+- **04-02 (Wave 2):** 2 deviations -- (1) `pnpm install --frozen-lockfile` ran in fresh worktree to enable Gate 1 + Gate 2 (node_modules gitignored; no diff pollution); (2) `pnpm test:run -- src/lib/pert/` filter syntax ran full 425 tests instead of PERT subset 81 (npm-script wrapper quirk); used `pnpm exec vitest run src/lib/pert/` directly. Recommendations recorded.
+- **04-03 (Wave 3):** 1 deviation in-phase -- AUDIT.sh Rule 5 regex tightened in place at commit `3001c2a` (Wave 1 deviation #3 follow-up; the script lives in the phase directory and is itself a Phase 4 artifact; tightening the regex resolves the false-positive without code-side impact). Plus 1 finding documented as PASS-with-backlog-note: pre-existing U+2013 at `pert-config.json:137` (Phase 4 did NOT regress; pre-Phase-4 baseline; tracked for v1.16).
+
+## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
 
 ## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
 

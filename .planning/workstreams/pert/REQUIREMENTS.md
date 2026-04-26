@@ -77,12 +77,12 @@ REQ-ID format: `PERT-[CATEGORY]-[NN]`. Numbering is workstream-local; integratio
 
 ### Visual Design Polish (`PERT-DESIGN-*`)
 
-- [ ] **PERT-DESIGN-01**: `/impeccable` critique skill run on live `/pert` UI in **light + dark** themes at **mobile 375 + desktop 1280** before release; findings triaged into P1 (must-fix) / P2 (should-fix) / P3 (nice-to-fix) per Phase 42.1 / 42.2 precedent
-- [ ] **PERT-DESIGN-02**: All P1 critique findings fixed before merge; addressable P2/P3 fixed inline if cheap, deferred with explicit triage notes if expensive (consistent with v1.9 POLISH-04 pattern)
-- [ ] **PERT-DESIGN-03**: DESIGN.md / DESIGN.json contract enforced — Identity-Inside Rule (`.identity-pert` only on inside-the-route surfaces), Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong (with the v1.13 STOP-red carve-out for PERT-SAFE-01 max-lipase cap), Tabular-Numbers on all numerical outputs, Eyebrow-Above-Numeral hero pattern, 11px font-size floor
-- [ ] **PERT-DESIGN-04**: `<HeroResult>` shared component owns above-the-fold viewport on mount in both modes; sticky `<InputDrawer>` pattern for input collapsibility consistent with v1.13 cross-route adoption
-- [ ] **PERT-DESIGN-05**: SegmentedToggle (Oral / Tube-Feed) visually integrated with the existing identity-hue treatment — does not introduce a new visual idiom
-- [ ] **PERT-DESIGN-06**: 16/40 → ≥35/40 critique score target (or document why a lower score is acceptable for this calculator), matching v1.13 Phase 42.2 sweep delta
+- [x] **PERT-DESIGN-01**: `/impeccable` critique skill run on live `/pert` UI in **light + dark** themes at **mobile 375 + desktop 1280** before release; findings triaged into P1 (must-fix) / P2 (should-fix) / P3 (nice-to-fix) per Phase 42.1 / 42.2 precedent -- **FULL closure 2026-04-26 (Phase 4 plan 04-01 + Gate 14)**: 8 critique transcripts captured (Wave 1 baseline + Wave 3 FINAL re-run); LLM-Design-Review fallback per orchestrator setup note #9; PRODUCT.md authored at repo root; auto-disposition rubric per CONTEXT D-03 applied.
+- [x] **PERT-DESIGN-02**: All P1 critique findings fixed before merge; addressable P2/P3 fixed inline if cheap, deferred with explicit triage notes if expensive (consistent with v1.9 POLISH-04 pattern) -- **FULL closure 2026-04-26 (Phase 4 plan 04-02 + Gate 15)**: 0 P1 findings; 1 P2 fix-now F-03 shipped (Tube-Feed Capsules-per-month visual hierarchy bump); 4 P2/P3 deferred per D-08b + D-03 (F-01, F-02 cross-calculator backlog; F-04, F-05 layout polish).
+- [x] **PERT-DESIGN-03**: DESIGN.md / DESIGN.json contract enforced -- Identity-Inside Rule (`.identity-pert` only on inside-the-route surfaces), Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong (with the v1.13 STOP-red carve-out for PERT-SAFE-01 max-lipase cap), Tabular-Numbers on all numerical outputs, Eyebrow-Above-Numeral hero pattern, 11px font-size floor -- **FULL closure 2026-04-26 (Phase 4 plans 04-02 + 04-03 + Gates 8, 9, 10, 11, 12)**: AUDIT.sh exit 0; Identity-pert reservation 11 hits all whitelisted; STOP-red carve-out 3 hits all in PertCalculator.svelte stopAdvisories block; em-dash 0 across PERT-route; tabular-numerals 9 (>= 5).
+- [x] **PERT-DESIGN-04**: `<HeroResult>` shared component owns above-the-fold viewport on mount in both modes; sticky `<InputDrawer>` pattern for input collapsibility consistent with v1.13 cross-route adoption -- **FULL closure 2026-04-26 (Phase 4 plans 04-02 + 04-03 + Gates 16, 17)**: per-context Aesthetic + Recognition heuristic scores 4/4 in 8/8 contexts; F-04 P3 deferred per D-03 default (D-08b boundary).
+- [x] **PERT-DESIGN-05**: SegmentedToggle (Oral / Tube-Feed) visually integrated with the existing identity-hue treatment -- does not introduce a new visual idiom -- **FULL closure 2026-04-26 (Phase 4 plans 04-02 + 04-03 + Gates 16, 17)**: Consistency heuristic = 4/4 in 8/8 contexts; Phase 1 + Phase 2 inheritance (active-pill carries `text-[var(--color-identity)]` matching v1.6 SegmentedToggle treatment); zero F-row finding cited the toggle.
+- [x] **PERT-DESIGN-06**: 16/40 -> >= 35/40 critique score target (or document why a lower score is acceptable for this calculator), matching v1.13 Phase 42.2 sweep delta -- **FULL closure 2026-04-26 (Phase 4 plan 04-03 + Gates 16, 17)**: Wave 3 aggregate 36.25/40 (Wave 1 baseline 35.6/40, delta +0.65); 8/8 contexts at >= 35/40 (target was >= 6/8); zero unhandled P1; AUDIT.sh exit 0; all 4 sub-conditions of CONTEXT D-04 score acceptance gate met.
 
 ### Release (`PERT-REL-*`)
 
@@ -164,12 +164,12 @@ Phase mapping for milestone v1.15. Workstream-local phase numbering (1..5). All 
 | PERT-TEST-04 | Phase 3 | Active |
 | PERT-TEST-05 | Phase 3 + Phase 3.1 (FULL closure) | Validated |
 | PERT-TEST-06 | Phase 3 | Active |
-| PERT-DESIGN-01 | Phase 4 | Active |
-| PERT-DESIGN-02 | Phase 4 | Active |
-| PERT-DESIGN-03 | Phase 4 | Active |
-| PERT-DESIGN-04 | Phase 4 | Active |
-| PERT-DESIGN-05 | Phase 4 | Active |
-| PERT-DESIGN-06 | Phase 4 | Active |
+| PERT-DESIGN-01 | Phase 4 (FULL closure) | Validated |
+| PERT-DESIGN-02 | Phase 4 (FULL closure) | Validated |
+| PERT-DESIGN-03 | Phase 4 (FULL closure) | Validated |
+| PERT-DESIGN-04 | Phase 4 (FULL closure) | Validated |
+| PERT-DESIGN-05 | Phase 4 (FULL closure) | Validated |
+| PERT-DESIGN-06 | Phase 4 (FULL closure) | Validated |
 | PERT-REL-01 | Phase 5 | Active |
 | PERT-REL-02 | Phase 5 | Active |
 | PERT-REL-03 | Phase 5 | Active |
