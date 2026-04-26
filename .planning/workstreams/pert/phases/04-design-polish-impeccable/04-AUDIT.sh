@@ -71,7 +71,12 @@ check "4 Red-Means-Wrong (PertInputs + +page.svelte)" grep -rnE "color-error" sr
 # Rule 5: Five-Roles-Only (typography)
 # No arbitrary text-Npx, no text-xs/sm/lg/xl in PERT route files (NumericInput
 # range hint is shared-component-inherited, not a PERT violation).
-check "5 Five-Roles-Only" grep -rEn "text-(xs|sm|lg|xl|\\[)\\b" src/lib/pert/PertCalculator.svelte src/lib/pert/PertInputs.svelte src/routes/pert/+page.svelte
+# Wave 3 fix (04-03 Task 2 deviation): the original regex `text-(xs|sm|lg|xl|\[)\b`
+# false-flagged `text-[var(--color-*)]` color tokens which are NOT typography
+# violations. Restrict the bracket alternative to numeric/dimension forms only:
+# `text-[<digit>...` or `text-[#...` -- the actual typography-arbitrary-size shape.
+# Color tokens `text-[var(...)]` are the standard convention and pass.
+check "5 Five-Roles-Only" grep -rEn "text-(xs|sm|lg|xl|\\[[0-9#])" src/lib/pert/PertCalculator.svelte src/lib/pert/PertInputs.svelte src/routes/pert/+page.svelte
 
 # Rule 6: Tabular-Numbers (>=5 hits in PertCalculator)
 check_min "6 Tabular-Numbers (PertCalculator class=\"num\" hits >=5)" 5 \
