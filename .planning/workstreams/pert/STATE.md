@@ -3,23 +3,23 @@ gsd_state_version: 1.0
 milestone: v1.14
 milestone_name: Kendamil Formulas + Desktop Full Nav
 status: executing
-last_updated: "2026-04-26T05:00:00.000Z"
-last_activity: 2026-04-26 -- Phase 04 COMPLETE (Wave 3 plan 04-03 closed; PERT-DESIGN-01..06 Validated)
+last_updated: "2026-04-26T18:00:00.000Z"
+last_activity: 2026-04-26 -- Phase 04 Wave 4 (gap closure plan 04-04) closed; F-03 Approach C escalation approved by human UAT
 progress:
   total_phases: 6
   completed_phases: 4
-  total_plans: 11
-  completed_plans: 11
+  total_plans: 12
+  completed_plans: 12
 ---
 
 # Project State - Workstream `pert`
 
 ## Current Position
 
-Phase: 04 (design-polish-impeccable) -- COMPLETE 2026-04-26
-Plan: 3 of 3 (Wave 3 plan 04-03 closed)
-Status: Phase 4 closed. Phase 5 (release) is next.
-Last activity: 2026-04-26 -- Ran /gsd-execute-phase 4 wave 3; plan 04-03 closed Phase 4 with all 18 gates green; aggregate score 36.25/40 (Wave 1 baseline 35.6/40, delta +0.65); 8/8 contexts at >=35/40; zero unhandled P1; AUDIT.sh exit 0; PERT-DESIGN-01..06 flipped Active -> Validated.
+Phase: 04 (design-polish-impeccable) -- COMPLETE 2026-04-26 (Wave 3 closure + Wave 4 gap-closure plan 04-04 shipped)
+Plan: 4 of 4 (Wave 4 gap-closure plan 04-04 closed; F-03 hierarchy gap from 04-UAT.md resolved by human-eye UAT verdict `approved`)
+Status: Phase 4 closed; F-03 gap row resolved. Phase 5 (release) is next.
+Last activity: 2026-04-26 -- Ran /gsd-execute-phase 4 wave 4 (gap closure); plan 04-04 shipped F-03 Approach C eyebrow `tracking-wide` -> `tracking-wider` on Tube-Feed Capsules per month row in PertCalculator.svelte (commit `d82aa30`; line 288); F-03 numeral `font-extrabold` from Wave 2 commit `29306e7` preserved byte-identical; combined two-commit delta IS the full Approach C COMBINED RECIPE per 04-02-PLAN.md `<interfaces>` lines 147-150; human-eye visual UAT checkpoint returned `approved` (verbatim); all 9 plan-level quality gates green; PERT-route allowlist + D-08b strictly-forbidden boundary enforced (only PertCalculator.svelte modified); REQUIREMENTS.md NOT touched (gap row resolution flows through `/gsd-verify-work 4 --ws pert`).
 
 Phases Complete: 4 / 6
 
@@ -37,11 +37,22 @@ Phases Complete: 4 / 6
 - **Backlog seeded by Phase 4 (cross-calculator items):** F-01 NumericInput template en-dash (~1 LOC; v1.15.x hotfix or v1.16 carrier); F-02 NavShell sticky-overlay layering (~5-15 LOC investigation; v1.16 carrier); pert-config.json:137 invalidLipaseRate en-dash (~1 LOC; same v1.16 carrier as F-01); F-04 mobile InputDrawer trigger pushes hero down (P3; D-08b boundary); F-05 desktop sticky-aside max-width tightening (P3; +page.svelte layout work). None block v1.15 release-readiness.
 - **Phase 4 vs Phase 3.1 baseline deltas:** svelte-check 0 (unchanged); vitest 425 (unchanged); pnpm build 575.99 KiB (-0.04 KiB; well within +/-5 KiB); pert-a11y 4 (unchanged); pert.spec 12 (unchanged); full Playwright 117 + 1 baseline flake (unchanged); files modified across phase 0 -> 3 src + 1 repo-root (additive). Phase 3.1 invariants intact: function-binding bridges 3, string-bridge proxies 0, em-dash 0 on PertCalculator.svelte, tabular-numerals 9, STOP-red carve-out byte-identical.
 
+## Phase 4 Wave 4 outcomes (HEAD 78686f9; gap-closure plan 04-04 ships F-03 Approach C eyebrow half + human-UAT corrective process insertion)
+
+- **Wave 4 -- Plan 04-04 (commits `d82aa30` Task 1 + `78686f9` Task 4):** Gap-closure plan authored after human UAT (recorded in 04-UAT.md test #1) contradicted the Wave 3 LLM-Design-Review verdict on F-03. The user reported the F-03 fix (Approach A: numeral `font-bold` -> `font-extrabold` from Wave 2 commit `29306e7`) is NOT visually distinguishable at the rendered text-title (22px) Plus Jakarta Sans scale -- "all 4 numerals read at equivalent weight by eye". Wave 4 ships the eyebrow half of the plan-anticipated COMBINED RECIPE (Approach C per 04-02-PLAN.md `<interfaces>` lines 147-150): a 1-token swap `tracking-wide` -> `tracking-wider` on the Capsules per month eyebrow `<div>` in `src/lib/pert/PertCalculator.svelte` (line 288). The numeral `<span>` on line 293 is byte-identical with Wave 2 commit `29306e7`. The combined two-commit delta (`29306e7` numeral + `d82aa30` eyebrow) IS the full Approach C COMBINED RECIPE.
+- **Human-eye visual UAT corrective process insertion:** the LLM-Design-Review fallback used at Phase 4 closure (Wave 3 plan 04-03) certified F-03 as PASS based on 8 FINAL critique transcripts but the screenshot-driven critique did not surface the perceptible-hierarchy-bump issue that human UAT immediately caught. Wave 4 inserts a `checkpoint:human-verify` gate as Task 3 of plan 04-04; the user reviewed the rendered Tube-Feed mode at `/pert` post-Approach-C-escalation and typed `approved` (verbatim, single-token). Lesson encoded as a hard process gate: human-eye review is non-substitutable for typographic hierarchy assertions where the LLM may report DOM-level structural correctness without registering the perceptual gap.
+- **All 9 plan-level quality gates green:** (1) `pnpm run check` -> 0 errors / 0 warnings (~4586 files); (2) `pnpm exec vitest run src/lib/pert/` -> 81 passed (5 test files; matches Phase 3.1 + Phase 4 PERT-subset baseline); (3) em-dash + en-dash sweep on PertCalculator.svelte -> 0/0; (4) tabular-numerals `.num` count = 9 (>= 5; UI-SPEC Gate 12); (5) F-03 numeral preserved (`font-extrabold` count = 1 byte-identical with commit `29306e7`); (6) Approach C bump landed (`tracking-wider` count = 1 on the Capsules per month eyebrow; `tracking-wide`-only count drops 8 -> 7); (7) function-binding bridges 3 hits in PertInputs.svelte; string-bridge proxies 0 (Phase 3.1 D-01 invariants preserved); (8) pert-config.json byte-identical against HEAD (Wave 2 commit `2dc7ae2` frozen); (9) plan-level negative-space audit -- exactly 1 file in Wave 4's diff (`src/lib/pert/PertCalculator.svelte`).
+- **D-08 PERT-route allowlist + D-08b strictly-forbidden boundary enforced:** only `src/lib/pert/PertCalculator.svelte` modified in Wave 4's source diff. PertInputs.svelte (Phase 3.1 frozen) byte-identical; pert-config.json (Phase 4 commit `2dc7ae2` frozen) byte-identical; calc-layer files (calculations.ts, state.svelte.ts, types.ts, config.ts) byte-identical; shared components, NavShell, HamburgerMenu, other calculators, DESIGN.md, DESIGN.json, e2e specs all untouched.
+- **Phase 3.1 + Phase 4 invariants preserved:** function-binding bridges 3 hits in PertInputs.svelte; zero string-bridge proxies (KI-1 structural fix preserved); em-dash + en-dash 0/0 across PertCalculator.svelte; STOP-red advisory carve-out byte-identical (downstream of the Wave 4 edit at lines ~310-322); F-03 numeral `font-extrabold` byte-identical from Wave 2 commit `29306e7`; Identity-Inside Rule preserved (eyebrow color token `text-[var(--color-identity)]` unchanged; Approach C is a TRACKING change, NOT a color change); Pitfall 4 selector preservation honored (visible text `Capsules per month` and numeral expression `{tubeFeedResult.capsulesPerMonth.toLocaleString('en-US')}` byte-identical; e2e selectors at `e2e/pert.spec.ts` continue to match without update).
+- **REQUIREMENTS.md NOT touched by Wave 4:** PERT-DESIGN-02..05 stay Validated mid-plan; the Validated state was Phase 4's own LLM-driven verdict at Wave 3 closure, and re-opening would require a deliberate flip outside this plan's scope. The 04-UAT.md gap row test #1 resolution flows through `/gsd-verify-work 4 --ws pert`: the verifier reads 04-04-SUMMARY.md's Human-visual UAT outcome section, sees the verbatim `approved` verdict, marks the gap row resolved, and confirms PERT-DESIGN-02..05 stay Validated; Phase 4 closure is re-confirmed; the workstream is unblocked for Phase 5 (Release).
+- **Escalation ladder forward note preserved (for any future regression's gap-closure pickup):** Approach D (numeral `text-title` 22px -> `text-[28px]` or `text-display` 44px) and Approach E (visual isolation: `bg-[var(--color-identity-hero)]/30` background tint, `border-t-2 border-[var(--color-identity)]` top divider, or icon prefix) documented in 04-04-SUMMARY.md as the next escalation rungs for any future regression on the F-03 surface (or analogous typographic hierarchy bump in another calculator's secondaries section). Recommendation: ship Approach D before Approach E (typographic vectors exhausted before container-level cues). One approach per Wave-N gap-closure plan; do NOT chain. Replan command: `/gsd-plan-phase 4 --gaps --ws pert` after re-running UAT.
+
 ## Phase 4 deviations applied (all auto, none Rule-4)
 
 - **04-01 (Wave 1):** 4 deviations -- (1) reused user's existing port-5173 dev server instead of starting/tearing down own (`--strictPort` collision avoidance); (2) `/impeccable` slash command + Skill tool not available -- applied LLM-Design-Review fallback per orchestrator setup note #9 via Playwright snapshot capture; (3) plan's verify regex `' -- |-'` is broken (matches every literal hyphen); reinterpreted intent as Workstream Q1 broad ban -- `grep -cP '\x{2014}|\x{2013}'` and verified 0/0 on PRODUCT.md / FINDINGS.md / 04-01-SUMMARY.md; (4) Pitfall 5 hard-guard regex false-positives on prose mentioning the rule (semantic intent: no F-row pairs fix-now with shared-component path; verified manually). Recommendations recorded for future plans.
 - **04-02 (Wave 2):** 2 deviations -- (1) `pnpm install --frozen-lockfile` ran in fresh worktree to enable Gate 1 + Gate 2 (node_modules gitignored; no diff pollution); (2) `pnpm test:run -- src/lib/pert/` filter syntax ran full 425 tests instead of PERT subset 81 (npm-script wrapper quirk); used `pnpm exec vitest run src/lib/pert/` directly. Recommendations recorded.
 - **04-03 (Wave 3):** 1 deviation in-phase -- AUDIT.sh Rule 5 regex tightened in place at commit `3001c2a` (Wave 1 deviation #3 follow-up; the script lives in the phase directory and is itself a Phase 4 artifact; tightening the regex resolves the false-positive without code-side impact). Plus 1 finding documented as PASS-with-backlog-note: pre-existing U+2013 at `pert-config.json:137` (Phase 4 did NOT regress; pre-Phase-4 baseline; tracked for v1.16).
+- **04-04 (Wave 4):** 0 deviations during Task 1 + Task 2 + Task 4. The plan's recipe was applied verbatim. Task 3 was the deliberate `checkpoint:human-verify` gate (the corrective process insertion); the user's resume signal `approved` was captured per the plan's spec. Note for future plans: the `tracking-wide` vs `tracking-wider` substring overlap means a bare `grep -c 'tracking-wide'` over-counts; the disambiguating pattern `grep -oE 'tracking-wide(r|[^a-z]|"|$)' file | grep -v 'tracking-wider' | wc -l` is documented in 04-04-SUMMARY.md for any future Tailwind-utility-bump plan on tokens with substring relationships.
 
 ## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
 
