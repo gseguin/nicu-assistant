@@ -7,21 +7,21 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **COMPLETE 2026-04-26 (all 4 plans shipped; clinical gate green; PERT-TEST-05 PARTIAL → FULL)**
-Plan: 03.1-04 (Wave 3 — clinical gate) COMPLETE — verification-only run. All 7 gates green: svelte-check 0/0 (4586 files); vitest 425/425 (41 files); pnpm build OK (PWA 49 entries / 576.03 KiB, -0.45 KiB vs Phase 3 baseline 576.48 KiB); CI=1 pert-a11y 4/4 (Phase-1-frozen); CI=1 pert.spec **12/12** (the SC-5 closure: was 8/8 in Phase 3); CI=1 full Playwright 117/118 (1 known baseline flake on disclaimer-banner.spec.ts:28 — same as Phase 1+2+3, accepted); negative-space audit clean (`git diff --name-only f2ef1d3..HEAD -- src/ e2e/` returns EXACTLY 3 files: `e2e/pert.spec.ts`, `src/lib/pert/PertInputs.svelte`, `src/lib/pert/PertInputs.test.ts`; all 12 protected files verified empty diff).
-Status: 4 of 4 plans complete (100%). Phase 3.1 closed. PERT-TEST-05 FULL. KI-1 RESOLVED at Plan 03.1-01 `f2da16d`.
-Last activity: 2026-04-26 — Completed /gsd-execute-phase 3.1 plan 04 (Wave 3 clinical gate). Phase 3.1 COMPLETE.
+Phase: Phase 4 — Design Polish (`/impeccable` Critique Sweep) — **CONTEXT CAPTURED 2026-04-26, UI-SPEC + PLAN PENDING**
+Plan: Phase 4 CONTEXT.md committed with D-01..D-11 (8 critique passes — theme×viewport×mode; Phase 42.2 P1/P2/P3 triage rubric; ≥35/40 target; scripted DESIGN.md named-rule audit; 3-wave structure with Wave 2 replan beat; PERT-route-only negative-space contract).
+Status: Phase 3.1 closed. Phase 4 discuss-phase done; awaiting /gsd-ui-phase 4 --ws pert (frontend-heavy phase, ui_phase + ui_safety_gate enabled), then /gsd-plan-phase 4 --ws pert.
+Last activity: 2026-04-26 — Ran /gsd-discuss-phase 4 --ws pert --auto; auto-resolved 11 gray areas grounded in Phase 42.2 v1.13 precedent + DESIGN.md/DESIGN.json contract + Phase 1/2/3.1 outcomes.
 
 ## Progress
 
-**Phases Complete:** 3 / 6 (Phase 3 PARTIAL closed by Phase 3.1 FULL; Phase 3.1 COMPLETE)
-**Current Plan:** Phase 3.1 — DONE; ready for Phase 4 (Design Polish via /impeccable critique sweep)
+**Phases Complete:** 3 / 6 (Phase 3 PARTIAL closed by Phase 3.1 FULL; Phase 3.1 COMPLETE; Phase 4 IN PLANNING)
+**Current Plan:** Phase 4 — discuss done; next /gsd-ui-phase + /gsd-plan-phase
 
 ## Session Continuity
 
-**Stopped At:** Phase 3.1 Wave 3 (clinical gate) COMPLETE — 03.1-04 SUMMARY + STATE/ROADMAP/REQUIREMENTS/known-issues updates committed
-**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-04-SUMMARY.md` (Wave 3 clinical gate evidence + PERT-TEST-05 FULL closure record)
-**Next Action:** Run `/gsd-verify-work 3.1 --ws pert` to validate the closure, then `/gsd-plan-phase 4 --ws pert` to begin Phase 4 (Design Polish — `/impeccable` critique sweep, ≥35/40 score target, P1 fixes pre-merge).
+**Stopped At:** Phase 4 CONTEXT captured (HEAD pending Phase 4 commit)
+**Resume File:** `.planning/workstreams/pert/phases/04-design-polish-impeccable/04-CONTEXT.md` (D-01..D-11 plus sub-decisions)
+**Next Action:** `/gsd-ui-phase 4 --ws pert --auto` (generate Phase 4 UI design contract — UI-SPEC.md), then `/gsd-plan-phase 4 --ws pert --auto` (Wave 1 critique + Wave 3 verify; Wave 2 replanned after Wave 1 ships findings). After Phase 4 closes, /gsd-plan-phase 5 --ws pert (release).
 
 ## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
 
