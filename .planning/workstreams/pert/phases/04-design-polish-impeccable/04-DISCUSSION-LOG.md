@@ -170,3 +170,22 @@
 **Lesson retained:** the Oral hierarchy inversion was missed by both (a) Wave 1 LLM-Design-Review fallback and (b) Wave 4 checkpoint:human-verify (which only inspected Tube-Feed because that's where F-03 originated). D-13's audit gate ("explicitly inspect prescribing artifact in BOTH modes") is the structural correction.
 
 **Auto-advance:** to `/gsd-plan-phase 4 --gaps --ws pert` (Wave 5 plan).
+
+---
+
+## Gap-closure pass — 2026-04-26 (--auto, --gaps, weight-in-Oral)
+
+**Trigger:** Wave 5 UAT verbatim user follow-up after `approved` on D-12 + D-13: `"...but it looks like weight isn't used in oral mode. double check against .xlsx. If that's the case remove it"`. Investigation against `epi-pert-calculator.xlsx` (Pediatric PERT Tool sheet, B4 cell traced through B9/B10/B11) confirmed weight is used ONLY by `B11 = B4*10000` (max-lipase-cap safety advisory PERT-SAFE-01); it is NOT used in dose-calculation cells (B9 = B5*B6; B10 = ROUND(B9/B8, 0)). Removing weight = clinical-safety regression. The real gap is UX: weight reads as a regular dose input but only fires the safety check.
+
+**Mode:** `--auto --gaps` — single-pass discuss; auto-resolve with recommended default; auto-advance to plan-phase.
+
+**Gray area identified:**
+1. Weight-in-Oral-mode UX: how to clarify the safety-only role without disabling PERT-SAFE-01
+
+**Auto-decisions:**
+
+- **D-14** [Q: How to resolve weight-in-Oral UX ambiguity?] → **"Option 3 — mode-conditional helper text"** (recommended default). 3-LOC sibling `<p>` element added below the weight input in `PertInputs.svelte`; gated `{#if pertState.current.mode === 'oral'}`; copy something like "Used for the 10,000 units/kg/day safety check, not the dose calculation." Tube-Feed unchanged (weight IS used in Tube-Feed for `lipasePerKg` secondary output per xlsx Tube-Feed B13). Lowest LOC; preserves Phase 3.1 function-binding bridges; preserves Pitfall 4 e2e selectors; PERT-route only; no D-08b violation (RangedNumericInput shared component NOT touched). Option 1 (separate section header) and Option 2 (gate isOralValid optional weight) considered but rejected — Option 1 risks bridge regression, Option 2 degrades clinical safety.
+
+**Lesson retained:** when an input is required for a SAFETY check but not for the primary calculation, the UX should make the safety-only role explicit. Otherwise clinicians may infer the input affects the dose, leading to either misplaced confidence (when the input is set) or disabled-safety risk (when the user is tempted to skip it). D-14 codifies this for the Oral weight case; the same principle generalizes to any "safety-only input" pattern in future phases.
+
+**Auto-advance:** to `/gsd-plan-phase 4 --gaps --ws pert` (Wave 6 plan).
