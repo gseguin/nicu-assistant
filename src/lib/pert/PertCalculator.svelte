@@ -281,7 +281,7 @@
 					</div>
 				</div>
 
-				<!-- Capsules per month -->
+				<!-- Capsules per month (F-03: extra-bold to elevate prescribing artifact above derived siblings; Identity-Inside preserved). -->
 				<div class="flex items-baseline justify-between px-5 py-4">
 					<div>
 						<div
@@ -290,7 +290,7 @@
 							Capsules per month
 						</div>
 						<div class="flex items-baseline gap-2">
-							<span class="num text-title font-bold text-[var(--color-text-primary)]">
+							<span class="num text-title font-extrabold text-[var(--color-text-primary)]">
 								{tubeFeedResult.capsulesPerMonth.toLocaleString('en-US')}
 							</span>
 							<span class="text-ui text-[var(--color-text-secondary)]">capsules</span>
