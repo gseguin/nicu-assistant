@@ -148,3 +148,25 @@
 - `/impeccable document` regeneration — out of scope; v1.13 contract is locked.
 - Real-iPhone smoke test — v1.15.1 hotfix fuel, not CI.
 - Animation refinements — P3 default unless materially regressing clinical-trust polish.
+
+---
+
+## Gap-closure pass — 2026-04-26 (--auto, --gaps)
+
+**Trigger:** Phase 4 UAT test #4 surfaced an Oral hierarchy inversion (Estimated daily total renders smaller/lighter than its derived per-dose figures). Phase 2 D-09 LOCKED treatment is the source; can't ship a fix without amending D-09 first.
+
+**Mode:** `--auto --gaps` — single-pass discuss; auto-select all gray areas; auto-resolve each with recommended default; auto-advance to plan-phase.
+
+**Gray areas identified:**
+1. Phase 2 D-09 amendment for the Oral tertiary-line treatment
+2. Promote prescribing-artifact-leads principle to a cross-mode design rule
+
+**Auto-decisions:**
+
+- **D-12** [Q: How to amend D-09?] → **"Promote to prescribing-artifact treatment, mirror Tube-Feed Capsules per month"** — 3-token swap on `PertCalculator.svelte:213-227`. Identity-Inside Rule + Pitfall 4 selector preservation honored. Wave 5 ships.
+
+- **D-13** [Q: Codify cross-mode design rule?] → **"Yes, codify as Prescribing-Artifact-Leads Rule"** — generalizes Watch Item 5 from Tube-Feed-only to BOTH PERT modes. Workstream-local for now; DESIGN.md update deferred to v1.16 design-contract-refinement phase.
+
+**Lesson retained:** the Oral hierarchy inversion was missed by both (a) Wave 1 LLM-Design-Review fallback and (b) Wave 4 checkpoint:human-verify (which only inspected Tube-Feed because that's where F-03 originated). D-13's audit gate ("explicitly inspect prescribing artifact in BOTH modes") is the structural correction.
+
+**Auto-advance:** to `/gsd-plan-phase 4 --gaps --ws pert` (Wave 5 plan).
