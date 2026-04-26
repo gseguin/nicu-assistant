@@ -1,13 +1,14 @@
 ---
-status: diagnosed
+status: complete
 phase: 04-design-polish-impeccable
 workstream: pert
 source:
   - 04-01-SUMMARY.md
   - 04-02-SUMMARY.md
   - 04-03-SUMMARY.md
+  - 04-04-SUMMARY.md
 started: 2026-04-26T16:01:00Z
-updated: 2026-04-26T16:38:00Z
+updated: 2026-04-26T17:20:00Z
 ---
 
 ## Current Test
@@ -22,9 +23,25 @@ expected: |
   (font-extrabold) than the 3 sibling rows above it. Identity-purple eyebrow
   preserved. No text/numeral string changes.
 auto_verified: dom-inspection-pass
-result: issue
-reported: "User reports: at the rendered text-title scale (22px Plus Jakarta Sans) the font-bold (700) → font-extrabold (800) bump is not visually distinguishable. All 4 numerals read at equivalent weight. Approach A (numeral-only) is insufficient."
-severity: major
+result: resolved
+resolution_commit: d82aa30
+resolution_plan: 04-04-PLAN.md (Approach C escalation — eyebrow tracking-wider bump)
+user_verdict_on_approach_c: "approved"
+resolution_note: |
+  Initial result was "issue" against HEAD e6f454a (Wave 2 commit 29306e7 with Approach A
+  alone — numeral font-bold → font-extrabold). User reported the 700 → 800 weight delta
+  on Plus Jakarta Sans at text-title (22px) was not visually distinguishable.
+
+  Plan 04-04 (Wave 4 gap closure) shipped Approach C: eyebrow tracking-wide → tracking-wider
+  on the Capsules per month row at PertCalculator.svelte:288 (commit d82aa30). Combined with
+  the preserved Approach A numeral font-extrabold from commit 29306e7, the both-vectors
+  typographic delta (eyebrow letter-spacing 0.275 px → 0.55 px AND numeral weight 700 → 800)
+  was re-tested via human-eye visual UAT at the human-verify checkpoint in plan 04-04 Task 3.
+
+  User verdict (verbatim): "approved"
+  Re-tested context: light-desktop-tube-feed (the surfaced-issue context)
+  Re-tested at: 2026-04-26T17:08
+  Re-tested against: HEAD = 8cafd1d (Wave 4 closure tracking commit)
 
 ### 2. Oral mode unaffected
 expected: |
@@ -49,15 +66,18 @@ result: pass
 ## Summary
 
 total: 3
-passed: 2
-issues: 1
+passed: 3
+issues: 0
+resolved: 1
 pending: 0
 skipped: 0
 
 ## Gaps
 
 - truth: "Tube-Feed `Capsules per month` row reads visually distinct from the 3 derived rows (Total fat / Total lipase / Lipase per kg) so the prescribing artifact is findable faster. Approach A applied (numeral font-bold → font-extrabold) per 04-02-PLAN.md preferred recipe."
-  status: failed
+  status: resolved
+  resolution: "Plan 04-04 (Wave 4) shipped Approach C escalation (eyebrow tracking-wider bump at line 288). Combined with preserved Approach A numeral font-extrabold (line 293), the both-vectors typographic delta closes the F-03 hierarchy gap. User-visual UAT at plan 04-04 Task 3 human-verify checkpoint returned verbatim verdict `approved` on 2026-04-26T17:08."
+  was_failed_status:
   reason: "User reports the font-weight 700 → 800 delta on Plus Jakarta Sans at text-title (22px) does not produce a perceptible hierarchy bump. All 4 numerals read at equivalent weight by eye. The plan anticipated this and offered Approach C (also bump eyebrow tracking-wide → tracking-wider) as the fallback. Need to apply Approach C, or escalate the typographic delta further (e.g. text-title → text-display on Capsules per month, OR add an isolating visual treatment such as a subtle background tint, top divider, or eyebrow size bump)."
   severity: major
   test: 1
