@@ -281,11 +281,11 @@
 					</div>
 				</div>
 
-				<!-- Capsules per month (F-03: extra-bold to elevate prescribing artifact above derived siblings; Identity-Inside preserved). -->
+				<!-- Capsules per month (F-03 + Approach C escalation: extra-bold numeral + wider eyebrow letter-spacing to elevate prescribing artifact above derived siblings; Identity-Inside preserved). -->
 				<div class="flex items-baseline justify-between px-5 py-4">
 					<div>
 						<div
-							class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+							class="text-2xs font-semibold tracking-wider text-[var(--color-identity)] uppercase"
 						>
 							Capsules per month
 						</div>
