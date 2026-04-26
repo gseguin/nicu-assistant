@@ -88,3 +88,27 @@ Recommend **option 2 (`$derived`-backed binding wrapper)** for the follow-up pha
 - `src/lib/feeds/FeedAdvanceInputs.svelte:55-74` (the analog that "works" because feeds has no external state mutations on the bridged field)
 - `src/lib/pert/PertInputs.test.ts:75-86` (the D-11 test that breaks under both hotfix attempts)
 - `e2e/pert.spec.ts` (Phase 3 — the dropped tests are commented in-file at the location they would have lived)
+
+### RESOLVED in Phase 3.1 (2026-04-26)
+
+**Status:** RESOLVED — KI-1 closed at Plan 03.1-01 commit `f2da16d` (the bridge fix); regression guards locked at Plan 03.1-02 commit `dfb6a62` (component tier) + Plan 03.1-03 commit `0d9636f` (e2e tier); clinical gate verification + PERT-TEST-05 FULL closure record at Plan 03.1-04 (SUMMARY: `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-04-SUMMARY.md`).
+
+**Resolution path taken:** Option 2 from the original recommended-resolution list (`$derived`-backed binding wrapper) — implemented via Svelte 5.9+ function bindings `bind:value={() => getter, (v) => setter}` per CONTEXT D-01. The fix replaced 3 string-bridge `$state` proxies + 6 bidirectional `$effect` blocks in `PertInputs.svelte` (lines 74-134 pre-fix) with 3 inline function-binding wrappers at the existing `<SelectPicker>` markup sites. Net delta: −27 LOC in PertInputs.svelte. Zero `$effect` involvement in the bridge path means zero registration-order race. SelectPicker.svelte was NOT touched (D-02 zero-change contract upheld); the shared component remains byte-identical for feeds / fortification / gir / uac-uvc consumers.
+
+**Architectural collision (read-vs-write effect order with D-11) eliminated:** The new pattern has no `$effect` at all for the bridge, so the trade-off described above (satisfy picker-click direction OR external-state-mutation direction, never both) no longer applies. The standalone D-11 `lastMedId` effect was preserved byte-identical and continues to work because it does not interact with the new function-binding bridge — when D-11 mutates `pertState.current.strengthValue = null` externally, the strength wrapper's getter (which reads `pertState.current.strengthValue` reactively) re-evaluates on the next microtask flush and the SelectPicker re-renders with the empty placeholder. Verified by the existing `PertInputs.test.ts:75-86` D-11 reset test staying green WITHOUT modification per D-03 contract, plus the new D-04 external-mutation propagation test in `PertInputs.test.ts:124-149` (Plan 03.1-02).
+
+**E2e closure (PERT-TEST-05 PARTIAL → FULL):** The 4 picker-driven happy-path runner cases (2 unique tests x 2 viewports) shipped at Plan 03.1-03 (`0d9636f`). pert.spec went from 8/8 (Phase 3 PARTIAL) to 12/12 (Phase 3.1 FULL). The clinical gate at Plan 03.1-04 verified the count is exactly 12. PERT-TEST-05 is now FULL; the requirement was flipped `[ ]` → `[x]` in `.planning/workstreams/pert/REQUIREMENTS.md` with the traceability row updated `Active` → `Validated`.
+
+**Phase traceability (final):**
+
+- Bug originated: Phase 2 Plan 02-03 (PertInputs.svelte initial implementation; commit `3171b06`)
+- Bug discovered: Phase 3 Plan 03-04 e2e execution (2026-04-25)
+- Hotfix attempt 1 (mechanical swap): rejected by D-11 test failure
+- Hotfix attempt 2 (fold D-11): rejected by external-write race on medication
+- Disposition (Phase 3): deferred to a follow-up phase; Phase 3 shipped partial PERT-TEST-05 coverage
+- Follow-up phase shipped: Phase 3.1 (4 plans, Wave 1 + Wave 2 + Wave 3)
+  - Plan 03.1-01 `f2da16d`: bridge fix (Svelte 5.9+ function bindings)
+  - Plan 03.1-02 `dfb6a62`: D-01 click-persist + D-04 external-mutation regression guards (component tier)
+  - Plan 03.1-03 `0d9636f`: 2 picker-driven e2e happy-paths (Oral + Tube-Feed) x 2 viewports = 4 new runner cases
+  - Plan 03.1-04: clinical gate verification + PERT-TEST-05 FULL closure record
+- Final outcome: KI-1 RESOLVED; KI-1 will not ship to v1.15 release. Worst-case clinical impact (clinicians cannot complete the picker flow) is fully eliminated.

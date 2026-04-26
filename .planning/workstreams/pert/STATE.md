@@ -7,21 +7,21 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **WAVE 2 (component tests + e2e tests) COMPLETE 2026-04-26, WAVE 3 (clinical gate) NEXT**
-Plan: 03.1-03 (Wave 2 — e2e tests) COMPLETE — 2 new picker-driven happy-path tests shipped at commit `0d9636f`. e2e/pert.spec.ts 197 -> 259 LOC (+78 / -16 = +62 net). Deleted the 17-line Phase-3 deferred-prose comment block (D-05 reframing) which removed the 2 D-08 em-dash hits as a side effect. Authored Oral mode happy-path (capsulesPerDose=4) + Tube-Feed mode happy-path (capsulesPerDay=5 + capsulesPerMonth=150), each running × 2 viewports = 4 new runner cases. svelte-check 0/0; CI=1 pert.spec 12/12 (was 8/8); CI=1 pert-a11y 4/4 (unchanged). Wave 3: 03.1-04 clinical gate.
-Status: 3 of 4 plans complete (75%). Component-tier + e2e-tier coverage of the function-binding bridge shipped. Clinical gate is the only remaining plan.
-Last activity: 2026-04-26 — Completed /gsd-execute-phase 3.1 plan 03 (Wave 2 e2e tests). Wave 3 clinical gate (03.1-04) next.
+Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **COMPLETE 2026-04-26 (all 4 plans shipped; clinical gate green; PERT-TEST-05 PARTIAL → FULL)**
+Plan: 03.1-04 (Wave 3 — clinical gate) COMPLETE — verification-only run. All 7 gates green: svelte-check 0/0 (4586 files); vitest 425/425 (41 files); pnpm build OK (PWA 49 entries / 576.03 KiB, -0.45 KiB vs Phase 3 baseline 576.48 KiB); CI=1 pert-a11y 4/4 (Phase-1-frozen); CI=1 pert.spec **12/12** (the SC-5 closure: was 8/8 in Phase 3); CI=1 full Playwright 117/118 (1 known baseline flake on disclaimer-banner.spec.ts:28 — same as Phase 1+2+3, accepted); negative-space audit clean (`git diff --name-only f2ef1d3..HEAD -- src/ e2e/` returns EXACTLY 3 files: `e2e/pert.spec.ts`, `src/lib/pert/PertInputs.svelte`, `src/lib/pert/PertInputs.test.ts`; all 12 protected files verified empty diff).
+Status: 4 of 4 plans complete (100%). Phase 3.1 closed. PERT-TEST-05 FULL. KI-1 RESOLVED at Plan 03.1-01 `f2da16d`.
+Last activity: 2026-04-26 — Completed /gsd-execute-phase 3.1 plan 04 (Wave 3 clinical gate). Phase 3.1 COMPLETE.
 
 ## Progress
 
-**Phases Complete:** 2.75 / 6 (Phase 3 PARTIAL; Phase 3.1 IN PROGRESS — 3/4 plans complete)
-**Current Plan:** Phase 3.1 — Wave 2 (component tests + e2e tests) done; next step Wave 3 clinical gate (03.1-04)
+**Phases Complete:** 3 / 6 (Phase 3 PARTIAL closed by Phase 3.1 FULL; Phase 3.1 COMPLETE)
+**Current Plan:** Phase 3.1 — DONE; ready for Phase 4 (Design Polish via /impeccable critique sweep)
 
 ## Session Continuity
 
-**Stopped At:** Phase 3.1 Wave 2 (e2e tests) COMPLETE — 03.1-03 SUMMARY + STATE update committed
-**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-03-SUMMARY.md` (Wave 2 e2e test outcomes), `03.1-04-PLAN.md` (Wave 3 — clinical gate)
-**Next Action:** Continue `/gsd-execute-phase 3.1 --ws pert` — Plan 03.1-04 (clinical gate: 7-gate sequence + PERT-TEST-05 FULL closure record). After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
+**Stopped At:** Phase 3.1 Wave 3 (clinical gate) COMPLETE — 03.1-04 SUMMARY + STATE/ROADMAP/REQUIREMENTS/known-issues updates committed
+**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-04-SUMMARY.md` (Wave 3 clinical gate evidence + PERT-TEST-05 FULL closure record)
+**Next Action:** Run `/gsd-verify-work 3.1 --ws pert` to validate the closure, then `/gsd-plan-phase 4 --ws pert` to begin Phase 4 (Design Polish — `/impeccable` critique sweep, ≥35/40 score target, P1 fixes pre-merge).
 
 ## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
 
@@ -41,6 +41,15 @@ Last activity: 2026-04-26 — Completed /gsd-execute-phase 3.1 plan 03 (Wave 2 e
 - **Wave 2 (e2e tests) — Plan 03.1-03 (`0d9636f`):** EDITED `e2e/pert.spec.ts` (197 → 259 LOC, +78 / −16 = +62 net). Deleted the 17-line `// DEFERRED (Phase 3 known-issue):` prose comment block at pre-edit lines 56-71 (D-05 reframing applied per RESEARCH: the deferred Phase 3 picker tests did NOT exist commented-in-file; this plan AUTHORED 2 new tests rather than uncommenting any). The 2 D-08 em-dash hits inside that prose block disappeared as a side effect — no separate em-dash sweep task. Authored 2 new picker-driven happy-path tests at the deletion site, each running × 2 viewports = 4 new runner cases: (1) `Oral mode happy path: weight=10 + fat=25 + lipase=2000 + Creon + 12,000 units → capsulesPerDose=4` (round(25×2000/12000)); (2) `Tube-Feed mode happy path: Tube-Feed tab + weight=15 + Kate Farms Pediatric Standard 1.2 + volume=1500 + lipase=2500 + Pancreaze + 37,000 units → capsulesPerDay=5 + capsulesPerMonth=150`. Locator strategy honors RESEARCH Pitfall 6 (scope-relative trigger + page-level option). D-11 cascade timing handled via polled assertion on the strength placeholder (`await expect(scope.getByRole('button', { name: /^Strength/ })).toContainText(/Select strength/)`) before each strength-picker click — no magic timeouts.
 - **Quality gates:** svelte-check 0/0 (4586 files); CI=1 pert.spec 12/12 (was 8/8 — +4 new picker-driven runner cases); CI=1 pert-a11y 4/4 (unchanged from Phase 1+2+3 baseline); pert-a11y.spec.ts byte-identical (D-07 verified empty diff); em-dash + en-dash count: 0 / 0 (D-08 closed).
 - **Negative-space audit:** `git diff --name-only HEAD~1 -- src/ e2e/` returns ONLY `e2e/pert.spec.ts`. PertInputs.svelte byte-identical, PertInputs.test.ts byte-identical, SelectPicker.svelte byte-identical, state.svelte.ts byte-identical, calculations.ts byte-identical (all empty diffs verified). Per-plan disjoint scope honored.
+
+## Phase 3.1 Wave 3 (clinical gate) outcomes (HEAD f89fc37 pre-this-plan-commit, baseline f2ef1d3 → 7 commits across the phase)
+
+- **Wave 3 — clinical gate — Plan 03.1-04 (commit pending):** Verification-only run; NO source/test/config edits inside `src/` or `e2e/`. Per-plan source diff `git diff HEAD -- src/ e2e/` is empty. Captured 7-gate evidence at `/tmp/03.1-04-gates/gate-*.log`.
+- **All 7 gates green:** (1) `pnpm exec svelte-check` → 0 errors / 0 warnings (4586 files); (2) `pnpm test:run` → 425 passed (41 files; matches Phase 3.1 Wave 2 baseline of Phase-3-baseline 423 + 2 Plan 03.1-02 D-06 cases = 425); (3) `pnpm build` → exit 0; PWA precache 49 entries / 576.03 KiB (-0.45 KiB vs Phase 3 baseline 576.48 KiB; well under +5 KiB tolerance); (4) `CI=1 pnpm exec playwright test pert-a11y` → 4 passed (Phase-1-frozen, unchanged); (5) `CI=1 pnpm exec playwright test pert.spec` → **12 passed** (the SC-5 closure: was 8/8 in Phase 3, +4 picker-driven runner cases shipped by Plan 03.1-03); (6) `CI=1 pnpm exec playwright test` → 117 passed, 1 failed where the 1 failure is the same pre-existing `disclaimer-banner.spec.ts:28 > Disclaimer Banner (D-12, D-14, D-15) > dismiss + reload keeps banner hidden (v2 persistence)` baseline flake that Phase 1+2+3 all carried (verifier accepts per established precedent); (7) negative-space audit `git diff --name-only f2ef1d3..HEAD -- 'src/' 'e2e/'` returns EXACTLY 3 files (`e2e/pert.spec.ts`, `src/lib/pert/PertInputs.svelte`, `src/lib/pert/PertInputs.test.ts`); all 12 protected files in RESEARCH §Files NOT to touch verified `0 lines diff` against the baseline (SelectPicker.svelte, FeedAdvanceInputs.svelte, FortificationInputs.svelte, state.svelte.ts, calculations.ts, pert-config.json, config.ts, types.ts, PertCalculator.svelte, +page.svelte, test-setup.ts, vite.config.ts).
+- **Em-dash + en-dash sweep across the 3 in-scope files:** all 0 hits (Workstream Q1 broad ban honored across PertInputs.svelte, PertInputs.test.ts, pert.spec.ts — the 2 D-08 em-dash hits originally flagged in pert.spec.ts pre-edit lines 65/70 disappeared as a side effect of Plan 03.1-03's prose-block deletion per D-05 reframing).
+- **PERT-TEST-05 closure transition:** Phase 3 PARTIAL (8/8 e2e, picker happy-paths deferred per KI-1) → Phase 3.1 FULL (12/12 e2e, all picker happy-paths green; click-persist + external-mutation regression guards locked at component tier). REQUIREMENTS.md PERT-TEST-05 row flipped `[ ]` → `[x]`; traceability table flipped `Active` → `Validated` (with phase mapping `Phase 3 + Phase 3.1 (FULL closure)`).
+- **5 ROADMAP success criteria mapped to verifying Plan + Gate** (per 03.1-04-SUMMARY.md): SC-1 (clinician click persists for medication/strength/formula) → Plan 03.1-02 D-01 component test + Plan 03.1-03 e2e Oral happy-path + Tube-Feed happy-path → Gates 2 + 5; SC-2 (D-11 contract preserved) → existing PertInputs.test.ts:75-86 D-11 reset test + Plan 03.1-03 Tube-Feed e2e (Pancreaze after Creon) → Gates 2 + 5; SC-3 (external mutation propagates) → Plan 03.1-02 D-04 component test → Gate 2; SC-4 (Phase 3 tests stay green) → full vitest 425/425 + pert-a11y 4/4 → Gates 2 + 4; SC-5 (12/12 picker tests) → Plan 03.1-03 e2e + Gate 5.
+- **KI-1 disposition:** RESOLVED at Plan 03.1-01 `f2da16d` (Svelte 5.9+ function-binding wrappers structurally eliminated the bidirectional `$effect` race). known-issues.md KI-1 entry annotated with the RESOLVED disposition note (cites Phase 3.1 + commit `f2da16d`).
 
 ## Phase 3.1 deviations applied (all auto, none Rule-4)
 

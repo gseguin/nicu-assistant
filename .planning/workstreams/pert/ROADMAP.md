@@ -18,7 +18,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 - [ ] **Phase 1: Architecture, Identity Hue & Clinical Data** — Foundations: registry entry, `/pert` route shell, `.identity-pert` OKLCH tokens, `pert-config.json`, AboutSheet entry, NavShell ternary extension. Wave 0 latent-bug prep so downstream phases compile cleanly.
 - [ ] **Phase 2: Calculator Core (Both Modes + Safety)** — Oral mode, Tube-Feed mode, SegmentedToggle mode switching, shared inputs across modes, max-lipase safety advisory, range advisories, empty-state messaging.
 - [ ] **Phase 3: Tests** — Spreadsheet-parity vitest (Oral + Tube-Feed fixture matrices), config shape tests, component tests, Playwright E2E mobile + desktop, 2 axe sweeps (light + dark) added to extended axe suite.
-- [ ] **Phase 3.1: KI-1 Resolution — SelectPicker Click-Revert Bug Fix** (INSERTED 2026-04-25) — Fix the bidirectional `bind:value` race in `<PertInputs />` SelectPicker bridges so clicks persist instead of silently reverting. Closes the 4 picker-driven happy-path e2e tests deferred from Phase 3 (PERT-TEST-05 partial).
+- [x] **Phase 3.1: KI-1 Resolution — SelectPicker Click-Revert Bug Fix** (INSERTED 2026-04-25; **COMPLETE 2026-04-26**) — Fix the bidirectional `bind:value` race in `<PertInputs />` SelectPicker bridges so clicks persist instead of silently reverting. Closes the 4 picker-driven happy-path e2e tests deferred from Phase 3. PERT-TEST-05 PARTIAL → FULL.
 - [ ] **Phase 4: Design Polish (`/impeccable` Critique Sweep)** — Light + dark × mobile + desktop critique pass, P1 fixes pre-merge, DESIGN.md / DESIGN.json contract enforcement, ≥35/40 score target.
 - [ ] **Phase 5: Release** — Version bump, AboutSheet version reflect, full clinical gate, PROJECT.md / ROADMAP / main-PROJECT integration, workstream-completion artifacts.
 
@@ -75,7 +75,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
   - [x] 03.1-01-PLAN.md — Replace SelectPicker string-bridge proxies in PertInputs.svelte with Svelte 5 function bindings (KI-1 root-cause fix) — **COMPLETE 2026-04-25 (commit `f2da16d`)**: PertInputs.svelte 248 -> 221 LOC, svelte-check 0/0, vitest 423/423, D-11 reset test green without modification per D-03
   - [x] 03.1-02-PLAN.md — Add D-01 click-persist + D-04 external-mutation regression-guard component tests to PertInputs.test.ts — **COMPLETE 2026-04-25 (commit `dfb6a62`)**: PertInputs.test.ts 96 -> 153 LOC (+57 additive), 7 -> 9 it() cases, full vitest 425/425 (was 423; +2 new), svelte-check 0/0, existing 7 cases byte-identical per D-03 (verified zero removed lines)
   - [x] 03.1-03-PLAN.md — Author 2 picker-driven happy-path e2e tests in pert.spec.ts (Oral + Tube-Feed); delete deferred prose comment block — **COMPLETE 2026-04-26 (commit `0d9636f`)**: e2e/pert.spec.ts 197 -> 259 LOC (+62 net), CI=1 pert.spec 12/12 (was 8/8; +4 new picker-driven runner cases = 2 new unique tests × 2 viewports), CI=1 pert-a11y 4/4 (unchanged), svelte-check 0/0, em-dash + en-dash count: 0 / 0 (D-08 closed as side effect of prose-block deletion per D-05 reframing). PERT-TEST-05 now ready for FULL closure record at Plan 03.1-04 clinical gate.
-  - [ ] 03.1-04-PLAN.md — Clinical gate (verification only): 7-gate sequence + PERT-TEST-05 FULL closure record
+  - [x] 03.1-04-PLAN.md — Clinical gate (verification only): 7-gate sequence + PERT-TEST-05 FULL closure record — **COMPLETE 2026-04-26 (commit pending)**: All 7 gates green (svelte-check 0/0; vitest 425/425; pnpm build OK at PWA 49 entries / 576.03 KiB; CI=1 pert-a11y 4/4; CI=1 pert.spec **12/12**; CI=1 full Playwright 117/118 with the same 1 baseline flake on disclaimer-banner.spec.ts:28 as Phase 1+2+3; negative-space audit clean — exactly 3 files modified across the entire phase). PERT-TEST-05 transitioned PARTIAL → FULL. Phase 3.1 closed.
 **Resolution recommendation** (per KI-1 known-issue analysis): Option 2 — `$derived`-backed binding wrapper for SelectPicker `bind:value` in PertInputs.svelte. Eliminates the bidirectional `$effect` race at the source; smallest blast radius; no shared-component change. Alternative: Option 1 (add `onValueChange` callback prop to SelectPicker — touches a shared component used by feeds/gir/uac-uvc, larger scope).
 **Origin**: Bug originated Phase 2 plan 02-03 (`3171b06`); discovered Phase 3 plan 03-04 e2e execution (2026-04-25); two failed hotfix attempts during Phase 3 confirmed the fix requires architectural change rather than effect-order tweak. Full root-cause + 3 candidate paths documented at `.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/known-issues.md` (KI-1).
 
@@ -109,7 +109,7 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 | 1. Architecture, Identity Hue & Clinical Data | 0/0 | Not started | - |
 | 2. Calculator Core (Both Modes + Safety) | 0/0 | Not started | - |
 | 3. Tests | 0/0 | Not started | - |
-| 3.1. KI-1 Resolution (SelectPicker bridge) | 2/4 | In progress | 2026-04-25 (Wave 2 — plan 02 component tests) |
+| 3.1. KI-1 Resolution (SelectPicker bridge) | 4/4 | Complete | 2026-04-26 (Wave 3 — plan 04 clinical gate; PERT-TEST-05 FULL) |
 | 4. Design Polish (`/impeccable` Critique Sweep) | 0/0 | Not started | - |
 | 5. Release | 0/0 | Not started | - |
 
@@ -145,4 +145,4 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 - Plan numbering inside each phase will follow `01-*`, `02-*`, etc. and is decided at `/gsd-plan-phase` time.
 
 ---
-*Last updated: 2026-04-25 — Phase 3.1 Wave 2 component tests (plan 03.1-02) complete; commit `dfb6a62`*
+*Last updated: 2026-04-26 — Phase 3.1 COMPLETE (Wave 3 clinical gate, plan 03.1-04). All 4 plans shipped (`f2da16d`, `dfb6a62`, `0d9636f`, plan-04 commit pending). PERT-TEST-05 PARTIAL → FULL. Next phase: Phase 4 (Design Polish via /impeccable critique sweep).*

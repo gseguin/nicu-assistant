@@ -72,7 +72,7 @@ REQ-ID format: `PERT-[CATEGORY]-[NN]`. Numbering is workstream-local; integratio
 - [ ] **PERT-TEST-02**: Spreadsheet-parity vitest within 1% epsilon for Tube-Feed mode — at least 3 weight × 3 formula × 2 volume fixtures including the xlsx default (weight 15 lbs → ~6.80 kg, Kate Farms Pediatric Standard 1.2 at 40 g/L, volume 1000 mL → expected capsules per `B13` and capsules/month per `B14`)
 - [ ] **PERT-TEST-03**: Component tests for `PertCalculator.svelte` covering empty / valid Oral flow / valid Tube-Feed flow / mode-switch / SegmentedToggle keyboard nav / formula picker search / advisory rendering / max-lipase advisory firing
 - [ ] **PERT-TEST-04**: Config shape tests — every medication has `brand` + `strengths[]`, every formula has `name` + `fatGPerL`, no entries fall outside FDA strength sets
-- [ ] **PERT-TEST-05**: Playwright E2E happy-path at mobile 375 + desktop 1280, both modes, with `inputmode="decimal"` regression guard, favorites round-trip (favorite from hamburger → reload → persists), sessionStorage round-trip
+- [x] **PERT-TEST-05**: Playwright E2E happy-path at mobile 375 + desktop 1280, both modes, with `inputmode="decimal"` regression guard, favorites round-trip (favorite from hamburger → reload → persists), sessionStorage round-trip — **FULL closure 2026-04-26 (Phase 3.1 plan 04 clinical gate, commit pending)**: pert.spec at 12/12 (Phase 3 PARTIAL was 8/8; +4 picker-driven runner cases shipped by Plan 03.1-03 `0d9636f`). KI-1 RESOLVED at Plan 03.1-01 `f2da16d` (Svelte 5.9+ function-binding wrappers).
 - [ ] **PERT-TEST-06**: Playwright axe sweeps in light + dark for the `/pert` route, added to the existing extended axe suite — must pass on first run (research-before-PR contract)
 
 ### Visual Design Polish (`PERT-DESIGN-*`)
@@ -162,7 +162,7 @@ Phase mapping for milestone v1.15. Workstream-local phase numbering (1..5). All 
 | PERT-TEST-02 | Phase 3 | Active |
 | PERT-TEST-03 | Phase 3 | Active |
 | PERT-TEST-04 | Phase 3 | Active |
-| PERT-TEST-05 | Phase 3 | Active |
+| PERT-TEST-05 | Phase 3 + Phase 3.1 (FULL closure) | Validated |
 | PERT-TEST-06 | Phase 3 | Active |
 | PERT-DESIGN-01 | Phase 4 | Active |
 | PERT-DESIGN-02 | Phase 4 | Active |
