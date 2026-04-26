@@ -1,5 +1,5 @@
 // e2e/desktop-full-nav.spec.ts
-// NAV-ALL-TEST-01: Desktop top toolbar renders the full registry (5 calculators)
+// NAV-ALL-TEST-01: Desktop top toolbar renders the full registry (6 calculators)
 // regardless of favorites state. Mobile bottom bar still tracks favorites.
 // Pattern source: e2e/favorites-nav.spec.ts (viewport loop, addInitScript clear, hamburger toggle).
 
@@ -13,7 +13,7 @@ test.describe('Desktop full-nav divergence (Phase 45)', () => {
 		});
 	});
 
-	test('NAV-ALL-TEST-01a: desktop @1280 renders all 5 calculators (default favorites = 4)', async ({
+	test('NAV-ALL-TEST-01a: desktop @1280 renders all 6 calculators in registry (alphabetical) order', async ({
 		page
 	}) => {
 		await page.setViewportSize({ width: 1280, height: 800 });
@@ -25,15 +25,16 @@ test.describe('Desktop full-nav divergence (Phase 45)', () => {
 
 		const desktopNav = page.locator('nav[aria-label="Calculator navigation"]').first();
 		const tabs = desktopNav.getByRole('tab');
-		await expect(tabs).toHaveCount(5);
-		await expect(tabs.nth(0)).toContainText('Morphine');
+		await expect(tabs).toHaveCount(6);
+		await expect(tabs.nth(0)).toContainText('Feeds');
 		await expect(tabs.nth(1)).toContainText('Formula');
 		await expect(tabs.nth(2)).toContainText('GIR');
-		await expect(tabs.nth(3)).toContainText('Feeds');
-		await expect(tabs.nth(4)).toContainText('UAC/UVC');
+		await expect(tabs.nth(3)).toContainText('Morphine');
+		await expect(tabs.nth(4)).toContainText('PERT');
+		await expect(tabs.nth(5)).toContainText('UAC/UVC');
 	});
 
-	test('NAV-ALL-TEST-01b: un-favorite Feeds via hamburger → desktop still 5, mobile 3', async ({
+	test('NAV-ALL-TEST-01b: un-favorite Feeds via hamburger → desktop still 6, mobile 3', async ({
 		page
 	}) => {
 		// Start at desktop viewport
@@ -51,9 +52,9 @@ test.describe('Desktop full-nav divergence (Phase 45)', () => {
 		await page.keyboard.press('Escape');
 		await page.getByRole('dialog').waitFor({ state: 'hidden' });
 
-		// Desktop unchanged: still 5
+		// Desktop unchanged: still 6
 		const desktopNav = page.locator('nav[aria-label="Calculator navigation"]').first();
-		await expect(desktopNav.getByRole('tab')).toHaveCount(5);
+		await expect(desktopNav.getByRole('tab')).toHaveCount(6);
 		await expect(desktopNav.getByRole('tab', { name: /feeds/i })).toBeVisible();
 
 		// Resize to mobile and verify the bottom bar reflects 3 favorites
@@ -63,7 +64,7 @@ test.describe('Desktop full-nav divergence (Phase 45)', () => {
 		await expect(mobileNav.getByRole('tab', { name: /feeds/i })).toHaveCount(0);
 	});
 
-	test('NAV-ALL-TEST-01c: zero favorites → desktop still renders all 5', async ({ page }) => {
+	test('NAV-ALL-TEST-01c: zero favorites → desktop still renders all 6', async ({ page }) => {
 		await page.addInitScript(() => {
 			localStorage.setItem('nicu:favorites', JSON.stringify({ v: 1, ids: [] }));
 		});
@@ -75,10 +76,10 @@ test.describe('Desktop full-nav divergence (Phase 45)', () => {
 			.catch(() => {});
 
 		const desktopNav = page.locator('nav[aria-label="Calculator navigation"]').first();
-		await expect(desktopNav.getByRole('tab')).toHaveCount(5);
+		await expect(desktopNav.getByRole('tab')).toHaveCount(6);
 	});
 
-	test('NAV-ALL-TEST-01d: narrow desktop @768 — all 5 tabs rendered, container scrolls horizontally', async ({
+	test('NAV-ALL-TEST-01d: narrow desktop @768 — all 6 tabs rendered, container scrolls horizontally', async ({
 		page
 	}) => {
 		// 768 = Tailwind md breakpoint, the narrowest viewport that shows the desktop nav.
@@ -90,9 +91,9 @@ test.describe('Desktop full-nav divergence (Phase 45)', () => {
 			.catch(() => {});
 
 		const desktopNav = page.locator('nav[aria-label="Calculator navigation"]').first();
-		await expect(desktopNav.getByRole('tab')).toHaveCount(5);
+		await expect(desktopNav.getByRole('tab')).toHaveCount(6);
 
-		// The active tab (UAC/UVC, the 5th tab) auto-scrolls into view per A2.
+		// The active tab (UAC/UVC, the last tab) auto-scrolls into view per A2.
 		const activeTab = desktopNav.getByRole('tab', { name: /uac/i });
 		// Element should be in the visible scroll viewport (not clipped beyond the right edge).
 		await expect(activeTab).toBeInViewport();

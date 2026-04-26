@@ -216,7 +216,7 @@ for (const viewport of [
 		test.use({ viewport: { width: viewport.width, height: viewport.height } });
 		const isDesktop = viewport.width >= 768;
 
-		test('favorite PERT -> nav shows PERT tab + 4 tabs total', async ({ page }) => {
+		test('favorite PERT -> nav shows PERT tab + correct count for viewport', async ({ page }) => {
 			// Pre-seed 3 of 4 alphabetical defaults so the 4th slot is open. Mirrors
 			// e2e/favorites-nav.spec.ts:76-79. PERT is NOT in the seed; the test
 			// verifies the add path.
@@ -243,14 +243,16 @@ for (const viewport of [
 			await page.getByRole('button', { name: /add pert to favorites/i }).click();
 			await page.keyboard.press('Escape');
 			await page.getByRole('dialog').waitFor({ state: 'hidden' });
-			// Bar shows 4 tabs; PERT is one of them. first() = desktop top nav,
-			// last() = mobile bottom nav (mirrors favorites-nav.spec.ts:60-61).
+			// Phase 45 divergence: desktop nav is registry-driven (6 tabs always),
+			// mobile bottom nav is favorites-driven (4 tabs after adding PERT).
+			// first() = desktop top nav, last() = mobile bottom nav.
 			const nav = isDesktop
 				? page.locator('nav[aria-label="Calculator navigation"]').first()
 				: page.locator('nav[aria-label="Calculator navigation"]').last();
-			await expect(nav.getByRole('tab')).toHaveCount(4);
+			await expect(nav.getByRole('tab')).toHaveCount(isDesktop ? 6 : 4);
 			await expect(nav.getByRole('tab', { name: /pert/i })).toBeVisible();
-			// localStorage persisted with PERT included.
+			// localStorage persisted with PERT included (the contract that matters
+			// regardless of viewport — desktop visibility is favorites-independent).
 			const stored = await page.evaluate(() => localStorage.getItem('nicu:favorites'));
 			const parsed = JSON.parse(stored as string);
 			expect(parsed.ids).toContain('pert');

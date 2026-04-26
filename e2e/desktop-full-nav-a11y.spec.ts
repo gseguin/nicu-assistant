@@ -1,5 +1,5 @@
 // e2e/desktop-full-nav-a11y.spec.ts
-// NAV-ALL-TEST-03: Axe sweep of the desktop top toolbar with all 5 tabs rendered,
+// NAV-ALL-TEST-03: Axe sweep of the desktop top toolbar with all 6 tabs rendered,
 // in light + dark themes. Verifies no contrast regressions from added calculator labels.
 // Pattern source: e2e/fortification-a11y.spec.ts (for-theme loop, no-transition class, axe analyze).
 
@@ -10,13 +10,13 @@ test.describe('Desktop full-nav accessibility (NAV-ALL-TEST-03)', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
   test.beforeEach(async ({ page }) => {
-    // Default favorites (4) — desktop still renders all 5 regardless, but keeps the page in
+    // Default favorites (4) — desktop still renders all 6 regardless, but keeps the page in
     // the canonical state.
     await page.addInitScript(() => {
       localStorage.removeItem('nicu:favorites');
       localStorage.removeItem('nicu:disclaimer-accepted');
     });
-    // Land on /uac-uvc so the 5th tab is the active one (worst case for the auto-scroll
+    // Land on /uac-uvc so the last tab is the active one (worst case for the auto-scroll
     // affordance + scroll-fade interaction).
     await page.goto('/uac-uvc');
     await page
@@ -35,9 +35,9 @@ test.describe('Desktop full-nav accessibility (NAV-ALL-TEST-03)', () => {
       }, theme);
       if (theme === 'dark') await page.waitForTimeout(250);
 
-      // Confirm desktop nav is rendered with all 5 tabs before scanning
+      // Confirm desktop nav is rendered with all 6 tabs before scanning
       const desktopNav = page.locator('nav[aria-label="Calculator navigation"]').first();
-      await expect(desktopNav.getByRole('tab')).toHaveCount(5);
+      await expect(desktopNav.getByRole('tab')).toHaveCount(6);
 
       const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
 
