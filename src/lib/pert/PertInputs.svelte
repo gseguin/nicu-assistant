@@ -122,6 +122,11 @@
 			id="pert-weight"
 			sliderAriaLabel="Weight slider"
 		/>
+		{#if pertState.current.mode === 'oral'}
+			<p class="text-ui text-[var(--color-text-secondary)]">
+				Used for the 10,000 units/kg/day safety check, not the dose calculation.
+			</p>
+		{/if}
 	</section>
 
 	{#if pertState.current.mode === 'oral'}
