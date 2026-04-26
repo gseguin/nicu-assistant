@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 04-design-polish-impeccable
 workstream: pert
 source:
@@ -8,7 +8,7 @@ source:
   - 04-03-SUMMARY.md
   - 04-04-SUMMARY.md
 started: 2026-04-26T16:01:00Z
-updated: 2026-04-26T17:20:00Z
+updated: 2026-04-26T17:30:00Z
 ---
 
 ## Current Test
@@ -63,11 +63,35 @@ auto_verified: |
   - 1 unrelated console warning: apple-mobile-web-app-capable deprecation (pre-existing baseline, not introduced by F-03)
 result: pass
 
+### 4. Oral mode prescribing-artifact hierarchy parity with Tube-Feed
+expected: |
+  In Oral mode, "Estimated daily total (3 meals/day)" is the prescribing
+  artifact for daily-script + parent-education workflows (capsules/day = the
+  number ordered against). It should mirror Tube-Feed's "Capsules per month"
+  visual treatment so the prescribing artifact reads as the row that matters
+  most regardless of mode: numeral text-title font-extrabold (not text-base
+  font-medium), eyebrow tracking-wider (not tracking-wide). Currently it
+  reads SMALLER and LIGHTER than the per-dose derived figures above it
+  (Total lipase needed, Lipase per dose), which is a hierarchy inversion.
+result: issue
+reported: "User reports: 'Estimated daily total (3 meals/day) should present the same as Capsules per month'. The current rendering puts the daily prescribing artifact visually below the per-dose derived figures. Currently: numeral text-base font-medium (16px / weight 500); eyebrow tracking-wide (0.275px). Should mirror Capsules-per-month: text-title font-extrabold (22px / weight 800); eyebrow tracking-wider (0.55px)."
+severity: major
+locked_decision_conflict: |
+  This finding contradicts Phase 2 LOCKED decision D-09 (.planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/02-CONTEXT.md:94-98), which prescribed the tertiary text-base + font-medium treatment. D-09 was authored under the assumption that the per-dose figures are the prescribing artifact and the daily total is informational/derived.
+
+  The user's point: clinically the daily total IS the prescribing artifact for daily-script and parent-education workflows. Even when it isn't, hierarchy INVERSION (prescribing artifact rendered SMALLER than derived figures) is worse than parity.
+
+  Fix path requires amending D-09 — that's a discuss-phase decision change, not a plan-level polish. The proper sequence:
+  1. /gsd-discuss-phase 4 --gaps --ws pert — author D-09a sub-decision: "Promote Estimated daily total to prescribing-artifact treatment (text-title font-extrabold + tracking-wider) to mirror Tube-Feed's Capsules per month and eliminate hierarchy inversion."
+  2. /gsd-plan-phase 4 --gaps --ws pert — author Wave 5 plan to ship the code change (3 token swaps on lines 215-221: tracking-wide → tracking-wider; text-base → text-title; font-medium → font-extrabold).
+  3. /gsd-execute-phase 4 --gaps-only --auto --ws pert — ship Wave 5.
+  4. /gsd-verify-work 4 --ws pert — re-test by eye.
+
 ## Summary
 
-total: 3
+total: 4
 passed: 3
-issues: 0
+issues: 1
 resolved: 1
 pending: 0
 skipped: 0
@@ -78,6 +102,24 @@ skipped: 0
   status: resolved
   resolution: "Plan 04-04 (Wave 4) shipped Approach C escalation (eyebrow tracking-wider bump at line 288). Combined with preserved Approach A numeral font-extrabold (line 293), the both-vectors typographic delta closes the F-03 hierarchy gap. User-visual UAT at plan 04-04 Task 3 human-verify checkpoint returned verbatim verdict `approved` on 2026-04-26T17:08."
   was_failed_status:
+
+- truth: "Oral mode `Estimated daily total (3 meals/day)` row reads with the same prescribing-artifact treatment as Tube-Feed `Capsules per month`: numeral text-title font-extrabold (22px / weight 800) + eyebrow tracking-wider (0.55px). The daily total is the prescribing artifact for daily-script and parent-education workflows; the current text-base font-medium tertiary treatment per Phase 2 D-09 inverts the hierarchy by rendering it SMALLER than the per-dose derived figures (Total lipase needed, Lipase per dose) above it."
+  status: failed
+  reason: "User-visual UAT (test #4) reports the Oral mode daily total renders smaller and lighter than the per-dose figures it derives from, inverting the prescribing-artifact hierarchy. The fix requires amending Phase 2 D-09 via /gsd-discuss-phase 4 --gaps --ws pert (locked decision change), then shipping the 3-token-swap code change via Wave 5 plan."
+  severity: major
+  test: 4
+  blocked_by: "Phase 2 D-09 LOCKED decision must be amended before Wave 5 plan can author the code change. /gsd-discuss-phase 4 --gaps --ws pert is the unblocking step."
+  artifacts:
+    - src/lib/pert/PertCalculator.svelte (lines 213-227 — the Estimated daily total row; eyebrow at line 215-216 currently `tracking-wide`; numeral at line 221 currently `text-base font-medium`; visible text at line 218 PRESERVED per Pitfall 4 selector preservation; numeral expression `oralResult.estimatedDailyTotal` at line 222 PRESERVED)
+    - .planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/02-CONTEXT.md (lines 94-98 — D-09 source decision)
+    - .planning/workstreams/pert/phases/02-calculator-core-both-modes-safety/02-04-PLAN.md (lines 33, 83-84 — D-09 enforcement in Phase 2 plan)
+    - .planning/workstreams/pert/phases/04-design-polish-impeccable/04-UI-SPEC.md (Watch Item 5 generalization candidate — the prescribing-artifact-must-lead principle that drove F-03 should now extend to Oral mode)
+  missing:
+    - Amended D-09 (call it D-09a or supersede outright) authorizing the prescribing-artifact treatment for Estimated daily total
+    - Wave 5 plan shipping the 3-token swap (tracking-wide → tracking-wider; text-base → text-title; font-medium → font-extrabold) on Oral row at PertCalculator.svelte:213-227
+  options:
+    - "Approach (canonical, mirrors Tube-Feed F-03 + 04-04 Approach C combined-vector treatment): 3-token swap on the existing Oral tertiary row in PertCalculator.svelte: line 216 `tracking-wide` → `tracking-wider`; line 221 `text-base` → `text-title`; line 221 `font-medium` → `font-extrabold`. Identity-Inside Rule preserved (eyebrow color token unchanged). Pitfall 4 preserved (visible text 'Estimated daily total (3 meals/day)' and numeral expression `oralResult.estimatedDailyTotal` unchanged). e2e/pert.spec.ts selector at line 132 (3-meals daily total assertion) still grep-matches. ~3 LOC, single file edit, PERT-route only, no D-08b violation."
+    - "Process: amend D-09 first via /gsd-discuss-phase 4 --gaps --ws pert. Without that, shipping the code change directly would silently override a LOCKED decision — the same anti-pattern that surfaced this gap (Phase 2 D-09 was locked under an assumption the user is now correcting). Discuss-phase produces D-09a sub-decision with the prescribing-artifact-must-lead principle generalized from Watch Item 5 to BOTH modes."
   reason: "User reports the font-weight 700 → 800 delta on Plus Jakarta Sans at text-title (22px) does not produce a perceptible hierarchy bump. All 4 numerals read at equivalent weight by eye. The plan anticipated this and offered Approach C (also bump eyebrow tracking-wide → tracking-wider) as the fallback. Need to apply Approach C, or escalate the typographic delta further (e.g. text-title → text-display on Capsules per month, OR add an isolating visual treatment such as a subtle background tint, top divider, or eyebrow size bump)."
   severity: major
   test: 1
