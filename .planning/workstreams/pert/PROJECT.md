@@ -64,6 +64,70 @@ Inherits all main-project constraints (PWA only, offline-first, WCAG 2.1 AA, emb
 | Cite xlsx + DailyMed in AboutSheet (not full NDA records) | The reference app's full FDA-source-record JSON is nice-to-have; the xlsx is the clinical authority for this app | Pending |
 | OKLCH identity hue researched pre-PR | v1.8 decision: axe-core retuning costs more than upfront audit | Pending |
 
+## v1.15 Closure (Pediatric EPI PERT Calculator -- 2026-04-26)
+
+Workstream `pert` v1.15.0 ships the sixth NICU Assistant calculator: Pediatric EPI PERT (Oral + Tube-Feed modes), parity-tested within ~1% epsilon against `epi-pert-calculator.xlsx` Pediatric tabs, integrated into the registry, navigation, AboutSheet, and PWA shell with zero regressions to the five shipped calculators (Morphine, Formula, GIR, Feeds, UAC/UVC) or the v1.13 favorites store / hamburger menu.
+
+### Newly Validated requirement IDs (v1.15.0 Phase 5)
+
+- PERT-REL-01 -- `package.json` bumped 1.13.0 -> 1.15.0; AboutSheet auto-flows via `__APP_VERSION__` Vite-define (commit `92e4a1c`)
+- PERT-REL-02 -- AboutSheet reflects `v1.15.0` for all 6 calculator entries (no `about-content.ts` edit needed); production bundle baked with the literal `1.15.0` at `build/_app/immutable/nodes/0.BbEh0vra.js:28`
+- PERT-REL-03 -- workstream PROJECT.md Validated list updated; main `.planning/PROJECT.md` fold-back deferred to `/gsd-workstreams complete pert` per 05-CONTEXT.md D-06
+- PERT-REL-04 -- workstream ROADMAP.md Progress rows flipped to Complete; orphan UAT debug artifacts cleaned (11 targets removed in commit `0024855`)
+- PERT-REL-05 -- 7-gate clinical gate green pre-bump (svelte-check 0/0; vitest 425/425; pnpm build 576.21 KiB; pert-a11y 4/4; pert.spec 12/12; disclaimer-banner targeted 6 passed + 1 baseline flake on `disclaimer-banner.spec.ts:28` per established Phase 1/2/3/3.1/4 precedent; PERT-route invariants all 9 assertions PASS)
+
+### Cross-reference to previously-Validated PERT-* requirement IDs
+
+All 49 IDs Validated post-Phase-3.1 + Phase 4 stay Validated:
+
+- PERT-ARCH-01..07 (Phase 1)
+- PERT-HUE-01..03 (Phase 1)
+- PERT-DATA-01..04 (Phase 1)
+- PERT-ORAL-01..08 (Phase 2)
+- PERT-TUBE-01..07 (Phase 2)
+- PERT-MODE-01..04 (Phase 2)
+- PERT-SAFE-01..04 (Phase 2; PERT-SAFE-01 referenced-not-modified at Phase 4 Wave 6)
+- PERT-TEST-01..04 + PERT-TEST-06 (Phase 3); PERT-TEST-05 (Phase 3 + Phase 3.1 FULL closure)
+- PERT-DESIGN-01..06 (Phase 4)
+
+Total v1.15 Validated: 54 / 54.
+
+### Phase closures
+
+- Phase 1 (Architecture, Identity Hue & Clinical Data) -- Complete 2026-04-24 (commits `34d64d6`, `f693b57`, `f7683bd`, `38468dd`, `d321580`, `805fd79`, `d9486ec`, `aa60629`)
+- Phase 2 (Calculator Core: Both Modes + Safety) -- Complete 2026-04-25 (commits `3a9b18f`, `6f05cfc`, `c1ba699`, `3171b06`, `b2e8e2b`, `1c74ef5`)
+- Phase 3 (Tests) -- Complete 2026-04-25 (commits `5d1356f`, `ad3bf36`, `3d45c7e`, `c56abf7`, `b83c0ea`)
+- Phase 3.1 (KI-1 Resolution: SelectPicker bridge fix) -- Complete 2026-04-26 (commits `f2da16d`, `dfb6a62`, `0d9636f`)
+- Phase 4 (Design Polish: /impeccable critique sweep) -- Complete 2026-04-26 (commits `eec18c2`, `e1e60cb`, `72be821`, `29306e7`, `136b624`, `2dc7ae2`, `5cd3386`, `95e31b0`, `3001c2a`, `33695e1`, `a6d9469`, `d82aa30`, `78686f9`, `f4565b4`, `618a66f`, `b0fe1a0`, `a5ed7d7`)
+- Phase 5 (Release) -- Complete 2026-04-26 (commits `0024855` cleanup, `92e4a1c` bump, plus the closure-record + SUMMARY commits authored by this plan)
+
+### Open backlog at workstream completion
+
+None of these block v1.15.0 release; all flagged for v1.15.x hotfix or v1.16 carrier:
+
+- F-01 NumericInput template en-dash (~1 LOC; v1.15.x or v1.16 cross-calculator polish phase)
+- F-02 NavShell sticky-overlay layering (~5-15 LOC investigation; v1.16 carrier)
+- `pert-config.json:137 invalidLipaseRate` en-dash (~1 LOC; same v1.16 carrier as F-01)
+- Weight-in-Oral UX evolution past Option 3 (Wave 6 D-14 helper text shipped; if future user feedback wants Option 1 -- separate section header -- or another rung, that is a v1.15.x or v1.16 cycle)
+
+### Workstream-completion handoff
+
+After Kendamil v1.14 ships on main, run from the main repo:
+
+```
+cd /mnt/data/src/nicu-assistant
+git fetch origin workspace/pert
+git merge workspace/pert
+git worktree remove /mnt/data/src/gsd-workspaces/pert/nicu-assistant
+/gsd-workstreams complete pert
+```
+
+The `/gsd-workstreams complete pert` handler:
+- Reads this PROJECT.md's v1.15 Closure section
+- Folds the 54 Validated PERT-* IDs into the main `.planning/PROJECT.md` Validated list
+- Updates the main `.planning/REQUIREMENTS.md` traceability
+- Archives the workstream
+
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries within the `pert` workstream.

@@ -113,12 +113,12 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Architecture, Identity Hue & Clinical Data | 0/0 | Not started | - |
-| 2. Calculator Core (Both Modes + Safety) | 0/0 | Not started | - |
-| 3. Tests | 0/0 | Not started | - |
+| 1. Architecture, Identity Hue & Clinical Data | 5/5 | Complete | 2026-04-24 (commits `34d64d6`, `f693b57`, `f7683bd`, `d321580`, `aa60629`; PERT-ARCH-01..07 + PERT-HUE-01..03 + PERT-DATA-01..04 Validated) |
+| 2. Calculator Core (Both Modes + Safety) | 4/4 | Complete | 2026-04-25 (commits `3a9b18f`, `6f05cfc`, `3171b06`, `b2e8e2b`; PERT-ORAL-01..08 + PERT-TUBE-01..07 + PERT-MODE-01..04 + PERT-SAFE-01..04 Validated) |
+| 3. Tests | 5/5 | Complete | 2026-04-25 (commits `5d1356f`, `ad3bf36`, `3d45c7e`, `c56abf7`, `b83c0ea`; PERT-TEST-01..04 + PERT-TEST-06 Validated; PERT-TEST-05 PARTIAL pending Phase 3.1 KI-1 fix) |
 | 3.1. KI-1 Resolution (SelectPicker bridge) | 4/4 | Complete | 2026-04-26 (Wave 3 — plan 04 clinical gate; PERT-TEST-05 FULL) |
 | 4. Design Polish (`/impeccable` Critique Sweep) | 6/6 | Complete | 2026-04-26 (Wave 3 plan 04-03 -- aggregate 36.25/40; 8/8 at >= 35/40; PERT-DESIGN-01..06 Validated. Wave 4 plan 04-04 -- F-03 Approach C escalation; human-UAT verdict `approved`; test #1 gap row resolved. Wave 5 plan 04-05 -- D-12 Oral hierarchy promotion + D-13 cross-mode parity codification; human-UAT verdict `approved`; test #4 gap row resolved; cross-mode parity structurally complete. Wave 6 plan 04-06 -- D-14 weight-in-Oral safety-only mode-conditional helper text; human-UAT verdict `approved`; cross-mode render confirmed -- helper visible in Oral, hidden in Tube-Feed; PERT-SAFE-01 referenced-not-modified; Wave-5 hand-off gap row resolved.) |
-| 5. Release | 0/1 | Planned | - (plan 05-01 authored 2026-04-26; ready for /gsd-execute-phase 5 --auto --ws pert) |
+| 5. Release | 1/1 | Complete | 2026-04-26 (plan 05-01: cleanup orphan artifacts; 7-gate clinical gate; bump v1.13.0 -> v1.15.0; workstream-local PROJECT.md / REQUIREMENTS.md / ROADMAP.md updates; PERT-REL-01..05 Validated; workstream-completion handoff documented for /gsd-workstreams complete pert) |
 
 ## Coverage Summary
 

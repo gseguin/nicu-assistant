@@ -86,11 +86,11 @@ REQ-ID format: `PERT-[CATEGORY]-[NN]`. Numbering is workstream-local; integratio
 
 ### Release (`PERT-REL-*`)
 
-- [ ] **PERT-REL-01**: `package.json` version bump (target version determined at completion based on whether v1.14 has shipped — likely v1.14.0 if pert ships first, else v1.15.0)
-- [ ] **PERT-REL-02**: AboutSheet reflects new version via `__APP_VERSION__` Vite-define constant
-- [ ] **PERT-REL-03**: Workstream `pert` PROJECT.md Validated list updated with all v1.15 entries; main `.planning/PROJECT.md` updated at workstream completion
-- [ ] **PERT-REL-04**: ROADMAP.md (workstream-local) Progress rows flipped to Complete; orphan planning artifacts cleaned
-- [ ] **PERT-REL-05**: Full clinical gate green pre-bump — `pnpm svelte-check` 0/0, `pnpm test` all green, `pnpm build` ✓, Playwright E2E + extended axe suite green in both themes (35/35 axe sweeps after adding 2)
+- [x] **PERT-REL-01**: `package.json` version bump (target version determined at completion based on whether v1.14 has shipped -- likely v1.14.0 if pert ships first, else v1.15.0) -- **FULL closure 2026-04-26 (Phase 5 plan 05-01, commit `92e4a1c` for the bump)**: package.json bumped 1.13.0 -> 1.15.0 single-line edit on line 4; AboutSheet auto-flows via __APP_VERSION__ Vite-define; no edit to about-content.ts.
+- [x] **PERT-REL-02**: AboutSheet reflects new version via `__APP_VERSION__` Vite-define constant -- **FULL closure 2026-04-26 (Phase 5 plan 05-01, commit `92e4a1c`)**: AboutSheet reflects v1.15.0 for all 6 calculator entries; verified at execute time via programmatic-fallback DOM probe (production bundle baked with the literal `1.15.0` at `build/_app/immutable/nodes/0.BbEh0vra.js:28`; see 05-01-SUMMARY.md).
+- [x] **PERT-REL-03**: Workstream `pert` PROJECT.md Validated list updated with all v1.15 entries; main `.planning/PROJECT.md` updated at workstream completion -- **FULL closure 2026-04-26 (Phase 5 plan 05-01, commit for the closure-record)**: Workstream PROJECT.md v1.15 Closure section appended; main .planning/PROJECT.md fold-back deferred to /gsd-workstreams complete pert per 05-CONTEXT.md D-06.
+- [x] **PERT-REL-04**: ROADMAP.md (workstream-local) Progress rows flipped to Complete; orphan planning artifacts cleaned -- **FULL closure 2026-04-26 (Phase 5 plan 05-01, commit `0024855` for the cleanup)**: Workstream ROADMAP.md Progress rows all flipped to Complete; orphan UAT debug artifacts cleaned in commit `0024855` (11 targets including .planning/workstreams/pert/phases/04-design-polish-impeccable/.continue-here.md, __capture.mjs, .playwright-mcp/, 8 UAT debug PNGs).
+- [x] **PERT-REL-05**: Full clinical gate green pre-bump -- `pnpm svelte-check` 0/0, `pnpm test` all green, `pnpm build` ✓, Playwright E2E + extended axe suite green in both themes (35/35 axe sweeps after adding 2) -- **FULL closure 2026-04-26 (Phase 5 plan 05-01, Task 2 verification-only)**: 7-gate clinical gate green pre-bump: svelte-check 0/0; vitest 425/425; pnpm build 576.21 KiB; pert-a11y 4/4; pert.spec 12/12; disclaimer-banner targeted 6 passed + 1 baseline flake on disclaimer-banner.spec.ts:28 per established Phase 1/2/3/3.1/4 precedent; PERT-route invariants all 9 assertions PASS.
 
 ---
 
@@ -170,10 +170,10 @@ Phase mapping for milestone v1.15. Workstream-local phase numbering (1..5). All 
 | PERT-DESIGN-04 | Phase 4 (FULL closure) | Validated |
 | PERT-DESIGN-05 | Phase 4 (FULL closure) | Validated |
 | PERT-DESIGN-06 | Phase 4 (FULL closure) | Validated |
-| PERT-REL-01 | Phase 5 | Active |
-| PERT-REL-02 | Phase 5 | Active |
-| PERT-REL-03 | Phase 5 | Active |
-| PERT-REL-04 | Phase 5 | Active |
-| PERT-REL-05 | Phase 5 | Active |
+| PERT-REL-01 | Phase 5 | Validated |
+| PERT-REL-02 | Phase 5 | Validated |
+| PERT-REL-03 | Phase 5 | Validated |
+| PERT-REL-04 | Phase 5 | Validated |
+| PERT-REL-05 | Phase 5 | Validated |
 
 **Total:** 54 requirements across 10 categories. Coverage: 54 / 54 mapped, 0 orphans, 0 duplicates.
