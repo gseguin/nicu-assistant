@@ -7,21 +7,10 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 4 — Design Polish (`/impeccable` Critique Sweep) — **CONTEXT CAPTURED 2026-04-26, UI-SPEC + PLAN PENDING**
-Plan: Phase 4 CONTEXT.md committed with D-01..D-11 (8 critique passes — theme×viewport×mode; Phase 42.2 P1/P2/P3 triage rubric; ≥35/40 target; scripted DESIGN.md named-rule audit; 3-wave structure with Wave 2 replan beat; PERT-route-only negative-space contract).
-Status: Phase 3.1 closed. Phase 4 discuss-phase done; awaiting /gsd-ui-phase 4 --ws pert (frontend-heavy phase, ui_phase + ui_safety_gate enabled), then /gsd-plan-phase 4 --ws pert.
-Last activity: 2026-04-26 — Ran /gsd-discuss-phase 4 --ws pert --auto; auto-resolved 11 gray areas grounded in Phase 42.2 v1.13 precedent + DESIGN.md/DESIGN.json contract + Phase 1/2/3.1 outcomes.
-
-## Progress
-
-**Phases Complete:** 3 / 6 (Phase 3 PARTIAL closed by Phase 3.1 FULL; Phase 3.1 COMPLETE; Phase 4 IN PLANNING)
-**Current Plan:** Phase 4 — discuss done; next /gsd-ui-phase + /gsd-plan-phase
-
-## Session Continuity
-
-**Stopped At:** Phase 4 CONTEXT captured (HEAD pending Phase 4 commit)
-**Resume File:** `.planning/workstreams/pert/phases/04-design-polish-impeccable/04-CONTEXT.md` (D-01..D-11 plus sub-decisions)
-**Next Action:** `/gsd-ui-phase 4 --ws pert --auto` (generate Phase 4 UI design contract — UI-SPEC.md), then `/gsd-plan-phase 4 --ws pert --auto` (Wave 1 critique + Wave 3 verify; Wave 2 replanned after Wave 1 ships findings). After Phase 4 closes, /gsd-plan-phase 5 --ws pert (release).
+Phase: Phase 4 — Design Polish (`/impeccable` Critique Sweep) — **PLANNED 2026-04-26, READY TO EXECUTE**
+Plan: Phase 4 has CONTEXT (D-01..D-11) + UI-SPEC (453 lines) + RESEARCH (HIGH confidence; /impeccable v3.0.1 API confirmed; PRODUCT.md gap surfaced + addressed) + 3 plans across 3 waves with explicit Wave 2 replan beat. Plan-checker VERIFICATION PASSED on all 10 dimensions; PERT-DESIGN-01..06 all covered.
+Status: Wave 1 (8-context critique sweep + PRODUCT.md authoring + FINDINGS triage) ready; Wave 2 placeholder triggers /gsd-plan-phase 4 --gaps after Wave 1; Wave 3 runs 18-gate verification (7 clinical + 11 design-polish).
+Last activity: 2026-04-26 — Completed /gsd-discuss-phase + /gsd-ui-phase + /gsd-plan-phase 4 --auto chain; spawning /gsd-execute-phase 4 next.
 
 ## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
 
