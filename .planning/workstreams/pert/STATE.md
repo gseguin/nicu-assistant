@@ -7,21 +7,21 @@ created: 2026-04-25
 
 ## Current Position
 
-Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **WAVE 2 (component tests) COMPLETE 2026-04-25, WAVE 2 (e2e) + WAVE 3 NEXT**
-Plan: 03.1-02 (Wave 2 — component tests) COMPLETE — 2 new KI-1 regression-guard tests shipped at commit `dfb6a62`. PertInputs.test.ts 96 -> 153 LOC (+57); 7 -> 9 it() cases. svelte-check 0/0; vitest 425/425 (was 423; +2 new = 425 exactly). Existing 7 cases byte-identical per D-03 (verified zero removed lines in git diff). Wave 2 sibling 03.1-03 (e2e tests) is the next plan; Wave 3: 03.1-04 clinical gate.
-Status: 2 of 4 plans complete (50%). Component-tier coverage of the function-binding bridge mechanism shipped (D-01 click-persist + D-04 external-mutation propagation). E2e-tier coverage of the user-visible symptom is next.
-Last activity: 2026-04-25 — Completed /gsd-execute-phase 3.1 plan 02 (Wave 2 component tests). Wave 2 e2e (03.1-03) next.
+Phase: Phase 3.1 — KI-1 Resolution (SelectPicker bridge fix) — **WAVE 2 (component tests + e2e tests) COMPLETE 2026-04-26, WAVE 3 (clinical gate) NEXT**
+Plan: 03.1-03 (Wave 2 — e2e tests) COMPLETE — 2 new picker-driven happy-path tests shipped at commit `0d9636f`. e2e/pert.spec.ts 197 -> 259 LOC (+78 / -16 = +62 net). Deleted the 17-line Phase-3 deferred-prose comment block (D-05 reframing) which removed the 2 D-08 em-dash hits as a side effect. Authored Oral mode happy-path (capsulesPerDose=4) + Tube-Feed mode happy-path (capsulesPerDay=5 + capsulesPerMonth=150), each running × 2 viewports = 4 new runner cases. svelte-check 0/0; CI=1 pert.spec 12/12 (was 8/8); CI=1 pert-a11y 4/4 (unchanged). Wave 3: 03.1-04 clinical gate.
+Status: 3 of 4 plans complete (75%). Component-tier + e2e-tier coverage of the function-binding bridge shipped. Clinical gate is the only remaining plan.
+Last activity: 2026-04-26 — Completed /gsd-execute-phase 3.1 plan 03 (Wave 2 e2e tests). Wave 3 clinical gate (03.1-04) next.
 
 ## Progress
 
-**Phases Complete:** 2.5 / 6 (Phase 3 PARTIAL; Phase 3.1 IN PROGRESS — 2/4 plans complete)
-**Current Plan:** Phase 3.1 — Wave 2 component tests done; next step Wave 2 e2e (03.1-03) then Wave 3 clinical gate (03.1-04)
+**Phases Complete:** 2.75 / 6 (Phase 3 PARTIAL; Phase 3.1 IN PROGRESS — 3/4 plans complete)
+**Current Plan:** Phase 3.1 — Wave 2 (component tests + e2e tests) done; next step Wave 3 clinical gate (03.1-04)
 
 ## Session Continuity
 
-**Stopped At:** Phase 3.1 Wave 2 (component tests) COMPLETE — 03.1-02 SUMMARY + STATE update committed
-**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-02-SUMMARY.md` (Wave 2 component test outcomes), `03.1-03-PLAN.md` (Wave 2 sibling — e2e tests), `03.1-04-PLAN.md` (Wave 3 — clinical gate)
-**Next Action:** Continue `/gsd-execute-phase 3.1 --ws pert` — Plan 03.1-03 (e2e tests: author 2 happy-path tests × 2 viewports = 4 runner cases, delete prose block, take pert.spec from 8/8 to 12/12). Then Plan 03.1-04 (clinical gate: 7-gate sequence). After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
+**Stopped At:** Phase 3.1 Wave 2 (e2e tests) COMPLETE — 03.1-03 SUMMARY + STATE update committed
+**Resume File:** `.planning/workstreams/pert/phases/03.1-selectpicker-bridge-fix/03.1-03-SUMMARY.md` (Wave 2 e2e test outcomes), `03.1-04-PLAN.md` (Wave 3 — clinical gate)
+**Next Action:** Continue `/gsd-execute-phase 3.1 --ws pert` — Plan 03.1-04 (clinical gate: 7-gate sequence + PERT-TEST-05 FULL closure record). After Phase 3.1 closes, resume normal flow with `/gsd-plan-phase 4 --ws pert`.
 
 ## Phase 3.1 Wave 1 outcomes (HEAD f2da16d, baseline f2ef1d3 → 1 commit)
 
@@ -36,10 +36,17 @@ Last activity: 2026-04-25 — Completed /gsd-execute-phase 3.1 plan 02 (Wave 2 c
 - **Quality gates:** svelte-check 0/0 (4586 files); PertInputs.test.ts 9/9 (was 7/7); PertCalculator.test.ts 10/10; calculations.test.ts 45/45; full vitest 425/425 (Phase 3 baseline 423 + 2 new = 425, exactly as expected by the plan); em-dash + en-dash count: 0 / 0.
 - **Negative-space audit:** `git diff --name-only HEAD~1 -- src/ e2e/` returns ONLY `src/lib/pert/PertInputs.test.ts`. PertInputs.svelte byte-identical, state.svelte.ts byte-identical, SelectPicker.svelte byte-identical (all empty diffs verified).
 
+## Phase 3.1 Wave 2 (e2e tests) outcomes (HEAD 0d9636f, baseline 5e3de9e → 1 commit)
+
+- **Wave 2 (e2e tests) — Plan 03.1-03 (`0d9636f`):** EDITED `e2e/pert.spec.ts` (197 → 259 LOC, +78 / −16 = +62 net). Deleted the 17-line `// DEFERRED (Phase 3 known-issue):` prose comment block at pre-edit lines 56-71 (D-05 reframing applied per RESEARCH: the deferred Phase 3 picker tests did NOT exist commented-in-file; this plan AUTHORED 2 new tests rather than uncommenting any). The 2 D-08 em-dash hits inside that prose block disappeared as a side effect — no separate em-dash sweep task. Authored 2 new picker-driven happy-path tests at the deletion site, each running × 2 viewports = 4 new runner cases: (1) `Oral mode happy path: weight=10 + fat=25 + lipase=2000 + Creon + 12,000 units → capsulesPerDose=4` (round(25×2000/12000)); (2) `Tube-Feed mode happy path: Tube-Feed tab + weight=15 + Kate Farms Pediatric Standard 1.2 + volume=1500 + lipase=2500 + Pancreaze + 37,000 units → capsulesPerDay=5 + capsulesPerMonth=150`. Locator strategy honors RESEARCH Pitfall 6 (scope-relative trigger + page-level option). D-11 cascade timing handled via polled assertion on the strength placeholder (`await expect(scope.getByRole('button', { name: /^Strength/ })).toContainText(/Select strength/)`) before each strength-picker click — no magic timeouts.
+- **Quality gates:** svelte-check 0/0 (4586 files); CI=1 pert.spec 12/12 (was 8/8 — +4 new picker-driven runner cases); CI=1 pert-a11y 4/4 (unchanged from Phase 1+2+3 baseline); pert-a11y.spec.ts byte-identical (D-07 verified empty diff); em-dash + en-dash count: 0 / 0 (D-08 closed).
+- **Negative-space audit:** `git diff --name-only HEAD~1 -- src/ e2e/` returns ONLY `e2e/pert.spec.ts`. PertInputs.svelte byte-identical, PertInputs.test.ts byte-identical, SelectPicker.svelte byte-identical, state.svelte.ts byte-identical, calculations.ts byte-identical (all empty diffs verified). Per-plan disjoint scope honored.
+
 ## Phase 3.1 deviations applied (all auto, none Rule-4)
 
 - 03.1-01: Two plan-side line-oriented grep gates returned 0 because the function-binding wrappers span multiple lines (`bind:value={` on its own line, `() => ...` on the next). Verified semantically with `perl -0777` multi-line aware count → 3 function bindings present (Formula 154/156, Medication 189/191, Strength 198/200). Pitfall 3 guard verified at line 205. svelte-check 0/0 confirms compile-time acceptance. The plan's verify regex assumes single-line layout; recommend updating to multi-line aware grep for future similar plans. D-11 doc-comment phrase update (lines 89-91) authorized explicitly by the plan's STEP C ("Default: update the comment as shown above"); code inside the effect is byte-identical.
 - 03.1-02: [Rule 1 - Bug] Plan-recommended selector `getByRole('button', { name: /Medication/i })` matched 2 buttons in the rendered DOM (Medication picker accessible name `"Medication Select medication"` AND Strength picker accessible name `"Strength Choose medication first"` — both contain "medication"), causing `getMultipleElementsFoundError`. Fixed both new tests by switching to anchored regex `/^Medication/`, which mirrors the canonical helper at `SelectPicker.test.ts:24` (`new RegExp('^' + label)`). Outcome assertions unchanged; the regex change is purely selector hardening. RESEARCH §Test Strategy did not enumerate the Strength picker's placeholder text in its DOM-shape inventory; recommend documenting the anchored form (`/^Label/`) as the default for SelectPicker trigger lookup in any future plan that mounts a component with sibling pickers whose placeholders share keywords.
+- 03.1-03: Three [Rule 1 - Bug] in-test selector fixes during the Playwright run (all in test code authored by this plan, not production): (1) Plan template used `getByRole('button', ...)` for the searchable Formula picker trigger; the actual rendered role is `combobox` (SelectPicker.svelte:172 sets `role={searchable ? 'combobox' : undefined}` so only the non-searchable Medication + Strength triggers are buttons). Fixed by switching the Formula trigger locator to `getByRole('combobox', ...)`. (2) Plan template used `getByRole('searchbox')` for the SelectPicker search input; the actual accessible role is `textbox` because SelectPicker.svelte:201 uses `<input type="text">` (not `type="search"`). Fixed by switching to `getByRole('textbox', { name: /Filter Formula/i })` per the plan's deviation-protocol fallback. (3) Final assertion `page.getByText('150')` strict-mode-collided with the `1500` Volume per day input value (substring match). Fixed by adding `{ exact: true }`. Plus 1 [Rule 1 - Style] em-dash self-remediation: 2 em-dashes I introduced in my own bug-fix comments were caught and replaced with periods before commit (final em-dash count: 0). Recommendations for future plans: (a) RESEARCH locator inventory should distinguish `searchable=true` (role=combobox) from `searchable=false` (role=button) per SelectPicker instance; (b) default to `getByRole('textbox', { name: /Filter ${label}/i })` for SelectPicker search inputs until SelectPicker.svelte adopts `type="search"`; (c) default to `{ exact: true }` for any `getByText(numericString)` assertion when a numeric input on the page might hold a superstring value.
 
 ## Phase 3 outcomes (HEAD 27dc39c, baseline e14f425 → 7 commits)
 
