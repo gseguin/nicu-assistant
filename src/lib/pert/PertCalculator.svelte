@@ -208,17 +208,17 @@
 					</div>
 				</div>
 
-				<!-- Tertiary line per D-09 verbatim.
-				     text-2xs eyebrow + text-base value (smaller than secondaries). -->
+				<!-- Prescribing-artifact line per D-12 (supersedes Phase 2 D-09 visual treatment).
+				     Same shape as Tube-Feed Capsules per month per D-13 Prescribing-Artifact-Leads Rule. -->
 				<div class="flex items-baseline justify-between px-5 py-4">
 					<div>
 						<div
-							class="text-2xs font-semibold tracking-wide text-[var(--color-identity)] uppercase"
+							class="text-2xs font-semibold tracking-wider text-[var(--color-identity)] uppercase"
 						>
 							Estimated daily total (3 meals/day)
 						</div>
 						<div class="flex items-baseline gap-2">
-							<span class="num text-base font-medium text-[var(--color-text-primary)]">
+							<span class="num text-title font-extrabold text-[var(--color-text-primary)]">
 								{oralResult.estimatedDailyTotal}
 							</span>
 							<span class="text-ui text-[var(--color-text-secondary)]">capsules</span>
