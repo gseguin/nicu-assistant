@@ -88,7 +88,10 @@ Add a sixth calculator (`/pert`) with two modes (Pediatric Oral / Pediatric Tube
   2. The DESIGN.md / DESIGN.json contract is enforced — Identity-Inside Rule (`.identity-pert` only on inside-the-route surfaces, not chrome), Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong (with the v1.13 STOP-red carve-out for the max-lipase cap, PERT-SAFE-01), Tabular-Numbers on every numerical output, Eyebrow-Above-Numeral hero pattern, 11px font-size floor — verified by visual inspection in both themes.
   3. The SegmentedToggle (Oral / Tube-Feed) reads as part of the existing identity-hue idiom (consistent with v1.6 SegmentedToggle treatment) — does not introduce a new visual primitive.
   4. The `/impeccable` critique sweep records ≥35/40, with all P1 findings fixed before merge and addressable P2/P3 fixed inline (or deferred with explicit triage notes per v1.9 POLISH-04 precedent).
-**Plans**: TBD
+**Plans**: 3 plans (Wave 2 placeholder may expand via /gsd-plan-phase 4 --gaps after Wave 1 ships)
+  - [ ] 04-01-PLAN.md — Wave 1 critique sweep + FINDINGS triage (PRODUCT.md authoring, 8 /impeccable critique transcripts, auto-disposition per CONTEXT D-03, Wave-2 plan-count recommendation)
+  - [ ] 04-02-PLAN.md — Wave 2 placeholder per CONTEXT D-07a replan beat (orchestrator runs /gsd-plan-phase 4 --gaps --ws pert post-Wave-1 to author actual fix plan(s); skipped entirely if 0 fix-now findings)
+  - [ ] 04-03-PLAN.md — Wave 3 clinical gate + 18-gate verification (re-run 8 /impeccable critique passes on post-fix UI; 7 inherited clinical gates from Phase 3.1 plan 04 + 11 design-polish gates per UI-SPEC; 04-VERIFICATION.md + Phase 4 closure with PERT-DESIGN-01..06 Validated)
 **UI hint**: yes
 
 ### Phase 5: Release
