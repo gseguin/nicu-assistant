@@ -63,11 +63,14 @@ for (const vp of viewports) {
 		test('FAV-TEST-03-2: re-favorite Feeds → bar shows 4 tabs in registry order', async ({
 			page
 		}) => {
-			// Register a SET script that runs on the next navigation (overrides the REMOVE from beforeEach)
+			// Plan 01-04 (D-19/D-20/D-21): registry alphabetized; recover() preserves
+			// stored order verbatim, but toggle() on add still re-sorts to registry
+			// order (alphabetical post-D-19). Pre-state mirrors the
+			// post-un-favorite-Feeds state: 3 of the 4 alphabetical defaults.
 			await page.addInitScript(() => {
 				localStorage.setItem(
 					'nicu:favorites',
-					JSON.stringify({ v: 1, ids: ['morphine-wean', 'formula', 'gir'] })
+					JSON.stringify({ v: 1, ids: ['formula', 'gir', 'morphine-wean'] })
 				);
 			});
 			await page.reload();
@@ -87,10 +90,10 @@ for (const vp of viewports) {
 			const nav = page.locator('nav[aria-label="Calculator navigation"]').last();
 			const tabs = nav.getByRole('tab');
 			await expect(tabs).toHaveCount(4);
-			await expect(tabs.nth(0)).toContainText('Morphine');
+			await expect(tabs.nth(0)).toContainText('Feeds');
 			await expect(tabs.nth(1)).toContainText('Formula');
 			await expect(tabs.nth(2)).toContainText('GIR');
-			await expect(tabs.nth(3)).toContainText('Feeds');
+			await expect(tabs.nth(3)).toContainText('Morphine');
 		});
 
 		test('FAV-TEST-03-3: favorites persist to localStorage after un-favorite', async ({

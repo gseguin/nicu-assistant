@@ -33,17 +33,20 @@ describe('HamburgerMenu', () => {
 	});
 
 	it('T-02 opens when prop bound to true — lists every registered calculator', async () => {
-		// beforeEach already called favorites.init() with defaults (first 4 favorited;
-		// UAC/UVC is the 5th registry entry and per Phase 42 D-02 stays non-favorited at first run).
+		// beforeEach already called favorites.init() with defaults. After D-19/D-20
+		// (pert workstream Phase 1), the registry is alphabetized to 6 entries:
+		// feeds, formula, gir, morphine-wean, pert, uac-uvc. The default favorites
+		// are the first 4 alphabetical entries; pert and uac-uvc remain non-favorited.
 		const trigger = document.createElement('button');
 		document.body.appendChild(trigger);
 		render(HamburgerMenu, { props: { triggerEl: trigger, open: true } });
 		await tick();
-		expect(screen.getAllByRole('link')).toHaveLength(5);
+		expect(screen.getAllByRole('link')).toHaveLength(6);
 		expect(screen.getByRole('link', { name: /Morphine/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /Formula/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /GIR/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /Feeds/i })).toBeTruthy();
+		expect(screen.getByRole('link', { name: /PERT/i })).toBeTruthy();
 		expect(screen.getByRole('link', { name: /UAC\/UVC/i })).toBeTruthy();
 	});
 

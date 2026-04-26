@@ -25,13 +25,13 @@ function validIds(): Set<string> {
 
 /**
  * D-08 six-step recovery pipeline.
- * Returns a validated, registry-ordered, capped array.
+ * Returns a validated, capped array. Stored order is preserved verbatim.
  *   (1) null raw → defaults
  *   (2) JSON.parse throws → defaults
  *   (3) shape validation (typeof object, v === SCHEMA_VERSION, ids array) → defaults on mismatch
  *   (4) filter ids to registry-known strings
  *   (5) cap at FAVORITES_MAX
- *   (6) empty filtered → defaults; otherwise re-sort by registry order
+ *   (6) empty filtered → defaults; otherwise return filtered (preserving user's order — D-21)
  */
 function recover(raw: string | null): CalculatorId[] {
 	if (raw === null) return defaultIds(); // first-run (D-09 — caller writes back)
@@ -50,13 +50,12 @@ function recover(raw: string | null): CalculatorId[] {
 		return defaultIds();
 	}
 	const valid = validIds();
-	const registryOrder = CALCULATOR_REGISTRY.map((c) => c.id);
 	const filtered = (parsed as StoredShape).ids
 		.filter((id): id is string => typeof id === 'string' && valid.has(id))
 		.slice(0, FAVORITES_MAX);
 	if (filtered.length === 0) return defaultIds();
-	// Sort by registry order (FAV-06)
-	return registryOrder.filter((id) => filtered.includes(id)) as CalculatorId[];
+	// D-21 (Phase pert-01): preserve user's stored order verbatim. Only filter+cap remain.
+	return filtered as CalculatorId[];
 }
 
 function persist(ids: readonly CalculatorId[]): void {

@@ -33,10 +33,12 @@ test.describe('Navigation (v1.2 restructure)', () => {
 
     const tabs = bottomNav.getByRole('tab');
     await expect(tabs).toHaveCount(4);
-    await expect(tabs.nth(0)).toContainText('Morphine');
+    // Plan 01-04 (D-19/D-20): registry alphabetized; first-run favorites
+    // are the first 4 alphabetical entries (feeds, formula, gir, morphine-wean).
+    await expect(tabs.nth(0)).toContainText('Feeds');
     await expect(tabs.nth(1)).toContainText('Formula');
     await expect(tabs.nth(2)).toContainText('GIR');
-    await expect(tabs.nth(3)).toContainText('Feeds');
+    await expect(tabs.nth(3)).toContainText('Morphine');
 
     await expect(bottomNav.getByRole('button', { name: /about/i })).toHaveCount(0);
     await expect(bottomNav.getByRole('button', { name: /switch to/i })).toHaveCount(0);

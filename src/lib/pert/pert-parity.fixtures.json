@@ -1,0 +1,152 @@
+{
+  "_comment": "Hand-derived from epi-pert-calculator.xlsx Pediatric tabs via openpyxl data_only=False. Each row's `expected` values come from applying CONTEXT D-15 (oral) / D-16 (tube) / D-12 (capsulesPerMonth times 30) / D-02 (Math.round) by hand, NOT by running ./calculations.ts. NEVER edit to match code changes.",
+  "_cellRefs": {
+    "oral": "Pediatric PERT Tool!B5..B11. B5=fat g, B6=lipasePerG, B8=strength, B9=B5*B6 totalLipase, B10=ROUND(B9/B8,0) capsulesPerDose, B11=B4*10000 max-lipase cap.",
+    "tubeFeed": "Pediatric Tube Feed PERT!B6..B15. B6=fatGPerL, B7=volume mL, B8=ROUND(B6*B7/1000,1) totalFatG, B9=lipasePerG, B11=strength, B12=B8*B9 totalLipase, B13=ROUND(B12/B4,0) lipasePerKg display, B14=ROUND(B12/B11,0) capsulesPerDay, B15=B14*30 capsulesPerMonth."
+  },
+  "oral": {
+    "row0_xlsx_default": {
+      "_derivation": "weight 10kg, fat 25g, lipasePerG 2000, Creon 12000. totalLipase = 25 * 2000 = 50000. capsulesPerDose = ROUND(50000 / 12000) = ROUND(4.1667) = 4. lipasePerDose = 4 * 12000 = 48000. estimatedDailyTotal = 4 * 3 = 12.",
+      "input": { "weightKg": 10, "fatGrams": 25, "lipasePerGramOfFat": 2000, "medicationId": "creon", "strengthValue": 12000 },
+      "expected": { "capsulesPerDose": 4, "totalLipase": 50000, "lipasePerDose": 48000, "estimatedDailyTotal": 12 }
+    },
+    "row1": {
+      "_derivation": "weight 10kg, fat 10g, lipasePerG 1000, Zenpep 10000. totalLipase = 10 * 1000 = 10000. capsulesPerDose = ROUND(10000 / 10000) = ROUND(1.0) = 1. lipasePerDose = 1 * 10000 = 10000. estimatedDailyTotal = 1 * 3 = 3.",
+      "input": { "weightKg": 10, "fatGrams": 10, "lipasePerGramOfFat": 1000, "medicationId": "zenpep", "strengthValue": 10000 },
+      "expected": { "capsulesPerDose": 1, "totalLipase": 10000, "lipasePerDose": 10000, "estimatedDailyTotal": 3 }
+    },
+    "row2": {
+      "_derivation": "weight 10kg, fat 60g, lipasePerG 3000, Pancreaze 21000. totalLipase = 60 * 3000 = 180000. capsulesPerDose = ROUND(180000 / 21000) = ROUND(8.5714) = 9. lipasePerDose = 9 * 21000 = 189000. estimatedDailyTotal = 9 * 3 = 27.",
+      "input": { "weightKg": 10, "fatGrams": 60, "lipasePerGramOfFat": 3000, "medicationId": "pancreaze", "strengthValue": 21000 },
+      "expected": { "capsulesPerDose": 9, "totalLipase": 180000, "lipasePerDose": 189000, "estimatedDailyTotal": 27 }
+    },
+    "row3": {
+      "_derivation": "weight 5kg, fat 25g, lipasePerG 1000, Pancreaze 21000. totalLipase = 25 * 1000 = 25000. capsulesPerDose = ROUND(25000 / 21000) = ROUND(1.1905) = 1. lipasePerDose = 1 * 21000 = 21000. estimatedDailyTotal = 1 * 3 = 3.",
+      "input": { "weightKg": 5, "fatGrams": 25, "lipasePerGramOfFat": 1000, "medicationId": "pancreaze", "strengthValue": 21000 },
+      "expected": { "capsulesPerDose": 1, "totalLipase": 25000, "lipasePerDose": 21000, "estimatedDailyTotal": 3 }
+    },
+    "row4": {
+      "_derivation": "weight 5kg, fat 10g, lipasePerG 2000, Creon 12000. totalLipase = 10 * 2000 = 20000. capsulesPerDose = ROUND(20000 / 12000) = ROUND(1.6667) = 2. lipasePerDose = 2 * 12000 = 24000. estimatedDailyTotal = 2 * 3 = 6.",
+      "input": { "weightKg": 5, "fatGrams": 10, "lipasePerGramOfFat": 2000, "medicationId": "creon", "strengthValue": 12000 },
+      "expected": { "capsulesPerDose": 2, "totalLipase": 20000, "lipasePerDose": 24000, "estimatedDailyTotal": 6 }
+    },
+    "row5": {
+      "_derivation": "weight 5kg, fat 60g, lipasePerG 3000, Zenpep 10000. totalLipase = 60 * 3000 = 180000. capsulesPerDose = ROUND(180000 / 10000) = ROUND(18.0) = 18. lipasePerDose = 18 * 10000 = 180000. estimatedDailyTotal = 18 * 3 = 54.",
+      "input": { "weightKg": 5, "fatGrams": 60, "lipasePerGramOfFat": 3000, "medicationId": "zenpep", "strengthValue": 10000 },
+      "expected": { "capsulesPerDose": 18, "totalLipase": 180000, "lipasePerDose": 180000, "estimatedDailyTotal": 54 }
+    },
+    "row6": {
+      "_derivation": "weight 25kg, fat 25g, lipasePerG 3000, Zenpep 10000. totalLipase = 25 * 3000 = 75000. capsulesPerDose = ROUND(75000 / 10000) = ROUND(7.5) = 8 (JS Math.round half-away-from-zero, matches xlsx ROUND). lipasePerDose = 8 * 10000 = 80000. estimatedDailyTotal = 8 * 3 = 24.",
+      "input": { "weightKg": 25, "fatGrams": 25, "lipasePerGramOfFat": 3000, "medicationId": "zenpep", "strengthValue": 10000 },
+      "expected": { "capsulesPerDose": 8, "totalLipase": 75000, "lipasePerDose": 80000, "estimatedDailyTotal": 24 }
+    },
+    "row7": {
+      "_derivation": "weight 25kg, fat 10g, lipasePerG 2000, Pancreaze 21000. totalLipase = 10 * 2000 = 20000. capsulesPerDose = ROUND(20000 / 21000) = ROUND(0.9524) = 1. lipasePerDose = 1 * 21000 = 21000. estimatedDailyTotal = 1 * 3 = 3.",
+      "input": { "weightKg": 25, "fatGrams": 10, "lipasePerGramOfFat": 2000, "medicationId": "pancreaze", "strengthValue": 21000 },
+      "expected": { "capsulesPerDose": 1, "totalLipase": 20000, "lipasePerDose": 21000, "estimatedDailyTotal": 3 }
+    },
+    "row8": {
+      "_derivation": "weight 25kg, fat 60g, lipasePerG 1000, Creon 12000. totalLipase = 60 * 1000 = 60000. capsulesPerDose = ROUND(60000 / 12000) = ROUND(5.0) = 5. lipasePerDose = 5 * 12000 = 60000. estimatedDailyTotal = 5 * 3 = 15.",
+      "input": { "weightKg": 25, "fatGrams": 60, "lipasePerGramOfFat": 1000, "medicationId": "creon", "strengthValue": 12000 },
+      "expected": { "capsulesPerDose": 5, "totalLipase": 60000, "lipasePerDose": 60000, "estimatedDailyTotal": 15 }
+    }
+  },
+  "tubeFeed": {
+    "row0_xlsx_default": {
+      "_derivation": "weight 15kg, formula Kate Farms Pediatric Standard 1.2 (fatGPerL=48), volume 1500mL, lipasePerG 2500, Pancreaze 37000. totalFatG = ROUND(48 * 1500 / 1000, 1) = 72.0. totalLipase = 72.0 * 2500 = 180000. capsulesPerDay = ROUND(180000 / 37000) = ROUND(4.8649) = 5. lipasePerKg (display, calc-layer unrounded) = 180000 / 15 = 12000.0 (xlsx B13 ROUND = 12000). capsulesPerMonth = 5 * 30 = 150.",
+      "input": { "weightKg": 15, "formulaId": "kate-farms-ped-std-12", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "pancreaze", "strengthValue": 37000 },
+      "expected": { "capsulesPerDay": 5, "totalLipase": 180000, "totalFatG": 72.0, "lipasePerKg": 12000.0, "capsulesPerMonth": 150 }
+    },
+    "row1": {
+      "_derivation": "weight 15kg, KF (48), volume 800mL, lipasePerG 2500, Creon 24000. totalFatG = ROUND(48*800/1000,1) = ROUND(38.4,1) = 38.4. totalLipase = 38.4*2500 = 96000. capsulesPerDay = ROUND(96000/24000) = ROUND(4.0) = 4. lipasePerKg = 96000/15 = 6400.0. capsulesPerMonth = 4*30 = 120.",
+      "input": { "weightKg": 15, "formulaId": "kate-farms-ped-std-12", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "creon", "strengthValue": 24000 },
+      "expected": { "capsulesPerDay": 4, "totalLipase": 96000, "totalFatG": 38.4, "lipasePerKg": 6400.0, "capsulesPerMonth": 120 }
+    },
+    "row2": {
+      "_derivation": "weight 15kg, PediaSure G&G (38), volume 1500mL, lipasePerG 2500, Zenpep 25000. totalFatG = ROUND(38*1500/1000,1) = 57.0. totalLipase = 57.0*2500 = 142500. capsulesPerDay = ROUND(142500/25000) = ROUND(5.7) = 6. lipasePerKg = 142500/15 = 9500.0. capsulesPerMonth = 6*30 = 180.",
+      "input": { "weightKg": 15, "formulaId": "pediasure-grow-gain", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "zenpep", "strengthValue": 25000 },
+      "expected": { "capsulesPerDay": 6, "totalLipase": 142500, "totalFatG": 57.0, "lipasePerKg": 9500.0, "capsulesPerMonth": 180 }
+    },
+    "row3": {
+      "_derivation": "weight 15kg, PS (38), volume 800mL, lipasePerG 2500, Pancreaze 37000. totalFatG = ROUND(38*800/1000,1) = 30.4. totalLipase = 30.4*2500 = 76000. capsulesPerDay = ROUND(76000/37000) = ROUND(2.054) = 2. lipasePerKg = 76000/15 = 5066.667. capsulesPerMonth = 2*30 = 60.",
+      "input": { "weightKg": 15, "formulaId": "pediasure-grow-gain", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "pancreaze", "strengthValue": 37000 },
+      "expected": { "capsulesPerDay": 2, "totalLipase": 76000, "totalFatG": 30.4, "lipasePerKg": 5066.667, "capsulesPerMonth": 60 }
+    },
+    "row4": {
+      "_derivation": "weight 15kg, Peptamen Jr 1.5 (68), volume 1500mL, lipasePerG 2500, Creon 24000. totalFatG = ROUND(68*1500/1000,1) = 102.0. totalLipase = 102.0*2500 = 255000. capsulesPerDay = ROUND(255000/24000) = ROUND(10.625) = 11. lipasePerKg = 255000/15 = 17000.0. capsulesPerMonth = 11*30 = 330.",
+      "input": { "weightKg": 15, "formulaId": "peptamen-junior-15", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "creon", "strengthValue": 24000 },
+      "expected": { "capsulesPerDay": 11, "totalLipase": 255000, "totalFatG": 102.0, "lipasePerKg": 17000.0, "capsulesPerMonth": 330 }
+    },
+    "row5": {
+      "_derivation": "weight 15kg, PJ (68), volume 800mL, lipasePerG 2500, Zenpep 25000. totalFatG = ROUND(68*800/1000,1) = 54.4. totalLipase = 54.4*2500 = 136000. capsulesPerDay = ROUND(136000/25000) = ROUND(5.44) = 5. lipasePerKg = 136000/15 = 9066.667. capsulesPerMonth = 5*30 = 150.",
+      "input": { "weightKg": 15, "formulaId": "peptamen-junior-15", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "zenpep", "strengthValue": 25000 },
+      "expected": { "capsulesPerDay": 5, "totalLipase": 136000, "totalFatG": 54.4, "lipasePerKg": 9066.667, "capsulesPerMonth": 150 }
+    },
+    "row6": {
+      "_derivation": "weight 8kg, KF (48), volume 1500mL, lipasePerG 2500, Creon 24000. totalFatG = ROUND(48*1500/1000,1) = 72.0. totalLipase = 72.0*2500 = 180000. capsulesPerDay = ROUND(180000/24000) = ROUND(7.5) = 8 (JS half-away). lipasePerKg = 180000/8 = 22500.0. capsulesPerMonth = 8*30 = 240.",
+      "input": { "weightKg": 8, "formulaId": "kate-farms-ped-std-12", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "creon", "strengthValue": 24000 },
+      "expected": { "capsulesPerDay": 8, "totalLipase": 180000, "totalFatG": 72.0, "lipasePerKg": 22500.0, "capsulesPerMonth": 240 }
+    },
+    "row7": {
+      "_derivation": "weight 8kg, KF (48), volume 800mL, lipasePerG 2500, Zenpep 25000. totalFatG = ROUND(48*800/1000,1) = 38.4. totalLipase = 38.4*2500 = 96000. capsulesPerDay = ROUND(96000/25000) = ROUND(3.84) = 4. lipasePerKg = 96000/8 = 12000.0. capsulesPerMonth = 4*30 = 120.",
+      "input": { "weightKg": 8, "formulaId": "kate-farms-ped-std-12", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "zenpep", "strengthValue": 25000 },
+      "expected": { "capsulesPerDay": 4, "totalLipase": 96000, "totalFatG": 38.4, "lipasePerKg": 12000.0, "capsulesPerMonth": 120 }
+    },
+    "row8": {
+      "_derivation": "weight 8kg, PS (38), volume 1500mL, lipasePerG 2500, Pancreaze 37000. totalFatG = ROUND(38*1500/1000,1) = 57.0. totalLipase = 57.0*2500 = 142500. capsulesPerDay = ROUND(142500/37000) = ROUND(3.851) = 4. lipasePerKg = 142500/8 = 17812.5. capsulesPerMonth = 4*30 = 120.",
+      "input": { "weightKg": 8, "formulaId": "pediasure-grow-gain", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "pancreaze", "strengthValue": 37000 },
+      "expected": { "capsulesPerDay": 4, "totalLipase": 142500, "totalFatG": 57.0, "lipasePerKg": 17812.5, "capsulesPerMonth": 120 }
+    },
+    "row9": {
+      "_derivation": "weight 8kg, PS (38), volume 800mL, lipasePerG 2500, Creon 24000. totalFatG = ROUND(38*800/1000,1) = 30.4. totalLipase = 30.4*2500 = 76000. capsulesPerDay = ROUND(76000/24000) = ROUND(3.167) = 3. lipasePerKg = 76000/8 = 9500.0. capsulesPerMonth = 3*30 = 90.",
+      "input": { "weightKg": 8, "formulaId": "pediasure-grow-gain", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "creon", "strengthValue": 24000 },
+      "expected": { "capsulesPerDay": 3, "totalLipase": 76000, "totalFatG": 30.4, "lipasePerKg": 9500.0, "capsulesPerMonth": 90 }
+    },
+    "row10": {
+      "_derivation": "weight 8kg, PJ (68), volume 1500mL, lipasePerG 2500, Zenpep 25000. totalFatG = ROUND(68*1500/1000,1) = 102.0. totalLipase = 102.0*2500 = 255000. capsulesPerDay = ROUND(255000/25000) = ROUND(10.2) = 10. lipasePerKg = 255000/8 = 31875.0. capsulesPerMonth = 10*30 = 300.",
+      "input": { "weightKg": 8, "formulaId": "peptamen-junior-15", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "zenpep", "strengthValue": 25000 },
+      "expected": { "capsulesPerDay": 10, "totalLipase": 255000, "totalFatG": 102.0, "lipasePerKg": 31875.0, "capsulesPerMonth": 300 }
+    },
+    "row11": {
+      "_derivation": "weight 8kg, PJ (68), volume 800mL, lipasePerG 2500, Pancreaze 37000. totalFatG = ROUND(68*800/1000,1) = 54.4. totalLipase = 54.4*2500 = 136000. capsulesPerDay = ROUND(136000/37000) = ROUND(3.676) = 4. lipasePerKg = 136000/8 = 17000.0. capsulesPerMonth = 4*30 = 120.",
+      "input": { "weightKg": 8, "formulaId": "peptamen-junior-15", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "pancreaze", "strengthValue": 37000 },
+      "expected": { "capsulesPerDay": 4, "totalLipase": 136000, "totalFatG": 54.4, "lipasePerKg": 17000.0, "capsulesPerMonth": 120 }
+    },
+    "row12": {
+      "_derivation": "weight 30kg, KF (48), volume 1500mL, lipasePerG 2500, Zenpep 25000. totalFatG = ROUND(48*1500/1000,1) = 72.0. totalLipase = 72.0*2500 = 180000. capsulesPerDay = ROUND(180000/25000) = ROUND(7.2) = 7. lipasePerKg = 180000/30 = 6000.0. capsulesPerMonth = 7*30 = 210.",
+      "input": { "weightKg": 30, "formulaId": "kate-farms-ped-std-12", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "zenpep", "strengthValue": 25000 },
+      "expected": { "capsulesPerDay": 7, "totalLipase": 180000, "totalFatG": 72.0, "lipasePerKg": 6000.0, "capsulesPerMonth": 210 }
+    },
+    "row13": {
+      "_derivation": "weight 30kg, KF (48), volume 800mL, lipasePerG 2500, Pancreaze 37000. totalFatG = ROUND(48*800/1000,1) = 38.4. totalLipase = 38.4*2500 = 96000. capsulesPerDay = ROUND(96000/37000) = ROUND(2.595) = 3. lipasePerKg = 96000/30 = 3200.0. capsulesPerMonth = 3*30 = 90.",
+      "input": { "weightKg": 30, "formulaId": "kate-farms-ped-std-12", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "pancreaze", "strengthValue": 37000 },
+      "expected": { "capsulesPerDay": 3, "totalLipase": 96000, "totalFatG": 38.4, "lipasePerKg": 3200.0, "capsulesPerMonth": 90 }
+    },
+    "row14": {
+      "_derivation": "weight 30kg, PS (38), volume 1500mL, lipasePerG 2500, Creon 24000. totalFatG = ROUND(38*1500/1000,1) = 57.0. totalLipase = 57.0*2500 = 142500. capsulesPerDay = ROUND(142500/24000) = ROUND(5.9375) = 6. lipasePerKg = 142500/30 = 4750.0. capsulesPerMonth = 6*30 = 180.",
+      "input": { "weightKg": 30, "formulaId": "pediasure-grow-gain", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "creon", "strengthValue": 24000 },
+      "expected": { "capsulesPerDay": 6, "totalLipase": 142500, "totalFatG": 57.0, "lipasePerKg": 4750.0, "capsulesPerMonth": 180 }
+    },
+    "row15": {
+      "_derivation": "weight 30kg, PS (38), volume 800mL, lipasePerG 2500, Zenpep 25000. totalFatG = ROUND(38*800/1000,1) = 30.4. totalLipase = 30.4*2500 = 76000. capsulesPerDay = ROUND(76000/25000) = ROUND(3.04) = 3. lipasePerKg = 76000/30 = 2533.333. capsulesPerMonth = 3*30 = 90.",
+      "input": { "weightKg": 30, "formulaId": "pediasure-grow-gain", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "zenpep", "strengthValue": 25000 },
+      "expected": { "capsulesPerDay": 3, "totalLipase": 76000, "totalFatG": 30.4, "lipasePerKg": 2533.333, "capsulesPerMonth": 90 }
+    },
+    "row16": {
+      "_derivation": "weight 30kg, PJ (68), volume 1500mL, lipasePerG 2500, Pancreaze 37000. totalFatG = ROUND(68*1500/1000,1) = 102.0. totalLipase = 102.0*2500 = 255000. capsulesPerDay = ROUND(255000/37000) = ROUND(6.892) = 7. lipasePerKg = 255000/30 = 8500.0. capsulesPerMonth = 7*30 = 210.",
+      "input": { "weightKg": 30, "formulaId": "peptamen-junior-15", "volumePerDayMl": 1500, "lipasePerGramOfFat": 2500, "medicationId": "pancreaze", "strengthValue": 37000 },
+      "expected": { "capsulesPerDay": 7, "totalLipase": 255000, "totalFatG": 102.0, "lipasePerKg": 8500.0, "capsulesPerMonth": 210 }
+    },
+    "row17": {
+      "_derivation": "weight 30kg, PJ (68), volume 800mL, lipasePerG 2500, Creon 24000. totalFatG = ROUND(68*800/1000,1) = 54.4. totalLipase = 54.4*2500 = 136000. capsulesPerDay = ROUND(136000/24000) = ROUND(5.667) = 6. lipasePerKg = 136000/30 = 4533.333. capsulesPerMonth = 6*30 = 180.",
+      "input": { "weightKg": 30, "formulaId": "peptamen-junior-15", "volumePerDayMl": 800, "lipasePerGramOfFat": 2500, "medicationId": "creon", "strengthValue": 24000 },
+      "expected": { "capsulesPerDay": 6, "totalLipase": 136000, "totalFatG": 54.4, "lipasePerKg": 4533.333, "capsulesPerMonth": 180 }
+    }
+  },
+  "stopRedTrigger": {
+    "_mode": "oral",
+    "_derivation": "Deliberate over-cap row. weight 2kg, fat 50g, lipasePerG 4000, Creon 6000. totalLipase = 50 * 4000 = 200000. capsulesPerDose = ROUND(200000/6000) = ROUND(33.333) = 33. lipasePerDose = 33*6000 = 198000. estimatedDailyTotal = 33*3 = 99. Daily lipase = 33 * 6000 * 3 = 594000. Cap = 2 * 10000 = 20000. 594000 > 20000 so STOP-red max-lipase-cap advisory fires.",
+    "input": { "weightKg": 2, "fatGrams": 50, "lipasePerGramOfFat": 4000, "medicationId": "creon", "strengthValue": 6000 },
+    "expected": { "capsulesPerDose": 33, "totalLipase": 200000, "lipasePerDose": 198000, "estimatedDailyTotal": 99, "stopRedTriggers": true }
+  }
+}
