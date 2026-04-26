@@ -25,3 +25,11 @@ vite.config.ts.timestamp-*
 # Playwright
 /test-results/
 /playwright-report/
+
+# Tooling
+.claude/
+.codex
+
+# GSD ephemeral state
+.planning/active-workstream
+.planning/graphs/
