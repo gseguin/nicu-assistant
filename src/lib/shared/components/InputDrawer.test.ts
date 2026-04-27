@@ -10,6 +10,11 @@ import { resolve } from 'node:path';
 
 import InputDrawer from './InputDrawer.svelte';
 import InputDrawerHarness from './InputDrawerHarness.svelte';
+import {
+	simulateKeyboardOpen,
+	simulateKeyboardDown,
+	_resetVisualViewportMock
+} from '$lib/test/visual-viewport-mock.js';
 
 beforeEach(() => {
 	// Some test environments warn on missing matchMedia; provide a stub.
@@ -28,6 +33,9 @@ beforeEach(() => {
 			})
 		});
 	}
+	// Phase 49: reset visualViewport polyfill to the no-keyboard baseline so each
+	// test starts from a known state. Required for T-09 / T-10 keyboard-up / down.
+	_resetVisualViewportMock();
 });
 
 describe('InputDrawer', () => {
@@ -119,6 +127,76 @@ describe('InputDrawer', () => {
 		expect(src).not.toContain('[role="slider"]');
 		// Positive: the close button has the autofocus attribute.
 		expect(src).toContain('autofocus');
+	});
+
+	it('T-09 DRAWER-TEST-02 keyboard-up: .input-drawer-sheet style contains --ivv-bottom and --ivv-max-height', async () => {
+		// Mount drawer expanded so the .input-drawer-sheet div is in the DOM.
+		// vv.init() is called by +layout.svelte:onMount in production; in this
+		// component test the harness mounts InputDrawer directly. The vv singleton
+		// auto-initializes on first read because this jsdom polyfill fires its
+		// initial 'resize' event during _resetVisualViewportMock(); however to be
+		// deterministic, we explicitly trigger init by importing and calling it.
+		const { vv } = await import('$lib/shared/visualViewport.svelte.js');
+		vv.init();
+		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
+		await tick();
+		simulateKeyboardOpen();
+		await tick();
+		const sheet = container.querySelector('.input-drawer-sheet') as HTMLDivElement | null;
+		expect(sheet).toBeTruthy();
+		const style = sheet!.getAttribute('style') ?? '';
+		expect(style).toMatch(/--ivv-bottom:\s*-?\d+(\.\d+)?px/);
+		expect(style).toMatch(/--ivv-max-height:\s*-?\d+(\.\d+)?px/);
+	});
+
+	it('T-10 DRAWER-TEST-02 keyboard-down: .input-drawer-sheet style attribute is empty (LC-03 short-circuit)', async () => {
+		const { vv } = await import('$lib/shared/visualViewport.svelte.js');
+		vv.init();
+		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
+		await tick();
+		// First put it into keyboard-up state...
+		simulateKeyboardOpen();
+		await tick();
+		// ...then dismiss the keyboard back to the no-OSK baseline.
+		simulateKeyboardDown();
+		await tick();
+		const sheet = container.querySelector('.input-drawer-sheet') as HTMLDivElement | null;
+		expect(sheet).toBeTruthy();
+		// Per UI-SPEC.md LC-03: when keyboardOpen is false, ivvStyle short-circuits to ''.
+		// Svelte 5 renders style="" as either an empty attribute or removes it entirely;
+		// both are acceptable. Reject anything that contains the CSS variable substrings.
+		const style = sheet!.getAttribute('style') ?? '';
+		expect(style).not.toMatch(/--ivv-bottom:/);
+		expect(style).not.toMatch(/--ivv-max-height:/);
+	});
+
+	it('T-11 DRAWER-08 / P-15 source-grep: no inline style attribute on the outer <dialog> element', () => {
+		// The visualViewport-aware sizing applies ONLY to the inner .input-drawer-sheet
+		// <div> (lines 91-94). Putting style= on the outer <dialog> would inherit the
+		// transform into the SelectPicker's nested top-layer dialog and visually drift it.
+		// PITFALLS.md P-15 + UI-SPEC.md LC-01 + CONTEXT.md D-11.
+		const src = readFileSync(resolve(__dirname, 'InputDrawer.svelte'), 'utf8');
+		expect(src).not.toMatch(/<dialog[^>]*\sstyle=/);
+	});
+
+	it('T-12 DRAWER-10 / D-27 source-grep: .input-drawer-sheet always-on rule declares no transition property', () => {
+		// CSS variable changes propagate via normal recomputation. Adding
+		// transition: max-height or transition: padding-bottom would re-introduce the
+		// scroll-driven coupling DRAWER-02 / P-08 forbids. Per UI-SPEC.md LC-02 +
+		// Reduced-Motion Contract + CONTEXT.md D-12 + D-27. The animation: declarations
+		// inside @media (prefers-reduced-motion: no-preference) are fine — those gate
+		// the existing slide-up; this assertion only rejects transition: inside the
+		// always-on .input-drawer-sheet { ... } rule.
+		const src = readFileSync(resolve(__dirname, 'InputDrawer.svelte'), 'utf8');
+		// Match the always-on rule body: from `.input-drawer-sheet {` (NOT preceded by
+		// an `@media` line) up to the closing `}`. Use a non-greedy capture across lines.
+		// The .input-drawer-sheet appears in two places: (a) the always-on rule, and
+		// (b) inside `.input-drawer-dialog[open] .input-drawer-sheet { animation: ... }`
+		// gated on `@media (prefers-reduced-motion: no-preference)`. We want only (a).
+		const alwaysOnMatch = src.match(/\n\s*\.input-drawer-sheet\s*\{([^}]*)\}/);
+		expect(alwaysOnMatch).toBeTruthy();
+		const ruleBody = alwaysOnMatch![1];
+		expect(ruleBody).not.toMatch(/\btransition\s*:/);
 	});
 
 	// Reference InputDrawer to keep the static import (used by future test scenarios that
