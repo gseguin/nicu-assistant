@@ -972,7 +972,15 @@ See §4 Pattern 4 (Synthetic visualViewport.resize for Playwright) earlier in th
 
 **If this table seems large for a "structural plumbing phase":** It isn't. A1, A4, A5 are pure scaffolding-environment assumptions; A2, A3 are real-device-tuning concerns explicitly punted to Phase 50; A6 is a sanity-check verified by inline code grep. None of these block the planner's work; all are documented for the discuss-phase / plan-checker to confirm if the auto-mode contract changes.
 
-## Open Questions
+## Open Questions (RESOLVED)
+
+> All five questions below carry an explicit `**Recommendation:**` line that the planner honored in `49-01-PLAN.md` / `49-02-PLAN.md` / `49-03-PLAN.md`. Resolutions are summarized at the top of each numbered item below; the original analysis is preserved for audit.
+
+- **Q1 RESOLVED:** Plan 49-02 Task 2 calls `vv.init()` in `beforeEach` for new T-09/T-10 component-test cases (D-03 idempotency makes this safe).
+- **Q2 RESOLVED:** CONTEXT.md D-04/D-13 corrected (commit `d31d601`) — `vv.init()` lands immediately after `favorites.init();` on line 55 of `+layout.svelte`. `pwa.init()` doesn't exist.
+- **Q3 RESOLVED:** Plan 49-03 runs `e2e/drawer-visual-viewport.spec.ts` under both `chromium` and `webkit-iphone` (Phase 47 D-15 default; no `test.skip`).
+- **Q4 RESOLVED:** CONTEXT.md DRAWER-11 corrected (commit `d31d601`) — `md:hidden` lives on the `<InputsRecap>` trigger at `InputsRecap.svelte:162`, not on `<InputDrawer>`. No redundant wrapper added.
+- **Q5 RESOLVED:** Re-read-every-event mitigation (D-05) addresses iOS 26 #800125 by construction; SMOKE-05 (Phase 50) is the authoritative gate. Defense-in-depth accepted.
 
 1. **DRAWER-TEST-02 needs explicit `vv.init()` in the test (or a test-only init seam).**
    - **What we know:** The singleton's resize listener is what writes the runes. Without `vv.init()`, the listener is not bound and `simulateKeyboardOpen()` won't update `vv.height` / `vv.keyboardOpen`. In production, `vv.init()` is called from `+layout.svelte:onMount`, but the component test mounts `InputDrawer` (via `InputDrawerHarness`) without a layout wrapper.
