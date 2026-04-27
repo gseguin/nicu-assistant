@@ -1,104 +1,153 @@
-# Requirements: NICU Assistant — Milestone v1.14
+# Requirements: NICU Assistant — Milestone v1.15.1
 
-**Defined:** 2026-04-25
-**Core Value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
+**Defined:** 2026-04-27
+**Core Value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context, using the same trusted interfaces they already know.
 
-## v1.14 Requirements
+**Milestone scope:** iOS-only shell-polish hotfix. Three bedside-iPhone regressions (drawer auto-focus, drawer mispositioning under iOS soft keyboard, NavShell title bar under camera notch / Dynamic Island), plus the test scaffolding and real-iPhone smoke gate that prove the fixes are durable. No new clinical features; no new calculators; no DESIGN contract drift.
+
+## v1.15.1 Requirements
 
 Requirements for this milestone. Each maps to roadmap phases.
 
-### Kendamil Formula Family
+### Test Scaffolding (Wave-0)
 
-- [x] **KEND-01
-**: User can select **Kendamil Organic** from the formula picker — entry added to `src/lib/fortification/fortification-config.json` with manufacturer `"Kendamil"`, calorie_concentration ≈ 5.12 kcal/g (22 kcal ÷ 4.3 g per scoop), displacement_factor ≈ 0.77 mL/g (3.3 mL ÷ 4.3 g per scoop), grams_per_scoop 4.3 (sourced from hcp.kendamil.com Organic mixing chart)
-- [x] **KEND-02
-**: User can select **Kendamil Classic** from the formula picker — entry added with manufacturer `"Kendamil"` and spec sourced from hcp.kendamil.com Classic mixing chart (calorie_concentration, displacement_factor, grams_per_scoop computed and documented in the plan, exact values verified against the manufacturer HCP page before commit)
-- [x] **KEND-03
-**: User can select **Kendamil Goat** from the formula picker — entry added with manufacturer `"Kendamil"` and spec sourced from hcp.kendamil.com Goat mixing chart (calorie_concentration, displacement_factor, grams_per_scoop computed and documented in the plan, exact values verified against the manufacturer HCP page before commit)
-- [x] **KEND-04
-**: All three Kendamil entries are grouped under a "Kendamil" manufacturer heading in the SelectPicker grouped view (consistent with existing Abbott / Mead Johnson / Nestlé / Nutricia grouping)
-- [x] **KEND-05
-**: Each Kendamil entry uses the documented `packetsSupported` field correctly — set to `false` for non-HMF infant formulas (per v1.3 SelectPicker behavior that hides the Packets unit on non-HMF selection)
+- [ ] **TEST-01**: `window.visualViewport` polyfill added to `src/test-setup.ts` mirroring the existing `ResizeObserver` / `matchMedia` / `HTMLDialogElement` polyfills (with the same self-test pattern at lines 122–149) so jsdom-based vitest does not throw `TypeError: Cannot read properties of undefined` when components or modules read `window.visualViewport`
+- [ ] **TEST-02**: Reusable test helper `dispatchVisualViewportResize(height, offsetTop)` exported from `src/lib/test/visual-viewport-mock.ts` (or equivalent location) so component and unit tests can synthesize keyboard-up / keyboard-down state deterministically
+- [ ] **TEST-03**: New `webkit-iphone` Playwright project added to `playwright.config.ts` (using `devices['iPhone 14 Pro']` or equivalent) so e2e specs can execute under WebKit + iPhone viewport. Existing `chromium` project preserved unchanged. CI pipeline runs both projects.
 
-### Kendamil Testing & Documentation
+### Notch-Safe Title Bar (Wave-1, Fix C)
 
-- [x] **KEND-TEST-01**: Spreadsheet-parity unit tests added for the three Kendamil entries — at minimum one canonical fortification calculation per variant (e.g., Target Calorie 24 kcal/oz from a known starting volume) verified against a hand-computed expected value within the 1% epsilon used by other formulas in `fortification.test.ts`
-- [x] **KEND-TEST-02**: SelectPicker grouping test extended to assert the "Kendamil" manufacturer group renders with all three variants in alphabetical-or-registry order
-- [x] **KEND-TEST-03**: Existing Playwright fortification axe sweeps re-run with a Kendamil variant selected (light + dark) to verify no contrast regressions from the new manufacturer label
+- [ ] **NOTCH-01**: `NavShell.svelte` `<header>` respects `env(safe-area-inset-top)` via `pt-[env(safe-area-inset-top,0px)]` so on iPhone 14 Pro+ in standalone PWA mode the hamburger button, "NICU Assist" wordmark, and theme/info buttons do not sit under the camera notch / Dynamic Island
+- [ ] **NOTCH-02**: `NavShell.svelte` `<header>` respects landscape safe-area via `px-[max(env(safe-area-inset-left,0px),1rem)]` (and right counterpart) so in landscape orientation chrome content does not sit under rounded corners or the notch on iPhone 14 Pro+
+- [ ] **NOTCH-03**: `<header>` `bg-[var(--color-surface)]` paints into the safe-area-inset-top region so the notch / Dynamic Island sits on an opaque title-bar background (not transparent show-through to scrolled content) in both light and dark themes
+- [ ] **NOTCH-04**: Existing sticky-top consumers (e.g. `top-20` asides in calculator routes, if any) audited and updated where they would otherwise sit under the new inset-padded header — `min-h-14` `sticky top-0` `viewport-fit=cover` semantics preserved
+- [ ] **NOTCH-TEST-01**: Component test asserts `NavShell.svelte` source contains `pt-[env(safe-area-inset-top` (regression guard against accidental removal); existing 16/16 axe sweeps re-run in light + dark to confirm no contrast regression from the inset-fill behavior
 
-### Desktop Full-Nav Divergence
+### Auto-Focus Suppression (Wave-1, Fix A)
 
-- [x] **NAV-ALL-01
-**: Desktop top toolbar (md+ breakpoint) renders **every registered calculator** from the registry, regardless of favorites state — split `visibleCalculators` in `NavShell.svelte` into `mobileVisibleCalculators` (favorites-driven, 4-cap) and `desktopVisibleCalculators` (registry-driven, all)
-- [x] **NAV-ALL-02
-**: Mobile bottom bar behavior is **unchanged** from v1.13 — still favorites-driven, still 4-cap, still hamburger-managed (no regressions to Phase 41 NAV-FAV-01..04)
-- [x] **NAV-ALL-03
-**: Desktop top toolbar preserves all v1.13 visual contracts — identity color indicators (`identityClass`, border-b-2 on active), focus-visible outlines, `aria-current="page"` on the active route, 48px touch targets
-- [x] **NAV-ALL-04
-**: Hamburger menu button remains visible on desktop (md+) so users can re-read the disclaimer / open AboutSheet via the existing v1.13 NAV-FAV-04 routing
-- [x] **NAV-ALL-05
-**: Desktop layout reflows gracefully at common widths (768px / 1024px / 1280px) — no horizontal overflow, no truncated labels, no layout shift on hydration; tested at all 5 currently-registered calculators
+- [ ] **FOCUS-01**: `InputDrawer.svelte` lines 51–57 `queueMicrotask(() => firstInput?.focus())` block deleted in full (no boolean opt-out, no narrowed selector) so opening the drawer never programmatically focuses an `<input>`, `<select>`, `<textarea>`, or `[role="slider"]` element
+- [ ] **FOCUS-02**: Native `<dialog>` autofocus lands on a non-text-summoning control on drawer open via `autofocus` attribute on the existing close button so VoiceOver still announces the drawer ("Close inputs, button") and keyboard users have a deterministic Tab origin, but iOS soft keyboard does not appear
+- [ ] **FOCUS-03**: Drawer-open behavior is consistent across all six existing calculators (Morphine, Formula, GIR, Feeds, UAC/UVC, PERT) — single source of truth in `InputDrawer.svelte`, no per-calculator divergence
+- [ ] **FOCUS-TEST-01**: Component test asserts that after `<dialog>.showModal()` opens the drawer, `document.activeElement` is NOT an `<input>`, `<select>`, `<textarea>`, or `[role="slider"]` (explicit non-focus assertion — green CI today does not prove the fix)
+- [ ] **FOCUS-TEST-02**: Source-grep test asserts `InputDrawer.svelte` source contains neither `queueMicrotask` nor the `[role="slider"]` selector substring (regression guard against the deleted block reappearing)
+- [ ] **FOCUS-TEST-03**: Cross-calculator Playwright spec opens the drawer on each of the six calculator routes and asserts the focused element is the close button (or another non-input deterministic target), exercising every `InputDrawer` call site
 
-### Desktop Full-Nav Testing
+### iOS-Correct Drawer Anchoring (Wave-2, Fix B)
 
-- [x] **NAV-ALL-TEST-01**: Playwright E2E spec at desktop 1280 verifies all 5 registered calculators are visible in the top toolbar regardless of favorites state (toggle a non-favorite calculator off via hamburger, assert it remains in the desktop top bar but disappears from mobile bottom bar at 375)
-- [x] **NAV-ALL-TEST-02
-**: Component / Vitest spec for `NavShell` covers the new `desktopVisibleCalculators` derived computation — asserts it equals the full registry order regardless of `favorites.current` state (including 0 favorites edge case)
-- [x] **NAV-ALL-TEST-03**: Playwright axe sweep extended to cover the desktop top toolbar with all 5 calculators rendered (light + dark) — no contrast regressions from added calculator labels
+- [ ] **DRAWER-01**: New module-scope singleton `src/lib/shared/visualViewport.svelte.ts` (~40 lines, mirrors `theme.svelte.ts` / `favorites.svelte.ts` patterns) exposes `$state` runes for `{ offsetTop, height, keyboardOpen }`; idempotent `init()`; `browser`-guarded for SSG safety
+- [ ] **DRAWER-02**: Singleton subscribes to `visualViewport.resize` only (NOT `visualViewport.scroll` — Phase 42.1 D-16 explicitly removed scroll-driven transforms; reintroducing risks the same scroll-jank). Re-reads `vv.width/height/offsetTop` on every event (no caching) to survive the iOS 26 `visualViewport.height` post-dismiss regression (Apple Developer Forums #800125)
+- [ ] **DRAWER-03**: Singleton binds `pageshow` (with `event.persisted === true` branch) and `visibilitychange` listeners so bfcache-restored sessions synchronously re-read `visualViewport` properties — drawer renders correctly on resume from background without requiring a user gesture
+- [ ] **DRAWER-04**: Singleton initialized from `src/routes/+layout.svelte:onMount` alongside the existing `theme.init()` / `disclaimer.init()` / `favorites.init()` / `pwa.init()` calls
+- [ ] **DRAWER-05**: `InputDrawer.svelte` `.input-drawer-sheet` exposes `--ivv-bottom` and `--ivv-max-height` CSS custom properties driven by the singleton; no per-calculator prop plumbing across the six call sites
+- [ ] **DRAWER-06**: Sheet `max-height` becomes `calc(var(--ivv-max-height, 80dvh))` so when the keyboard is up the sheet shrinks to fit the available `visualViewport.height − 16px` (eyebrow + first input remain visible)
+- [ ] **DRAWER-07**: Sheet `padding-bottom` becomes `max(env(safe-area-inset-bottom, 0px), var(--ivv-bottom, 0px))` so when the keyboard is up the sheet's bottom edge sits flush above the keyboard top with ≥ 8 px clearance; when the keyboard is down the existing safe-area-inset-bottom clearance is preserved
+- [ ] **DRAWER-08**: `transform`/`max-height` modifications apply ONLY to the inner `.input-drawer-sheet`, never to the outer `<dialog>` element, so top-layer positioning rules and `<dialog>` accessibility semantics are preserved (and the existing SelectPicker dialog inside the drawer is unaffected)
+- [ ] **DRAWER-09**: Hardware-keyboard-paired iPhones do NOT trigger the keyboard-open branch (singleton's `keyboardOpen` heuristic uses `window.innerHeight − vv.height > 100` to filter URL-bar collapse and admit only the OSK; no false positives for Bluetooth keyboards which leave `vv.height` unchanged)
+- [ ] **DRAWER-10**: `prefers-reduced-motion: reduce` honored — when set, sheet sizing/positioning snaps without transition (consistent with v1.6 / Phase 42.1 reduced-motion contract); when unset, transition uses an existing scoped CSS rule (no new global transitions)
+- [ ] **DRAWER-11**: Existing `md:hidden` rule on the drawer is preserved (drawer never appears on tablet/desktop breakpoints) so iPad split-keyboard cases are out of scope per architectural design
+- [ ] **DRAWER-12**: Existing `<dialog>` `showModal()` + top-layer + Esc-to-close + focus-trap + focus-restore behaviors are preserved verbatim — no replacement with `position: fixed` or other anti-pattern (reference: PITFALLS.md anti-feature list)
+- [ ] **DRAWER-TEST-01**: Vitest unit test on the singleton — mock `window.visualViewport` via `dispatchVisualViewportResize(...)` helper, assert `$state` runes update on `resize` events, assert listeners rebind on `pageshow.persisted === true`, assert no `vv.scroll` listener is attached
+- [ ] **DRAWER-TEST-02**: Vitest component test on `InputDrawer.svelte` asserts that `style="--ivv-bottom: …px; --ivv-max-height: …px"` is applied to `.input-drawer-sheet` and updates when the mock visualViewport dispatches a resize
+- [ ] **DRAWER-TEST-03**: Playwright spec under the new `webkit-iphone` project synthesizes `visualViewport.resize` (via `page.evaluate(() => window.dispatchEvent(...))`) and asserts the computed `padding-bottom` and `max-height` of `.input-drawer-sheet` match the keyboard-up branch
+- [ ] **DRAWER-TEST-04**: Existing 16/16 axe sweeps (light + dark across all 6 calculators) re-run with the new drawer behavior — confirm no contrast or landmark regressions from the visualViewport-aware layout
 
-### Release v1.14.0
+### Real-iPhone Smoke Gate (Wave-3) — closes v1.13 D-12 deferral
 
-- [ ] **REL-01**: `package.json` version bumped to `1.14.0`; AboutSheet automatically reflects v1.14.0 via the `__APP_VERSION__` build-time constant
-- [ ] **REL-02**: PROJECT.md Validated list updated with v1.14 entries (KEND-*, NAV-ALL-*, REL-*) at milestone completion
-- [ ] **REL-03**: REQUIREMENTS.md traceability table flipped to ✓ Validated for all v1.14 IDs; ROADMAP.md Progress markers complete; full clinical gate green (svelte-check 0/0, vitest green, `pnpm build` ✓, Playwright E2E + extended axe suite green in both themes)
+- [ ] **SMOKE-01**: `.planning/v1.15.1-IPHONE-SMOKE.md` checklist artifact created and used as a blocking gate before milestone close. Tester signs off on each step on a real iPhone 14 Pro+ (or newer) in standalone PWA mode (not Safari browser tab)
+- [ ] **SMOKE-02**: Smoke step verifies hamburger / wordmark / theme button visible below Dynamic Island in portrait (NOTCH-01 closure)
+- [ ] **SMOKE-03**: Smoke step verifies drawer opens with no keyboard appearing and focus on close button; VoiceOver announces the drawer (FOCUS-01 / FOCUS-02 closure)
+- [ ] **SMOKE-04**: Smoke step verifies tapping a weight field summons keyboard AND drawer is anchored above keyboard top with ≥ 8 px clearance; first input + eyebrow remain visible (DRAWER-06 / DRAWER-07 closure)
+- [ ] **SMOKE-05**: Smoke step verifies dismissing keyboard (Done button) returns drawer smoothly to bottom-nav-top with `env(safe-area-inset-bottom)` clearance; no flicker, no stale offset (DRAWER-02 closure for iOS 26 regression)
+- [ ] **SMOKE-06**: Smoke step verifies bfcache restore (call yourself, return to app) — drawer renders flush without requiring a user gesture (DRAWER-03 closure)
+- [ ] **SMOKE-07**: Smoke step verifies hardware-keyboard-paired iPhone does NOT lift the drawer (DRAWER-09 closure)
+- [ ] **SMOKE-08**: Smoke step verifies landscape rotation — `safe-area-inset-left/right` insets respected; portrait re-rotation preserves notch-safe top (NOTCH-02 closure)
+- [ ] **SMOKE-09**: Smoke step verifies light-mode `apple-mobile-web-app-status-bar-style: black-translucent` text legibility against `var(--color-surface)` light value (PITFALLS.md gap; if poor, mitigation is light/dark `<meta name="theme-color">` toggled by FOUC script)
+- [ ] **SMOKE-10**: All six calculators (Morphine, Formula, GIR, Feeds, UAC/UVC, PERT) smoke-tested for drawer + notch behavior — no per-calculator divergence found (or any divergence captured as a follow-up todo)
+
+### Release v1.15.1
+
+- [ ] **REL-01**: `package.json` version bumped from `1.15.0` to `1.15.1`. AboutSheet reflects v1.15.1 via the `__APP_VERSION__` build-time constant sourced from `package.json` (no manual string edit)
+- [ ] **REL-02**: PROJECT.md Validated list updated with v1.15.1 entries at milestone completion; Active section cleared; Last updated footer bumped
+- [ ] **REL-03**: REQUIREMENTS.md traceability table all v1.15.1 IDs flipped to ✓ Validated; ROADMAP.md Progress row marked Complete; v1.15.1 archived to `.planning/milestones/v1.15.1-{REQUIREMENTS,ROADMAP,phases}/` per existing pattern
+- [ ] **REL-04**: Final clinical gate passes — svelte-check 0/0, vitest fully green (existing 439+ + new TEST/FOCUS/DRAWER tests), `pnpm build` ✓, Playwright `chromium` + `webkit-iphone` projects + extended axe suite (16/16 minimum) green in both themes; SMOKE-01..10 all signed off
 
 ## Future Requirements
 
-Deferred to later milestones:
-
-- Raise mobile favorites cap from 4 to N (only if a 6th+ calculator is added that doesn't fit the 4-cap default)
-- Hide hamburger button on desktop (would require relocating the AboutSheet trigger)
-- Additional non-Kendamil formula brands (no current request)
-- Kendamil HMF / fortifier variants (current request is infant formulas only)
+(deferred from v1.15.1 — none currently)
 
 ## Out of Scope
 
-Explicit exclusions for v1.14:
+Explicit exclusions for v1.15.1:
 
-- **Mobile bottom bar visual change** — explicitly unchanged per user direction, mobile stays favorites-driven
-- **About-link relocation off the hamburger menu** — out of scope; v1.13 NAV-FAV-04 routing is preserved
-- **DESIGN.md / DESIGN.json contract changes** — no new tokens, no rule additions; the v1.13 design contract holds
-- **New identity hue** — no new calculators added (only formula entries), so no new `--color-identity-*` tokens
-- **Kendamil-specific UI treatment** — Kendamil entries use the existing fortification UI, no special branding or layout
+- **New clinical features or calculators** — milestone is shell-polish only; six existing calculators are unchanged behaviorally
+- **DESIGN.md / DESIGN.json contract changes** — no new tokens, no rule additions, no Identity-Inside / Amber-as-Semantic / OKLCH-Only / Red-Means-Wrong / Tabular-Numbers / Eyebrow-Above-Numeral changes
+- **`HeroResult` redesign** — the v1.13 above-the-fold pattern is preserved verbatim
+- **Bottom-nav layout changes** — favorites-driven 4-tab pattern preserved verbatim; bottom nav is left untouched (the top-layer `<dialog>` covers it when the drawer is open)
+- **Calculator state migrations** — no sessionStorage / localStorage schema changes; no migrations needed
+- **Drawer libraries** (`svelte-bottom-sheet`, `svelte-drawer`, `vaul`) — would re-introduce the auto-focus we're deleting and add ~10 KB for behavior we already have everywhere except iOS keyboard overlap
+- **`body { overflow: hidden }` scroll-lock** — breaks iOS scroll-into-view; preserve current behavior
+- **`position: fixed` on `<html>` or `<body>`** — documented gap-at-bottom bug under `<dialog>` + `black-translucent`
+- **`window.innerHeight`-based sizing** — equals layout viewport, includes keyboard region (this is the current bug being fixed)
+- **`interactive-widget=resizes-content` viewport meta** — Chrome/Android-only, iOS ignores it
+- **VirtualKeyboard API / `keyboard-inset-height` as primary mechanism** — not implemented in iOS Safari; visualViewport API is the authoritative source for v1.15.1 (acceptable as progressive enhancement only in a future milestone)
+- **`inputmode="none"`** — breaks paste flows (especially v1.8 GIR EPIC paste)
+- **iPad split-keyboard handling** — drawer is already `md:hidden`, so iPad does not invoke the affected code path
+- **Boolean `autoFocus={false}` opt-out prop** — full deletion is the fix; no per-call-site toggle
+- **Non-iOS regressions** — Android Chrome, desktop Chrome, desktop Safari, desktop Firefox already work correctly; v1.15.1 must not regress them but does not add new affordances for them
 - **Native app builds** — PWA only (project-level constraint)
 
 ## Traceability
 
 | Requirement ID | Phase | Status |
 |---|---|---|
-| KEND-01 | Phase 44 | Complete |
-| KEND-02 | Phase 44 | Complete |
-| KEND-03 | Phase 44 | Complete |
-| KEND-04 | Phase 44 | Complete |
-| KEND-05 | Phase 44 | Complete |
-| KEND-TEST-01 | Phase 44 | Complete |
-| KEND-TEST-02 | Phase 44 | Complete |
-| KEND-TEST-03 | Phase 44 | Complete |
-| NAV-ALL-01 | Phase 45 | Complete |
-| NAV-ALL-02 | Phase 45 | Complete |
-| NAV-ALL-03 | Phase 45 | Complete |
-| NAV-ALL-04 | Phase 45 | Complete |
-| NAV-ALL-05 | Phase 45 | Complete |
-| NAV-ALL-TEST-01 | Phase 45 | Complete |
-| NAV-ALL-TEST-02 | Phase 45 | Complete |
-| NAV-ALL-TEST-03 | Phase 45 | Complete |
-| REL-01 | Phase 46 | Pending |
-| REL-02 | Phase 46 | Pending |
-| REL-03 | Phase 46 | Pending |
+| TEST-01 | Phase TBD | Pending |
+| TEST-02 | Phase TBD | Pending |
+| TEST-03 | Phase TBD | Pending |
+| NOTCH-01 | Phase TBD | Pending |
+| NOTCH-02 | Phase TBD | Pending |
+| NOTCH-03 | Phase TBD | Pending |
+| NOTCH-04 | Phase TBD | Pending |
+| NOTCH-TEST-01 | Phase TBD | Pending |
+| FOCUS-01 | Phase TBD | Pending |
+| FOCUS-02 | Phase TBD | Pending |
+| FOCUS-03 | Phase TBD | Pending |
+| FOCUS-TEST-01 | Phase TBD | Pending |
+| FOCUS-TEST-02 | Phase TBD | Pending |
+| FOCUS-TEST-03 | Phase TBD | Pending |
+| DRAWER-01 | Phase TBD | Pending |
+| DRAWER-02 | Phase TBD | Pending |
+| DRAWER-03 | Phase TBD | Pending |
+| DRAWER-04 | Phase TBD | Pending |
+| DRAWER-05 | Phase TBD | Pending |
+| DRAWER-06 | Phase TBD | Pending |
+| DRAWER-07 | Phase TBD | Pending |
+| DRAWER-08 | Phase TBD | Pending |
+| DRAWER-09 | Phase TBD | Pending |
+| DRAWER-10 | Phase TBD | Pending |
+| DRAWER-11 | Phase TBD | Pending |
+| DRAWER-12 | Phase TBD | Pending |
+| DRAWER-TEST-01 | Phase TBD | Pending |
+| DRAWER-TEST-02 | Phase TBD | Pending |
+| DRAWER-TEST-03 | Phase TBD | Pending |
+| DRAWER-TEST-04 | Phase TBD | Pending |
+| SMOKE-01 | Phase TBD | Pending |
+| SMOKE-02 | Phase TBD | Pending |
+| SMOKE-03 | Phase TBD | Pending |
+| SMOKE-04 | Phase TBD | Pending |
+| SMOKE-05 | Phase TBD | Pending |
+| SMOKE-06 | Phase TBD | Pending |
+| SMOKE-07 | Phase TBD | Pending |
+| SMOKE-08 | Phase TBD | Pending |
+| SMOKE-09 | Phase TBD | Pending |
+| SMOKE-10 | Phase TBD | Pending |
+| REL-01 | Phase TBD | Pending |
+| REL-02 | Phase TBD | Pending |
+| REL-03 | Phase TBD | Pending |
+| REL-04 | Phase TBD | Pending |
 
 **Coverage:**
-- v1.14 requirements: 19 total
-- Mapped to phases: 19 (Phase 44: 8 / Phase 45: 8 / Phase 46: 3) ✓ 100%
+- v1.15.1 requirements: 44 total
+- Mapped to phases: 0 (filled by roadmapper)
 
 ---
-*Requirements defined: 2026-04-25 — Traceability filled by roadmapper 2026-04-25*
+*Requirements defined: 2026-04-27*
