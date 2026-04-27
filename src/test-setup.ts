@@ -148,3 +148,64 @@ if (typeof HTMLDialogElement !== 'undefined') {
     throw err;
   }
 }
+
+// jsdom (^29) does not implement window.visualViewport — the iOS soft-keyboard
+// + drawer-anchoring code in Phase 49 reads window.visualViewport.{height,offsetTop}
+// and registers a 'resize' listener. Provide an additive polyfill backed by
+// EventTarget so component / unit tests can synthesize keyboard-up / keyboard-down
+// state via the helper at src/lib/test/visual-viewport-mock.ts (Phase 47 / TEST-02).
+if (typeof window !== 'undefined' && typeof window.visualViewport === 'undefined') {
+  class VisualViewportPolyfill extends EventTarget {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    offsetTop = 0;
+    offsetLeft = 0;
+    pageTop = 0;
+    pageLeft = 0;
+    scale = 1;
+    onresize: ((this: VisualViewport, ev: Event) => unknown) | null = null;
+    onscroll: ((this: VisualViewport, ev: Event) => unknown) | null = null;
+    onscrollend: ((this: VisualViewport, ev: Event) => unknown) | null = null;
+  }
+
+  Object.defineProperty(window, 'visualViewport', {
+    configurable: true,
+    writable: false,
+    value: new VisualViewportPolyfill() as unknown as VisualViewport
+  });
+
+  // Self-test: catches regressions at suite startup. Mirrors the HTMLDialogElement
+  // self-test pattern at lines 121-149 — probe → mutate → assert → throw on failure.
+  // console.warn is invisible in CI; throw err makes the suite fail LOUDLY.
+  try {
+    // Cast through unknown so the instanceof check is reachable at compile time —
+    // lib.dom types VisualViewport as already extending EventTarget, which would
+    // narrow the negative branch to `never` and break the runtime guard.
+    const vv = window.visualViewport as unknown as EventTarget & {
+      addEventListener: VisualViewport['addEventListener'];
+      removeEventListener: VisualViewport['removeEventListener'];
+      dispatchEvent: VisualViewport['dispatchEvent'];
+    };
+    if (!(vv instanceof EventTarget)) {
+      throw new Error('visualViewport polyfill: instance is not an EventTarget');
+    }
+    let received = 0;
+    const handler = () => {
+      received++;
+    };
+    vv.addEventListener('resize', handler);
+    vv.dispatchEvent(new Event('resize'));
+    if (received !== 1) {
+      throw new Error('visualViewport polyfill: dispatchEvent did not fire registered listener');
+    }
+    vv.removeEventListener('resize', handler);
+    vv.dispatchEvent(new Event('resize'));
+    if (received !== 1) {
+      throw new Error('visualViewport polyfill: removeEventListener did not detach listener');
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('[test-setup] visualViewport polyfill self-test failed:', err);
+    throw err;
+  }
+}
