@@ -149,7 +149,10 @@ See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROA
   3. User backgrounds the app (call yourself, switch apps) and returns — the bfcache-restored session renders the drawer flush without requiring a user gesture (singleton's `pageshow` `event.persisted === true` branch + `visibilitychange` listener synchronously re-read `visualViewport` properties on resume)
   4. User on an iPhone paired with a Bluetooth hardware keyboard does NOT see the drawer lift (the `keyboardOpen` heuristic uses `window.innerHeight − vv.height > 100` to filter URL-bar collapse and admit only the OSK; hardware keyboards leave `vv.height` unchanged so no false positive)
   5. The `<dialog>` `showModal()` + Esc-to-close + focus-trap + focus-restore behaviors are preserved verbatim; the existing SelectPicker dialog inside the drawer is unaffected (transforms apply ONLY to the inner `.input-drawer-sheet`, never the outer `<dialog>`); Android Chrome, desktop Chrome/Safari/Firefox behavior is unchanged; existing 16/16 axe sweeps re-run with the visualViewport-aware layout in light + dark and remain green
-**Plans**: TBD (run `/gsd-plan-phase 49` to break down)
+**Plans**: 3 plans
+  - [ ] 49-01-PLAN.md — visualViewport singleton (`src/lib/shared/visualViewport.svelte.ts`) + layout init in `+layout.svelte:onMount` + DRAWER-TEST-01 unit test (DRAWER-01..04, DRAWER-09, DRAWER-TEST-01)
+  - [ ] 49-02-PLAN.md — InputDrawer wiring (singleton import + $derived ivvStyle + inline style on inner sheet div + two CSS rule changes consuming `--ivv-bottom` / `--ivv-max-height`) + DRAWER-TEST-02 component tests + source-grep sentinels (DRAWER-05..08, DRAWER-10..12, DRAWER-TEST-02)
+  - [ ] 49-03-PLAN.md — Playwright spec `e2e/drawer-visual-viewport.spec.ts` (synthetic visualViewport.resize under both chromium + webkit-iphone projects) + 16/16 axe sweep regression re-run (DRAWER-TEST-03, DRAWER-TEST-04)
 **UI hint**: yes
 
 ### Phase 50: Wave-3 — Real-iPhone Smoke Gate
@@ -196,7 +199,7 @@ See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROA
 | ws-pert | v1.15 | — | Complete | 2026-04-26 |
 | 47. Wave-0 — Test Scaffolding | v1.15.1 | 2/3 | In Progress|  |
 | 48. Wave-1 — Trivial Fixes (NOTCH + FOCUS) | v1.15.1 | 0/2 | Not started | — |
-| 49. Wave-2 — visualViewport Drawer Anchoring | v1.15.1 | 0/TBD | Not started | — |
+| 49. Wave-2 — visualViewport Drawer Anchoring | v1.15.1 | 0/3 | Not started | — |
 | 50. Wave-3 — Real-iPhone Smoke Gate | v1.15.1 | 0/TBD | Not started | — |
 | 51. Release v1.15.1 | v1.15.1 | 0/TBD | Not started | — |
 
