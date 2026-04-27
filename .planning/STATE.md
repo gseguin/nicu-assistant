@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
-status: verifying
-stopped_at: Phase 49 UI-SPEC approved (6/6 PASS)
-last_updated: "2026-04-27T17:55:33.312Z"
-last_activity: 2026-04-27 -- Phase 48 verified complete
+status: executing
+stopped_at: Plan 49-01 complete (singleton + layout init merged); ready for 49-02
+last_updated: "2026-04-27T18:42:39.271Z"
+last_activity: 2026-04-27 -- Phase 49 execution started
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
-  percent: 100
+  total_plans: 8
+  completed_plans: 6
+  percent: 75
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-27)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase 48 — Wave-1 — Trivial Fixes (NOTCH + FOCUS)
+**Current focus:** Phase 49 — wave-2-visualviewport-drawer-anchoring
 
 ## Current Position
 
-Phase: 48 (Wave-1 — Trivial Fixes (NOTCH + FOCUS)) — COMPLETE
-Plan: 2 of 2
-Status: Phase complete — 5/5 success criteria verified, 11/11 requirements satisfied (NOTCH-01..04 + NOTCH-TEST-01 + FOCUS-01..03 + FOCUS-TEST-01..03), 21/21 decisions honored. Ready for Phase 49 (Wave-2 visualViewport Drawer Anchoring).
-Last activity: 2026-04-27 -- Phase 48 verified complete
+Phase: 49 (wave-2-visualviewport-drawer-anchoring) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 49
+Last activity: 2026-04-27 -- Phase 49 execution started
 
 ## Performance Metrics
 
@@ -86,8 +86,8 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 
 ## Session Continuity
 
-Last session: 2026-04-27T17:55:33.305Z
-Stopped at: Phase 49 UI-SPEC approved (6/6 PASS)
+Last session: 2026-04-27T18:42:39.265Z
+Stopped at: Plan 49-01 complete (singleton + layout init merged); ready for 49-02
 Resume file: 
 
-.planning/phases/49-wave-2-visualviewport-drawer-anchoring/49-UI-SPEC.md
+.planning/phases/49-wave-2-visualviewport-drawer-anchoring/49-02-PLAN.md
