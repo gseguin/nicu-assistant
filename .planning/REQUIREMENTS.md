@@ -25,12 +25,12 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Auto-Focus Suppression (Wave-1, Fix A)
 
-- [ ] **FOCUS-01**: `InputDrawer.svelte` lines 51–57 `queueMicrotask(() => firstInput?.focus())` block deleted in full (no boolean opt-out, no narrowed selector) so opening the drawer never programmatically focuses an `<input>`, `<select>`, `<textarea>`, or `[role="slider"]` element
-- [ ] **FOCUS-02**: Native `<dialog>` autofocus lands on a non-text-summoning control on drawer open via `autofocus` attribute on the existing close button so VoiceOver still announces the drawer ("Close inputs, button") and keyboard users have a deterministic Tab origin, but iOS soft keyboard does not appear
-- [ ] **FOCUS-03**: Drawer-open behavior is consistent across all six existing calculators (Morphine, Formula, GIR, Feeds, UAC/UVC, PERT) — single source of truth in `InputDrawer.svelte`, no per-calculator divergence
-- [ ] **FOCUS-TEST-01**: Component test asserts that after `<dialog>.showModal()` opens the drawer, `document.activeElement` is NOT an `<input>`, `<select>`, `<textarea>`, or `[role="slider"]` (explicit non-focus assertion — green CI today does not prove the fix)
-- [ ] **FOCUS-TEST-02**: Source-grep test asserts `InputDrawer.svelte` source contains neither `queueMicrotask` nor the `[role="slider"]` selector substring (regression guard against the deleted block reappearing)
-- [ ] **FOCUS-TEST-03**: Cross-calculator Playwright spec opens the drawer on each of the six calculator routes and asserts the focused element is the close button (or another non-input deterministic target), exercising every `InputDrawer` call site
+- [x] **FOCUS-01**: `InputDrawer.svelte` lines 51–57 `queueMicrotask(() => firstInput?.focus())` block deleted in full (no boolean opt-out, no narrowed selector) so opening the drawer never programmatically focuses an `<input>`, `<select>`, `<textarea>`, or `[role="slider"]` element
+- [x] **FOCUS-02**: Native `<dialog>` autofocus lands on a non-text-summoning control on drawer open via `autofocus` attribute on the existing close button so VoiceOver still announces the drawer ("Close inputs, button") and keyboard users have a deterministic Tab origin, but iOS soft keyboard does not appear
+- [x] **FOCUS-03**: Drawer-open behavior is consistent across all six existing calculators (Morphine, Formula, GIR, Feeds, UAC/UVC, PERT) — single source of truth in `InputDrawer.svelte`, no per-calculator divergence
+- [x] **FOCUS-TEST-01**: Component test asserts that after `<dialog>.showModal()` opens the drawer, `document.activeElement` is NOT an `<input>`, `<select>`, `<textarea>`, or `[role="slider"]` (explicit non-focus assertion — green CI today does not prove the fix)
+- [x] **FOCUS-TEST-02**: Source-grep test asserts `InputDrawer.svelte` source contains neither `queueMicrotask` nor the `[role="slider"]` selector substring (regression guard against the deleted block reappearing)
+- [x] **FOCUS-TEST-03**: Cross-calculator Playwright spec opens the drawer on each of the six calculator routes and asserts the focused element is the close button (or another non-input deterministic target), exercising every `InputDrawer` call site
 
 ### iOS-Correct Drawer Anchoring (Wave-2, Fix B)
 
@@ -108,12 +108,12 @@ Explicit exclusions for v1.15.1:
 | NOTCH-03 | Phase 48 | Complete |
 | NOTCH-04 | Phase 48 | Complete |
 | NOTCH-TEST-01 | Phase 48 | Complete |
-| FOCUS-01 | Phase 48 | Pending |
-| FOCUS-02 | Phase 48 | Pending |
-| FOCUS-03 | Phase 48 | Pending |
-| FOCUS-TEST-01 | Phase 48 | Pending |
-| FOCUS-TEST-02 | Phase 48 | Pending |
-| FOCUS-TEST-03 | Phase 48 | Pending |
+| FOCUS-01 | Phase 48 | Complete |
+| FOCUS-02 | Phase 48 | Complete |
+| FOCUS-03 | Phase 48 | Complete |
+| FOCUS-TEST-01 | Phase 48 | Complete |
+| FOCUS-TEST-02 | Phase 48 | Complete |
+| FOCUS-TEST-03 | Phase 48 | Complete |
 | DRAWER-01 | Phase 49 | Pending |
 | DRAWER-02 | Phase 49 | Pending |
 | DRAWER-03 | Phase 49 | Pending |

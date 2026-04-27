@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
-status: verifying
+status: executing
 stopped_at: Phase 48 plans created and verified (2 plans, 6 tasks total)
-last_updated: "2026-04-27T16:25:06.573Z"
-last_activity: 2026-04-27
+last_updated: "2026-04-27T16:25:31.005Z"
+last_activity: 2026-04-27 -- Phase 48 execution started
 progress:
   total_phases: 5
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-27)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase 47 — Wave-0 — Test Scaffolding
+**Current focus:** Phase 48 — Wave-1 — Trivial Fixes (NOTCH + FOCUS)
 
 ## Current Position
 
-Phase: 47 (Wave-0 — Test Scaffolding) — COMPLETE
-Plan: 3 of 3
-Status: Phase complete — all 4 success criteria verified, TEST-01..03 satisfied. Ready for Phase 48 (Wave-1 NOTCH + FOCUS).
-Last activity: 2026-04-27
+Phase: 48 (Wave-1 — Trivial Fixes (NOTCH + FOCUS)) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 48
+Last activity: 2026-04-27 -- Phase 48 execution started
 
 ## Performance Metrics
 
