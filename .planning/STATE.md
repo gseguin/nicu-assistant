@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
-status: planning
-last_updated: "2026-04-27T06:00:06.770Z"
-last_activity: 2026-04-27
+status: Roadmap landed; awaiting `/gsd-plan-phase 47` to break Phase 47 into plans
+stopped_at: Phase 47 context gathered
+last_updated: "2026-04-27T06:57:23.623Z"
+last_activity: 2026-04-27 — Roadmap for v1.15.1 created (Phases 47-51, 44 requirements mapped 100%)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
-  percent: 0
 ---
 
 # Project State
@@ -77,13 +77,14 @@ Last activity: 2026-04-27 — Roadmap for v1.15.1 created (Phases 47-51, 44 requ
 ### Blockers/Concerns
 
 None at the roadmap level. Two known iOS-research gaps to monitor during planning:
+
 - iOS 26 `visualViewport.height` post-dismiss regression (Apple Developer Forums #800125, Sep 2025) — mitigation pattern (re-read on every event, never cache) is industry-standard and survives by construction. Verify on latest available iOS during Phase 50 smoke.
 - Keyboard-open detection threshold (`window.innerHeight − vv.height > 100`) — needs real-device tuning to filter URL-bar collapse (~50–80 px) without missing edge cases. Verify during Phase 50.
 
 ## Session Continuity
 
-Last session: 2026-04-27
-Stopped at: Roadmap landed for v1.15.1 (5 phases, 44 reqs mapped 100%)
-Resume file: None
+Last session: 2026-04-27T06:57:23.616Z
+Stopped at: Phase 47 context gathered
+Resume file: .planning/phases/47-wave-0-test-scaffolding/47-CONTEXT.md
 
 **Planned Phase:** 47 (Wave-0 Test Scaffolding) — 0 plans — 2026-04-27
