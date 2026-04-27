@@ -134,7 +134,9 @@ See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROA
   3. User opens the input drawer (manually, or for the first time on a calculator route) and the iOS soft keyboard does NOT appear; focus lands on the close button (not on any `<input>`, `<select>`, `<textarea>`, or `[role="slider"]`); VoiceOver announces "Close inputs, button" — keyboard users get a deterministic Tab origin and the clinician must tap a field to summon the OSK
   4. The same drawer-open-no-keyboard behavior holds on every one of the six existing calculators (Morphine, Formula, GIR, Feeds, UAC/UVC, PERT) — single source of truth in `InputDrawer.svelte` with no per-calculator divergence
   5. Existing 16/16 axe sweeps re-run in light + dark and remain green; no contrast regression introduced by the inset-fill behavior; component + source-grep tests guard against the deleted `queueMicrotask` block reappearing or the `pt-[env(safe-area-inset-top` Tailwind class being accidentally removed
-**Plans**: TBD (run `/gsd-plan-phase 48` to break down)
+**Plans**: 2 plans
+  - [ ] 48-01-PLAN.md — FOCUS: delete queueMicrotask block, add autofocus to close button, T-07 + T-08 + cross-calculator Playwright spec
+  - [ ] 48-02-PLAN.md — NOTCH: pt-[env(safe-area-inset-top,0px)] + px-[max(env(safe-area-inset-left,0px),1rem)] on header, T-13 source-grep guard
 **UI hint**: yes
 
 ### Phase 49: Wave-2 — visualViewport Drawer Anchoring
@@ -193,7 +195,7 @@ See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROA
 | 44-46 | v1.14 | — | Complete | 2026-04-25 |
 | ws-pert | v1.15 | — | Complete | 2026-04-26 |
 | 47. Wave-0 — Test Scaffolding | v1.15.1 | 2/3 | In Progress|  |
-| 48. Wave-1 — Trivial Fixes (NOTCH + FOCUS) | v1.15.1 | 0/TBD | Not started | — |
+| 48. Wave-1 — Trivial Fixes (NOTCH + FOCUS) | v1.15.1 | 0/2 | Not started | — |
 | 49. Wave-2 — visualViewport Drawer Anchoring | v1.15.1 | 0/TBD | Not started | — |
 | 50. Wave-3 — Real-iPhone Smoke Gate | v1.15.1 | 0/TBD | Not started | — |
 | 51. Release v1.15.1 | v1.15.1 | 0/TBD | Not started | — |
