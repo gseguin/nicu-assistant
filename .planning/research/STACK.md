@@ -1,120 +1,111 @@
-# Technology Stack — v1.12 Feed Advance Calculator
+# Technology Stack — v1.15.1 iOS Polish & Drawer Hardening
 
 **Project:** NICU Assistant
-**Milestone:** v1.12 Feed Advance Calculator
-**Researched:** 2026-04-09
-**Scope:** Additions only. Base stack (SvelteKit 2.57 / Svelte 5.55 / Tailwind 4 / Vite 8 / TS 6 / pnpm 10.33 / @vite-pwa/sveltekit / adapter-static / Vitest 4 / Playwright 1.58 / axe-core / @lucide/svelte 1.8 / bits-ui 2.17) is frozen and NOT re-evaluated.
+**Milestone:** v1.15.1 (iOS-only polish; three iPhone bedside regressions)
+**Researched:** 2026-04-27
+**Scope:** Additions only. Base stack (SvelteKit 2.57 / Svelte 5.55 / Tailwind 4 / Vite 8 / TS 6 / pnpm 10.33 / @vite-pwa/sveltekit / adapter-static / Vitest 4 / Playwright 1.59 / @axe-core/playwright / @lucide/svelte 1.8 / bits-ui 2.18) is frozen and NOT re-evaluated.
 
-## TL;DR
+## 1. Summary
 
-**Zero new runtime dependencies. Zero new devDependencies.** The Feed Advance Calculator is a pure application of existing patterns — a fourth entry in `CALCULATOR_REGISTRY`, a new `src/lib/feeds/` module, a JSON config, spreadsheet-parity tests against `nutrition-calculator.xlsx`, and one new `--color-identity` OKLCH token pair. No new lib is justified.
+**Zero new runtime dependencies. Zero new devDependencies.** All three iOS fixes are plain web-platform plumbing. The `visualViewport` API is part of `lib.dom.d.ts`, baseline-available since 2021, and already typed by the in-repo `typescript@^6.0.3`. `env(safe-area-inset-top)` is a CSS function with no JS surface — it just needs to be added to `NavShell.svelte`'s sticky `<header>` padding. Suppressing dialog auto-focus is a one-line edit (delete the `queueMicrotask(() => firstInput?.focus())` block in `InputDrawer.svelte`); the native `<dialog>` itself with no `autofocus` attribute does the right thing on its own. The v1.9 zero-runtime-deps posture (DEBT-03) is preserved.
 
-## Recommended Stack Additions
+The non-trivial concern is **iOS 26 Safari's `visualViewport` regression** ([Apple Developer Forum thread 800125](https://developer.apple.com/forums/thread/800125), September 2025): `visualViewport.height` does not fully reset after the keyboard dismisses, leaving fixed elements offset by ~24 px. We mitigate by reading `visualViewport.height` only on `resize`/`scroll` events while the drawer is open AND a focused input is present, and by always pinning the sheet to the bottom of `visualViewport.height + visualViewport.offsetTop` rather than `bottom: 0` on the layout viewport. No library handles this for us; the fix is small enough (≤ 30 lines) that pulling in a drawer library would be a net cost.
 
-### Core Framework
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| — | — | — | None. SvelteKit + Svelte 5 runes already carry the calculator pattern proven across Morphine, Formula, and GIR. |
+## 2. New Dependencies Needed
 
-### Database
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| — | — | — | N/A. Clinical parameters embedded at build time in `src/lib/feeds/feeds-config.json` (same pattern as `morphine-config.json`, `fortification-config.json`, `gir-config.json`). No runtime DB. |
+**None.**
 
-### Infrastructure
-| Technology | Version | Purpose | Why |
-|------------|---------|---------|-----|
-| — | — | — | adapter-static SPA output unchanged. PWA precache extends automatically to the new `/feeds` route. |
+| Runtime | Dev | Total |
+|---|---|---|
+| 0 | 0 | 0 |
 
-### Supporting Libraries
-| Library | Version | Purpose | When to Use |
-|---------|---------|---------|-------------|
-| — | — | — | See per-question justifications below. |
+The `package.json` will only see a `version` bump from 1.15.0 → 1.15.1 at release, identical in shape to the v1.10/v1.11/v1.12/v1.13 hotfix-style milestones.
 
-## Answers to Specific Questions
+## 3. Existing Capabilities Cover Each Requirement
 
-### 1. xlsx parsing / test helpers for Sheet1 + Sheet2 parity?
+### Requirement A — Don't auto-focus first input on drawer expand
 
-**Verdict: NO addition. Continue hand-written fixtures.**
+**Existing capability:** Native `HTMLDialogElement.showModal()` + the absence of an `autofocus` attribute. Per [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog), without `autofocus` showModal() lands focus on the first focusable element by sequential keyboard order — in our drawer that is the "Clear" button (or the close-toggle button when `onClear` is omitted), neither of which triggers the iOS soft keyboard. The current bug is a deliberate `queueMicrotask` block in `InputDrawer.svelte` lines 51–57 that overrides this default and re-focuses the first `input/select/textarea/[role="slider"]`.
 
-**Rationale:**
-- Existing parity tests (`morphine-wean.test.ts`, `gir.test.ts`, `fortification.test.ts`) all use hand-transcribed row-by-row fixtures from the authoritative xlsx with an `~1%` epsilon. This pattern is documented in PROJECT.md Key Decisions and has shipped 3 calculators with zero drift.
-- Adding a runtime xlsx parser (`xlsx`/`sheetjs`, `exceljs`) would be overkill and wrong: the spreadsheet is the *source of truth at authoring time*, not a runtime input. The whole point of transcribing to fixtures is to pin the contract in the repo and survive xlsx file renames/moves.
-- A devDep parser used only in tests would add weight and indirection: humans would still need to read the xlsx to validate transcriptions, so the parser adds work, not saves it.
-- Sheet1 (full TPN + enteral) and Sheet2 (bedside advancement) are both small tables — Sheet2 in particular is a handful of rows that transcribe in minutes.
-- Hand transcription has already caught a truncated-constant class of issue on Morphine that automated xlsx parsing would have silently propagated.
+**Fix:** Delete the `queueMicrotask` block. Native dialog behavior (focus on first button) is exactly what the milestone goal asks for. The header buttons are visually de-emphasized text/icon, so focus-on-Clear is not a UX regression — it just means iOS doesn't summon the keyboard automatically.
 
-**Action:** In `src/lib/feeds/__tests__/feeds.test.ts`, create two locked fixture blocks: `SHEET1_CASES` (TPN + enteral full-nutrition) and `SHEET2_CASES` (bedside advancement per trophic divisor and advance cadence). Mirror the `morphine-wean.test.ts` shape.
+**Confidence:** HIGH. MDN authoritative; behavior consistent across Safari/Chromium/Firefox per [web.dev dialog learn](https://web.dev/learn/html/dialog).
 
-### 2. New lucide icon for the Feed Advance nav tab?
+### Requirement B — Anchor drawer to visualViewport above iOS soft keyboard
 
-**Verdict: YES — `Baby` from `@lucide/svelte` (already installed). Zero new package.**
+**Existing capability:** `window.visualViewport` (instance of `VisualViewport`, in `lib.dom.d.ts` since TS 4.4 — present in our `typescript@^6.0.3`). Properties `.height`, `.offsetTop`, `.offsetLeft` and events `resize` / `scroll` are all we need.
 
-**Candidates considered (all in `@lucide/svelte` 1.8.0):**
-| Icon | Fit | Verdict |
-|------|-----|---------|
-| `Baby` | Clearest "infant feeding" signal; complements Milk (Formula) and Syringe (Morphine) without colliding | **Recommended** |
-| `Utensils` | Reads "adult dining," wrong register for NICU enteral feeding | Reject |
-| `CookingPot` | Too literal/kitchen | Reject |
-| `Soup` | Reads as "meal," not "advancing enteral feeds" | Reject |
-| `TrendingUp` | Captures "advance" but loses "feeding" context | Reject |
-| `Bottle` | Does not exist in lucide | N/A |
-| `Milk` | Already used by Formula tab — collision | Reject |
+**Implementation sketch (no library):**
+```ts
+// In InputDrawer.svelte, alongside existing $state/$effect blocks
+let viewportHeight = $state(typeof window !== 'undefined' ? window.innerHeight : 0);
+let viewportOffsetTop = $state(0);
 
-`Baby` is visually distinct from `Syringe`, `Milk`, `Droplet` and reads unambiguously as "infant," which is the defining subject of a feeding-advancement calculator. The semantic gap ("baby" ≠ "feeds") is acceptable because the label text is always visible (NAV-01/NAV-02), so the icon carries recognition, not meaning.
-
-**Action:** In `src/lib/shell/registry.ts`, add `Baby` to the existing `@lucide/svelte` import and use it on the `feeds` entry. Extend the `identityClass` union to include `'identity-feeds'`. No `package.json` change.
-
-**Confidence:** HIGH — `Baby` is a long-standing lucide icon, present in every recent release including the currently-installed 1.8.0.
-
-### 3. Numeric formatting library for ml/feed display?
-
-**Verdict: NO addition. Keep inline `.toFixed(1)` pattern.**
-
-**Rationale:**
-- Morphine (mg), Formula (g/packets/scoops), and GIR (mg/kg/min and ml/hr) all format inline at the render site. There is no shared `formatNumber` helper, and introducing one for a single new calculator would require a codemod across three existing calculators to justify itself.
-- `ml/feed` is a single-decimal clinical value — `.toFixed(1)` is trivially correct for the range involved (0.1–50 ml).
-- Libs like `numeral`, `d3-format`, or `Intl.NumberFormat` wrappers offer no benefit here: no locale-specific grouping, no currency, no unit conversion. Pure decimal truncation.
-- The project has a zero-runtime-deps posture for calculator math (DEBT-03 decision, v1.9). Adding one for display formatting would violate that trajectory.
-
-**Action:** Use `value.toFixed(1)` at the render site in `FeedAdvanceCalculator.svelte`. If the same formatting repeats 3+ times within the module, extract a local `formatMlPerFeed(n: number)` helper in `src/lib/feeds/feeds.ts` — local to the module, not shared.
-
-### 4. Additional Tailwind plugin for the 4th identity hue?
-
-**Verdict: NO plugin. Add one OKLCH token pair to `src/app.css`.**
-
-**Rationale:**
-- v1.5 introduced the `--color-identity` pattern wired to exactly 4 surfaces (result hero, focus rings, eyebrows, active nav indicator). It is implemented purely with CSS custom properties declared under `.identity-morphine`, `.identity-formula`, `.identity-gir` selectors in `src/app.css`.
-- No Tailwind plugin is involved; Tailwind 4's `@theme` + arbitrary-value utilities consume the tokens directly. Adding a plugin would add an indirection for zero expressive gain.
-- The Morphine v1.5 Phase 20 retune and the GIR v1.8 first-pass-green both confirm the flow: pick an OKLCH triple → declare it → run 4 axe sweeps (light/dark, focus, hero, nav) → adjust L only if contrast fails.
-
-**Action:** In `src/app.css`, add a new `.identity-feeds` selector block mirroring `.identity-gir`. Pick a hue that clears WCAG 4.5:1 in both themes against existing result-hero text tokens. Hue-space already in use: 220 (Morphine blue), 60 (Formula amber), 145 (GIR green). **Recommended: hue ~25 (warm terracotta/clay) or hue ~285 (violet)** — both clearly separated from the existing three on the hue wheel and neither collides with the red reserved for errors. Final L/C tuning is a Phase task, not a research task.
-
-**Axe-core upfront audit** (per v1.8 Key Decision): do the OKLCH contrast math in the discussion phase, not after the first axe failure. Cost of one audit < cost of one retune cycle.
-
-## Alternatives Considered
-
-| Category | Recommended | Alternative | Why Not |
-|----------|-------------|-------------|---------|
-| xlsx parity | Hand-written fixtures | `xlsx` / `exceljs` devDep | Adds weight, silently propagates truncation errors, provides nothing hand-transcription doesn't already guarantee. |
-| Nav icon | `Baby` (existing `@lucide/svelte`) | `Utensils`, `Soup`, `CookingPot` | Wrong clinical register — these read "adult dining." |
-| Nav icon | `Baby` | Custom SVG | No benefit; lucide maintains parity with Svelte 5 via `@lucide/svelte`. |
-| Number formatting | Inline `.toFixed(1)` | `numeral`, `d3-format`, `Intl.NumberFormat` | Single-decimal clinical value. Zero locale/grouping needs. Violates zero-dep posture. |
-| Identity hue | New OKLCH token in `app.css` | Tailwind plugin | Plugin adds indirection for a ~6-line CSS change. Pattern is proven through 3 calculators. |
-| Identity hue | New OKLCH token | Reuse existing hue | Per-tab identity is the entire point of `--color-identity`; reuse would collapse the signal. |
-
-## Installation
-
-```bash
-# No runtime installs.
-# No devDependency installs.
-# No package.json changes beyond the v1.12.0 version bump at release.
+$effect(() => {
+  if (!expanded) return;
+  const vv = window.visualViewport;
+  if (!vv) return; // Safari < 13 / non-PWA fallback: no-op, falls back to 100dvh
+  const update = () => {
+    viewportHeight = vv.height;
+    viewportOffsetTop = vv.offsetTop;
+  };
+  update();
+  vv.addEventListener('resize', update);
+  vv.addEventListener('scroll', update);
+  return () => {
+    vv.removeEventListener('resize', update);
+    vv.removeEventListener('scroll', update);
+  };
+});
 ```
+Drive the `<dialog>` height via inline style: `style="height: {viewportHeight}px; top: {viewportOffsetTop}px;"` and keep the inner `.input-drawer-sheet` at `flex-end`. This sidesteps the iOS 26 height-reset bug because we recompute on every visualViewport event — no stale "post-dismiss" state.
 
-## Sources
+**Why no library:** The two main candidates ([svelte-bottom-sheet](https://github.com/AuxiDev/svelte-bottom-sheet), [svelte-drawer](https://github.com/AbhiVarde/svelte-drawer)) are gesture-driven Vaul-style drawers with their own focus-trap, scrim, drag-to-dismiss, and animation pipelines. Adopting one would (a) re-introduce auto-focus we are explicitly removing, (b) replace our existing v1.13 Phase 42.1 sticky-drawer pattern that downstream calculators depend on, and (c) add ~10 KB of runtime for code we already have working everywhere except iOS keyboard overlap. Net negative.
 
-- PROJECT.md Validated list (v1.5 `--color-identity` introduction, v1.8 GIR first-pass axe green, v1.9 DEBT-03 zero-dep posture, v1.11 Morphine xlsx Sheet1 parity) — HIGH confidence, in-repo authority.
-- `src/lib/shell/registry.ts` — current icon imports and `identityClass` union — HIGH confidence, read directly.
-- `@lucide/svelte` 1.8.0 icon inventory (`Baby` long-standing export) — HIGH confidence, present in currently-installed version.
-- Tailwind CSS v4 `@theme` + CSS custom property docs: https://tailwindcss.com/docs/theme — MEDIUM confidence, consistent with existing `src/app.css` usage.
-- Key Decisions: "Research before PR for new identity hues" (v1.8) and "Drop ESLint in favor of svelte-check + Prettier only" (v1.9, Phase 30-02) — HIGH confidence, establish the zero-dep guardrail.
+**Confidence:** HIGH for the API itself; MEDIUM for the iOS 26 `visualViewport.height` post-dismiss bug — workaround is to re-read on every event rather than cache, which is the standard mitigation pattern.
+
+### Requirement C — Notch-safe title bar (`env(safe-area-inset-top)`)
+
+**Existing capability:** Pure CSS. The app already declares `<meta name="viewport" content="..., viewport-fit=cover">` (required by the existing `pb-[env(safe-area-inset-bottom,0px)]` mobile bottom nav at `NavShell.svelte:150`). The bottom-inset path proves the meta tag and stack are wired correctly; the missing piece is the symmetric top-inset on the sticky `<header>`.
+
+**Fix:** In `NavShell.svelte` line 76–80, change the header's `px-4` to add `pt-[env(safe-area-inset-top,0px)]` and either bump `min-h-14` to a content-height-only constraint (so total height = inset + 56 px) or split into two stacked elements (a transparent inset spacer + the existing 56 px row). Tailwind 4 arbitrary-value notation matches the bottom-nav pattern verbatim. No JS, no plugin, no `tailwind.config` change.
+
+**Caveat — Tailwind class form:** Use `pt-[env(safe-area-inset-top,0px)]` (with the `0px` fallback) to mirror the bottom-nav line 150 contract. Without the fallback, browsers that don't recognize `env()` produce no padding (acceptable but inconsistent with our existing pattern).
+
+**Confidence:** HIGH. Identical idiom to existing line 150; documented at [MDN env()](https://developer.mozilla.org/en-US/docs/Web/CSS/env) and the [Karma "Make Your PWAs Look Handsome on iOS"](https://itnext.io/make-your-pwas-look-handsome-on-ios-fd8fdfcd5777) reference cited in our existing CLAUDE.md sources.
+
+### TypeScript typing — gap analysis
+
+| Surface | Typing source | Gap? |
+|---|---|---|
+| `window.visualViewport` | `lib.dom.d.ts` → `Window.visualViewport: VisualViewport \| null` | None |
+| `VisualViewport` events | `lib.dom.d.ts` → `onresize`/`onscroll`/`onscrollend` | None |
+| `env(safe-area-inset-top)` | CSS — no TS surface | N/A |
+| `HTMLDialogElement.showModal()` | `lib.dom.d.ts` | None |
+
+No `@types/*` updates needed. The existing `@types/node@^25.6.0` covers Node-side Vite/Vitest plumbing only and is unrelated.
+
+## 4. Test Stack Adequacy
+
+| Surface | Playwright WebKit (CI) | Real iPhone (manual smoke) |
+|---|---|---|
+| Drawer no-auto-focus assertion (focus stays on Clear button) | ✓ Sufficient — `expect(page.locator('button:has-text("Clear")')).toBeFocused()` works headless | Confirms iOS keyboard does not appear |
+| `visualViewport` JS API exists & resize handler attaches | ✓ Sufficient — can assert `window.visualViewport !== null` and dispatch synthetic events | — |
+| **iOS soft keyboard actually shrinks visualViewport** | ✗ **NOT emulated** by Playwright WebKit per [Playwright Emulation docs](https://playwright.dev/docs/emulation) and the unresolved [microsoft/playwright#21420](https://github.com/microsoft/playwright/issues/21420) discussion. Emulation covers viewport size, user agent, touch, and screen — NOT software keyboard, NOT IME, NOT visualViewport resize on focus | ✓ **Required.** The drawer-above-keyboard behavior cannot be regression-tested in CI |
+| `env(safe-area-inset-top)` resolves to non-zero on devices with notch | ✗ Not emulated — Playwright's iPhone descriptors set viewport size but do NOT inject safe-area insets | ✓ **Required.** Visual regression on real iPhone 13/14/15/Pro/Plus |
+| Standalone PWA `display-mode: standalone` (where iOS top-inset actually applies) | Partial — can `page.emulateMedia({ media: 'screen', displayMode: 'standalone' })` per Playwright docs but this only flips the CSS media query, doesn't reproduce the WebKit standalone-mode layout chrome | ✓ **Required.** "Add to Home Screen" launch confirms inset is non-zero |
+
+**Recommended action:**
+1. Add Playwright project for `webkit` + `devices['iPhone 14']` (or iPhone 15 if 1.59 ships it) to `playwright.config.ts` projects array. Cost: ~zero (browser already installed for axe sweeps that import it transitively isn't true — confirm `pnpm exec playwright install webkit` ran or add to CI). Useful for: layout regressions (no inset injected, but viewport math still verifiable), focus-restoration assertions, dialog open/close.
+2. Codify a real-iPhone smoke checklist in the milestone verification doc covering: drawer opens → keyboard does NOT appear, tap input → keyboard appears AND drawer is above it, dismiss keyboard → drawer drops back to nav, install to home → launch standalone → notch does not eclipse hamburger. This closes the v1.13 D-12 deferral.
+
+**Bottom line:** Playwright WebKit project adds value for the focus-management and CSS layout assertions but **cannot exercise the keyboard-overlay or notch-inset behavior**. Real-iPhone smoke remains mandatory and is the primary validation surface for this milestone.
+
+## 5. Sources
+
+- [MDN — VisualViewport API](https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport) — Baseline since Aug 2021; `lib.dom.d.ts` typing confirmed. HIGH.
+- [MDN — env() CSS function](https://developer.mozilla.org/en-US/docs/Web/CSS/env) — `safe-area-inset-top/right/bottom/left` definitions, fallback syntax. HIGH.
+- [MDN — `<dialog>` element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog) — `showModal()` initial focus rules and `autofocus` interaction. HIGH.
+- [Apple Developer Forum 800125 — iOS 26 Safari & WebView: VisualViewport.offsetTop not resetting](https://developer.apple.com/forums/thread/800125) (Sep 2025) — known regression; mitigation is to re-read on every visualViewport event rather than cache. MEDIUM (Apple-engineering-aware, no shipped fix yet).
+- [Playwright — Emulation docs](https://playwright.dev/docs/emulation) — confirms WebKit emulation covers viewport/UA/touch but NOT software keyboard or visualViewport keyboard-resize. HIGH.
+- [Karma Sakshi — Make Your PWAs Look Handsome on iOS](https://itnext.io/make-your-pwas-look-handsome-on-ios-fd8fdfcd5777) — already cited in CLAUDE.md; viewport-fit=cover + safe-area-inset idioms, confirms the symmetric top-inset pattern matches the existing bottom-nav implementation. MEDIUM.

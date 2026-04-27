@@ -113,22 +113,26 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-## Current Milestone: v1.14 Kendamil Formulas + Desktop Full Nav
+## Current Milestone: v1.15.1 iOS Polish & Drawer Hardening
 
-**Goal:** Expand the formula picker with the Kendamil family (Organic, Classic, Goat) and let desktop users see every registered calculator in the top toolbar.
+**Goal:** Fix three iOS-specific bugs that degrade the bedside experience — runaway drawer auto-focus, drawer mispositioning under the iOS keyboard, and the title bar colliding with the camera notch / Dynamic Island.
 
 **Target features:**
-- Add three Kendamil infant-formula entries to `fortification-config.json` — Organic, Classic, Goat — sourced from hcp.kendamil.com manufacturer specs, grouped under a "Kendamil" manufacturer in the picker, with packets-supported defaults and spreadsheet-parity tests consistent with the v1.3 patterns
-- Diverge desktop top toolbar from mobile bottom bar: desktop (md+) renders every registered calculator with identity colors / focus rings / `aria-current` semantics preserved; mobile stays favorites-driven (4-cap, hamburger-managed)
-- Hamburger button remains visible on desktop for About / disclaimer re-read (v1.13 NAV-FAV-04 routing preserved)
-- Zero regressions to v1.13 favorites store, hamburger menu, or the 5 existing calculators (Morphine, Formula, GIR, Feeds, UAC/UVC); WCAG 2.1 AA axe sweeps re-run in light + dark, both viewports
+- **No auto-focus on drawer open.** When the sticky `InputDrawer` expands (manually or on first open), do NOT programmatically focus the first input. The on-screen keyboard must only appear when the clinician taps a field.
+- **iOS-correct drawer positioning.** The drawer anchors to the bottom of the visible viewport using the `visualViewport` API: above the on-screen keyboard when one is present, above the bottom nav otherwise. Sized to fit the available space without being obscured by, or floating over, the iOS software keyboard.
+- **Notch-safe title bar.** On iPhones with a camera notch / Dynamic Island in standalone PWA mode, the `NavShell` title bar respects `env(safe-area-inset-top)` so the hamburger, app name, and theme/info buttons never sit under the notch.
 
-## In Flight: v1.15 Pediatric EPI PERT Calculator (workstream `pert`)
+**Constraints:**
+- Hotfix milestone (decimal version) — three iOS-only regressions surfaced post v1.15.0 ship; no new clinical features.
+- Affects shared infrastructure (`InputDrawer`, `NavShell`); no per-calculator behavioral changes.
+- v1.13's `<HeroResult>` + sticky-drawer pattern, DESIGN.md / DESIGN.json contract, and Identity-Inside Rule must be preserved unchanged.
+- WCAG 2.1 AA + 16/16 axe sweeps must remain green; primary verification surface is real iPhone in standalone PWA mode (closes the v1.13 D-12 deferral).
 
-**Goal:** Add the sixth clinical calculator — Pediatric EPI PERT (Oral + Tube-Feed modes) — sourced from `epi-pert-calculator.xlsx` Pediatric tabs. Phases 1–5 in `.planning/workstreams/pert/`.
+## Previously Shipped
 
-**Phase 1 Wave-0 architectural side-effect (cross-cutting):**
-- **First-run favorites default reordered** (alphabetical: `[feeds, formula, gir, morphine-wean]`) at v1.15 cut as a side-effect of `CALCULATOR_REGISTRY` alphabetization (Phase 1 of pert workstream). Existing users' stored favorite order is preserved verbatim — this is a fresh-install change only. The v1.13 historical first-run order (`['morphine-wean', 'formula', 'gir', 'feeds']`) recorded above remains accurate for v1.13/v1.14 installs; the alphabetical default applies starting at v1.15. Decision rationale captured in `.planning/workstreams/pert/phases/01-architecture-identity-hue-clinical-data/01-CONTEXT.md` D-19/D-20/D-21.
+- v1.15 Pediatric EPI PERT Calculator (sixth calculator) — workstream `pert`, archived to `.planning/milestones/ws-pert-2026-04-26/`
+- v1.14 Kendamil Formulas + Desktop Full Nav — Phases 44–46
+- v1.13 UAC/UVC Calculator + Favorites Nav — Phases 40–43
 
 ### Out of Scope
 
@@ -203,4 +207,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-24 — v1.14 milestone started (Kendamil formula family + desktop full-nav divergence)*
+*Last updated: 2026-04-27 — v1.15.1 milestone started (iOS polish & drawer hardening)*

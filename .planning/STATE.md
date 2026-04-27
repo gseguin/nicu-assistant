@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.14
-milestone_name: Kendamil Formulas + Desktop Full Nav
-status: verifying
-stopped_at: Completed 45-01-PLAN.md
-last_updated: "2026-04-25T05:05:37.225Z"
-last_activity: 2026-04-25
+milestone: v1.15.1
+milestone_name: iOS Polish & Drawer Hardening
+status: planning
+last_updated: "2026-04-27T06:00:06.770Z"
+last_activity: 2026-04-27
 progress:
-  total_phases: 2
-  completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -25,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-04-25)
 
 ## Current Position
 
-Phase: 45 (Desktop Full-Nav Divergence) — EXECUTING
-Plan: 3 of 3
-Status: Phase complete — ready for verification
-Last activity: 2026-04-25
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-27 — Milestone v1.15.1 started
 
 ## Performance Metrics
 

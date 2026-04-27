@@ -1,368 +1,111 @@
-# Domain Pitfalls — v1.12 Feed Advance Calculator
+# Domain Pitfalls — v1.15.1 iOS Polish & Drawer Hardening
 
-**Domain:** NICU Feed Advance (Sheet1 TPN + full nutrition / Sheet2 bedside advancement)
-**Researched:** 2026-04-09
-**Source authority:** `nutrition-calculator.xlsx` (Sheet1 + Sheet2)
-**Prior pain referenced:** v1.5 Phase 20 (Morphine OKLCH axe failure), v1.6 (NumericInput advisory contract), v1.8 Phase 28 Wave 0 (`CalculatorId` + `NavShell.activeCalculatorId` latent bugs), v1.8 GIR (~1% epsilon for truncated constants), v1.11 (xlsx as sole source of truth, row-by-row parity)
-
----
-
-## Critical Pitfalls
-
-These will cause rewrites, silent clinical errors, or broken builds if not pre-empted.
+**Domain:** iOS-correct sticky drawers, keyboard-aware bottom UI, notch-safe top chrome in a production-grade adapter-static SvelteKit PWA already wired into a 6-calculator shell with WCAG 2.1 AA + spreadsheet-parity contracts.
+**Researched:** 2026-04-27
+**Scope of file:** Pitfalls specific to *adding* visualViewport-aware sizing, removing the drawer's auto-focus side-effect, and threading `safe-area-inset-top` through `NavShell`'s sticky header. Generic "always test on real iPhone" advice is not repeated; only project-specific traps with concrete file/test/phase prevention.
 
 ---
 
-### P1. Spreadsheet parity drift when xlsx constants become user-selectable dropdowns
+## Summary
 
-**Risk category:** Clinical correctness / test discipline
-**Phase:** Calculator phase (pure-logic sub-phase, BEFORE UI)
-**Severity:** CRITICAL
+Three highest-severity pitfalls, in priority order:
 
-**What goes wrong:**
-The xlsx hardcodes trophic `/6` (q4h), advance `/2` (twice-daily), and IV backfill `/3` (q3h). Our calculator exposes all three as dropdowns. If the parity test just calls `calculateFeedAdvance(weight)` with defaults that don't *exactly* match the xlsx's hardcoded divisors, the test either (a) silently passes a different formula than the spreadsheet, or (b) the divisor constants drift between the engine and the xlsx and no one notices because tests are green.
+1. **P-04 visualViewport listener not re-attaching after bfcache restore** (Blocker). Real iPhone bedside use repeatedly switches between Safari standalone PWA and other apps; bfcache restore + missed `pageshow` rebind leaves the drawer stuck at the pre-restore visual height — exactly the failure mode the milestone is supposed to fix. Bites only on real device, never in CI.
+2. **P-09 `apple-mobile-web-app-status-bar-style: black-translucent` already in `app.html` ⇒ status-bar-overlap is silently active TODAY for every standalone install**, and the fix that makes `safe-area-inset-top` non-zero must also be applied to *every fixed/sticky element pinned to the top of the layout viewport* — not just `NavShell`. Currently `NavShell <header>` has `min-h-14` with zero top padding (line 76–80), so the hamburger / app name / Sun-Moon button sit *under* the Dynamic Island in standalone mode on iPhone 14 Pro+ today. (See `src/app.html` line 49.)
+3. **P-01 Removing drawer auto-focus changes the screen-reader announcement contract.** The current code at `InputDrawer.svelte:51-57` shifts focus into the first input on `showModal()`. ATs (VoiceOver, TalkBack) announce the focused control's role + name on focus change; no focus shift means the drawer's `aria-label` must be the announcement, which only fires reliably if the dialog itself receives focus first. Removing auto-focus *without* an `autofocus` on a non-text element (e.g. the Close button in the header) leaves VoiceOver silent on drawer open. Existing axe-core sweep cannot detect this — it is a focus-flow regression, not a rule violation.
 
-**Trigger scenario:**
-A future phase "simplifies" the dropdown default from `twiceDaily` to `everyOtherFeed` without re-locking the xlsx fixture. Parity test still passes (because the fixture was recomputed from the new default), but the output no longer matches the authoritative spreadsheet.
-
-**Prevention strategy (fixture discipline):**
-
-1. **Fixture file `feed-advance-parity.fixtures.json`** with TWO sections:
-   - `xlsxLocked`: weight **1.94**, trophic `q4h` (÷6), advance `twiceDaily` (÷2), IV backfill divisor `3` — the EXACT divisors the xlsx hardcodes. Row-by-row expected values copied directly from Sheet1 + Sheet2 cells. These tests are the "xlsx is God" gate.
-   - `parameterMatrix`: derived expected values for the other dropdown combinations (q3h trophic, every-feed / every-other / every-3rd / once-daily advance). These are NOT parity-locked; they are computed from the same pure function under different inputs and assert *internal consistency* (e.g., "every-other-feed of 10 feeds/day = 5 advances/day", "sum of per-feed volumes × feed count == daily volume").
-
-2. **Fixture header comment** citing exact xlsx cell addresses (e.g., `Sheet2!B15..B24`) so the next reader can re-verify without opening the xlsx blind.
-
-3. **Test structure** — mirror `morphine/calculations.test.ts`:
-   ```ts
-   describe('Feed Advance — xlsx Sheet2 spreadsheet parity (locked)', () => {
-     // canonical: weight 1.94, trophic q4h, advance twiceDaily, backfill /3
-     for (const row of expected) { it(`step ${row.step} matches Sheet2 row`, ...) }
-   });
-   describe('Feed Advance — parameter matrix (internal consistency)', () => {
-     // every dropdown combo × expected shape, not locked to xlsx
-   });
-   ```
-
-4. **Guard comment in `calculations.ts`**: `// xlsx Sheet2 hardcodes trophic /6, advance /2, backfill /3. Our dropdowns parameterize these. The LOCKED parity fixture uses those exact divisors and MUST NOT be edited to match new defaults.`
-
-**Detection:** CI runs `pnpm test -- feed-advance`. If the locked block fails, stop and re-verify the xlsx.
+The remaining pitfalls cluster around test-surface gaps (Playwright is chromium-only; jsdom has no visualViewport), iOS-specific keyboard / orientation / hardware-keyboard edge cases the visualViewport API does not cover, and cross-calculator regression vectors created by the InputDrawer's `[role="slider"]` selector accidentally biasing first-focus toward bits-ui sliders on UAC/UVC and Feeds.
 
 ---
 
-### P2. Sheet1 dual dextrose source — single-line UI under-reports kcal
+## Pitfall Table
 
-**Risk category:** Clinical correctness (silent under-dose)
-**Phase:** Requirements + calculator phase
-**Severity:** CRITICAL
-
-**What goes wrong:**
-Sheet1 has TWO parallel dextrose lines (B3/B4 and B5/B6), both feeding the dextrose-kcal total. A naive port reads only one pair, and total kcal/kg silently under-reports. This is the worst class of bug for a clinical calculator: it produces a *plausible* number that is *wrong*.
-
-**Trigger scenario:**
-Port authors the UI with one "Dextrose %" + one "Volume" input, wires `calculateDextroseKcal(pct, ml)`, runs parity against a single-line fixture they themselves constructed, and ships. The xlsx row that uses both lines never gets tested.
-
-**Prevention strategy:**
-
-1. **Requirements phase: explicit dual-line callout.** REQUIREMENTS.md must state "Sheet1 has two dextrose lines (B3/B4 + B5/B6). Both contribute to dextrose kcal. UI must expose both inputs or justify in writing why one is deprecated."
-2. **Data model:** `Sheet1Inputs.dextroseLines: Array<{ pct: number; volumeMl: number }>` — an array, never two scalar fields. Makes the dual nature structural.
-3. **Parity fixture** for Sheet1 uses a realistic case where **both** lines are non-zero. Row-by-row assert `dextroseKcal` matches xlsx `=B4*B3/100*3.4 + B6*B5/100*3.4`.
-4. **Unit test** explicitly named `"dextrose kcal sums BOTH lines"` — a regression anchor for future refactors.
-
----
-
-### P3. Sheet1 unit confusion — wrong constant × wrong variable pairing
-
-**Risk category:** Clinical correctness
-**Phase:** Calculator phase (pure-logic sub-phase)
-**Severity:** CRITICAL
-
-**What goes wrong:**
-Sheet1 mixes three totally different unit conversions:
-
-| Component   | Formula                         | Unit meaning                                  |
-| ----------- | ------------------------------- | --------------------------------------------- |
-| Dextrose    | `(vol_ml × pct/100) × 3.4`      | ml × g/ml × kcal/g                            |
-| IL (SMOF)   | `vol_ml × 2`                    | ml × 2 kcal/ml (SMOF 20% is 2 kcal/ml)        |
-| Enteral     | `(vol_ml × kcal_per_oz) / 30`   | ml × kcal/oz ÷ 30 ml/oz = kcal                |
-
-Swap `3.4` and `2`, or forget `/30`, and the number is plausibly close but wrong.
-
-**Prevention strategy:**
-
-1. **Named constants in a `constants.ts` sibling** with JSDoc citing the unit derivation:
-   ```ts
-   /** kcal per gram of dextrose (Atwater factor for carbohydrate from glucose monohydrate) */
-   export const KCAL_PER_G_DEXTROSE = 3.4;
-   /** kcal per ml of SMOF 20% lipid emulsion (per xlsx Sheet1 B7 formula) */
-   export const KCAL_PER_ML_SMOF = 2;
-   /** ml per fluid ounce — xlsx Sheet1 uses 30, not 29.5735 */
-   export const ML_PER_OZ = 30;
-   ```
-2. **Three isolated pure functions** — `dextroseKcal()`, `lipidKcal()`, `enteralKcal()` — each independently unit-tested with a hand-calculated case in the comment above the test.
-3. **One aggregate test** asserting `totalKcal === dextroseKcal + lipidKcal + enteralKcal` (no hidden coupling).
-4. **Parity fixture** covers a row where removing any one component changes the total meaningfully (rules out the "sum accidentally matches because two terms are tiny" class of false-green).
+| ID    | Severity | Description | Prevention | Catch-in |
+| ----- | -------- | ----------- | ---------- | -------- |
+| **P-01** | High     | **Removing auto-focus drops VoiceOver announcement.** When `<dialog>.showModal()` runs, browsers move focus to the first focusable child or the dialog itself. If we strip the `queueMicrotask(() => firstInput?.focus())` block at `InputDrawer.svelte:51-57` and do nothing else, `<dialog>` falls back to autofocusing the first interactive child — which is the Clear button (when present) or the close button. That is acceptable; the regression is dropping focus into the dialog at all (some toolchains lose it). VoiceOver then never announces the drawer. | Keep an explicit but **non-text-field** focus target: either add `autofocus` to the header close button (no OSK, still announces "Close inputs, button"), or `dialog.focus()` explicitly. Do **not** focus an `<input>` synchronously in the effect — that is what re-introduces the OSK. Verify VoiceOver announcement on real iPhone (the only authoritative surface). | Phase plan must add a `T-07` to `InputDrawer.test.ts` asserting `document.activeElement` after open is the close button (or the dialog), **not** the textbox. Real-iPhone smoke checklist must include "VoiceOver announces drawer when expanded." |
+| **P-02** | High     | **Existing tests assume drawer-open puts an input in keyboard-ready state.** Six e2e specs follow the pattern `await page.getByRole('button', { name: /tap to edit inputs/i }).click(); … getByLabel('Weight').fill(...)` (`e2e/uac-uvc.spec.ts:65,77`, `e2e/feeds.spec.ts:35`, `e2e/gir.spec.ts:38`, `e2e/pert.spec.ts:52,185,205`, `e2e/formula.spec.ts:52-57`). Today these pass because chromium under Playwright auto-focuses the textbox; `.fill()` does not require focus. **Removing auto-focus does not break `.fill()`** (Playwright synthesizes focus). The trap is *false confidence* — green CI does not mean the bug is fixed. | Add explicit focus assertion: after opening the drawer **without typing**, assert `document.activeElement` is the dialog close button or dialog itself, not an input. Add a "tap weight field, OSK does not pre-emptively flicker" check that can only run on real iPhone (document in real-iPhone smoke checklist). | New `e2e/drawer-no-autofocus.spec.ts` mobile-viewport spec covering all 6 calculators: open drawer → assert no input has focus. Real-iPhone smoke for the OSK behaviour. |
+| **P-03** | Blocker  | **`InputDrawer` uses `100dvh` + `flex-end`, which sits in the *layout* viewport, not visual.** `InputDrawer.svelte:142-143` sets `height: 100dvh`. iOS 16+ updates `dvh` when toolbars retract but **not** when the on-screen keyboard appears in standalone PWA mode — only `visualViewport.height` does. Result: with the OSK up, the sheet's `flex-end` anchor is below the keyboard; the bottom 200–300 px of the sheet (including any focused input) is hidden. The milestone goal "above the OSK" is impossible with `100dvh` alone. | Replace `height: 100dvh` with a JS-driven CSS custom property `--drawer-h: var(--vv-height, 100dvh)` updated from `visualViewport.height` listener. Also update an offset `--vv-offset: var(--vv-offsetTop, 0)` so the dialog itself can `translateY(var(--vv-offset))` to follow keyboard scroll-jumps in iOS Safari. Fall back to `100dvh` when `window.visualViewport` is undefined (older iOS, jsdom). | New unit test on the keyboard-aware sizing util that mocks `window.visualViewport` and asserts `--drawer-h` updates on `resize` event. Real-iPhone smoke: focus weight field with sheet expanded; sheet must clear OSK by ≥ 8 px and Clear/Close header must remain visible. |
+| **P-04** | Blocker  | **bfcache restore does not re-emit `visualViewport.resize`.** Switching from NICU Assist (standalone PWA) to a phone call and back triggers Safari's bfcache. On restore, listeners are still attached, but `visualViewport` properties may report pre-suspension values without firing a fresh `resize`. The drawer renders at the pre-call visual height, mispositioned. This is the "drawer mispositioning under iOS keyboard" symptom from the milestone goal **except it persists with no keyboard up** until the next user gesture. | Add a `pageshow` listener (with `event.persisted === true` branch) that synchronously re-reads `visualViewport.width/height/offsetTop` and pushes the values to the CSS custom properties used by the drawer. Pair with a `visibilitychange` listener for the foreground-return case where bfcache did *not* fire. | Vitest cannot simulate bfcache. Real-iPhone smoke must include "open drawer → background app → call yourself → return; drawer must still be flush above OSK." Document as a one-line manual step in the `v1.15.1 real-iPhone smoke` checklist. |
+| **P-05** | High     | **Hardware keyboard suppresses `visualViewport` change.** Bedside iPads often have a Smart Keyboard or Bluetooth keyboard attached; iOS does not show the OSK. `visualViewport.height` then equals the layout height, no keyboard inset, no drawer move. If the implementation *unconditionally* subtracts a "keyboard height" by reading `window.innerHeight - visualViewport.height`, the math is always 0 — but if the implementation *unconditionally adds a "keyboard placeholder"* the drawer floats above empty space. | Compute keyboard inset as `Math.max(0, window.innerHeight - visualViewport.height)` and only translate when > 0. Never hardcode a keyboard-height assumption. Test by toggling "Connect Hardware Keyboard" in iOS Simulator and confirming drawer sits flush against the bottom nav (not floating). | Real-iPhone smoke (or Xcode Simulator with hardware keyboard checkbox) — cannot be caught in vitest or Playwright chromium. |
+| **P-06** | Medium   | **iPad floating / split keyboard breaks visualViewport assumptions.** On iPad, the floating mini-keyboard updates `visualViewport.offsetTop` but not height; the split keyboard updates neither consistently. Drawer that "anchors above keyboard" will sit *over* the split keyboard's right half. | The PWA manifest already declares `orientation: portrait` and the project is iPhone-primary. Add an explicit guard: if `window.matchMedia('(min-width: 768px)').matches` (i.e. md+, where the desktop sticky aside renders), the drawer is hidden anyway (`md:` rule preserved from Phase 42.1). Verify the drawer's `md:hidden` is still in place after this milestone. | `e2e/desktop-full-nav.spec.ts` already runs at 1280; extend it (or add) a 1024 (iPad portrait) viewport assertion that the drawer dialog is `display: none` / not in DOM. Vitest unit test on the route's `md:hidden` class on the `<InputDrawer>` wrapper. |
+| **P-07** | High     | **`pb-[env(safe-area-inset-bottom,0px)]` on bottom nav already accounts for the home indicator, but if visualViewport-driven drawer transform also adds the bottom inset, content gets double-offset.** `NavShell.svelte:150` already adds the inset to the mobile bottom nav. If the new drawer transform is `translateY(-keyboardHeight)` *and* the drawer's own CSS still has `padding-bottom: env(safe-area-inset-bottom,0px)` (`InputDrawer.svelte:157`), with the OSK up iOS reports `safe-area-inset-bottom: 0` (keyboard covers it), so this self-corrects — but with OSK *down*, both nav and drawer add 34 px, creating a gap. | When the drawer is open and OSK is up, set `padding-bottom: 0` on the sheet (keyboard provides the safe area). When OSK is down, keep the existing `env(safe-area-inset-bottom)` padding so the drawer clears the home indicator (drawer covers bottom nav via `<dialog>` top-layer). Drive both states from the same visualViewport-derived JS state. | New Playwright spec at iPhone-SE 375x667 + iPhone-14-Pro-Max 414x896 (existing sizes from `mobile-nav-clearance.spec.ts:23-24`) asserting that with drawer open and no keyboard, last child of sheet is at least 34 px above viewport bottom. Real-iPhone smoke confirms the with-OSK case. |
+| **P-08** | High     | **Removing dock magnification was a Phase 42.1 D-16 win; nothing in this milestone should reintroduce scroll-driven transforms.** The `MorphineWeanCalculator.svelte:12` and `GlucoseTitrationGrid.svelte:24` comments explicitly mark the removal. A naive visualViewport implementation that listens to `scroll` on `visualViewport` and applies `translate3d` to the drawer will look like dock magnification on first sight to a critique reviewer — and may also cause the same iOS scroll-jank that motivated the original removal. | Listen only to `visualViewport.resize`, **not** `visualViewport.scroll`. The drawer follows keyboard appearance, not page scroll. Apply CSS transform on the dialog parent (which is `position: fixed`-equivalent via top-layer) using a single rAF-coalesced write per resize event, never per scroll frame. | `src/lib/shell/identity-inside.test.ts` already enforces design contract; add a sibling test asserting `InputDrawer.svelte` source contains no `visualViewport.addEventListener('scroll'` (mirror the source-grep pattern at `InputDrawer.test.ts:88-93`). |
+| **P-09** | Blocker  | **`apple-mobile-web-app-status-bar-style: black-translucent` (already in `app.html:49`) puts the page under the status bar, but no element currently respects `safe-area-inset-top`.** `NavShell.svelte:76-80` declares `<header class="sticky top-0 … min-h-14 … px-4">` with no `pt-[env(safe-area-inset-top,0px)]`. On iPhone 14 Pro+ standalone PWA, the hamburger button (48×48 at `-ml-2` per line 85) renders **under** the Dynamic Island, where touches are intercepted by the system. This is the milestone-named bug and the fix must cover both the visible padding *and* the `top-0` anchor's intended reading. | Add `pt-[env(safe-area-inset-top,0px)]` to the `NavShell <header>`, and confirm the `min-h-14` gives a generous-enough total (height = 14 × 4 + 47 px on Dynamic Island ≈ 103 px) without breaking the desktop tablist. Set `--header-h` CSS custom property and consume it in routes' sticky-aside `top-20` (e.g. `pert/+page.svelte:106`); verify all 6 routes. | Snapshot-style component test of `NavShell.svelte` source confirming `env(safe-area-inset-top` appears in the header element. Real-iPhone (Dynamic Island device) smoke is the only way to *visually* verify. Playwright chromium does not render the notch even at iPhone-14-Pro-Max viewport. |
+| **P-10** | Medium   | **`env(safe-area-inset-top)` returns 0 in browser tab mode.** When NICU Assist is opened in Safari (not "Add to Home Screen"), `safe-area-inset-top: 0` because the URL bar already consumes that space. If the milestone implementation hardcodes a fallback like `pt-[max(env(safe-area-inset-top,0px),16px)]`, the title bar gets +16 px in Safari tab mode (where it is not needed) and the existing `min-h-14` clearance plus tab chrome leaves the calculator hero pushed below the fold. Phase 42.1's "hero fills viewport on mount" contract is broken silently in browser-tab mode. | Use the bare `env(safe-area-inset-top, 0px)` form. `0px` is the correct fallback in a browser tab (browser owns the inset). Do **not** add a `max()` floor. Detect standalone mode separately if needed via `@media (display-mode: standalone)`. | Visual regression test impractical in CI; add a Playwright assertion at iPhone-14-Pro-Max viewport (414x896) that `getBoundingClientRect()` of the calculator hero card has `top < window.innerHeight * 0.5` (hero-fills-viewport on mount preserved in browser-tab mode). |
+| **P-11** | Medium   | **Landscape orientation activates `safe-area-inset-left/right`, not `top`.** PWA manifest declares `orientation: portrait` so most users won't rotate, but iOS does not enforce orientation lock in standalone PWA mode for non-fullscreen navigation. A clinician glancing at the iPhone landscape sees `safe-area-inset-top: 0` (notch is on the side) and `safe-area-inset-left: 47px`. The hamburger then sits under the notch's *side*. | Add horizontal padding `px-[max(env(safe-area-inset-left,0px),1rem)]` to the same `<header>`. The existing `px-4` is 16 px (= 1rem); with the `max()`, landscape clips correctly. Do the same for the bottom nav and drawer sheet. | `e2e/desktop-full-nav.spec.ts` is chromium 1280; add a new viewport at 896×414 (landscape iPhone-14-Pro-Max) confirming hamburger button's bounding rect `left ≥ 47`. Cannot truly verify on Playwright (no notch render), but at least the inset application can be verified via computed style. |
+| **P-12** | High     | **`theme-color` meta vs `apple-mobile-web-app-status-bar-style: black-translucent` mismatch.** `vite.config.ts:27` sets `theme_color: '#0d1117'` (dark) for the manifest, used by Safari for the status-bar tint when status bar is *not* `black-translucent`. With `black-translucent` (already declared), the OS shows the page content directly under a transparent status bar — meaning a *light-mode* user sees **dark text on dark Dynamic Island background** until the surface paints. FOUC inline script (`app.html:8-24`) handles `.dark` class but does not adjust theme-color or status-bar-style dynamically. | Either remove `theme_color` from the manifest (PWAs in `black-translucent` ignore it anyway and the manifest theme is for the splash), or add a JS toggle of a `<meta name="theme-color">` element with `media="(prefers-color-scheme: light)"` / `dark` pair. Simpler: leave manifest as-is, accept that status bar is system-default-translucent, but adjust the FOUC script to set `<meta name="theme-color" content="…">` to match the resolved theme before first paint. | Real-iPhone (Dynamic Island device) is the only way to verify visually. Playwright cannot render notch. Document as smoke-checklist line: "Light mode + Dynamic Island device: text near hamburger is legible against the live wallpaper." |
+| **P-13** | High     | **Auto-focus selector at `InputDrawer.svelte:54` matches `[role="slider"]` first, biasing UAC/UVC and Feeds.** Selector: `'input:not([type="hidden"]), select, textarea, [role="slider"]'`. UAC/UVC uses `RangedNumericInput` which renders both a `NumericInput` textbox and a bits-ui `Slider.Root` thumb (`role="slider"`). The DOM order in `RangedNumericInput.svelte:117-145` puts the textbox first, so today the textbox wins. Removing this query entirely is the milestone goal. **The trap:** if the team *narrows* the selector (e.g. to "first textbox") instead of removing it, no behaviour changes for UAC/UVC but does for SegmentedToggle-first calculators (Feeds — its first input *is* a `role="tab"` toggle, not in the selector at all). | Remove the entire `queueMicrotask` focus block. Replace with `dialog.focus()` or `autofocus` on the close button. **Do not** keep a "smart" first-focusable heuristic — that is what created this latent bug. | The phase plan must include an explicit code-deletion step (lines 51-57 of `InputDrawer.svelte`). Add a regression source-grep test asserting `InputDrawer.svelte` source no longer contains `queueMicrotask` or `[role="slider"]` (mirror `T-06` source-grep pattern). |
+| **P-14** | Medium   | **Cross-calculator: SegmentedToggle inside the drawer changes which element receives initial focus when auto-focus is removed.** Feeds has a `Bedside / Full Nutrition` SegmentedToggle as the *first* visible interactive control inside the drawer (`FeedAdvanceInputs.svelte`). With auto-focus removed and `dialog.focus()` used instead, VoiceOver announces "Inputs, dialog" — fine. With `autofocus` on the close button, VoiceOver announces "Close inputs, button" — also fine. With nothing (relying on browser default), some browsers (Chrome/Edge desktop) move focus to the SegmentedToggle's first tab, others (Safari) to the close button. Inconsistent. | Use **explicit** `autofocus` on the header close button across all 6 calculators. Single source of truth — no per-calculator divergence. The close button is non-interactive-with-keyboard from the user POV (`role="button"` with text label) and never triggers OSK. | `InputDrawer.test.ts` `T-07` (per P-01) covers this. Add a per-calculator render check in component tests that asserts the close button has `autofocus` after drawer mounts. |
+| **P-15** | Medium   | **`FormulaPicker` dialog (a `<dialog>` inside the drawer's `<dialog>`).** `SelectPicker.svelte` opens its own native `<dialog>`. Two stacked top-layer dialogs *are* legal in HTML — top-layer is a stack — but iOS WebKit had at least one regression where dismissing the inner dialog also closed the outer. Status as of WebKit 17.4+: fixed. **Trap:** if visualViewport-driven drawer translate is also applied to the *top-layer parent* (the dialog), the inner picker inherits the transform and visually drifts. | Apply visualViewport transform to the **sheet div** (`InputDrawer.svelte:90` `bind:this={sheet}`) not the outer `<dialog>`. Inner SelectPicker dialog opens in its own top-layer slot, unaffected. | `e2e/formula.spec.ts` already covers Formula picker open inside drawer; extend with iPhone-14-Pro-Max viewport + a `bounding-rect` assertion that the picker dialog is centered in the visual viewport, not offset by the drawer's translate. |
+| **P-16** | Low      | **iOS rubber-band overscroll briefly reports negative `visualViewport.offsetTop`.** When the user pulls down at the top of the page, iOS Safari momentarily reports `offsetTop: -N` while the layout viewport rubber-bands. A drawer that pins via `translateY(-offsetTop)` will jump *up* during overscroll. | Clamp: `translateY(max(0, -offsetTop))`. The drawer's `<dialog>` is in top-layer, so it's already isolated from page scroll on most browsers; this only matters when the drawer is closed and visualViewport is used by other parts of the shell. | Real-iPhone smoke. Cannot reproduce in chromium. |
+| **P-17** | Medium   | **Auto-focus removal + WCAG 2.4.3 Focus Order (Level A).** WCAG 2.4.3 requires focus order to be predictable. With auto-focus removed and `autofocus` on the close button, Tab from the close button must land on the first input next — the existing DOM order in `<children>` snippet. If a calculator's `Inputs` snippet starts with a `<label>` that *wraps* the input, focus may skip the label correctly; if it starts with a non-focusable header, Tab goes nowhere visible until reaching the first control. | Audit each calculator's input snippet (`MorphineWeanInputs`, `FortificationInputs`, `GirInputs`, `FeedAdvanceInputs`, `UacUvcInputs`, `PertInputs`) — first DOM child should be a focusable control or a tabindex-0 group label. Already mostly the case via `RangedNumericInput`. | Add a per-calculator focus-order Playwright spec: open drawer → press Tab → assert focus is on the calculator's first control (Weight textbox in 5 of 6, mode toggle in Feeds). |
+| **P-18** | Blocker  | **jsdom does not implement `window.visualViewport`. The polyfill must be in `src/test-setup.ts`.** Today the test-setup polyfills `ResizeObserver`, `scrollIntoView`, `matchMedia`, `Element.animate`, and `HTMLDialogElement` (lines 5-150). Adding visualViewport-aware code without a stub will throw `TypeError: Cannot read properties of undefined` in every component test that mounts `InputDrawer`. Worst case, only the new keyboard-aware util will throw, and the existing 340/340 vitest gate stays green by accident — but the new feature is untested. | Add a `window.visualViewport` stub to `src/test-setup.ts` exposing `addEventListener`, `removeEventListener`, `width: window.innerWidth`, `height: window.innerHeight`, `offsetTop: 0`, `offsetLeft: 0`, `scale: 1`. Provide a `dispatchVisualViewportResize(height, offsetTop)` helper exported from a new `src/lib/test/visual-viewport-mock.ts` so per-test scenarios can simulate keyboard appearance. | The phase plan must add this polyfill to `src/test-setup.ts` *first*, before any feature code. The very first new test (`InputDrawer.test.ts T-08 keyboard-aware sizing`) fails fast if the polyfill is missing. Self-test pattern from `test-setup.ts:122-149` is the model. |
+| **P-19** | Blocker  | **Playwright config is chromium-only.** `playwright.config.ts:16-19` defines exactly one project. WebKit is not part of the suite. iOS device emulation in Playwright is `devices['iPhone 13']` etc., which uses chromium with mobile UA (default) or webkit (if explicitly configured). Even with WebKit, iOS notch / status bar / Dynamic Island are not rendered — Playwright simulates iOS *user agent + viewport size*, not iOS chrome. **Fixing the notch bug visually in CI is impossible.** | Two prevention layers: (1) add a `webkit-mobile` project to `playwright.config.ts` for visualViewport API surface coverage and `safe-area-inset-*` computed-style verification (these *do* work in WebKit Playwright); (2) make real-iPhone smoke an explicit blocking phase before milestone completion (closes v1.13 D-12 deferral). Document it in `.planning/v1.15.1-PLAN.md` Phase Gate. | Phase plan must add a webkit project. The real-iPhone smoke is a blocking phase, not deferred. Include a smoke-checklist artifact at `.planning/v1.15.1-IPHONE-SMOKE.md`. |
+| **P-20** | Medium   | **axe-core cannot detect "drawer hidden by keyboard."** All 16/16 axe sweeps green is the project's primary a11y signal, but axe is purely DOM-static — it has no concept of layout, viewport, or keyboard. A drawer that is rendered (visible to axe) but covered by the OSK at runtime passes axe and fails the user. | Add a layout-correctness E2E (Playwright with WebKit) that opens the drawer, focuses the weight field, **simulates** keyboard via `page.evaluate(() => window.visualViewport.dispatchEvent(...))` (not the real OSK — Playwright cannot show iOS keyboard), and asserts the weight field is in the visual viewport via `boundingClientRect.bottom < visualViewport.height`. Even imperfect, it catches mathematical regressions in the visualViewport-driven sizing util. | Same as P-19. Real-iPhone is the authoritative gate; webkit Playwright is the CI proxy. |
+| **P-21** | Low      | **Theme switch during drawer-open mid-keyboard reflows.** Theme toggle is in the same `<header>` as the hamburger; with the drawer open, theme button is reachable via Esc → focus-trap exit → header. The `html:not(.no-transition) [role="dialog"]` rule in `app.css:138` transitions background-color over 200ms; doing this with the OSK up causes a brief visualViewport.height jitter on iOS as the theme repaint forces a layout. Drawer transform may flicker. | Add `transition: none` on the drawer dialog when expanded. Already covered in spirit by the `no-transition` class pattern from `app.html:13-21` for first-paint; extend to drawer-mid-flight. | Real-iPhone smoke. Low priority — cosmetic, not safety. |
+| **P-22** | Medium   | **`max-height: 80dvh` on `.input-drawer-sheet` (`InputDrawer.svelte:153-154`) is incompatible with visualViewport-driven sizing.** With OSK up, the visual viewport is ~50% of layout; 80dvh of layout = 80% of layout = ~160% of visual. The sheet then exceeds the visual viewport top and is clipped against the status bar. | Replace `max-height: 80dvh` with `max-height: calc(var(--vv-height, 100dvh) - 4rem)`. The 4rem reserves space for the status bar / notch and the inset top of the layout viewport. | Unit test on the sizing util mock. Playwright webkit can verify computed-style of `.input-drawer-sheet` is bounded by the visual viewport when `visualViewport.height` is mocked. |
 
 ---
 
-### P4. CalculatorId union + NavShell branch — Wave 0 latent bug (v1.8 pattern)
-
-**Risk category:** Build / latent routing bug
-**Phase:** **WAVE 0 — before any calculator work**
-**Severity:** HIGH (blocks compilation of downstream phases)
-
-**What goes wrong:**
-v1.8 GIR hit exactly this: `CalculatorId` type union was missing `'gir'`, and `NavShell.activeCalculatorId` had no `/gir` branch (fell through to Morphine), which would have poisoned AboutSheet content routing if not caught. v1.12 will repeat this pattern unless the type extension is a Wave-0 task.
-
-**Prevention strategy:**
-
-1. **Wave 0 grep checklist** (add to roadmap):
-   ```
-   grep -rn "CalculatorId" src/lib/shell/
-   grep -rn "activeCalculatorId" src/
-   grep -rn "'morphine' | 'formula' | 'gir'" src/
-   grep -rn "identityClass" src/lib/shell/registry.ts
-   grep -rn "about-content" src/lib/shared/
-   ```
-2. **Wave 0 task list** (all BEFORE calculator logic):
-   - Extend `CalculatorId` union to include `'feed-advance'` (or chosen id).
-   - Add `/feeds` branch to `NavShell.activeCalculatorId` derivation.
-   - Add registry entry stub in `src/lib/shell/registry.ts` with `identityClass: 'identity-feeds'`.
-   - Add placeholder route `src/routes/feeds/+page.svelte`.
-   - Add AboutSheet stub entry in `src/lib/shared/about-content.ts`.
-   - Compile + smoke: `pnpm check` green, nav shows 4 tabs, `/feeds` renders placeholder, about dialog shows stub entry.
-3. **Verification gate:** Wave 0 is its own commit with `pnpm check` and `pnpm test` both green before any calculator logic lands.
-
----
-
-### P5. 4th identity hue — axe-core failure repeat of v1.5 Phase 20
-
-**Risk category:** Accessibility / rework churn
-**Phase:** Calculator phase, **pre-PR** gate
-**Severity:** HIGH
-
-**What goes wrong:**
-v1.5 Phase 20 Morphine re-used `--color-accent-light` for the identity hero and hit 3.61:1 against the eyebrow text — caught only by Phase 20's axe sweep, required OKLCH tuning (`oklch(95% 0.04 220)`). v1.8 GIR learned from this and pre-researched the hue (145 green), shipped green on first sweep. v1.12 must follow the GIR pattern, not the Morphine pattern.
-
-**Prevention strategy:**
-
-1. **Hue pre-research task in STACK.md / ARCHITECTURE.md** — pick a hue NOT already in use (avoid 220 Morphine blue, 195 Formula teal, 145 GIR green). Candidates: ~30 (warm amber — collides with BMF, REJECT), ~300 (magenta/purple), ~25 (terracotta). Pre-check target OKLCH values against text tokens.
-2. **Axe sweep as a hard gate BEFORE PR**, not a PR-time discovery. Phase verification checklist:
-   - `pnpm test:e2e:a11y` must return **20/20** (16 existing + 4 new feed-advance sweeps).
-   - New sweeps: feeds-light, feeds-dark, feeds-light-selected, feeds-dark-selected.
-3. **Contrast sanity math in the phase plan**, not just "trust axe" — hand-compute the `--color-identity-hero` lightness against `--color-text-primary` and `--color-text-secondary` before writing the token.
-4. **Do not inline-tune.** If axe fails, file the finding as a sub-task ("hue retuning") and treat it as a failure of pre-research, not a routine PR revision.
-
----
-
-## Moderate Pitfalls
-
----
-
-### P6. Mode switching (Sheet1 ↔ Sheet2) — state preservation ambiguity
-
-**Risk category:** UX / clinical trust
-**Phase:** Requirements (decision), calculator phase (implementation)
-**Severity:** MEDIUM
-
-**What goes wrong:**
-User enters TPN values in Sheet1 mode, toggles to Sheet2, enters bedside inputs, toggles back — is Sheet1 state still there? If wiped, users lose work and stop trusting the toggle. If preserved without visual cue, they don't realize old values are still there.
-
-**Prevention:**
-
-1. **Decision in REQUIREMENTS.md:** Preserve both modes' inputs independently in sessionStorage (`feedAdvanceState.sheet1` + `feedAdvanceState.sheet2`), mirroring Morphine's `morphineState` shape.
-2. **No cross-mode field coupling.** Weight lives in both but is stored per-mode (clinicians may be computing for different patients). Document explicitly.
-3. **Test:** Playwright E2E — enter Sheet1 inputs, toggle to Sheet2, enter Sheet2 inputs, toggle back, assert Sheet1 values intact.
-4. **Stale-key migration:** Follow v1.11 pattern — `{ ...defaultState(), ...parsed }` spread silently drops unknown keys, no version bump needed.
-
----
-
-### P7. Trophic /6 vs /8 × advance cadence coherence
-
-**Risk category:** Clinical coherence / usability trap
-**Phase:** Requirements + calculator phase
-**Severity:** MEDIUM
-
-**What goes wrong:**
-User selects trophic q4h (÷6 = 6 feeds/day) but advance cadence "every 3rd feed" — that's fine, 2 advances/day. But if they could separately select trophic q3h (÷8) while the goal-phase feed frequency is q4h, the schedule is clinically incoherent.
-
-**Prevention:**
-
-1. **Decision in REQUIREMENTS.md:** *Single* feed-frequency dropdown at the top of the card ("Feed frequency: q3h / q4h"), which drives BOTH the trophic divisor (÷6 or ÷8) AND the IV backfill divisor (÷3 vs ÷4). The user cannot mix them. This also solves P8.
-2. **Advance cadence is orthogonal** — "how often to step up" (once daily, twice daily, every feed, every other, every 3rd) is independent of feed frequency. That's fine.
-3. **No clinical coherence-check advisories needed** if the dropdowns are structured correctly.
-
----
-
-### P8. IV backfill `total_fluids − enteral/3` stale constant when frequency is q4h
-
-**Risk category:** Clinical correctness
-**Phase:** Calculator phase
-**Severity:** MEDIUM → CRITICAL if shipped wrong
-
-**What goes wrong:**
-The xlsx IV backfill formula uses `/3` because it assumes q3h feeds. If the user picks q4h but the code still uses `/3`, IV rate is wrong by ~25%.
-
-**Prevention:**
-
-1. **Audit the xlsx cell formula** before writing a line of code. Document the derivation in a comment above the function. Do not "port from memory" — open the cell and read the reference chain.
-2. **Parameterize on feed frequency**, not on the literal `3`. Pull from the same single feed-frequency dropdown as P7.
-3. **Parity fixture** must include an IV backfill row for BOTH q3h and q4h feed frequency (one locked to xlsx, one hand-derived).
-4. **Unit test** named `"IV backfill uses feed-frequency-aware divisor, not literal 3"` as a regression anchor.
-
----
-
-### P9. Auto-advance divisor mismatch between Sheet1 (/2 hardcoded) and Sheet2 (dropdown)
-
-**Risk category:** Internal consistency
-**Phase:** Calculator phase
-**Severity:** MEDIUM
-
-**What goes wrong:**
-Sheet1 hardcodes `/2` for its auto-advance calculation. Sheet2 exposes a dropdown. If the Sheet1 mode calculation silently uses `/2` while Sheet2 mode uses the dropdown, two modes return different numbers for the same user intent.
-
-**Prevention:**
-
-1. **Single source of truth in code:** one `calculateAdvance(advancePerDay, divisor)` function shared by both modes. Sheet1 mode passes the dropdown value; Sheet1 xlsx parity fixture locks it to `2` to match the spreadsheet.
-2. **Document in AboutSheet + inline comment:** "Sheet1 xlsx hardcodes ÷2 (twice daily); in this app, both modes use the same dropdown, with ÷2 as the default."
-3. **Parity test** for Sheet1 mode uses `divisor: 2` exactly, the default.
-4. **Cross-mode test:** `"Sheet1 and Sheet2 modes produce identical advance numbers given identical inputs"`.
-
----
-
-### P10. "Every 3rd feed" with q3h (8 feeds/day) → non-integer advances-per-day
-
-**Risk category:** Clinical convention / UX
-**Phase:** Requirements (decision), calculator phase
-**Severity:** LOW-MEDIUM
-
-**What goes wrong:**
-q3h × every-3rd = 8/3 = 2.67 advances per day. Is that "round down to 2" (safer, slower wean up), "round up to 3" (faster), or "2.67 steps shown with fractional labeling"?
-
-**Prevention:**
-
-1. **Clinical decision in REQUIREMENTS.md** — recommend **floor** (round down, safer: fewer volume jumps per day).
-2. **Document in AboutSheet** for feed-advance: "When feed frequency and advance cadence produce a non-integer number of advances per day, the schedule rounds down to stay clinically conservative."
-3. **Unit test** — `"q3h feeds with every-3rd advance rounds 8/3 down to 2 advances/day"`.
-4. **Alternative if clinical team objects:** surface an advisory "{combo} is unusual — verify intent" rather than rejecting.
-
----
-
-### P11. NumericInput advisory-only contract violation
-
-**Risk category:** Clinical safety regression
-**Phase:** Calculator phase
-**Severity:** MEDIUM
-
-**What goes wrong:**
-v1.6 locked `NumericInput` as advisory-only: `min`/`max` surface a blur-gated "Outside expected range — verify" message; they DO NOT clamp (see `NumericInput.svelte` lines 43–52). A well-meaning port author adds `Math.min/max` "just to be safe," silently corrupting user input.
-
-**Prevention:**
-
-1. **Inputs config in JSON only** — `feed-advance-config.json` with `inputs.weightKg.min/max`, mirroring `morphine-config.json` and `fortification-config.json`. No call-site magic numbers.
-2. **No clamp anywhere.** Grep the phase diff for `Math.min`/`Math.max` near input handlers before merging.
-3. **Scroll-wheel clamp is allowed** (explicit user gesture with immediate feedback; the v1.6 contract permits it — see `setupWheel` in NumericInput).
-4. **Test:** `"weight above max shows advisory on blur, does not clamp value"`.
-
----
-
-### P12. Playwright `inputmode="decimal"` regression
-
-**Risk category:** Mobile UX regression
-**Phase:** Calculator phase (Playwright sub-phase)
-**Severity:** LOW (easy to prevent)
-
-**What goes wrong:**
-GIR v1.8 added a regression test asserting every numeric input exposes `inputmode="decimal"` so mobile gets the decimal keyboard. Feed Advance has 5+ numeric inputs; if any use `<input type="text">` or a custom widget, mobile keyboard regresses for that field and users don't notice until bedside.
-
-**Prevention:**
-
-1. **Mandatory use of shared `NumericInput.svelte`** for every numeric field (already sets `inputmode="decimal"` — line 135).
-2. **Playwright regression test** extending the GIR `inputmode` assertion:
-   ```ts
-   for (const selector of feedAdvanceNumericSelectors) {
-     await expect(page.locator(selector)).toHaveAttribute('inputmode', 'decimal');
-   }
-   ```
-3. **Grep gate** in phase verification: `grep -rn 'type="text"' src/lib/feed-advance/` must return zero results.
-
----
-
-## Minor Pitfalls
-
----
-
-### P13. AboutSheet drift — copy written late, fixup commit required
-
-**Risk category:** Release hygiene
-**Phase:** Calculator phase (NOT a polish phase)
-**Severity:** LOW
-
-**What goes wrong:**
-Every prior calculator (v1.3 Formula, v1.8 GIR, v1.11 Morphine rewrite) required an AboutSheet copy fixup commit because it was written last. Small but embarrassing.
-
-**Prevention:**
-
-1. **AboutSheet entry is a Wave 0 task (stub) and a Calculator Phase exit criterion (final copy).**
-2. **Required content** (per v1.8 GIR pattern): description, source citation (`nutrition-calculator.xlsx` Sheet1 + Sheet2), institutional-protocol disclaimer, note on user-selectable divisors that differ from the raw xlsx.
-3. **Phase verification checklist item:** "AboutSheet entry renders in both `/feeds` and global about dialog, cites xlsx, notes divisor parameterization."
-
----
-
-### P14. Parity epsilon — clinical insignificance floor
-
-**Risk category:** Test flakiness vs. over-strictness
-**Phase:** Calculator phase (test sub-phase)
-**Severity:** LOW
-
-**What goes wrong:**
-GIR used 1% relative tolerance + 0.15 ml/hr absolute floor because truncated spreadsheet constants cascade into delta math. Feed Advance has similar risk: `/30`, `/3`, `×3.4` are all susceptible to xlsx-side rounding. Strict `toBeCloseTo(n, 4)` will produce fragile tests.
-
-**Prevention:**
-
-1. **Reuse the `closeEnough()` pattern** from `gir/calculations.test.ts` (EPSILON 0.01, ABS_FLOOR tuned to the unit — e.g., 0.5 kcal for kcal totals, 0.5 ml for per-feed volumes).
-2. **Document tolerance choice** in a comment: "0.5 kcal abs floor reflects xlsx cell display truncation of `3.4` kcal/g; clinically negligible."
-3. **Do NOT widen epsilon beyond clinical insignificance.** 1% on a kcal/kg/day number is the ceiling.
+## Test-surface gaps (where pitfalls cannot be caught in CI)
+
+These are the failure modes that *only* surface on a real iPhone in standalone PWA mode. They are the entire reason the v1.13 D-12 real-iPhone smoke deferral existed and why this milestone now has to absorb that work.
+
+| Pitfall | Why CI cannot catch | Real-iPhone smoke step |
+| ------- | ------------------- | ---------------------- |
+| P-04    | Playwright cannot trigger bfcache. WebKit Playwright simulates page navigation but not iOS app suspension. | Open NICU Assist standalone, expand drawer, switch to Phone app and call yourself, decline call, return to NICU Assist. Drawer must be flush above bottom nav with no offset. |
+| P-05    | Hardware keyboard requires Bluetooth pairing or Smart Connector. iOS Simulator has a checkbox but Playwright drives the simulator only via UA. | Pair Bluetooth keyboard. Open any calculator, expand drawer, focus Weight field. Confirm drawer does **not** lift (no OSK = no inset). |
+| P-08    | Scroll-driven jank on iOS only manifests during real touch-momentum scrolling. Synthesized scroll events in chromium are smooth. | Scroll the calculator page rapidly (flick gesture); drawer must not render at all (it is closed). Then expand drawer, scroll inside the sheet's children — sheet itself must not move. |
+| P-09    | Dynamic Island is a hardware feature; Playwright at viewport `393x852` does not paint a notch. | iPhone 14 Pro+ device. Open NICU Assist standalone. Hamburger button must be tappable (not under Dynamic Island), app name must be horizontally centered between hamburger and theme button. |
+| P-12    | Status-bar tint is a system render layer Playwright cannot capture. | Light mode + Dynamic Island device. Status bar must be readable against the title bar background. |
+| P-16    | Rubber-band overscroll is iOS-only. | At top of scroll, pull down past the title bar. Title bar must not jitter; drawer (when closed) must not appear. |
+| P-21    | Theme transition during keyboard-up requires real OSK + real layout pipeline. | Open drawer, focus field (OSK appears), tap theme toggle. Drawer must remain flush above OSK with no flicker. |
+
+**Recommendation:** add `.planning/v1.15.1-IPHONE-SMOKE.md` checklist file as a phase deliverable, blocking milestone completion. Mirrors the v1.13 D-12 deferral closure obligation called out in the milestone goal.
 
 ---
 
 ## Phase-Specific Warnings
 
-| Phase / Wave                          | Pitfalls addressed                          | Mitigation                                                                  |
-| ------------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------- |
-| **Wave 0 (pre-feature)**              | P4, P5 (hue pre-research), P13 (AboutSheet stub) | Grep checklist, hue pre-research, stub entries, compile gate                |
-| **Calculator pure-logic sub-phase**   | P1, P2, P3, P8, P9, P14                     | Locked + matrix fixture file, named constants, audit xlsx cells directly    |
-| **Calculator UI sub-phase**           | P2 (dual dextrose UI), P6, P7, P10, P11, P12 | Dual dextrose inputs, single feed-frequency dropdown, shared NumericInput   |
-| **Polish / pre-PR gate**              | P5 (axe sweep), P13 (AboutSheet final copy) | 20/20 axe mandatory, AboutSheet rendered in both contexts                    |
-| **Release**                           | version bump, PROJECT.md update (standard)  | Follow v1.11 release checklist                                               |
-
----
-
-## Prioritized Pitfall List (for requirements author)
-
-1. **P1** spreadsheet parity fixture discipline — CRITICAL
-2. **P2** Sheet1 dual dextrose — CRITICAL
-3. **P3** Sheet1 unit confusion — CRITICAL
-4. **P4** Wave 0 `CalculatorId` / NavShell extension — HIGH (build blocker)
-5. **P5** 4th identity hue axe pre-gate — HIGH
-6. **P8** IV backfill stale `/3` — MEDIUM (CRITICAL if shipped wrong)
-7. **P9** Sheet1 ↔ Sheet2 divisor consistency — MEDIUM
-8. **P7** trophic × goal frequency coherence (single-dropdown fix) — MEDIUM
-9. **P6** mode state preservation policy — MEDIUM
-10. **P11** NumericInput advisory contract — MEDIUM
-11. **P10** non-integer advances-per-day — LOW-MEDIUM
-12. **P12** Playwright `inputmode="decimal"` — LOW
-13. **P14** parity epsilon tuning — LOW
-14. **P13** AboutSheet drift — LOW
+| Phase Topic                          | Likely Pitfall(s)                                                       | Mitigation                                                                                                                                                                                                  |
+| ------------------------------------ | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Drawer auto-focus removal            | P-01, P-02, P-13, P-14, P-17                                            | Single phase: delete the `queueMicrotask` block, add `autofocus` to close button, add `T-07` activeElement test, add cross-calculator focus-order Playwright spec.                                          |
+| visualViewport-aware drawer sizing   | P-03, P-04, P-05, P-06, P-08, P-15, P-16, P-18, P-22                    | Two phases: (a) add `visualViewport` polyfill + sizing util + unit tests; (b) wire util into `InputDrawer.svelte` and add Playwright webkit project.                                                         |
+| Notch-safe NavShell                  | P-09, P-10, P-11, P-12                                                  | Single phase: add `pt-[env(safe-area-inset-top,0px)]` and `px-[max(env(safe-area-inset-left,0px),1rem)]` to the `<header>`, audit all sticky-top consumers (sticky asides at `top-20`), update FOUC script meta-color sync. |
+| Real-iPhone smoke                    | P-04, P-05, P-08, P-09, P-12, P-16, P-21                                | Phase Gate before milestone close. `.planning/v1.15.1-IPHONE-SMOKE.md` as deliverable.                                                                                                                       |
+| Test scaffolding                     | P-18, P-19, P-20                                                        | Wave-0 phase before any feature code: polyfill in `src/test-setup.ts`, add webkit Playwright project, add visual-viewport-mock util.                                                                          |
 
 ---
 
 ## Sources
 
-- `src/lib/gir/calculations.test.ts` — `closeEnough()` epsilon pattern (1% relative + absolute floor)
-- `src/lib/morphine/calculations.test.ts` — xlsx Sheet1 row-by-row parity pattern (v1.11)
-- `src/lib/shared/components/NumericInput.svelte` — advisory-only contract (v1.6, lines 43–52, 96–120, 135)
-- `.planning/PROJECT.md` — v1.5 Phase 20 axe pain; v1.8 Phase 28 Wave 0 latent bugs; v1.11 xlsx-as-sole-source-of-truth
-- `.planning/MILESTONES.md` v1.8 — "Two latent bugs caught before ship — Phase 28 Wave 0 fixed `CalculatorId` union (missing `'gir'`) and `NavShell.activeCalculatorId` `/gir` branch"
-- `.planning/MILESTONES.md` v1.5 — "Real WCAG failure caught and fixed by Phase 20's axe sweep: Phase 19's Morphine schedule eyebrow was 3.61:1"
-- `nutrition-calculator.xlsx` Sheet1 (TPN + full nutrition) + Sheet2 (bedside advance) — sole clinical authority
+- [VisualViewport — MDN](https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport) — HIGH confidence (official spec)
+- [WICG visual-viewport repo (Issue #79: Safari 15 keyboard not firing resize)](https://github.com/WICG/visual-viewport/issues/79) — HIGH confidence
+- [Apple Developer Forums: iOS 26 Safari & WebView — VisualViewport.offsetTop not resetting after keyboard dismiss](https://developer.apple.com/forums/thread/800125) — MEDIUM confidence (recent, post-cutoff)
+- [Bramus — Prevent content from being hidden underneath the Virtual Keyboard](https://www.bram.us/2021/09/13/prevent-items-from-being-hidden-underneath-the-virtual-keyboard-by-means-of-the-virtualkeyboard-api/) — MEDIUM
+- [Martijn Hols — How to get the document height in iOS Safari when the OSK is open](https://martijnhols.nl/blog/how-to-get-document-height-ios-safari-osk) — MEDIUM
+- [saricden — How to make fixed elements respect the virtual keyboard on iOS](https://saricden.com/how-to-make-fixed-elements-respect-the-virtual-keyboard-on-ios) — MEDIUM
+- [Krutsilin — Fixing the Safari Mobile Resizing Bug](https://medium.com/@krutilin.sergey.ks/fixing-the-safari-mobile-resizing-bug-a-developers-guide-6568f933cde0) — LOW (single Medium post, secondary corroboration)
+- [shuvcode #264 — Menu button hidden behind Dynamic Island in iOS PWA](https://github.com/Latitudes-Dev/shuvcode/issues/264) — MEDIUM (real-world bug match for P-09)
+- [ionic-team/ionic-framework #29621 — Safe-area not applying on iOS PWA](https://github.com/ionic-team/ionic-framework/issues/29621) — MEDIUM
+- [karmasakshi — Make Your PWAs Look Handsome on iOS](https://dev.to/karmasakshi/make-your-pwas-look-handsome-on-ios-1o08) — MEDIUM
+- [MDN — env() CSS function](https://developer.mozilla.org/en-US/docs/Web/CSS/env) — HIGH (browser-tab returns 0 behavior)
+- [Manuel Matuzović — O dialog focus, where art thou?](https://www.matuzo.at/blog/2023/focus-dialog/) — MEDIUM (dialog autofocus / VoiceOver)
+- [Jared Cunha — HTML dialog: Getting accessibility and UX right](https://jaredcunha.com/blog/html-dialog-getting-accessibility-and-ux-right) — MEDIUM
+- [Scott O'Hara — Having an open dialog (archival)](https://www.scottohara.me/blog/2019/03/05/open-dialog.html) — HIGH (a11y standard reference)
+- [iOS focus + OSK gist by cathyxz](https://gist.github.com/cathyxz/73739c1bdea7d7011abb236541dc9aaa) — LOW (gist; corroborates synchronous-click rule)
+- [emilkowalski/vaul #13 — Testing with vaul drawer](https://github.com/emilkowalski/vaul/issues/13) — MEDIUM (jsdom + visualViewport polyfill discussion)
+- [npm jsdom-testing-mocks](https://www.npmjs.com/package/jsdom-testing-mocks) — MEDIUM (visualViewport mock pattern)
+- [Bramus — viewport-resize-behavior explainer](https://github.com/bramus/viewport-resize-behavior/blob/main/explainer.md) — MEDIUM (current proposal landscape)
+
+Project-internal sources (HIGH confidence, ground truth):
+
+- `src/lib/shared/components/InputDrawer.svelte` (lines 51-57, 142-160) — current auto-focus + dvh sizing
+- `src/lib/shell/NavShell.svelte` (lines 76-80, 149-152) — current sticky header + bottom nav
+- `src/app.html` (lines 45, 49) — viewport-fit=cover + black-translucent already declared
+- `vite.config.ts` (line 27, 62) — theme_color + jsdom test environment
+- `src/test-setup.ts` — existing polyfill-self-test pattern to mirror for visualViewport
+- `playwright.config.ts` (lines 16-19) — chromium-only, no webkit project
+- `e2e/mobile-nav-clearance.spec.ts:23-24` — existing iPhone-SE / iPhone-14-Pro-Max viewport pair
+- `.planning/PROJECT.md` Active section — milestone goal as authoritative scope statement
+- `.planning/PROJECT.md` Validated v1.13 D-12 — real-iPhone smoke deferral carried forward into this milestone
