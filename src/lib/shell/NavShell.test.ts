@@ -252,4 +252,16 @@ describe('NavShell — desktop full-nav divergence (Phase 45)', () => {
     // The class is bound conditionally in markup
     expect(navShellSource).toContain('class:is-overflowing={isOverflowing}');
   });
+
+  it('T-13 NOTCH-TEST-01: header carries pt-[env(safe-area-inset-top,...)] and px-[max(env(safe-area-inset-left,...),1rem)]', () => {
+    // Source-grep regression guard mirrors T-06 pattern (InputDrawer.test.ts:83-94)
+    // and T-11/T-12 above. We assert literal-token presence — single bracket-syntax
+    // tokens like `pt-[env(safe-area-inset-top,0px)]` are un-splittable by
+    // prettier-plugin-tailwindcss, so the assertion is format-stable.
+    expect(navShellSource).toContain('pt-[env(safe-area-inset-top,0px)]');
+    expect(navShellSource).toContain('px-[max(env(safe-area-inset-left,0px),1rem)]');
+    // Defense: the canonical sticky-header tokens are still present
+    // (token-presence assertion via the existing helper, not order-sensitive).
+    expect(classAttrContainsAll(navShellSource, ['sticky', 'top-0', 'min-h-14'])).toBe(true);
+  });
 });
