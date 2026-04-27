@@ -39,22 +39,24 @@
 	}
 
 	let dialog = $state<HTMLDialogElement | null>(null);
+	let closeBtn = $state<HTMLButtonElement | null>(null);
 
 	$effect(() => {
 		if (!dialog) return;
 		if (expanded && !dialog.open) {
 			dialog.showModal();
-			// Move focus from the drawer's header close-button to the first actual
-			// input once the dialog is open. showModal() auto-focuses the first
-			// focusable child (which is the "Clear" or close button in our header),
-			// but clinicians landing on "Close" and having to tab is a wasted step.
-			queueMicrotask(() => {
-				if (!sheet) return;
-				const firstInput = sheet.querySelector<HTMLElement>(
-					'input:not([type="hidden"]), select, textarea, [role="slider"]'
-				);
-				firstInput?.focus();
-			});
+			// Native <dialog>.showModal() runs the HTML focus-fixup-step
+			// synchronously and reads the AUTOFOCUS CONTENT ATTRIBUTE on
+			// dialog descendants. Svelte 5's `autofocus` directive only
+			// sets the IDL property, so the attribute is invisible to
+			// dialog focus resolution and the browser falls back to
+			// "first focusable child" — which can be a textbox/spinbutton
+			// (re-summoning the iOS soft keyboard, the bug we just fixed).
+			// We explicitly focus the close button to honor the contract
+			// the declarative `autofocus` attribute on the close button
+			// represents. Single source of truth in InputDrawer.svelte;
+			// no per-calculator divergence.
+			closeBtn?.focus();
 		}
 		if (!expanded && dialog.open) {
 			dialog.close();
@@ -105,7 +107,9 @@
 					</button>
 				{/if}
 				<button
+					bind:this={closeBtn}
 					type="button"
+					autofocus
 					class="flex min-h-[56px] flex-1 items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-[var(--color-surface-alt)] active:bg-[var(--color-surface-alt)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)]"
 					aria-label="Close {title.toLowerCase()}"
 					onclick={() => (expanded = false)}
