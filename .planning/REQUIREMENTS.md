@@ -34,19 +34,19 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### iOS-Correct Drawer Anchoring (Wave-2, Fix B)
 
-- [ ] **DRAWER-01**: New module-scope singleton `src/lib/shared/visualViewport.svelte.ts` (~40 lines, mirrors `theme.svelte.ts` / `favorites.svelte.ts` patterns) exposes `$state` runes for `{ offsetTop, height, keyboardOpen }`; idempotent `init()`; `browser`-guarded for SSG safety
-- [ ] **DRAWER-02**: Singleton subscribes to `visualViewport.resize` only (NOT `visualViewport.scroll` — Phase 42.1 D-16 explicitly removed scroll-driven transforms; reintroducing risks the same scroll-jank). Re-reads `vv.width/height/offsetTop` on every event (no caching) to survive the iOS 26 `visualViewport.height` post-dismiss regression (Apple Developer Forums #800125)
-- [ ] **DRAWER-03**: Singleton binds `pageshow` (with `event.persisted === true` branch) and `visibilitychange` listeners so bfcache-restored sessions synchronously re-read `visualViewport` properties — drawer renders correctly on resume from background without requiring a user gesture
-- [ ] **DRAWER-04**: Singleton initialized from `src/routes/+layout.svelte:onMount` alongside the existing `theme.init()` / `disclaimer.init()` / `favorites.init()` / `pwa.init()` calls
+- [x] **DRAWER-01**: New module-scope singleton `src/lib/shared/visualViewport.svelte.ts` (~40 lines, mirrors `theme.svelte.ts` / `favorites.svelte.ts` patterns) exposes `$state` runes for `{ offsetTop, height, keyboardOpen }`; idempotent `init()`; `browser`-guarded for SSG safety
+- [x] **DRAWER-02**: Singleton subscribes to `visualViewport.resize` only (NOT `visualViewport.scroll` — Phase 42.1 D-16 explicitly removed scroll-driven transforms; reintroducing risks the same scroll-jank). Re-reads `vv.width/height/offsetTop` on every event (no caching) to survive the iOS 26 `visualViewport.height` post-dismiss regression (Apple Developer Forums #800125)
+- [x] **DRAWER-03**: Singleton binds `pageshow` (with `event.persisted === true` branch) and `visibilitychange` listeners so bfcache-restored sessions synchronously re-read `visualViewport` properties — drawer renders correctly on resume from background without requiring a user gesture
+- [x] **DRAWER-04**: Singleton initialized from `src/routes/+layout.svelte:onMount` alongside the existing `theme.init()` / `disclaimer.init()` / `favorites.init()` / `pwa.init()` calls
 - [ ] **DRAWER-05**: `InputDrawer.svelte` `.input-drawer-sheet` exposes `--ivv-bottom` and `--ivv-max-height` CSS custom properties driven by the singleton; no per-calculator prop plumbing across the six call sites
 - [ ] **DRAWER-06**: Sheet `max-height` becomes `calc(var(--ivv-max-height, 80dvh))` so when the keyboard is up the sheet shrinks to fit the available `visualViewport.height − 16px` (eyebrow + first input remain visible)
 - [ ] **DRAWER-07**: Sheet `padding-bottom` becomes `max(env(safe-area-inset-bottom, 0px), var(--ivv-bottom, 0px))` so when the keyboard is up the sheet's bottom edge sits flush above the keyboard top with ≥ 8 px clearance; when the keyboard is down the existing safe-area-inset-bottom clearance is preserved
 - [ ] **DRAWER-08**: `transform`/`max-height` modifications apply ONLY to the inner `.input-drawer-sheet`, never to the outer `<dialog>` element, so top-layer positioning rules and `<dialog>` accessibility semantics are preserved (and the existing SelectPicker dialog inside the drawer is unaffected)
-- [ ] **DRAWER-09**: Hardware-keyboard-paired iPhones do NOT trigger the keyboard-open branch (singleton's `keyboardOpen` heuristic uses `window.innerHeight − vv.height > 100` to filter URL-bar collapse and admit only the OSK; no false positives for Bluetooth keyboards which leave `vv.height` unchanged)
+- [x] **DRAWER-09**: Hardware-keyboard-paired iPhones do NOT trigger the keyboard-open branch (singleton's `keyboardOpen` heuristic uses `window.innerHeight − vv.height > 100` to filter URL-bar collapse and admit only the OSK; no false positives for Bluetooth keyboards which leave `vv.height` unchanged)
 - [ ] **DRAWER-10**: `prefers-reduced-motion: reduce` honored — when set, sheet sizing/positioning snaps without transition (consistent with v1.6 / Phase 42.1 reduced-motion contract); when unset, transition uses an existing scoped CSS rule (no new global transitions)
 - [ ] **DRAWER-11**: Existing `md:hidden` rule on the drawer is preserved (drawer never appears on tablet/desktop breakpoints) so iPad split-keyboard cases are out of scope per architectural design
 - [ ] **DRAWER-12**: Existing `<dialog>` `showModal()` + top-layer + Esc-to-close + focus-trap + focus-restore behaviors are preserved verbatim — no replacement with `position: fixed` or other anti-pattern (reference: PITFALLS.md anti-feature list)
-- [ ] **DRAWER-TEST-01**: Vitest unit test on the singleton — mock `window.visualViewport` via `dispatchVisualViewportResize(...)` helper, assert `$state` runes update on `resize` events, assert listeners rebind on `pageshow.persisted === true`, assert no `vv.scroll` listener is attached
+- [x] **DRAWER-TEST-01**: Vitest unit test on the singleton — mock `window.visualViewport` via `dispatchVisualViewportResize(...)` helper, assert `$state` runes update on `resize` events, assert listeners rebind on `pageshow.persisted === true`, assert no `vv.scroll` listener is attached
 - [ ] **DRAWER-TEST-02**: Vitest component test on `InputDrawer.svelte` asserts that `style="--ivv-bottom: …px; --ivv-max-height: …px"` is applied to `.input-drawer-sheet` and updates when the mock visualViewport dispatches a resize
 - [ ] **DRAWER-TEST-03**: Playwright spec under the new `webkit-iphone` project synthesizes `visualViewport.resize` (via `page.evaluate(() => window.dispatchEvent(...))`) and asserts the computed `padding-bottom` and `max-height` of `.input-drawer-sheet` match the keyboard-up branch
 - [ ] **DRAWER-TEST-04**: Existing 16/16 axe sweeps (light + dark across all 6 calculators) re-run with the new drawer behavior — confirm no contrast or landmark regressions from the visualViewport-aware layout
@@ -114,19 +114,19 @@ Explicit exclusions for v1.15.1:
 | FOCUS-TEST-01 | Phase 48 | Complete |
 | FOCUS-TEST-02 | Phase 48 | Complete |
 | FOCUS-TEST-03 | Phase 48 | Complete |
-| DRAWER-01 | Phase 49 | Pending |
-| DRAWER-02 | Phase 49 | Pending |
-| DRAWER-03 | Phase 49 | Pending |
-| DRAWER-04 | Phase 49 | Pending |
+| DRAWER-01 | Phase 49 | Complete |
+| DRAWER-02 | Phase 49 | Complete |
+| DRAWER-03 | Phase 49 | Complete |
+| DRAWER-04 | Phase 49 | Complete |
 | DRAWER-05 | Phase 49 | Pending |
 | DRAWER-06 | Phase 49 | Pending |
 | DRAWER-07 | Phase 49 | Pending |
 | DRAWER-08 | Phase 49 | Pending |
-| DRAWER-09 | Phase 49 | Pending |
+| DRAWER-09 | Phase 49 | Complete |
 | DRAWER-10 | Phase 49 | Pending |
 | DRAWER-11 | Phase 49 | Pending |
 | DRAWER-12 | Phase 49 | Pending |
-| DRAWER-TEST-01 | Phase 49 | Pending |
+| DRAWER-TEST-01 | Phase 49 | Complete |
 | DRAWER-TEST-02 | Phase 49 | Pending |
 | DRAWER-TEST-03 | Phase 49 | Pending |
 | DRAWER-TEST-04 | Phase 49 | Pending |
