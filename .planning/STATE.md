@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
 status: executing
-stopped_at: Plan 49-01 complete (singleton + layout init merged); ready for 49-02
-last_updated: "2026-04-27T18:42:39.271Z"
-last_activity: 2026-04-27 -- Phase 49 execution started
+stopped_at: Plan 49-02 complete (InputDrawer singleton wiring + T-09..T-12 merged); ready for 49-03
+last_updated: "2026-04-28T16:45:00.000Z"
+last_activity: 2026-04-28 -- Phase 49 Plan 02 verified (svelte-check 0, vitest 464/464, build clean)
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 8
-  completed_plans: 6
-  percent: 75
+  completed_plans: 7
+  percent: 87
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-04-27)
 ## Current Position
 
 Phase: 49 (wave-2-visualviewport-drawer-anchoring) — EXECUTING
-Plan: 1 of 3
+Plan: 2 of 3 complete; advancing to Plan 49-03
 Status: Executing Phase 49
-Last activity: 2026-04-27 -- Phase 49 execution started
+Last activity: 2026-04-28 -- Phase 49 Plan 02 verified (svelte-check 0, vitest 464/464, build clean)
 
 ## Performance Metrics
 
@@ -86,8 +86,8 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 
 ## Session Continuity
 
-Last session: 2026-04-27T18:42:39.265Z
-Stopped at: Plan 49-01 complete (singleton + layout init merged); ready for 49-02
+Last session: 2026-04-28T16:45:00.000Z
+Stopped at: Plan 49-02 complete (InputDrawer singleton wiring + T-09..T-12 merged); ready for 49-03
 Resume file: 
 
-.planning/phases/49-wave-2-visualviewport-drawer-anchoring/49-02-PLAN.md
+.planning/phases/49-wave-2-visualviewport-drawer-anchoring/49-03-PLAN.md
