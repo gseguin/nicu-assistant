@@ -120,8 +120,8 @@ See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROA
   3. Running `pnpm exec playwright test --list` shows two projects (`chromium` and `webkit-iphone`); a smoke spec under `webkit-iphone` (e.g. opening `/`) executes and `window.visualViewport` is defined inside `page.evaluate`
   4. The existing 99-passing chromium Playwright suite remains green unchanged (no spec regressions from project-level config refactor)
 **Plans**: 3 plans
-  - [ ] 47-01-PLAN.md — TEST-01: visualViewport polyfill in src/test-setup.ts + co-located unit test
-  - [ ] 47-02-PLAN.md — TEST-02: visual-viewport-mock helper module + co-located unit test
+  - [x] 47-01-PLAN.md — TEST-01: visualViewport polyfill in src/test-setup.ts + co-located unit test
+  - [x] 47-02-PLAN.md — TEST-02: visual-viewport-mock helper module + co-located unit test
   - [ ] 47-03-PLAN.md — TEST-03: webkit-iphone Playwright project + smoke spec + CI workflow update
 
 ### Phase 48: Wave-1 — Trivial Fixes (NOTCH + FOCUS)
@@ -192,7 +192,7 @@ See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROA
 | 40-43 | v1.13 | 15/15 | Complete | 2026-04-24 |
 | 44-46 | v1.14 | — | Complete | 2026-04-25 |
 | ws-pert | v1.15 | — | Complete | 2026-04-26 |
-| 47. Wave-0 — Test Scaffolding | v1.15.1 | 0/3 | Planned | — |
+| 47. Wave-0 — Test Scaffolding | v1.15.1 | 2/3 | In Progress|  |
 | 48. Wave-1 — Trivial Fixes (NOTCH + FOCUS) | v1.15.1 | 0/TBD | Not started | — |
 | 49. Wave-2 — visualViewport Drawer Anchoring | v1.15.1 | 0/TBD | Not started | — |
 | 50. Wave-3 — Real-iPhone Smoke Gate | v1.15.1 | 0/TBD | Not started | — |

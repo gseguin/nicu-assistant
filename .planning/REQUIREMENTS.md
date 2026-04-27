@@ -12,7 +12,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Test Scaffolding (Wave-0)
 
 - [ ] **TEST-01**: `window.visualViewport` polyfill added to `src/test-setup.ts` mirroring the existing `ResizeObserver` / `matchMedia` / `HTMLDialogElement` polyfills (with the same self-test pattern at lines 122–149) so jsdom-based vitest does not throw `TypeError: Cannot read properties of undefined` when components or modules read `window.visualViewport`
-- [ ] **TEST-02**: Reusable test helper `dispatchVisualViewportResize(height, offsetTop)` exported from `src/lib/test/visual-viewport-mock.ts` (or equivalent location) so component and unit tests can synthesize keyboard-up / keyboard-down state deterministically
+- [x] **TEST-02**: Reusable test helper `dispatchVisualViewportResize(height, offsetTop)` exported from `src/lib/test/visual-viewport-mock.ts` (or equivalent location) so component and unit tests can synthesize keyboard-up / keyboard-down state deterministically
 - [ ] **TEST-03**: New `webkit-iphone` Playwright project added to `playwright.config.ts` (using `devices['iPhone 14 Pro']` or equivalent) so e2e specs can execute under WebKit + iPhone viewport. Existing `chromium` project preserved unchanged. CI pipeline runs both projects.
 
 ### Notch-Safe Title Bar (Wave-1, Fix C)
@@ -101,7 +101,7 @@ Explicit exclusions for v1.15.1:
 | Requirement ID | Phase | Status |
 |---|---|---|
 | TEST-01 | Phase 47 | Pending |
-| TEST-02 | Phase 47 | Pending |
+| TEST-02 | Phase 47 | Complete |
 | TEST-03 | Phase 47 | Pending |
 | NOTCH-01 | Phase 48 | Pending |
 | NOTCH-02 | Phase 48 | Pending |

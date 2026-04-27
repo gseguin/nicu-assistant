@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
-status: Roadmap landed; awaiting `/gsd-plan-phase 47` to break Phase 47 into plans
+status: executing
 stopped_at: Phase 47 context gathered
-last_updated: "2026-04-27T06:57:23.623Z"
-last_activity: 2026-04-27 — Roadmap for v1.15.1 created (Phases 47-51, 44 requirements mapped 100%)
+last_updated: "2026-04-27T07:44:18.481Z"
+last_activity: 2026-04-27
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 2
+  percent: 67
 ---
 
 # Project State
@@ -20,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-27)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase 47 — Wave-0 Test Scaffolding (v1.15.1 starting phase)
+**Current focus:** Phase 47 — Wave-0 — Test Scaffolding
 
 ## Current Position
 
-Phase: 47 — Wave-0 Test Scaffolding (not started — roadmap just landed)
-Plan: —
-Status: Roadmap landed; awaiting `/gsd-plan-phase 47` to break Phase 47 into plans
-Last activity: 2026-04-27 — Roadmap for v1.15.1 created (Phases 47-51, 44 requirements mapped 100%)
+Phase: 47 (Wave-0 — Test Scaffolding) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
+Last activity: 2026-04-27
 
 ## Performance Metrics
 
@@ -58,6 +59,8 @@ Last activity: 2026-04-27 — Roadmap for v1.15.1 created (Phases 47-51, 44 requ
 - [v1.15]: PERT shipped as a self-contained workstream (`milestones/ws-pert-2026-04-26/`) with internal phase numbering 01-05 — did NOT consume main-roadmap phase numbers. v1.14 ended at Phase 46; v1.15.1 picks up at Phase 47.
 - [v1.15.1]: Wave structure is non-negotiable per HIGH-confidence research convergence. Wave-0 (Phase 47, Test Scaffolding) MUST land before any feature code or visualViewport-aware tests give green-by-accident. Wave-1 NOTCH + FOCUS combined into a single phase (Phase 48) because they touch different files (`NavShell.svelte` vs `InputDrawer.svelte`), have no shared state, and at granularity `coarse` two phases for ~10 LOC each is over-fragmented. Wave-2 (Phase 49, visualViewport Drawer) is its own phase due to size + risk concentration (4 blocker pitfalls). Wave-3 (Phase 50, Real-iPhone Smoke) is a phase gate that closes v1.13 D-12 deferral — CI cannot prove the fix works.
 - [v1.15.1]: Slip plan: Phase 49 (Wave-2 visualViewport) is the most complex; if it slips, Phases 47 + 48 still close 2/3 of bedside complaints (notch + auto-focus) and Wave-2 becomes v1.15.2.
+- [Phase 47-02]: Test helper convention: src/lib/test/ directory holds plain-TS framework-neutral helpers — First test helper (visual-viewport-mock.ts) imports nothing — no vitest/jest/mocha. Reusable from any future test runner. Distinct from src/lib/shared/ (runtime singletons) and src/test-setup.ts (setup-time polyfill installer).
+- [Phase 47-02]: visual-viewport-mock helper mutates the live polyfill instance — never replaces window.visualViewport — Pitfall 2 from RESEARCH.md. Tests holding a 'const vv = window.visualViewport' reference must observe new values without refetching. Internal getPolyfill() applies the cast once; T-07 unit test is the regression sentinel against future 'replace instance' refactors.
 
 ### Roadmap Evolution
 
@@ -83,8 +86,8 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 
 ## Session Continuity
 
-Last session: 2026-04-27T06:57:23.616Z
+Last session: 2026-04-27T07:42:31.439Z
 Stopped at: Phase 47 context gathered
-Resume file: .planning/phases/47-wave-0-test-scaffolding/47-CONTEXT.md
+Resume file: None
 
 **Planned Phase:** 47 (Wave-0 Test Scaffolding) — 0 plans — 2026-04-27
