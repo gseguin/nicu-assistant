@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
 status: verifying
-stopped_at: Phase 48 verified complete (5/5 SC, 11/11 reqs, 21/21 D-XX)
-last_updated: "2026-04-27T17:37:53.043Z"
-last_activity: 2026-04-27 -- Phase 48 execution started
+stopped_at: Phase 49 context gathered
+last_updated: "2026-04-27T17:46:51.470Z"
+last_activity: 2026-04-27 -- Phase 48 verified complete
 progress:
   total_phases: 5
   completed_phases: 2
@@ -86,8 +86,8 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 
 ## Session Continuity
 
-Last session: 2026-04-27T17:37:53.036Z
-Stopped at: Phase 48 verified complete (5/5 SC, 11/11 reqs, 21/21 D-XX)
+Last session: 2026-04-27T17:46:51.463Z
+Stopped at: Phase 49 context gathered
 Resume file: 
 
-**Planned Phase:** 47 (Wave-0 Test Scaffolding) — 0 plans — 2026-04-27
+.planning/phases/49-wave-2-visualviewport-drawer-anchoring/49-CONTEXT.md
