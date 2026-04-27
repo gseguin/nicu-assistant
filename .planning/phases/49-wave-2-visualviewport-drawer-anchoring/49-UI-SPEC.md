@@ -1,10 +1,11 @@
 ---
 phase: 49
 slug: wave-2-visualviewport-drawer-anchoring
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-04-27
+reviewed_at: 2026-04-27
 ---
 
 # Phase 49 — UI Design Contract
