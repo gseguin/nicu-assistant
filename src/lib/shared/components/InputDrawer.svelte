@@ -95,6 +95,7 @@
 				{/if}
 				<button
 					type="button"
+					autofocus
 					class="flex min-h-[56px] flex-1 items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-[var(--color-surface-alt)] active:bg-[var(--color-surface-alt)] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--color-identity)]"
 					aria-label="Close {title.toLowerCase()}"
 					onclick={() => (expanded = false)}
