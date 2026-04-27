@@ -100,54 +100,60 @@ Explicit exclusions for v1.15.1:
 
 | Requirement ID | Phase | Status |
 |---|---|---|
-| TEST-01 | Phase TBD | Pending |
-| TEST-02 | Phase TBD | Pending |
-| TEST-03 | Phase TBD | Pending |
-| NOTCH-01 | Phase TBD | Pending |
-| NOTCH-02 | Phase TBD | Pending |
-| NOTCH-03 | Phase TBD | Pending |
-| NOTCH-04 | Phase TBD | Pending |
-| NOTCH-TEST-01 | Phase TBD | Pending |
-| FOCUS-01 | Phase TBD | Pending |
-| FOCUS-02 | Phase TBD | Pending |
-| FOCUS-03 | Phase TBD | Pending |
-| FOCUS-TEST-01 | Phase TBD | Pending |
-| FOCUS-TEST-02 | Phase TBD | Pending |
-| FOCUS-TEST-03 | Phase TBD | Pending |
-| DRAWER-01 | Phase TBD | Pending |
-| DRAWER-02 | Phase TBD | Pending |
-| DRAWER-03 | Phase TBD | Pending |
-| DRAWER-04 | Phase TBD | Pending |
-| DRAWER-05 | Phase TBD | Pending |
-| DRAWER-06 | Phase TBD | Pending |
-| DRAWER-07 | Phase TBD | Pending |
-| DRAWER-08 | Phase TBD | Pending |
-| DRAWER-09 | Phase TBD | Pending |
-| DRAWER-10 | Phase TBD | Pending |
-| DRAWER-11 | Phase TBD | Pending |
-| DRAWER-12 | Phase TBD | Pending |
-| DRAWER-TEST-01 | Phase TBD | Pending |
-| DRAWER-TEST-02 | Phase TBD | Pending |
-| DRAWER-TEST-03 | Phase TBD | Pending |
-| DRAWER-TEST-04 | Phase TBD | Pending |
-| SMOKE-01 | Phase TBD | Pending |
-| SMOKE-02 | Phase TBD | Pending |
-| SMOKE-03 | Phase TBD | Pending |
-| SMOKE-04 | Phase TBD | Pending |
-| SMOKE-05 | Phase TBD | Pending |
-| SMOKE-06 | Phase TBD | Pending |
-| SMOKE-07 | Phase TBD | Pending |
-| SMOKE-08 | Phase TBD | Pending |
-| SMOKE-09 | Phase TBD | Pending |
-| SMOKE-10 | Phase TBD | Pending |
-| REL-01 | Phase TBD | Pending |
-| REL-02 | Phase TBD | Pending |
-| REL-03 | Phase TBD | Pending |
-| REL-04 | Phase TBD | Pending |
+| TEST-01 | Phase 47 | Pending |
+| TEST-02 | Phase 47 | Pending |
+| TEST-03 | Phase 47 | Pending |
+| NOTCH-01 | Phase 48 | Pending |
+| NOTCH-02 | Phase 48 | Pending |
+| NOTCH-03 | Phase 48 | Pending |
+| NOTCH-04 | Phase 48 | Pending |
+| NOTCH-TEST-01 | Phase 48 | Pending |
+| FOCUS-01 | Phase 48 | Pending |
+| FOCUS-02 | Phase 48 | Pending |
+| FOCUS-03 | Phase 48 | Pending |
+| FOCUS-TEST-01 | Phase 48 | Pending |
+| FOCUS-TEST-02 | Phase 48 | Pending |
+| FOCUS-TEST-03 | Phase 48 | Pending |
+| DRAWER-01 | Phase 49 | Pending |
+| DRAWER-02 | Phase 49 | Pending |
+| DRAWER-03 | Phase 49 | Pending |
+| DRAWER-04 | Phase 49 | Pending |
+| DRAWER-05 | Phase 49 | Pending |
+| DRAWER-06 | Phase 49 | Pending |
+| DRAWER-07 | Phase 49 | Pending |
+| DRAWER-08 | Phase 49 | Pending |
+| DRAWER-09 | Phase 49 | Pending |
+| DRAWER-10 | Phase 49 | Pending |
+| DRAWER-11 | Phase 49 | Pending |
+| DRAWER-12 | Phase 49 | Pending |
+| DRAWER-TEST-01 | Phase 49 | Pending |
+| DRAWER-TEST-02 | Phase 49 | Pending |
+| DRAWER-TEST-03 | Phase 49 | Pending |
+| DRAWER-TEST-04 | Phase 49 | Pending |
+| SMOKE-01 | Phase 50 | Pending |
+| SMOKE-02 | Phase 50 | Pending |
+| SMOKE-03 | Phase 50 | Pending |
+| SMOKE-04 | Phase 50 | Pending |
+| SMOKE-05 | Phase 50 | Pending |
+| SMOKE-06 | Phase 50 | Pending |
+| SMOKE-07 | Phase 50 | Pending |
+| SMOKE-08 | Phase 50 | Pending |
+| SMOKE-09 | Phase 50 | Pending |
+| SMOKE-10 | Phase 50 | Pending |
+| REL-01 | Phase 51 | Pending |
+| REL-02 | Phase 51 | Pending |
+| REL-03 | Phase 51 | Pending |
+| REL-04 | Phase 51 | Pending |
 
 **Coverage:**
 - v1.15.1 requirements: 44 total
-- Mapped to phases: 0 (filled by roadmapper)
+- Mapped to phases: 44 (100%)
+  - Phase 47 (Wave-0 Test Scaffolding): 3 (TEST-01..03)
+  - Phase 48 (Wave-1 NOTCH + FOCUS): 11 (NOTCH-01..04 + NOTCH-TEST-01 + FOCUS-01..03 + FOCUS-TEST-01..03)
+  - Phase 49 (Wave-2 visualViewport Drawer): 16 (DRAWER-01..12 + DRAWER-TEST-01..04)
+  - Phase 50 (Wave-3 Real-iPhone Smoke): 10 (SMOKE-01..10)
+  - Phase 51 (Release v1.15.1): 4 (REL-01..04)
 
 ---
 *Requirements defined: 2026-04-27*
+*Phase mappings added: 2026-04-27 by /gsd-roadmapper*
