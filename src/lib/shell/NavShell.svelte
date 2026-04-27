@@ -76,7 +76,9 @@
 <header
 	class="sticky top-0 right-0 left-0 z-10 flex
          min-h-14 items-center gap-2 border-b
-         border-[var(--color-border)] bg-[var(--color-surface)] px-4"
+         border-[var(--color-border)] bg-[var(--color-surface)]
+         pt-[env(safe-area-inset-top,0px)]
+         px-[max(env(safe-area-inset-left,0px),1rem)]"
 >
 	<!-- Hamburger button: top-left corner -->
 	<button

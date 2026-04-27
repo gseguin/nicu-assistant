@@ -17,11 +17,11 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Notch-Safe Title Bar (Wave-1, Fix C)
 
-- [ ] **NOTCH-01**: `NavShell.svelte` `<header>` respects `env(safe-area-inset-top)` via `pt-[env(safe-area-inset-top,0px)]` so on iPhone 14 Pro+ in standalone PWA mode the hamburger button, "NICU Assist" wordmark, and theme/info buttons do not sit under the camera notch / Dynamic Island
-- [ ] **NOTCH-02**: `NavShell.svelte` `<header>` respects landscape safe-area via `px-[max(env(safe-area-inset-left,0px),1rem)]` (and right counterpart) so in landscape orientation chrome content does not sit under rounded corners or the notch on iPhone 14 Pro+
-- [ ] **NOTCH-03**: `<header>` `bg-[var(--color-surface)]` paints into the safe-area-inset-top region so the notch / Dynamic Island sits on an opaque title-bar background (not transparent show-through to scrolled content) in both light and dark themes
-- [ ] **NOTCH-04**: Existing sticky-top consumers (e.g. `top-20` asides in calculator routes, if any) audited and updated where they would otherwise sit under the new inset-padded header — `min-h-14` `sticky top-0` `viewport-fit=cover` semantics preserved
-- [ ] **NOTCH-TEST-01**: Component test asserts `NavShell.svelte` source contains `pt-[env(safe-area-inset-top` (regression guard against accidental removal); existing 16/16 axe sweeps re-run in light + dark to confirm no contrast regression from the inset-fill behavior
+- [x] **NOTCH-01**: `NavShell.svelte` `<header>` respects `env(safe-area-inset-top)` via `pt-[env(safe-area-inset-top,0px)]` so on iPhone 14 Pro+ in standalone PWA mode the hamburger button, "NICU Assist" wordmark, and theme/info buttons do not sit under the camera notch / Dynamic Island
+- [x] **NOTCH-02**: `NavShell.svelte` `<header>` respects landscape safe-area via `px-[max(env(safe-area-inset-left,0px),1rem)]` (and right counterpart) so in landscape orientation chrome content does not sit under rounded corners or the notch on iPhone 14 Pro+
+- [x] **NOTCH-03**: `<header>` `bg-[var(--color-surface)]` paints into the safe-area-inset-top region so the notch / Dynamic Island sits on an opaque title-bar background (not transparent show-through to scrolled content) in both light and dark themes
+- [x] **NOTCH-04**: Existing sticky-top consumers (e.g. `top-20` asides in calculator routes, if any) audited and updated where they would otherwise sit under the new inset-padded header — `min-h-14` `sticky top-0` `viewport-fit=cover` semantics preserved
+- [x] **NOTCH-TEST-01**: Component test asserts `NavShell.svelte` source contains `pt-[env(safe-area-inset-top` (regression guard against accidental removal); existing 16/16 axe sweeps re-run in light + dark to confirm no contrast regression from the inset-fill behavior
 
 ### Auto-Focus Suppression (Wave-1, Fix A)
 
@@ -103,11 +103,11 @@ Explicit exclusions for v1.15.1:
 | TEST-01 | Phase 47 | Complete |
 | TEST-02 | Phase 47 | Complete |
 | TEST-03 | Phase 47 | Complete |
-| NOTCH-01 | Phase 48 | Pending |
-| NOTCH-02 | Phase 48 | Pending |
-| NOTCH-03 | Phase 48 | Pending |
-| NOTCH-04 | Phase 48 | Pending |
-| NOTCH-TEST-01 | Phase 48 | Pending |
+| NOTCH-01 | Phase 48 | Complete |
+| NOTCH-02 | Phase 48 | Complete |
+| NOTCH-03 | Phase 48 | Complete |
+| NOTCH-04 | Phase 48 | Complete |
+| NOTCH-TEST-01 | Phase 48 | Complete |
 | FOCUS-01 | Phase 48 | Pending |
 | FOCUS-02 | Phase 48 | Pending |
 | FOCUS-03 | Phase 48 | Pending |
