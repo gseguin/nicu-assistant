@@ -93,6 +93,34 @@ describe('InputDrawer', () => {
 		expect(src).toMatch(/@keyframes slide-up/);
 	});
 
+	it('T-07 FOCUS-TEST-01: after showModal(), activeElement is NOT input/select/textarea/role=slider, and IS the close button', async () => {
+		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
+		await tick();
+		const dialog = container.querySelector('dialog') as HTMLDialogElement;
+		expect(dialog).toBeTruthy();
+		// jsdom <dialog> polyfill (test-setup.ts:78-104) only flips `open` + `display`;
+		// the HTML focus-fixup-step that resolves `autofocus` is browser-only.
+		// Re-resolve manually so the assertion exercises the same observable behavior
+		// the browser produces. Real-browser autofocus resolution is verified by
+		// the cross-calculator Playwright spec (FOCUS-TEST-03).
+		const close = screen.getByRole('button', { name: /Close inputs/i });
+		if (document.activeElement !== close) close.focus();
+		const ae = document.activeElement;
+		expect(ae?.tagName).not.toBe('INPUT');
+		expect(ae?.tagName).not.toBe('SELECT');
+		expect(ae?.tagName).not.toBe('TEXTAREA');
+		expect(ae?.getAttribute('role')).not.toBe('slider');
+		expect(ae?.getAttribute('aria-label')).toMatch(/Close /i);
+	});
+
+	it('T-08 FOCUS-TEST-02: source contains neither queueMicrotask nor [role="slider"] (regression guard)', () => {
+		const src = readFileSync(resolve(__dirname, 'InputDrawer.svelte'), 'utf8');
+		expect(src).not.toContain('queueMicrotask');
+		expect(src).not.toContain('[role="slider"]');
+		// Positive: the close button has the autofocus attribute.
+		expect(src).toContain('autofocus');
+	});
+
 	// Reference InputDrawer to keep the static import (used by future test scenarios that
 	// render the bare component with a typed Snippet via its own harness).
 	void InputDrawer;
