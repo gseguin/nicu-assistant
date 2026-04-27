@@ -17,6 +17,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { ChevronDown } from '@lucide/svelte';
+	import { vv } from '$lib/shared/visualViewport.svelte.js';
 
 	let {
 		title = 'Inputs',
@@ -65,6 +66,21 @@
 
 	let sheet = $state<HTMLDivElement | null>(null);
 
+	// Phase 49 / DRAWER-05..07: visualViewport-aware sheet sizing for iOS standalone PWA.
+	// When the soft keyboard is up (iOS only — heuristic in vv.keyboardOpen), inline-bind
+	// two CSS custom properties on .input-drawer-sheet so the sheet shrinks to fit
+	// (vv.height − 16px) and lifts above the keyboard top with ≥ 8px clearance.
+	// When the keyboard is down (Android, desktop, all chromium e2e, older iOS, jsdom),
+	// short-circuit to '' so the existing var(--ivv-max-height, 80dvh) and
+	// var(--ivv-bottom, 0px) fallbacks govern — verbatim Phase-48 behavior.
+	// Per UI-SPEC.md LC-03 + CONTEXT.md D-09. Empty-string short-circuit is non-negotiable
+	// to avoid overriding the safe-area-inset-bottom fallback in defense-in-depth ways.
+	const ivvStyle = $derived(
+		vv.keyboardOpen
+			? `--ivv-bottom: ${window.innerHeight - vv.offsetTop - vv.height}px; --ivv-max-height: ${vv.height - 16}px;`
+			: ''
+	);
+
 	function handleDialogClick(e: MouseEvent) {
 		// Only close on backdrop taps (the empty flex space above the sheet).
 		// If the click lands inside the sheet — including inputs, buttons,
@@ -91,6 +107,7 @@
 		<div
 			bind:this={sheet}
 			class="input-drawer-sheet flex flex-col bg-[var(--color-surface-card)] text-[var(--color-text-primary)] shadow-2xl"
+			style={ivvStyle}
 		>
 			<!-- Header holds two siblings: optional Clear on the left, collapse
 			     button on the right. Collapse dominates the row; Clear stays quiet
@@ -155,10 +172,13 @@
 	.input-drawer-sheet {
 		width: 100%;
 		max-height: 80vh;
-		max-height: 80dvh;
+		max-height: calc(var(--ivv-max-height, 80dvh));
 		overflow: hidden;
 		/* Clear the iOS home indicator when overlaying the nav. */
-		padding-bottom: env(safe-area-inset-bottom, 0px);
+		/* Phase 49 / DRAWER-07: max() composition of safe-area-inset-bottom and
+		   --ivv-bottom yields env(safe-area-inset-bottom, 0px) when keyboard is down
+		   (var fallback = 0px) and yields the keyboard-top offset when up. */
+		padding-bottom: max(env(safe-area-inset-bottom, 0px), var(--ivv-bottom, 0px));
 		border-top-left-radius: 1rem;
 		border-top-right-radius: 1rem;
 	}
