@@ -44,17 +44,6 @@
 		if (!dialog) return;
 		if (expanded && !dialog.open) {
 			dialog.showModal();
-			// Move focus from the drawer's header close-button to the first actual
-			// input once the dialog is open. showModal() auto-focuses the first
-			// focusable child (which is the "Clear" or close button in our header),
-			// but clinicians landing on "Close" and having to tab is a wasted step.
-			queueMicrotask(() => {
-				if (!sheet) return;
-				const firstInput = sheet.querySelector<HTMLElement>(
-					'input:not([type="hidden"]), select, textarea, [role="slider"]'
-				);
-				firstInput?.focus();
-			});
 		}
 		if (!expanded && dialog.open) {
 			dialog.close();
