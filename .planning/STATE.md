@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
 status: executing
-stopped_at: Completed 49-03-PLAN.md
-last_updated: "2026-04-28T00:02:39.532Z"
+stopped_at: Phase 50 context gathered
+last_updated: "2026-04-28T00:11:09.264Z"
 last_activity: 2026-04-28
 progress:
   total_phases: 5
@@ -89,8 +89,8 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 
 ## Session Continuity
 
-Last session: 2026-04-28T00:02:39.522Z
-Stopped at: Completed 49-03-PLAN.md
+Last session: 2026-04-28T00:11:09.255Z
+Stopped at: Phase 50 context gathered
 Resume file: 
 
-None
+.planning/phases/50-wave-3-real-iphone-smoke-gate/50-CONTEXT.md
