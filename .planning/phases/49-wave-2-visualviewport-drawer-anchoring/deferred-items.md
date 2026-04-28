@@ -103,3 +103,34 @@ layout adjustments.
   changes only** (which are zero src changes). The 32 pre-existing failures
   are NOT caused by 49-03 and the existing axe sweeps are byte-identical
   pre/post-49-03.
+
+---
+
+## Post-49 — iOS input-focus auto-zoom (observed on real iPhone, 2026-04-28)
+
+**Reported by user during Phase 50 planning, with iPhone screenshot of PERT calculator drawer:** when a NumericInput gets focus and the iOS soft keyboard appears, the entire page scales up (status-bar text, drawer header, inputs all enlarged). Drawer-above-keyboard wiring (Phase 49) works correctly; the zoom is iOS Safari's form auto-zoom heuristic firing on focus.
+
+### Root cause hypotheses (in priority order)
+
+1. **`type="number"` heuristic** — `src/lib/shared/components/NumericInput.svelte:156` declares `type="number" inputmode="decimal"`. iOS Safari sometimes auto-zooms `type="number"` inputs regardless of font-size. Fix: change `type="number"` → `type="text"` (keep `inputmode="decimal"`). Already aligned with project memory `NumericInput min/max is advisory only — never auto-clamp` — losing native min/max is intended.
+
+2. **`text-sm` (14px) on SelectPicker search input** — `src/lib/shared/components/SelectPicker.svelte:202`. Fix: bump `text-sm` → `text-base` (16px). Independent fix.
+
+3. **Defense-in-depth** — add explicit `font-size: 16px` floor on the `input` selector in `src/app.css` so future inputs cannot fall below the iOS zoom threshold without being caught.
+
+### Recommended fix sequence
+
+- 3 edits: NumericInput type swap, SelectPicker font bump, app.css 16px floor
+- Co-located test (jsdom): vitest assertion that NumericInput renders `<input type="text">` (regression sentinel against future revert)
+- Manual reverify on real iPhone — page should NOT scale on focus
+
+### Routing options
+
+- **v1.15.1 hotfix as decimal phase (50.1 or insert before Phase 50 smoke run)** — recommended; smoke checklist should test the *fixed* behavior, not record a known regression
+- Defer to v1.15.2 — acceptable if smoke pass-through is otherwise clean and SMOKE-04 is observed to still pass despite the zoom
+
+### Cross-references
+
+- Phase 49 DRAWER-06 / DRAWER-07 (drawer above keyboard) — visual zoom does NOT break the wiring; SMOKE-04 likely still passes its ≥ 8 px clearance check, just at a zoomed-up scale
+- Phase 50 SMOKE-04 — should observe + record the zoom behavior; if input-zoom fix lands first, SMOKE-04 verifies the corrected behavior
+- Phase 42.1 (Design Polish) — preceded the zoom regression; this regression existed before v1.15.1 and is not introduced by Phase 49
