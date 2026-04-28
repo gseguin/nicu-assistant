@@ -48,8 +48,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 - [ ] **DRAWER-12**: Existing `<dialog>` `showModal()` + top-layer + Esc-to-close + focus-trap + focus-restore behaviors are preserved verbatim — no replacement with `position: fixed` or other anti-pattern (reference: PITFALLS.md anti-feature list)
 - [x] **DRAWER-TEST-01**: Vitest unit test on the singleton — mock `window.visualViewport` via `dispatchVisualViewportResize(...)` helper, assert `$state` runes update on `resize` events, assert listeners rebind on `pageshow.persisted === true`, assert no `vv.scroll` listener is attached
 - [ ] **DRAWER-TEST-02**: Vitest component test on `InputDrawer.svelte` asserts that `style="--ivv-bottom: …px; --ivv-max-height: …px"` is applied to `.input-drawer-sheet` and updates when the mock visualViewport dispatches a resize
-- [ ] **DRAWER-TEST-03**: Playwright spec under the new `webkit-iphone` project synthesizes `visualViewport.resize` (via `page.evaluate(() => window.dispatchEvent(...))`) and asserts the computed `padding-bottom` and `max-height` of `.input-drawer-sheet` match the keyboard-up branch
-- [ ] **DRAWER-TEST-04**: Existing 16/16 axe sweeps (light + dark across all 6 calculators) re-run with the new drawer behavior — confirm no contrast or landmark regressions from the visualViewport-aware layout
+- [x] **DRAWER-TEST-03**: Playwright spec under the new `webkit-iphone` project synthesizes `visualViewport.resize` (via `page.evaluate(() => window.dispatchEvent(...))`) and asserts the computed `padding-bottom` and `max-height` of `.input-drawer-sheet` match the keyboard-up branch
+- [x] **DRAWER-TEST-04**: Existing 16/16 axe sweeps (light + dark across all 6 calculators) re-run with the new drawer behavior — confirm no contrast or landmark regressions from the visualViewport-aware layout
 
 ### Real-iPhone Smoke Gate (Wave-3) — closes v1.13 D-12 deferral
 
@@ -128,8 +128,8 @@ Explicit exclusions for v1.15.1:
 | DRAWER-12 | Phase 49 | Pending |
 | DRAWER-TEST-01 | Phase 49 | Complete |
 | DRAWER-TEST-02 | Phase 49 | Pending |
-| DRAWER-TEST-03 | Phase 49 | Pending |
-| DRAWER-TEST-04 | Phase 49 | Pending |
+| DRAWER-TEST-03 | Phase 49 | Complete |
+| DRAWER-TEST-04 | Phase 49 | Complete |
 | SMOKE-01 | Phase 50 | Pending |
 | SMOKE-02 | Phase 50 | Pending |
 | SMOKE-03 | Phase 50 | Pending |

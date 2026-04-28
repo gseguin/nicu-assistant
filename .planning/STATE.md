@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
 status: executing
-stopped_at: Plan 49-02 complete (InputDrawer singleton wiring + T-09..T-12 merged); ready for 49-03
-last_updated: "2026-04-28T16:45:00.000Z"
-last_activity: 2026-04-28 -- Phase 49 Plan 02 verified (svelte-check 0, vitest 464/464, build clean)
+stopped_at: Completed 49-03-PLAN.md
+last_updated: "2026-04-28T00:02:39.532Z"
+last_activity: 2026-04-28
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 8
-  completed_plans: 7
-  percent: 87
+  completed_plans: 8
+  percent: 100
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-04-27)
 ## Current Position
 
 Phase: 49 (wave-2-visualviewport-drawer-anchoring) — EXECUTING
-Plan: 2 of 3 complete; advancing to Plan 49-03
-Status: Executing Phase 49
-Last activity: 2026-04-28 -- Phase 49 Plan 02 verified (svelte-check 0, vitest 464/464, build clean)
+Plan: 3 of 3 complete; advancing to Plan 49-03
+Status: Ready to execute
+Last activity: 2026-04-28
 
 ## Performance Metrics
 
@@ -61,6 +61,9 @@ Last activity: 2026-04-28 -- Phase 49 Plan 02 verified (svelte-check 0, vitest 4
 - [v1.15.1]: Slip plan: Phase 49 (Wave-2 visualViewport) is the most complex; if it slips, Phases 47 + 48 still close 2/3 of bedside complaints (notch + auto-focus) and Wave-2 becomes v1.15.2.
 - [Phase 47-02]: Test helper convention: src/lib/test/ directory holds plain-TS framework-neutral helpers — First test helper (visual-viewport-mock.ts) imports nothing — no vitest/jest/mocha. Reusable from any future test runner. Distinct from src/lib/shared/ (runtime singletons) and src/test-setup.ts (setup-time polyfill installer).
 - [Phase 47-02]: visual-viewport-mock helper mutates the live polyfill instance — never replaces window.visualViewport — Pitfall 2 from RESEARCH.md. Tests holding a 'const vv = window.visualViewport' reference must observe new values without refetching. Internal getPolyfill() applies the cast once; T-07 unit test is the regression sentinel against future 'replace instance' refactors.
+- [Phase ?]: Synthetic-dispatch CI proxy via page.evaluate Object.defineProperty(window.visualViewport, ..., { configurable: true }) + dispatchEvent — real-iPhone soft keyboard verification deferred to Phase 50 SMOKE-04..07
+- [Phase ?]: DRAWER-TEST-04 satisfied as regression-only gate (CONTEXT.md D-20) — 32 pre-existing Playwright failures (28 axe dlitem + 2 disclaimer-banner + 3 calc UI) verified to pre-exist on 66bf1d5 and logged to deferred-items.md per executor SCOPE BOUNDARY rule
+- [Phase ?]: Build+preview path workaround for system inotify watcher saturation (ENOSPC) — single pnpm run preview started manually on port 5173 and reused via Playwright reuseExistingServer:true, avoiding both dev-server crash and CI=1 (forbidden by user memory feedback_playwright_no_ci_env)
 
 ### Roadmap Evolution
 
@@ -86,8 +89,8 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 
 ## Session Continuity
 
-Last session: 2026-04-28T16:45:00.000Z
-Stopped at: Plan 49-02 complete (InputDrawer singleton wiring + T-09..T-12 merged); ready for 49-03
+Last session: 2026-04-28T00:02:39.522Z
+Stopped at: Completed 49-03-PLAN.md
 Resume file: 
 
-.planning/phases/49-wave-2-visualviewport-drawer-anchoring/49-03-PLAN.md
+None
