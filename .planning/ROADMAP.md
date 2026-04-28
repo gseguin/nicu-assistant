@@ -170,7 +170,8 @@ See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROA
   8. **Light-mode status-bar legibility:** Light mode + Dynamic Island shows status-bar text legible against `var(--color-surface)` light value (if poor, mitigation is light/dark `<meta name="theme-color">` toggled by the FOUC script) — closes the PITFALLS.md `black-translucent` legibility gap
   9. **Cross-calculator parity:** All six calculators (Morphine, Formula, GIR, Feeds, UAC/UVC, PERT) smoke-tested for drawer + notch behavior — no per-calculator divergence found, or any divergence captured as a follow-up todo
   10. **Smoke checklist artifact created:** `.planning/v1.15.1-IPHONE-SMOKE.md` checklist exists, was used as the blocking gate, and is committed alongside the milestone for clinical audit trail
-**Plans**: TBD (run `/gsd-plan-phase 50` to break down)
+**Plans**: 1 plan
+  - [ ] 50-01-PLAN.md — generate `.planning/v1.15.1-IPHONE-SMOKE.md` from SMOKE-01..10 acceptance text + tester runs the bedside session and commits the signed state (SMOKE-01..10)
 
 ### Phase 51: Release v1.15.1
 **Goal**: v1.15.1 is shipped: the AboutSheet shows v1.15.1, PROJECT.md tells the story of the iOS polish hotfix that landed, REQUIREMENTS.md traceability is fully ✓-Validated, the v1.13 D-12 deferral is officially closed, and the full clinical quality gate is green across both Playwright projects.
@@ -200,7 +201,7 @@ See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROA
 | 47. Wave-0 — Test Scaffolding | v1.15.1 | 2/3 | In Progress|  |
 | 48. Wave-1 — Trivial Fixes (NOTCH + FOCUS) | v1.15.1 | 0/2 | Not started | — |
 | 49. Wave-2 — visualViewport Drawer Anchoring | v1.15.1 | 3/3 | Complete   | 2026-04-28 |
-| 50. Wave-3 — Real-iPhone Smoke Gate | v1.15.1 | 0/TBD | Not started | — |
+| 50. Wave-3 — Real-iPhone Smoke Gate | v1.15.1 | 0/1 | Not started | — |
 | 51. Release v1.15.1 | v1.15.1 | 0/TBD | Not started | — |
 
 ## Order Rationale
