@@ -6,11 +6,6 @@ export interface SelectOption {
 
 export type CalculatorId = 'morphine-wean' | 'formula' | 'gir' | 'feeds' | 'uac-uvc' | 'pert';
 
-export interface CalculatorContext {
-  id: CalculatorId;
-  accentColor: string;
-}
-
 export interface NumericInputRange {
   min: number;
   max: number;

@@ -1,10 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import { tick } from 'svelte';
-
-vi.mock('../context.js', () => ({
-  getCalculatorContext: () => ({ accentColor: 'oklch(49% 0.17 220)' })
-}));
 
 import SelectPicker from './SelectPicker.svelte';
 

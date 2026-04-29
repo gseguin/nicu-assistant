@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import { Check, ChevronDown } from '@lucide/svelte';
-	import { getCalculatorContext } from '../context.js';
 	import { randomId } from '../uid.js';
 	import type { SelectOption } from '../types.js';
 
@@ -20,9 +19,6 @@
 		searchable?: boolean;
 		class?: string;
 	} = $props();
-
-	const ctx = getCalculatorContext();
-	const accentColor = ctx.accentColor;
 
 	// Hybrid native/custom branch detection. Touch (coarse pointer) renders
 	// a native <select> so iOS' keyboard accessory-bar prev/next arrows
@@ -283,7 +279,7 @@
 								<div
 									id={headingId}
 									class="sticky top-0 z-10 bg-[var(--color-surface-card)] px-4 py-2 text-[0.6875rem] font-bold tracking-[0.18em] uppercase"
-									style="color: {accentColor}"
+									style="color: var(--color-identity)"
 								>
 									{group}
 								</div>
@@ -302,7 +298,7 @@
 											{#if option.value === value}
 												<Check
 													class="h-4 w-4 shrink-0"
-													style="color: {accentColor}"
+													style="color: var(--color-identity)"
 													aria-hidden="true"
 												/>
 											{/if}
@@ -324,7 +320,7 @@
 							>
 								<span>{option.label}</span>
 								{#if option.value === value}
-									<Check class="h-4 w-4 shrink-0" style="color: {accentColor}" aria-hidden="true" />
+									<Check class="h-4 w-4 shrink-0" style="color: var(--color-identity)" aria-hidden="true" />
 								{/if}
 							</button>
 						{/each}
