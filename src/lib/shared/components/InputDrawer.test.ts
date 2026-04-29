@@ -129,12 +129,13 @@ describe('InputDrawer', () => {
 		expect(src).toContain('autofocus');
 	});
 
-	it('T-09 DRAWER-TEST-02 keyboard-up: <dialog> style contains top + height (visualViewport sizing)', async () => {
-		// Second-correction design: visualViewport-aware sizing moved from the
-		// inner .input-drawer-sheet (--ivv-max-height) to the outer <dialog>
-		// (top + height). When the keyboard is up, the dialog resizes to match
-		// vv.height and repositions to vv.offsetTop. The sheet is then a regular
-		// flex-end-aligned box with no internal max-height gymnastics.
+	it('T-09 DRAWER-TEST-02 keyboard-up: <dialog> style contains bottom + max-height', async () => {
+		// Third-correction design: dialog anchors its bottom edge to the
+		// keyboard top (bottom: keyboard-height-from-layout-bottom) and is
+		// capped at vv.height (max-height). It grows upward from the
+		// keyboard top as needed by sheet content. P-15 (no transform on
+		// outer dialog) still respected — bottom + max-height are layout
+		// properties, no transform inheritance into nested SelectPicker dialogs.
 		const { vv } = await import('$lib/shared/visualViewport.svelte.js');
 		vv.init();
 		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
@@ -144,10 +145,8 @@ describe('InputDrawer', () => {
 		const dlg = container.querySelector('dialog.input-drawer-dialog') as HTMLDialogElement | null;
 		expect(dlg).toBeTruthy();
 		const style = dlg!.getAttribute('style') ?? '';
-		expect(style).toMatch(/top:\s*-?\d+(\.\d+)?px/);
-		expect(style).toMatch(/height:\s*-?\d+(\.\d+)?px/);
-		// P-15: layout properties only; transform on the outer dialog leaks
-		// into nested SelectPicker dialogs and is forbidden.
+		expect(style).toMatch(/bottom:\s*-?\d+(\.\d+)?px/);
+		expect(style).toMatch(/max-height:\s*-?\d+(\.\d+)?px/);
 		expect(style).not.toMatch(/transform:/);
 	});
 
@@ -165,10 +164,10 @@ describe('InputDrawer', () => {
 		const dlg = container.querySelector('dialog.input-drawer-dialog') as HTMLDialogElement | null;
 		expect(dlg).toBeTruthy();
 		// dialogStyle short-circuits to '' when keyboardOpen is false; the
-		// dialog falls back to its CSS rule (height: 100dvh, top: 0).
+		// dialog falls back to its CSS rule.
 		const style = dlg!.getAttribute('style') ?? '';
-		expect(style).not.toMatch(/top:/);
-		expect(style).not.toMatch(/height:/);
+		expect(style).not.toMatch(/bottom:/);
+		expect(style).not.toMatch(/max-height:/);
 	});
 
 	it('T-11 DRAWER-08 / P-15 source-grep: no transform: in inline style on the outer <dialog>', () => {

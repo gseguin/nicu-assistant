@@ -64,24 +64,57 @@
 		}
 	});
 
+	// Body-scroll lock while the drawer is open. iOS auto-scrolls the page to
+	// bring focused inputs into view, which moves vv.offsetTop and breaks the
+	// dialog's bottom-anchor geometry (computing distance from layout-bottom
+	// to keyboard-top relies on a stable scroll position). Locking with
+	// position: fixed + top: -scrollY preserves the visual scroll position
+	// so closing the drawer doesn't jump the page back to top.
+	$effect(() => {
+		if (typeof document === 'undefined') return;
+		if (!expanded) return;
+		const scrollY = window.scrollY;
+		const body = document.body;
+		const prev = {
+			position: body.style.position,
+			top: body.style.top,
+			width: body.style.width,
+			overflow: body.style.overflow
+		};
+		body.style.position = 'fixed';
+		body.style.top = `-${scrollY}px`;
+		body.style.width = '100%';
+		body.style.overflow = 'hidden';
+		return () => {
+			body.style.position = prev.position;
+			body.style.top = prev.top;
+			body.style.width = prev.width;
+			body.style.overflow = prev.overflow;
+			window.scrollTo(0, scrollY);
+		};
+	});
+
 	let sheet = $state<HTMLDivElement | null>(null);
 
 	// Phase 49 / DRAWER-05..06: visualViewport-aware sizing for iOS standalone PWA.
-	// Second-correction design (post-real-iPhone iteration): when the keyboard is
-	// up, resize the OUTER <dialog> to match the visualViewport (top: vv.offsetTop,
-	// height: vv.height). The sheet inside is then a regular flex-end-aligned box
-	// with max-height: 80dvh — no internal max-height gymnastics. Inputs container
-	// uses overflow-y: auto, but the scroll container is now exactly the
-	// visualViewport-sized box, so iOS' native focus-scroll-into-view operates
-	// directly on the visible region and the keyboard accessory-bar prev/next
-	// arrows can advance focus to off-screen inputs without requiring pre-scroll.
+	// Third-correction design (post-real-iPhone iteration): the dialog anchors its
+	// BOTTOM edge to the keyboard top and grows upward to its content size, capped
+	// at the visualViewport height. Concretely:
+	//   bottom: <distance from keyboard top to layout-viewport bottom> px
+	//   max-height: vv.height px
+	// The sheet inside keeps its existing flex-end alignment + 80dvh cap; the
+	// dialog being correctly anchored + capped is what makes inputs reachable.
+	//
+	// iOS' keyboard accessory-bar prev/next arrows operate on the dialog's scroll
+	// context (the children container's overflow-y: auto), which is now sized to
+	// the visualViewport, so off-screen inputs are reachable via native auto-scroll.
 	//
 	// Why not transform? PITFALLS.md P-15: transforms on the outer dialog leak
-	// into nested SelectPicker dialogs. We use `top` + `height` instead — pure
+	// into nested SelectPicker dialogs. We use `bottom` + `max-height` — pure
 	// layout properties, no transform inheritance.
 	const dialogStyle = $derived(
 		vv.keyboardOpen
-			? `top: ${vv.offsetTop}px; height: ${vv.height}px;`
+			? `top: auto; bottom: ${typeof window === 'undefined' ? 0 : window.innerHeight - vv.offsetTop - vv.height}px; max-height: ${vv.height}px;`
 			: ''
 	);
 
@@ -183,6 +216,13 @@
 		max-height: 100dvh;
 		overflow: hidden;
 	}
+	/* Keyboard-up override: when the dialog has been anchored above the
+	   keyboard (bottom + max-height set inline), drop the explicit height
+	   so the dialog grows to its content size rather than filling 100dvh.
+	   data-keyboard-open is set on the dialog by the script block. */
+	.input-drawer-dialog[data-keyboard-open] {
+		height: auto;
+	}
 	.input-drawer-dialog[open] {
 		display: flex;
 		flex-direction: column;
@@ -200,15 +240,6 @@
 		padding-bottom: env(safe-area-inset-bottom, 0px);
 		border-top-left-radius: 1rem;
 		border-top-right-radius: 1rem;
-	}
-	/* When the keyboard is up, the dialog has been resized to match the
-	   visualViewport (top = vv.offsetTop, height = vv.height) so the sheet
-	   should fill the whole dialog rather than honor the 80dvh cap (which
-	   was sized for the keyboard-down case). data-keyboard-open is set on
-	   the dialog by the dialogStyle derived in the script block. */
-	.input-drawer-dialog[data-keyboard-open] .input-drawer-sheet {
-		max-height: none;
-		height: 100%;
 	}
 
 	/* scroll-margin gives focused inputs breathing room inside the
