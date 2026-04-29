@@ -105,6 +105,7 @@
 	class="input-drawer-dialog"
 	aria-label={title}
 	style={dialogStyle}
+	data-keyboard-open={vv.keyboardOpen ? '' : undefined}
 	onclick={handleDialogClick}
 	onclose={handleClose}
 >
@@ -199,6 +200,15 @@
 		padding-bottom: env(safe-area-inset-bottom, 0px);
 		border-top-left-radius: 1rem;
 		border-top-right-radius: 1rem;
+	}
+	/* When the keyboard is up, the dialog has been resized to match the
+	   visualViewport (top = vv.offsetTop, height = vv.height) so the sheet
+	   should fill the whole dialog rather than honor the 80dvh cap (which
+	   was sized for the keyboard-down case). data-keyboard-open is set on
+	   the dialog by the dialogStyle derived in the script block. */
+	.input-drawer-dialog[data-keyboard-open] .input-drawer-sheet {
+		max-height: none;
+		height: 100%;
 	}
 
 	/* scroll-margin gives focused inputs breathing room inside the
