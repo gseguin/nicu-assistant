@@ -137,9 +137,18 @@
 					/>
 				</button>
 			</header>
-			<div class="flex-1 overflow-y-auto px-4 py-4">
+			<!-- The <form> wrapper is required for iOS Safari's keyboard
+			     accessory-bar prev/next arrows to traverse the inputs as
+			     a coherent chain. Form-less inputs on iOS often dead-end
+			     the chain at the first focused field. onsubmit prevents
+			     accidental navigation if the user hits Enter from a text
+			     field — the drawer has no submit semantics. -->
+			<form
+				class="flex-1 overflow-y-auto px-4 py-4"
+				onsubmit={(e) => e.preventDefault()}
+			>
 				{@render children()}
-			</div>
+			</form>
 		</div>
 	{/if}
 </dialog>
