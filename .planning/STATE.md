@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-27)
 Phase: 49 (wave-2-visualviewport-drawer-anchoring) — EXECUTING
 Plan: 3 of 3 complete; advancing to Plan 49-03
 Status: Ready to execute
-Last activity: 2026-04-29 - Completed quick task 260429-lyq: Add CalculatorStore<T> for state-singleton collapse
+Last activity: 2026-04-29 - Completed quick task 260429-m79: Migrate uac-uvc state singleton to CalculatorStore<T>
 
 ## Performance Metrics
 
@@ -92,6 +92,7 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 260429-lyq | Add CalculatorStore<T> generic class for state-singleton collapse (commit 1 of 5) | 2026-04-29 | 45d86cf | [260429-lyq-add-calculatorstore-t-generic-class-for-](./quick/260429-lyq-add-calculatorstore-t-generic-class-for-/) |
+| 260429-m79 | Migrate uac-uvc state singleton to CalculatorStore<UacUvcStateData> (commit 2 of 5) | 2026-04-29 | 66cf633 | [260429-m79-migrate-uac-uvc-state-singleton-to-calcu](./quick/260429-m79-migrate-uac-uvc-state-singleton-to-calcu/) |
 
 ## Session Continuity
 
