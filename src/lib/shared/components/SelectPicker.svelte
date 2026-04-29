@@ -258,7 +258,7 @@
 						<input
 							bind:this={searchInput}
 							type="text"
-							class="min-h-12 w-full bg-transparent text-sm font-medium text-[var(--color-text-primary)] outline-none placeholder:text-[var(--color-text-tertiary)]"
+							class="min-h-12 w-full bg-transparent text-base font-medium text-[var(--color-text-primary)] outline-none placeholder:text-[var(--color-text-tertiary)]"
 							placeholder="Search..."
 							aria-label="Filter {label}"
 							bind:value={searchQuery}
