@@ -306,6 +306,31 @@ The visualViewport-aware sizing strategy was iterated **twice** based on real-iP
 
 **Spec impact:** UI-SPEC.md LC-03 + DRAWER-07 acceptance text are superseded by this addendum. Phase 49 SUMMARY remains an accurate audit of what shipped at 2026-04-28; this addendum records the 2026-04-29 correction. Phase 50 SMOKE-04 verifies the corrected behavior on real iPhone.
 
+### Final correction (2026-04-29 night) — converged on dvh-only design
+
+After three iterations of inline-style strategies (—ivv-bottom; top+height; bottom+max-height; top:auto+bottom:0), the working design is **pure CSS** with no JS-driven sizing on the dialog.
+
+**Final design:**
+- Dialog uses CSS `height: 100dvh; max-height: 100dvh` (already present from the original Phase 42.1 design). On iOS Safari, `100dvh` shrinks when the keyboard is up to match the visible region — no JS measurement required.
+- Sheet has CSS `max-height: 80dvh` (keyboard-down baseline) with a keyboard-up override `.input-drawer-dialog[data-keyboard-open] .input-drawer-sheet { max-height: 100% }` so the sheet fills the now-shrunk dialog.
+- `data-keyboard-open` attribute on the dialog (set when `vv.keyboardOpen` is true) is the only JS-driven signal — controls the keyboard-up CSS overrides.
+- **Body scroll lock** when drawer is open (`position: fixed; top: -scrollY` on `<body>`) prevents iOS from auto-scrolling to bring focused inputs into view (which would shift vv.offsetTop and break geometry).
+- **No inline style on the dialog** at all — preserves PITFALLS.md P-15 trivially (no transform leakage into nested SelectPicker dialogs).
+- `--ivv-bottom`, `--ivv-max-height`, JS-computed `top`/`height`/`bottom`/`max-height` — all removed.
+
+**Why this works where the inline-style designs failed:**
+- iOS Safari standalone PWA reports inconsistent `vv.offsetTop` / `vv.height` / `window.innerHeight` relationships when the page can scroll. Our JS-computed bottom-anchor formulas were valid in some scenarios but produced gaps in others depending on iOS' auto-scroll behavior.
+- `dvh` is the standardized solution iOS implemented for exactly this problem. Using it directly avoids reinventing what the platform already provides.
+- Body scroll lock removes the only remaining variable (auto-scroll moving the page mid-interaction).
+
+**Test impact (final):**
+- T-09 amended to assert `data-keyboard-open` attribute presence (not inline style top/height) and forbid `transform:` in any inline style on the dialog
+- T-10 amended to assert `data-keyboard-open` attribute absence when keyboard is down
+- T-11 amended to forbid `transform:` in inline style; tolerates other style (none in current design, but the rule is forward-compatible)
+- T-12 unchanged
+
+**Spec impact:** UI-SPEC.md LC-01..LC-05 (CSS-variable-based sizing) and DRAWER-05..07 (CSS-variable wiring) are entirely superseded by this addendum. The sheet no longer consumes `--ivv-bottom` or `--ivv-max-height` — those CSS variables are removed. CONTEXT.md D-08..D-11 (inline-style branch) is also superseded. Phase 49 SUMMARY remains an accurate audit of what shipped at 2026-04-28; this addendum records the 2026-04-29 iterations and final shipped design.
+
 ### Second correction (2026-04-29 evening) — DRAWER-05 / D-08 / D-09 / D-11 (P-15)
 
 **Iterating again** because the first correction's `max-height: vv.height - 16px` on the inner sheet did not solve the iOS keyboard accessory-bar prev/next focus chain. Inputs below the visible scroll area in the inner-overflow container were focus-targets iOS would not advance to (it pre-validates the next candidate's visibility and refuses to advance to off-screen elements).

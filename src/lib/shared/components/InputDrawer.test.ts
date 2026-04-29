@@ -129,13 +129,13 @@ describe('InputDrawer', () => {
 		expect(src).toContain('autofocus');
 	});
 
-	it('T-09 DRAWER-TEST-02 keyboard-up: <dialog> style contains bottom + max-height', async () => {
-		// Third-correction design: dialog anchors its bottom edge to the
-		// keyboard top (bottom: keyboard-height-from-layout-bottom) and is
-		// capped at vv.height (max-height). It grows upward from the
-		// keyboard top as needed by sheet content. P-15 (no transform on
-		// outer dialog) still respected — bottom + max-height are layout
-		// properties, no transform inheritance into nested SelectPicker dialogs.
+	it('T-09 DRAWER-TEST-02 keyboard-up: <dialog> has data-keyboard-open and no transform inline style', async () => {
+		// Fourth-correction design (dvh-based): no inline sizing — pure CSS
+		// `height: 100dvh; max-height: 100dvh` does the work. iOS Safari
+		// shrinks 100dvh to match the visualViewport when the keyboard is up,
+		// so the dialog naturally sizes to the visible region without JS.
+		// data-keyboard-open is still set to enable keyboard-up CSS overrides.
+		// P-15 still enforced: no transform: in inline style on the dialog.
 		const { vv } = await import('$lib/shared/visualViewport.svelte.js');
 		vv.init();
 		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
@@ -144,13 +144,12 @@ describe('InputDrawer', () => {
 		await tick();
 		const dlg = container.querySelector('dialog.input-drawer-dialog') as HTMLDialogElement | null;
 		expect(dlg).toBeTruthy();
+		expect(dlg!.hasAttribute('data-keyboard-open')).toBe(true);
 		const style = dlg!.getAttribute('style') ?? '';
-		expect(style).toMatch(/bottom:\s*-?\d+(\.\d+)?px/);
-		expect(style).toMatch(/max-height:\s*-?\d+(\.\d+)?px/);
 		expect(style).not.toMatch(/transform:/);
 	});
 
-	it('T-10 DRAWER-TEST-02 keyboard-down: <dialog> style attribute is empty (short-circuit)', async () => {
+	it('T-10 DRAWER-TEST-02 keyboard-down: <dialog> has no data-keyboard-open attribute', async () => {
 		const { vv } = await import('$lib/shared/visualViewport.svelte.js');
 		vv.init();
 		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
@@ -163,11 +162,7 @@ describe('InputDrawer', () => {
 		await tick();
 		const dlg = container.querySelector('dialog.input-drawer-dialog') as HTMLDialogElement | null;
 		expect(dlg).toBeTruthy();
-		// dialogStyle short-circuits to '' when keyboardOpen is false; the
-		// dialog falls back to its CSS rule.
-		const style = dlg!.getAttribute('style') ?? '';
-		expect(style).not.toMatch(/bottom:/);
-		expect(style).not.toMatch(/max-height:/);
+		expect(dlg!.hasAttribute('data-keyboard-open')).toBe(false);
 	});
 
 	it('T-11 DRAWER-08 / P-15 source-grep: no transform: in inline style on the outer <dialog>', () => {

@@ -97,26 +97,18 @@
 	let sheet = $state<HTMLDivElement | null>(null);
 
 	// Phase 49 / DRAWER-05..06: visualViewport-aware sizing for iOS standalone PWA.
-	// Third-correction design (post-real-iPhone iteration): the dialog anchors its
-	// BOTTOM edge to the keyboard top and grows upward to its content size, capped
-	// at the visualViewport height. Concretely:
-	//   bottom: <distance from keyboard top to layout-viewport bottom> px
-	//   max-height: vv.height px
-	// The sheet inside keeps its existing flex-end alignment + 80dvh cap; the
-	// dialog being correctly anchored + capped is what makes inputs reachable.
-	//
-	// iOS' keyboard accessory-bar prev/next arrows operate on the dialog's scroll
-	// context (the children container's overflow-y: auto), which is now sized to
-	// the visualViewport, so off-screen inputs are reachable via native auto-scroll.
-	//
-	// Why not transform? PITFALLS.md P-15: transforms on the outer dialog leak
-	// into nested SelectPicker dialogs. We use `bottom` + `max-height` — pure
-	// layout properties, no transform inheritance.
-	const dialogStyle = $derived(
-		vv.keyboardOpen
-			? `top: auto; bottom: ${typeof window === 'undefined' ? 0 : window.innerHeight - vv.offsetTop - vv.height}px; max-height: ${vv.height}px;`
-			: ''
-	);
+	// Final design (post-real-iPhone iteration): pure CSS, no JS measurement.
+	// - Dialog uses CSS `height: 100dvh; max-height: 100dvh` — iOS Safari sizes
+	//   100dvh to track the visible region when the keyboard appears.
+	// - Sheet has CSS `max-height: 80dvh` (keyboard-down baseline) with a
+	//   keyboard-up override `.input-drawer-dialog[data-keyboard-open]
+	//   .input-drawer-sheet { max-height: 100% }` so the sheet fills the
+	//   reduced-100dvh dialog when the keyboard is up.
+	// - Body scroll is locked while the drawer is open so iOS doesn't
+	//   auto-scroll to bring focused inputs into view (which would shift
+	//   vv.offsetTop and break geometry).
+	// - data-keyboard-open is the only signal needed; no inline style on the
+	//   dialog. Preserves PITFALLS.md P-15 (no transform leakage) trivially.
 
 	function handleDialogClick(e: MouseEvent) {
 		// Only close on backdrop taps (the empty flex space above the sheet).
@@ -137,7 +129,6 @@
 	bind:this={dialog}
 	class="input-drawer-dialog"
 	aria-label={title}
-	style={dialogStyle}
 	data-keyboard-open={vv.keyboardOpen ? '' : undefined}
 	onclick={handleDialogClick}
 	onclose={handleClose}
@@ -216,12 +207,14 @@
 		max-height: 100dvh;
 		overflow: hidden;
 	}
-	/* Keyboard-up override: when the dialog has been anchored above the
-	   keyboard (bottom + max-height set inline), drop the explicit height
-	   so the dialog grows to its content size rather than filling 100dvh.
-	   data-keyboard-open is set on the dialog by the script block. */
-	.input-drawer-dialog[data-keyboard-open] {
-		height: auto;
+	/* Keyboard-up: dialog is positioned + sized to match visualViewport
+	   exactly (top: vv.offsetTop, height: vv.height inline). The sheet
+	   is flex-end aligned within that and content-sized; the inputs
+	   container scrolls if content exceeds the dialog. The sheet's
+	   80dvh cap doesn't apply because dialog height is already capped
+	   to vv.height which is < 80dvh in practice. */
+	.input-drawer-dialog[data-keyboard-open] .input-drawer-sheet {
+		max-height: 100%;
 	}
 	.input-drawer-dialog[open] {
 		display: flex;
