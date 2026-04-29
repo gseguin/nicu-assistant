@@ -136,8 +136,16 @@
 					style="background: var(--color-identity);"
 				/>
 			</span>
+			<!-- tabindex=-1: removes the thumb from the iOS keyboard accessory-bar
+			     prev/next form-field chain (a non-form-control with tabindex=0
+			     was disabling the chain or making it skip adjacent inputs). The
+			     paired NumericInput above the slider is the canonical keyboard
+			     entry point for this value, so keyboard users keep parity by
+			     typing there. Touch drag is unaffected (pointer interaction
+			     does not depend on tabindex). -->
 			<Slider.Thumb
 				index={0}
+				tabindex={-1}
 				aria-label={effectiveSliderAriaLabel}
 				class="block h-6 w-6 rounded-full border-2 bg-[var(--color-surface)] shadow-md transition-transform focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-110"
 				style="border-color: var(--color-identity); --tw-ring-color: var(--color-identity); --tw-ring-offset-color: var(--color-surface);"
