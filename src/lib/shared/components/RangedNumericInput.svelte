@@ -97,6 +97,15 @@
 	}
 
 	let effectiveSliderAriaLabel = $derived(sliderAriaLabel ?? `${label} slider`);
+
+	// Thumb DOM ref — used to override bits-ui's internal tabindex=0 with -1
+	// so the iOS keyboard accessory-bar prev/next form-field chain skips it.
+	// bits-ui's props-merge order overwrites a tabindex prop, so we mutate
+	// the rendered attribute post-mount instead.
+	let thumbEl = $state<HTMLElement | null>(null);
+	$effect(() => {
+		if (thumbEl) thumbEl.tabIndex = -1;
+	});
 </script>
 
 <div class="flex flex-col gap-2">
@@ -136,16 +145,17 @@
 					style="background: var(--color-identity);"
 				/>
 			</span>
-			<!-- tabindex=-1: removes the thumb from the iOS keyboard accessory-bar
-			     prev/next form-field chain (a non-form-control with tabindex=0
-			     was disabling the chain or making it skip adjacent inputs). The
-			     paired NumericInput above the slider is the canonical keyboard
-			     entry point for this value, so keyboard users keep parity by
-			     typing there. Touch drag is unaffected (pointer interaction
-			     does not depend on tabindex). -->
+			<!-- bind:ref + post-mount tabindex=-1: removes the thumb from the iOS
+			     keyboard accessory-bar prev/next form-field chain (a non-form-control
+			     with tabindex=0 was disabling the chain or making it skip adjacent
+			     inputs). bits-ui sets tabindex=0 internally via its props-merge
+			     order, so passing tabindex={-1} as a prop is overwritten — we
+			     mutate the DOM attribute directly after mount instead. The paired
+			     NumericInput above is the canonical keyboard entry point; touch
+			     drag is unaffected. -->
 			<Slider.Thumb
+				bind:ref={thumbEl}
 				index={0}
-				tabindex={-1}
 				aria-label={effectiveSliderAriaLabel}
 				class="block h-6 w-6 rounded-full border-2 bg-[var(--color-surface)] shadow-md transition-transform focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-110"
 				style="border-color: var(--color-identity); --tw-ring-color: var(--color-identity); --tw-ring-offset-color: var(--color-surface);"

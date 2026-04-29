@@ -19,6 +19,16 @@ describe('UacUvcInputs', () => {
     expect(screen.getByRole('slider').getAttribute('aria-label')).toBe('Weight slider');
   });
 
+  it('slider thumb has tabindex=-1 (iOS form-chain regression sentinel)', () => {
+    // Regression guard for the iOS Safari keyboard-accessory-bar prev/next bug.
+    // bits-ui sets tabindex=0 internally; RangedNumericInput overrides to -1
+    // post-mount via a $effect. If this assertion fails, the iPhone keyboard
+    // arrows will dead-end at the slider thumb (or skip past adjacent inputs).
+    render(UacUvcInputs);
+    const thumb = screen.getByRole('slider') as HTMLElement;
+    expect(thumb.tabIndex).toBe(-1);
+  });
+
   it('bidirectional sync — slider to textbox: ArrowRight step updates state and textbox', async () => {
     uacUvcState.current.weightKg = 5;
     render(UacUvcInputs);
