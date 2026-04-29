@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-27)
 Phase: 49 (wave-2-visualviewport-drawer-anchoring) — EXECUTING
 Plan: 3 of 3 complete; advancing to Plan 49-03
 Status: Ready to execute
-Last activity: 2026-04-29 - Completed quick task 260429-mr1: Migrate PERT state singleton to CalculatorStore<T> with custom merge — completes the state-singleton collapse (commits 1–4 of 5)
+Last activity: 2026-04-29 - Completed quick task 260429-mwe: Route shell collapse — finishes the 5-commit architecture deepening (CalculatorStore + CalculatorModule + CalculatorPage)
 
 ## Performance Metrics
 
@@ -95,6 +95,7 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 | 260429-m79 | Migrate uac-uvc state singleton to CalculatorStore<UacUvcStateData> (commit 2 of 5) | 2026-04-29 | 66cf633 | [260429-m79-migrate-uac-uvc-state-singleton-to-calcu](./quick/260429-m79-migrate-uac-uvc-state-singleton-to-calcu/) |
 | 260429-mkz | Migrate gir/morphine/feeds/fortification state singletons to CalculatorStore<T> (commit 3 of 5) | 2026-04-29 | d10ffc4 | [260429-mkz-migrate-gir-morphine-feeds-fortification](./quick/260429-mkz-migrate-gir-morphine-feeds-fortification/) |
 | 260429-mr1 | Migrate PERT state singleton to CalculatorStore<PertStateData> with custom merge (commit 4 of 5) | 2026-04-29 | d092909 | [260429-mr1-migrate-pert-state-singleton-to-calculat](./quick/260429-mr1-migrate-pert-state-singleton-to-calculat/) |
+| 260429-mwe | Collapse 6 calculator route shells into <CalculatorPage> + CalculatorModule; drop CalculatorContext (commit 5 of 5 — completes architecture deepening) | 2026-04-29 | 0ec8f98 | [260429-mwe-collapse-6-calculator-route-shells-into-](./quick/260429-mwe-collapse-6-calculator-route-shells-into-/) |
 
 ## Session Continuity
 
