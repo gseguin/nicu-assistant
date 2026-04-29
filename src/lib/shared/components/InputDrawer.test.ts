@@ -129,13 +129,17 @@ describe('InputDrawer', () => {
 		expect(src).toContain('autofocus');
 	});
 
-	it('T-09 DRAWER-TEST-02 keyboard-up: .input-drawer-sheet style contains --ivv-bottom and --ivv-max-height', async () => {
+	it('T-09 DRAWER-TEST-02 keyboard-up: .input-drawer-sheet style contains --ivv-max-height', async () => {
 		// Mount drawer expanded so the .input-drawer-sheet div is in the DOM.
 		// vv.init() is called by +layout.svelte:onMount in production; in this
 		// component test the harness mounts InputDrawer directly. The vv singleton
 		// auto-initializes on first read because this jsdom polyfill fires its
 		// initial 'resize' event during _resetVisualViewportMock(); however to be
 		// deterministic, we explicitly trigger init by importing and calling it.
+		// Post-real-iPhone correction: --ivv-bottom was dropped from the style emit
+		// because max-height alone (with flex-end alignment) places the sheet above
+		// the keyboard; the original padding-bottom: max(safe-area, --ivv-bottom)
+		// rule double-counted, producing ~keyboard-height spurious bottom padding.
 		const { vv } = await import('$lib/shared/visualViewport.svelte.js');
 		vv.init();
 		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
@@ -145,8 +149,8 @@ describe('InputDrawer', () => {
 		const sheet = container.querySelector('.input-drawer-sheet') as HTMLDivElement | null;
 		expect(sheet).toBeTruthy();
 		const style = sheet!.getAttribute('style') ?? '';
-		expect(style).toMatch(/--ivv-bottom:\s*-?\d+(\.\d+)?px/);
 		expect(style).toMatch(/--ivv-max-height:\s*-?\d+(\.\d+)?px/);
+		expect(style).not.toMatch(/--ivv-bottom:/);
 	});
 
 	it('T-10 DRAWER-TEST-02 keyboard-down: .input-drawer-sheet style attribute is empty (LC-03 short-circuit)', async () => {
@@ -164,9 +168,8 @@ describe('InputDrawer', () => {
 		expect(sheet).toBeTruthy();
 		// Per UI-SPEC.md LC-03: when keyboardOpen is false, ivvStyle short-circuits to ''.
 		// Svelte 5 renders style="" as either an empty attribute or removes it entirely;
-		// both are acceptable. Reject anything that contains the CSS variable substrings.
+		// both are acceptable. Reject the CSS variable substring.
 		const style = sheet!.getAttribute('style') ?? '';
-		expect(style).not.toMatch(/--ivv-bottom:/);
 		expect(style).not.toMatch(/--ivv-max-height:/);
 	});
 

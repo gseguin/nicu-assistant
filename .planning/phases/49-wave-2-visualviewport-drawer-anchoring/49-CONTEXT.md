@@ -278,5 +278,32 @@
 
 ---
 
+## Post-real-iPhone correction (2026-04-29)
+
+**DRAWER-07 / D-09 amended** after real-iPhone testing surfaced a double-counting bug.
+
+**Original design (incorrect):**
+- `padding-bottom: max(env(safe-area-inset-bottom, 0px), var(--ivv-bottom, 0px))`
+- `$derived ivvStyle` emitted both `--ivv-bottom` and `--ivv-max-height` when keyboard up
+
+**Observed bug:** The keyboard-up branch produced ~290 px of spurious bottom padding inside the sheet (the keyboard's height), pushing inputs upward and creating visible empty space at the sheet's bottom edge.
+
+**Root cause:** Two mechanisms doing the same job. `max-height: calc(var(--ivv-max-height, 80dvh))` shrinks the inner sheet to fit the visualViewport, and the outer `<dialog>` is `flex-end` aligned — that combination naturally places the sheet above the keyboard. The additional `padding-bottom: var(--ivv-bottom)` then ADDED keyboard-height padding INSIDE the already-correctly-positioned sheet.
+
+**Corrected design:**
+- `padding-bottom: env(safe-area-inset-bottom, 0px)` (verbatim Phase-48 rule, restored)
+- `$derived ivvStyle` emits ONLY `--ivv-max-height` when keyboard up
+- `--ivv-bottom` is no longer used anywhere — removed from both the CSS rule and the inline-style emit
+
+**Test impact:**
+- T-09 amended to assert ONLY `--ivv-max-height:` substring presence; explicitly rejects `--ivv-bottom:`
+- T-10 amended to drop the `--ivv-bottom:` rejection (it's never emitted now)
+- T-11 / T-12 unaffected
+
+**Spec impact:** UI-SPEC.md LC-03 + DRAWER-07 acceptance text are superseded by this addendum. Phase 49 SUMMARY remains an accurate audit of what shipped at 2026-04-28; this addendum records the 2026-04-29 correction. Phase 50 SMOKE-04 verifies the corrected behavior on real iPhone.
+
+---
+
 *Phase: 49-wave-2-visualviewport-drawer-anchoring*
 *Context gathered: 2026-04-27*
+*Post-real-iPhone correction: 2026-04-29*

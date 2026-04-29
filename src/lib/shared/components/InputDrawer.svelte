@@ -66,19 +66,17 @@
 
 	let sheet = $state<HTMLDivElement | null>(null);
 
-	// Phase 49 / DRAWER-05..07: visualViewport-aware sheet sizing for iOS standalone PWA.
+	// Phase 49 / DRAWER-05..06: visualViewport-aware sheet sizing for iOS standalone PWA.
 	// When the soft keyboard is up (iOS only — heuristic in vv.keyboardOpen), inline-bind
-	// two CSS custom properties on .input-drawer-sheet so the sheet shrinks to fit
-	// (vv.height − 16px) and lifts above the keyboard top with ≥ 8px clearance.
-	// When the keyboard is down (Android, desktop, all chromium e2e, older iOS, jsdom),
-	// short-circuit to '' so the existing var(--ivv-max-height, 80dvh) and
-	// var(--ivv-bottom, 0px) fallbacks govern — verbatim Phase-48 behavior.
-	// Per UI-SPEC.md LC-03 + CONTEXT.md D-09. Empty-string short-circuit is non-negotiable
-	// to avoid overriding the safe-area-inset-bottom fallback in defense-in-depth ways.
+	// --ivv-max-height so the sheet shrinks to fit vv.height − 16px. The flex-end aligned
+	// dialog naturally places that constrained sheet above the keyboard, so no
+	// padding-bottom adjustment is needed (real-iPhone correction post-DRAWER-07: the
+	// original max(env(safe-area-inset-bottom), --ivv-bottom) double-counted, producing
+	// ~keyboard-height spurious padding inside the sheet).
+	// When the keyboard is down, short-circuit to '' so the var(--ivv-max-height, 80dvh)
+	// fallback governs — verbatim Phase-48 behavior.
 	const ivvStyle = $derived(
-		vv.keyboardOpen
-			? `--ivv-bottom: ${window.innerHeight - vv.offsetTop - vv.height}px; --ivv-max-height: ${vv.height - 16}px;`
-			: ''
+		vv.keyboardOpen ? `--ivv-max-height: ${vv.height - 16}px;` : ''
 	);
 
 	function handleDialogClick(e: MouseEvent) {
@@ -174,11 +172,10 @@
 		max-height: 80vh;
 		max-height: calc(var(--ivv-max-height, 80dvh));
 		overflow: hidden;
-		/* Clear the iOS home indicator when overlaying the nav. */
-		/* Phase 49 / DRAWER-07: max() composition of safe-area-inset-bottom and
-		   --ivv-bottom yields env(safe-area-inset-bottom, 0px) when keyboard is down
-		   (var fallback = 0px) and yields the keyboard-top offset when up. */
-		padding-bottom: max(env(safe-area-inset-bottom, 0px), var(--ivv-bottom, 0px));
+		/* Clear the iOS home indicator when overlaying the nav. Keyboard-up
+		   case is handled by max-height alone — flex-end alignment in the
+		   <dialog> places the constrained sheet above the keyboard. */
+		padding-bottom: env(safe-area-inset-bottom, 0px);
 		border-top-left-radius: 1rem;
 		border-top-right-radius: 1rem;
 	}
