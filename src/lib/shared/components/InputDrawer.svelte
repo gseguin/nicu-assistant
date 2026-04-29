@@ -137,7 +137,21 @@
 					/>
 				</button>
 			</header>
-			<div class="flex-1 overflow-y-auto px-4 py-4">
+			<!-- onfocusin scrolls the newly focused input into view inside the
+			     overflow-y-auto container. iOS' keyboard accessory-bar prev/next
+			     advances focus correctly, but its native scrollIntoView traverses
+			     the page scroller, not the drawer's internal overflow scroller —
+			     so an off-screen next-input gets focus without being made
+			     visible, and the user perceives the chain as stuck. Calling
+			     scrollIntoView({ block: 'nearest' }) on focusin guarantees the
+			     focused element is visible inside this container. -->
+			<div
+				class="drawer-scroll flex-1 overflow-y-auto px-4 py-4"
+				onfocusin={(e) => {
+					const t = e.target as HTMLElement | null;
+					t?.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+				}}
+			>
 				{@render children()}
 			</div>
 		</div>
@@ -178,6 +192,16 @@
 		padding-bottom: env(safe-area-inset-bottom, 0px);
 		border-top-left-radius: 1rem;
 		border-top-right-radius: 1rem;
+	}
+
+	/* scroll-margin gives focused inputs breathing room inside the
+	   .drawer-scroll overflow container — when scrollIntoView fires on
+	   focusin, the input lands ~12px from the container edge instead of
+	   pinned flush against it. Applies to inputs, selects, the slider
+	   thumb (kept focusable for screen readers), and the SelectPicker
+	   custom trigger button. */
+	.drawer-scroll :global(:is(input, select, textarea, [role='slider'], [data-select-trigger])) {
+		scroll-margin-block: 0.75rem;
 	}
 	.input-drawer-dialog::backdrop {
 		background: var(--color-scrim);
