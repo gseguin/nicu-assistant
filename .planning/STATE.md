@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-27)
 Phase: 49 (wave-2-visualviewport-drawer-anchoring) — EXECUTING
 Plan: 3 of 3 complete; advancing to Plan 49-03
 Status: Ready to execute
-Last activity: 2026-04-28
+Last activity: 2026-04-29 - Completed quick task 260429-lyq: Add CalculatorStore<T> for state-singleton collapse
 
 ## Performance Metrics
 
@@ -86,6 +86,12 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 
 - iOS 26 `visualViewport.height` post-dismiss regression (Apple Developer Forums #800125, Sep 2025) — mitigation pattern (re-read on every event, never cache) is industry-standard and survives by construction. Verify on latest available iOS during Phase 50 smoke.
 - Keyboard-open detection threshold (`window.innerHeight − vv.height > 100`) — needs real-device tuning to filter URL-bar collapse (~50–80 px) without missing edge cases. Verify during Phase 50.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260429-lyq | Add CalculatorStore<T> generic class for state-singleton collapse (commit 1 of 5) | 2026-04-29 | 45d86cf | [260429-lyq-add-calculatorstore-t-generic-class-for-](./quick/260429-lyq-add-calculatorstore-t-generic-class-for-/) |
 
 ## Session Continuity
 
