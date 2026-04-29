@@ -66,17 +66,23 @@
 
 	let sheet = $state<HTMLDivElement | null>(null);
 
-	// Phase 49 / DRAWER-05..06: visualViewport-aware sheet sizing for iOS standalone PWA.
-	// When the soft keyboard is up (iOS only — heuristic in vv.keyboardOpen), inline-bind
-	// --ivv-max-height so the sheet shrinks to fit vv.height − 16px. The flex-end aligned
-	// dialog naturally places that constrained sheet above the keyboard, so no
-	// padding-bottom adjustment is needed (real-iPhone correction post-DRAWER-07: the
-	// original max(env(safe-area-inset-bottom), --ivv-bottom) double-counted, producing
-	// ~keyboard-height spurious padding inside the sheet).
-	// When the keyboard is down, short-circuit to '' so the var(--ivv-max-height, 80dvh)
-	// fallback governs — verbatim Phase-48 behavior.
-	const ivvStyle = $derived(
-		vv.keyboardOpen ? `--ivv-max-height: ${vv.height - 16}px;` : ''
+	// Phase 49 / DRAWER-05..06: visualViewport-aware sizing for iOS standalone PWA.
+	// Second-correction design (post-real-iPhone iteration): when the keyboard is
+	// up, resize the OUTER <dialog> to match the visualViewport (top: vv.offsetTop,
+	// height: vv.height). The sheet inside is then a regular flex-end-aligned box
+	// with max-height: 80dvh — no internal max-height gymnastics. Inputs container
+	// uses overflow-y: auto, but the scroll container is now exactly the
+	// visualViewport-sized box, so iOS' native focus-scroll-into-view operates
+	// directly on the visible region and the keyboard accessory-bar prev/next
+	// arrows can advance focus to off-screen inputs without requiring pre-scroll.
+	//
+	// Why not transform? PITFALLS.md P-15: transforms on the outer dialog leak
+	// into nested SelectPicker dialogs. We use `top` + `height` instead — pure
+	// layout properties, no transform inheritance.
+	const dialogStyle = $derived(
+		vv.keyboardOpen
+			? `top: ${vv.offsetTop}px; height: ${vv.height}px;`
+			: ''
 	);
 
 	function handleDialogClick(e: MouseEvent) {
@@ -98,6 +104,7 @@
 	bind:this={dialog}
 	class="input-drawer-dialog"
 	aria-label={title}
+	style={dialogStyle}
 	onclick={handleDialogClick}
 	onclose={handleClose}
 >
@@ -105,7 +112,6 @@
 		<div
 			bind:this={sheet}
 			class="input-drawer-sheet flex flex-col bg-[var(--color-surface-card)] text-[var(--color-text-primary)] shadow-2xl"
-			style={ivvStyle}
 		>
 			<!-- Header holds two siblings: optional Clear on the left, collapse
 			     button on the right. Collapse dominates the row; Clear stays quiet
@@ -184,11 +190,12 @@
 	.input-drawer-sheet {
 		width: 100%;
 		max-height: 80vh;
-		max-height: calc(var(--ivv-max-height, 80dvh));
+		max-height: 80dvh;
 		overflow: hidden;
 		/* Clear the iOS home indicator when overlaying the nav. Keyboard-up
-		   case is handled by max-height alone — flex-end alignment in the
-		   <dialog> places the constrained sheet above the keyboard. */
+		   sizing is handled by inline style on the outer <dialog> (which
+		   resizes to match visualViewport when vv.keyboardOpen), not on
+		   the sheet — see dialogStyle in the script block. */
 		padding-bottom: env(safe-area-inset-bottom, 0px);
 		border-top-left-radius: 1rem;
 		border-top-right-radius: 1rem;

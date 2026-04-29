@@ -280,6 +280,10 @@
 
 ## Post-real-iPhone correction (2026-04-29)
 
+The visualViewport-aware sizing strategy was iterated **twice** based on real-iPhone testing.
+
+### First correction (2026-04-29 morning) — DRAWER-07 / D-09
+
 **DRAWER-07 / D-09 amended** after real-iPhone testing surfaced a double-counting bug.
 
 **Original design (incorrect):**
@@ -301,6 +305,30 @@
 - T-11 / T-12 unaffected
 
 **Spec impact:** UI-SPEC.md LC-03 + DRAWER-07 acceptance text are superseded by this addendum. Phase 49 SUMMARY remains an accurate audit of what shipped at 2026-04-28; this addendum records the 2026-04-29 correction. Phase 50 SMOKE-04 verifies the corrected behavior on real iPhone.
+
+### Second correction (2026-04-29 evening) — DRAWER-05 / D-08 / D-09 / D-11 (P-15)
+
+**Iterating again** because the first correction's `max-height: vv.height - 16px` on the inner sheet did not solve the iOS keyboard accessory-bar prev/next focus chain. Inputs below the visible scroll area in the inner-overflow container were focus-targets iOS would not advance to (it pre-validates the next candidate's visibility and refuses to advance to off-screen elements).
+
+**Root cause of the second-iteration design flaw:** The drawer used an internal `overflow-y-auto` container as the scroll surface. iOS' arrow-bar uses the **page** scroller for focus-scroll-into-view, not internal overflow scrollers. So when an off-screen input was the next focus candidate, iOS would not auto-scroll the drawer's internal container to reveal it.
+
+**Corrected design (second iteration):**
+- The visualViewport-aware sizing moves from the inner sheet (max-height) to the outer **`<dialog>`** (`top` + `height` inline style).
+- When `vv.keyboardOpen === true`: dialog inline style sets `top: ${vv.offsetTop}px; height: ${vv.height}px;` — the dialog itself becomes exactly the visible-region size and position.
+- When `vv.keyboardOpen === false`: dialog inline style is empty; the CSS rule's `height: 100dvh` and default top apply.
+- Inner sheet returns to plain `max-height: 80dvh` (the keyboard-down case) — no internal max-height gymnastics.
+- The drawer's children container keeps `overflow-y: auto`, but its scroll context is now the dialog itself, which is exactly visualViewport-sized — so iOS' native focus-scroll-into-view operates directly on the visible region and the keyboard accessory-bar arrows can advance focus to off-screen inputs successfully.
+- `--ivv-bottom` and `--ivv-max-height` CSS custom properties are removed entirely. The Phase-49 design that drove sheet sizing via custom properties is fully superseded.
+
+**P-15 (transform leakage) is still respected.** The dialog's inline style uses `top` and `height` — pure layout properties — NOT `transform`. T-11 is amended to forbid only `transform:` in dialog inline style; layout properties are tolerated.
+
+**Test impact:**
+- T-09 amended to assert dialog inline style contains `top:` and `height:` (no longer asserts sheet style)
+- T-10 amended to assert dialog inline style is empty when keyboard is down (no `top:` or `height:`)
+- T-11 amended to forbid only `transform:` in dialog tag inline style (was: any `style=` at all)
+- T-12 unaffected (sheet still has no `transition:` — that contract still holds)
+
+**Spec impact:** UI-SPEC.md LC-01 (transform inner sheet, never outer dialog) is now read as "no TRANSFORM on outer dialog" — layout properties on the dialog are SAFE and required for visualViewport-aware sizing. CONTEXT.md D-11 is similarly read.
 
 ---
 

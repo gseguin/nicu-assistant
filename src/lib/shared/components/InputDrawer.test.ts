@@ -129,31 +129,29 @@ describe('InputDrawer', () => {
 		expect(src).toContain('autofocus');
 	});
 
-	it('T-09 DRAWER-TEST-02 keyboard-up: .input-drawer-sheet style contains --ivv-max-height', async () => {
-		// Mount drawer expanded so the .input-drawer-sheet div is in the DOM.
-		// vv.init() is called by +layout.svelte:onMount in production; in this
-		// component test the harness mounts InputDrawer directly. The vv singleton
-		// auto-initializes on first read because this jsdom polyfill fires its
-		// initial 'resize' event during _resetVisualViewportMock(); however to be
-		// deterministic, we explicitly trigger init by importing and calling it.
-		// Post-real-iPhone correction: --ivv-bottom was dropped from the style emit
-		// because max-height alone (with flex-end alignment) places the sheet above
-		// the keyboard; the original padding-bottom: max(safe-area, --ivv-bottom)
-		// rule double-counted, producing ~keyboard-height spurious bottom padding.
+	it('T-09 DRAWER-TEST-02 keyboard-up: <dialog> style contains top + height (visualViewport sizing)', async () => {
+		// Second-correction design: visualViewport-aware sizing moved from the
+		// inner .input-drawer-sheet (--ivv-max-height) to the outer <dialog>
+		// (top + height). When the keyboard is up, the dialog resizes to match
+		// vv.height and repositions to vv.offsetTop. The sheet is then a regular
+		// flex-end-aligned box with no internal max-height gymnastics.
 		const { vv } = await import('$lib/shared/visualViewport.svelte.js');
 		vv.init();
 		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
 		await tick();
 		simulateKeyboardOpen();
 		await tick();
-		const sheet = container.querySelector('.input-drawer-sheet') as HTMLDivElement | null;
-		expect(sheet).toBeTruthy();
-		const style = sheet!.getAttribute('style') ?? '';
-		expect(style).toMatch(/--ivv-max-height:\s*-?\d+(\.\d+)?px/);
-		expect(style).not.toMatch(/--ivv-bottom:/);
+		const dlg = container.querySelector('dialog.input-drawer-dialog') as HTMLDialogElement | null;
+		expect(dlg).toBeTruthy();
+		const style = dlg!.getAttribute('style') ?? '';
+		expect(style).toMatch(/top:\s*-?\d+(\.\d+)?px/);
+		expect(style).toMatch(/height:\s*-?\d+(\.\d+)?px/);
+		// P-15: layout properties only; transform on the outer dialog leaks
+		// into nested SelectPicker dialogs and is forbidden.
+		expect(style).not.toMatch(/transform:/);
 	});
 
-	it('T-10 DRAWER-TEST-02 keyboard-down: .input-drawer-sheet style attribute is empty (LC-03 short-circuit)', async () => {
+	it('T-10 DRAWER-TEST-02 keyboard-down: <dialog> style attribute is empty (short-circuit)', async () => {
 		const { vv } = await import('$lib/shared/visualViewport.svelte.js');
 		vv.init();
 		const { container } = render(InputDrawerHarness, { props: { initialExpanded: true } });
@@ -164,22 +162,25 @@ describe('InputDrawer', () => {
 		// ...then dismiss the keyboard back to the no-OSK baseline.
 		simulateKeyboardDown();
 		await tick();
-		const sheet = container.querySelector('.input-drawer-sheet') as HTMLDivElement | null;
-		expect(sheet).toBeTruthy();
-		// Per UI-SPEC.md LC-03: when keyboardOpen is false, ivvStyle short-circuits to ''.
-		// Svelte 5 renders style="" as either an empty attribute or removes it entirely;
-		// both are acceptable. Reject the CSS variable substring.
-		const style = sheet!.getAttribute('style') ?? '';
-		expect(style).not.toMatch(/--ivv-max-height:/);
+		const dlg = container.querySelector('dialog.input-drawer-dialog') as HTMLDialogElement | null;
+		expect(dlg).toBeTruthy();
+		// dialogStyle short-circuits to '' when keyboardOpen is false; the
+		// dialog falls back to its CSS rule (height: 100dvh, top: 0).
+		const style = dlg!.getAttribute('style') ?? '';
+		expect(style).not.toMatch(/top:/);
+		expect(style).not.toMatch(/height:/);
 	});
 
-	it('T-11 DRAWER-08 / P-15 source-grep: no inline style attribute on the outer <dialog> element', () => {
-		// The visualViewport-aware sizing applies ONLY to the inner .input-drawer-sheet
-		// <div> (lines 91-94). Putting style= on the outer <dialog> would inherit the
-		// transform into the SelectPicker's nested top-layer dialog and visually drift it.
-		// PITFALLS.md P-15 + UI-SPEC.md LC-01 + CONTEXT.md D-11.
+	it('T-11 DRAWER-08 / P-15 source-grep: no transform: in inline style on the outer <dialog>', () => {
+		// P-15: a transform on the outer dialog leaks into nested SelectPicker
+		// top-layer dialogs and visually drifts them. Layout properties (top,
+		// height) are SAFE — the second-correction design uses those to resize
+		// the dialog to the visualViewport when the keyboard is up. This
+		// sentinel forbids only transform:; it tolerates other inline style.
 		const src = readFileSync(resolve(__dirname, 'InputDrawer.svelte'), 'utf8');
-		expect(src).not.toMatch(/<dialog[^>]*\sstyle=/);
+		const dialogTagMatch = src.match(/<dialog\b[^>]*?>/);
+		expect(dialogTagMatch).toBeTruthy();
+		expect(dialogTagMatch![0]).not.toMatch(/style=[^>]*transform/);
 	});
 
 	it('T-12 DRAWER-10 / D-27 source-grep: .input-drawer-sheet always-on rule declares no transition property', () => {
