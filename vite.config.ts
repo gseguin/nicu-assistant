@@ -66,7 +66,22 @@ export default defineConfig({
   server: {
     allowedHosts: ['nicu-assistant-dev.heartsmiles.io', 'nicu-assistant-preview.heartsmiles.io'],
     watch: {
-      ignored: ['**/.planning/**', '**/.claude/**', '**/.remember/**', '**/.playwright-mcp/**']
+      ignored: [
+        '**/.git/**',
+        '**/node_modules/**',
+        '**/.svelte-kit/**',
+        '**/build/**',
+        '**/dist/**',
+        '**/coverage/**',
+        '**/playwright-report/**',
+        '**/test-results/**',
+        '**/.planning/**',
+        '**/.claude/**',
+        '**/.remember/**',
+        '**/.playwright-mcp/**',
+        '**/.vscode/**',
+        '**/.github/**'
+      ]
     }
   },
   resolve: {
