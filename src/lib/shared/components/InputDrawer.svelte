@@ -152,6 +152,13 @@
 						Clear
 					</button>
 				{/if}
+				<!-- svelte-ignore a11y_autofocus -->
+				<!-- Phase 48 D-09 intentional: autofocus on the close button (NOT
+				     an input/select/slider) is what suppresses the iOS soft
+				     keyboard from summoning when the drawer opens. The general
+				     a11y warning against autofocus assumes form-page contexts;
+				     in a modal dialog, focusing the dismiss control on open is
+				     the documented WAI-ARIA dialog pattern. -->
 				<button
 					bind:this={closeBtn}
 					type="button"
