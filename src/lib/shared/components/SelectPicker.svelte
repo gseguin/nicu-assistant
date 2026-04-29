@@ -2,6 +2,7 @@
 	import { tick } from 'svelte';
 	import { Check, ChevronDown } from '@lucide/svelte';
 	import { getCalculatorContext } from '../context.js';
+	import { randomId } from '../uid.js';
 	import type { SelectOption } from '../types.js';
 
 	let {
@@ -23,7 +24,22 @@
 	const ctx = getCalculatorContext();
 	const accentColor = ctx.accentColor;
 
-	const uid = crypto.randomUUID();
+	// Hybrid native/custom branch detection. Touch (coarse pointer) renders
+	// a native <select> so iOS' keyboard accessory-bar prev/next arrows
+	// traverse it as a form field. Fine-pointer (mouse, or jsdom which
+	// reports no pointer) keeps the custom <button>+<dialog> design.
+	// SSR-safe: default to custom on the server, swap reactively on hydrate.
+	let isCoarsePointer = $state(false);
+	$effect(() => {
+		if (typeof window === 'undefined' || !window.matchMedia) return;
+		const mq = window.matchMedia('(pointer: coarse)');
+		isCoarsePointer = mq.matches;
+		const onChange = (e: MediaQueryListEvent) => (isCoarsePointer = e.matches);
+		mq.addEventListener('change', onChange);
+		return () => mq.removeEventListener('change', onChange);
+	});
+
+	const uid = randomId();
 	const labelId = `select-${uid}-label`;
 	const valueId = `select-${uid}-value`;
 	const dialogTitleId = `${labelId}-title`;
@@ -154,7 +170,49 @@
 </script>
 
 <div class="min-w-0 {className}">
-	<div class="flex flex-col gap-1.5">
+	{#if !searchable && isCoarsePointer}
+		<!-- Native <select> branch — touch/coarse-pointer only.
+		     Renders an iOS-system picker so the keyboard accessory bar
+		     prev/next arrows include this control in the form-field chain. -->
+		<label class="flex flex-col gap-1.5">
+			<span
+				class="ml-0.5 text-xs leading-none font-semibold tracking-[0.02em] text-[var(--color-text-secondary)]"
+			>
+				{label}
+			</span>
+			<div class="relative">
+				<select
+					bind:value
+					aria-label={label}
+					class="native-select flex min-h-12 w-full items-center rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-card)] px-3.5 py-2.5 pr-9 text-[0.9375rem] font-medium text-[var(--color-text-primary)] transition hover:border-[var(--color-identity)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-identity)]"
+				>
+					{#if !options.some((o) => o.value === value)}
+						<option value="" disabled>{placeholder}</option>
+					{/if}
+					{#if hasGroups}
+						{#each groups as group (group)}
+							<optgroup label={group}>
+								{#each options as option (option.value)}
+									{#if option.group === group}
+										<option value={option.value}>{option.label}</option>
+									{/if}
+								{/each}
+							</optgroup>
+						{/each}
+					{:else}
+						{#each options as option (option.value)}
+							<option value={option.value}>{option.label}</option>
+						{/each}
+					{/if}
+				</select>
+				<ChevronDown
+					class="pointer-events-none absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-[var(--color-text-tertiary)]"
+					aria-hidden="true"
+				/>
+			</div>
+		</label>
+	{:else}
+		<div class="flex flex-col gap-1.5">
 		<span
 			id={labelId}
 			class="ml-0.5 text-xs leading-none font-semibold tracking-[0.02em] text-[var(--color-text-secondary)]"
@@ -177,7 +235,8 @@
 			<span id={valueId} class="flex-1 truncate">{selectedLabel}</span>
 			<ChevronDown class="h-4 w-4 shrink-0 text-[var(--color-text-tertiary)]" aria-hidden="true" />
 		</button>
-	</div>
+		</div>
+	{/if}
 
 	<dialog
 		bind:this={dialog}
@@ -299,5 +358,16 @@
 			max-width: 100vw;
 			border-radius: 1rem 1rem 0 0;
 		}
+	}
+
+	/* Style the native <select> trigger to match the custom button visually
+	   (chevron icon is positioned absolutely above; we strip the platform
+	   default arrow). The option list itself is rendered by iOS as the
+	   system wheel picker — desired UX trade for keyboard-accessory-bar
+	   prev/next traversal. Touch/coarse-pointer users see this branch;
+	   mouse/fine-pointer users keep the custom <button>+<dialog>. */
+	.native-select {
+		appearance: none;
+		-webkit-appearance: none;
 	}
 </style>

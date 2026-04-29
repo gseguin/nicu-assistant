@@ -1,4 +1,6 @@
 <script lang="ts" generics="T extends string">
+	import { randomId } from '../uid.js';
+
 	interface SegmentedOption {
 		value: T;
 		label: string;
@@ -18,7 +20,7 @@
 		class?: string;
 	} = $props();
 
-	const uid = crypto.randomUUID();
+	const uid = randomId();
 
 	function activate(next: T) {
 		value = next;
