@@ -45,8 +45,7 @@ function getRecapItems(state: PertStateData): RecapItem[] {
       state.tubeFeed.formulaId === null ? null : getFormulaById(state.tubeFeed.formulaId);
     items.push({
       label: 'Formula',
-      value: formula?.name ?? null,
-      fullRow: true
+      value: formula?.name ?? null
     });
     items.push({
       label: 'Volume',
