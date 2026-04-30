@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-04-27)
 Phase: 49 (wave-2-visualviewport-drawer-anchoring) — EXECUTING
 Plan: 3 of 3 complete; advancing to Plan 49-03
 Status: Ready to execute
-Last activity: 2026-04-29 - Completed quick task 260429-mwe: Route shell collapse — finishes the 5-commit architecture deepening (CalculatorStore + CalculatorModule + CalculatorPage)
+Last activity: 2026-04-30 - Completed quick task 260430-cvl: Drop fullRow on PERT Formula RecapItem (pair with Volume); bump 1.16.0 → 1.16.1
 
 ## Performance Metrics
 
@@ -96,6 +96,7 @@ None at the roadmap level. Two known iOS-research gaps to monitor during plannin
 | 260429-mkz | Migrate gir/morphine/feeds/fortification state singletons to CalculatorStore<T> (commit 3 of 5) | 2026-04-29 | d10ffc4 | [260429-mkz-migrate-gir-morphine-feeds-fortification](./quick/260429-mkz-migrate-gir-morphine-feeds-fortification/) |
 | 260429-mr1 | Migrate PERT state singleton to CalculatorStore<PertStateData> with custom merge (commit 4 of 5) | 2026-04-29 | d092909 | [260429-mr1-migrate-pert-state-singleton-to-calculat](./quick/260429-mr1-migrate-pert-state-singleton-to-calculat/) |
 | 260429-mwe | Collapse 6 calculator route shells into <CalculatorPage> + CalculatorModule; drop CalculatorContext (commit 5 of 5 — completes architecture deepening) | 2026-04-29 | 0ec8f98 | [260429-mwe-collapse-6-calculator-route-shells-into-](./quick/260429-mwe-collapse-6-calculator-route-shells-into-/) |
+| 260430-cvl | Drop fullRow:true on PERT Formula RecapItem so it pairs with Volume in the recap row (matches every other calculator); bump 1.16.0 → 1.16.1 | 2026-04-30 | a96e037 | [260430-cvl-bump-patch-version-and-commit-pert-calcu](./quick/260430-cvl-bump-patch-version-and-commit-pert-calcu/) |
 
 ## Session Continuity
 
