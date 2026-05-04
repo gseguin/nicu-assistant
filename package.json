@@ -46,7 +46,7 @@
     "workbox-window": "^7.4.0"
   },
   "dependencies": {
-    "@lucide/svelte": "^1.8.0",
+    "@lucide/svelte": "^1.14.0",
     "bits-ui": "^2.18.0"
   }
 }
