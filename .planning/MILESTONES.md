@@ -1,5 +1,27 @@
 # Milestones
 
+## v1.15.1 iOS Polish & Drawer Hardening (Shipped: 2026-05-17)
+
+**Phases completed:** 4 phases, 9 plans, 13 tasks
+
+**Known deferred items at close:** 11 (SMOKE-01..10 + REL-04 smoke-sign-off portion) + 6 quick-task manifest audit gaps (work complete; see STATE.md Deferred Items)
+
+**Notes:**
+- Package version was bumped from 1.15.0 → 1.15.1 → 1.16.0 → 1.16.1 via quick tasks *before* milestone close (commit `2060393` for 1.15.1; `d4a0f29` for 1.16.0; `5fba1e7` for 1.16.1). v1.15.1 shipped under package v1.16.x.
+- Real-iPhone smoke gate (SMOKE-01..10) re-opens v1.13 D-12 deferral; carries forward.
+
+**Key accomplishments:**
+
+- EventTarget-backed `window.visualViewport` polyfill in `src/test-setup.ts` with throw-on-regression suite-startup self-test, plus a co-located T-01..T-05 unit test that pins the polyfill's runtime shape so Phase 48 + 49 component tests can mount visualViewport-aware code without jsdom throwing.
+- Plain-TS, framework-neutral test helper module at `src/lib/test/visual-viewport-mock.ts` exporting five named functions that mutate the live `window.visualViewport` polyfill (Plan 47-01) in place and dispatch synthetic events — gives Phase 49's drawer-anchoring tests a deterministic "synthesize keyboard up / keyboard down / bfcache restore / reset baseline" surface, with a co-located T-01..T-07 unit test that pins the helper's behavior including the Pitfall 2 mutate-don't-replace sentinel.
+- Adds a `webkit-iphone` Playwright project to `playwright.config.ts` using `devices['iPhone 14 Pro']` (393×660 viewport + iPhone user-agent + WebKit engine via the descriptor's `defaultBrowserType`), creates a minimal `e2e/webkit-smoke.spec.ts` that asserts `window.visualViewport` is defined under both projects, and updates `.github/workflows/ci.yml` so CI installs the WebKit binary — closing the last requirement in Phase 47 (Wave-0 Test Scaffolding) and unblocking Phase 49's DRAWER-TEST-03 behavioral assertions on iOS form factor.
+- 1. [Rule 1 - Bug] Svelte 5 `autofocus` directive does NOT set the HTML content attribute that `<dialog>.showModal()` autofocus resolution reads
+- Class-based `$state` singleton (`vv`) exposing reactive `offsetTop` / `height` / `keyboardOpen` runes, subscribed to `visualViewport.resize` + `pageshow.persisted` + `visibilitychange.visible` (NO scroll), with idempotent browser-guarded `init()` wired into `+layout.svelte:onMount` alongside `theme` / `disclaimer` / `favorites`. Zero drawer behavior change at this commit boundary — runes are produced and observed by tests, but no consumer reads them yet.
+- Wire `vv` singleton (Plan 49-01) into `InputDrawer.svelte` via a `$derived ivvStyle` computation + inline `style={ivvStyle}` on the inner `.input-drawer-sheet` `<div>`. Two CSS rule changes (`max-height` consumes `calc(var(--ivv-max-height, 80dvh))`; `padding-bottom` consumes `max(env(safe-area-inset-bottom, 0px), var(--ivv-bottom, 0px))`) produce visualViewport-aware sizing that preserves Phase-48 behavior bit-for-bit when the keyboard is down (CSS `var(...)` fallbacks resolve to the prior values) and lifts the sheet above the iOS soft keyboard when up. Extends `InputDrawer.test.ts` with T-09 (component keyboard-up), T-10 (component keyboard-down), and two source-grep regression sentinels (T-11: no `style=` on `<dialog>`; T-12: no `transition:` in always-on sheet rule). Zero per-calculator edits; six calculator routes inherit the new behavior via single source of truth in `InputDrawer.svelte`. `<dialog>` `showModal()` + Esc-to-close + focus-trap + close-button `autofocus` byte-identical to Phase 48.
+- Land the final CI gate for Phase 49: a new Playwright e2e spec at `e2e/drawer-visual-viewport.spec.ts` that synthesizes a `visualViewport.resize` event via `page.evaluate(...)` (since Playwright WebKit on Linux does NOT emulate the iOS soft keyboard — P-19 + P-20 + D-24) and asserts the computed `max-height` of `.input-drawer-sheet` matches the keyboard-up branch (≈ vv.height − 16 = 384 px when vv.height = 400). The spec runs under both `chromium` and `webkit-iphone` Playwright projects (Phase 47 D-15 default — 1 spec × 2 projects = 2 cases). DRAWER-TEST-04 is satisfied as a regression-only gate (CONTEXT.md D-20): the existing axe sweeps and full Playwright matrix are re-run; Plan 49-03's only code change is the new file, so any failures observed are pre-existing inheritances, not 49-03 regressions. The new spec passes 2/2 in 5.0 s on a clean preview server (chromium 415 ms + webkit-iphone 1.5 s). The spec file header explicitly documents the CI-proxy gap so future maintainers don't mistake green CI for bedside-iPhone correctness — that obligation belongs to Phase 50 SMOKE-04..07.
+
+---
+
 ## v1.12 Feed Advance Calculator (Shipped: 2026-04-10)
 
 **Phases completed:** 4 phases, 7 plans, 12 tasks

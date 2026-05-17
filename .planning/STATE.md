@@ -2,39 +2,40 @@
 gsd_state_version: 1.0
 milestone: v1.15.1
 milestone_name: iOS Polish & Drawer Hardening
-status: executing
+status: Awaiting next milestone
 stopped_at: Phase 50 context gathered
-last_updated: "2026-04-28T00:11:09.264Z"
-last_activity: 2026-04-28
+last_updated: "2026-05-17T05:58:48.474Z"
+last_activity: 2026-05-17 — Milestone v1.15.1 completed and archived
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 8
+  total_plans: 9
   completed_plans: 8
-  percent: 100
+  percent: 60
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-27)
+See: .planning/PROJECT.md (updated 2026-05-17)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase 49 — wave-2-visualviewport-drawer-anchoring
+**Current focus:** Planning next milestone (v1.16 — remove PERT calculator)
 
 ## Current Position
 
-Phase: 49 (wave-2-visualviewport-drawer-anchoring) — EXECUTING
-Plan: 3 of 3 complete; advancing to Plan 49-03
-Status: Ready to execute
-Last activity: 2026-04-30 - Completed quick task 260430-cvl: Drop fullRow on PERT Formula RecapItem (pair with Volume); bump 1.16.0 → 1.16.1
+Phase: Milestone v1.15.1 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-05-17 — Milestone v1.15.1 completed and archived
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed (all milestones): 56+ (v1.13 last counted; v1.14 + v1.15 added but not re-counted here)
+- Total plans completed (all milestones): 65+ (v1.15.1 added 9 plans across Phases 47–49)
+- v1.15.1: 9 plans across 4 phases (47, 48, 49, 50-planning-only); 63 commits; shipped 2026-05-17 (Phase 50 SMOKE deferred)
 - v1.13: 15 plans across 5 phases (40, 41, 42, 42.1, 43), shipped 2026-04-24
 - v1.12: 7 plans across 4 phases (36-39), 52 commits
 - v1.11: 1 plan, 1 commit
@@ -74,18 +75,40 @@ Last activity: 2026-04-30 - Completed quick task 260430-cvl: Drop fullRow on PER
 
 ### Pending Todos
 
-- Run `/gsd-plan-phase 47` to break Phase 47 (Wave-0 Test Scaffolding) into plans. This phase is a Wave-0 blocker — must complete before Phases 48 + 49 can land their tests.
-- Run `/gsd-plan-phase 48` to break Phase 48 (Wave-1 NOTCH + FOCUS) into plans (likely 2 sibling plans — NOTCH on `NavShell.svelte`, FOCUS on `InputDrawer.svelte` — that can land in either order or in parallel).
-- Run `/gsd-plan-phase 49` to break Phase 49 (Wave-2 visualViewport Drawer) into plans. Largest surface; most testing time. Depends on Phase 47.
-- Run `/gsd-plan-phase 50` to plan the real-iPhone smoke checklist (`.planning/v1.15.1-IPHONE-SMOKE.md`). Phase gate — blocks milestone close.
-- Run `/gsd-plan-phase 51` to break Phase 51 (Release v1.15.1) into plans after Phases 48 + 49 + 50 are green.
+- Run `/gsd-new-milestone 1.16 remove pert calculator` to open v1.16.
 
 ### Blockers/Concerns
 
-None at the roadmap level. Two known iOS-research gaps to monitor during planning:
+None at the roadmap level. Two iOS-research gaps remain to be verified on real hardware as part of the deferred v1.15.1 SMOKE work (see Deferred Items below):
 
-- iOS 26 `visualViewport.height` post-dismiss regression (Apple Developer Forums #800125, Sep 2025) — mitigation pattern (re-read on every event, never cache) is industry-standard and survives by construction. Verify on latest available iOS during Phase 50 smoke.
-- Keyboard-open detection threshold (`window.innerHeight − vv.height > 100`) — needs real-device tuning to filter URL-bar collapse (~50–80 px) without missing edge cases. Verify during Phase 50.
+- iOS 26 `visualViewport.height` post-dismiss regression (Apple Developer Forums #800125, Sep 2025) — mitigation pattern (re-read on every event, never cache) is industry-standard and survives by construction. Needs real-iPhone confirmation during deferred SMOKE-05 run.
+- Keyboard-open detection threshold (`window.innerHeight − vv.height > 100`) — needs real-device tuning to filter URL-bar collapse (~50–80 px) without missing edge cases. Needs real-iPhone confirmation during deferred SMOKE-04/07.
+
+## Deferred Items
+
+Items acknowledged and deferred at v1.15.1 milestone close (2026-05-17):
+
+| Category | Item | Status | Reason |
+|----------|------|--------|--------|
+| smoke | SMOKE-01 .planning/v1.15.1-IPHONE-SMOKE.md checklist artifact | Pending | Human-blocked — requires clinician with real iPhone 14 Pro+ in standalone PWA mode |
+| smoke | SMOKE-02 Hamburger/wordmark/theme below Dynamic Island (portrait) | Pending | Human verification required |
+| smoke | SMOKE-03 Drawer opens with no keyboard; focus on close button; VoiceOver | Pending | Human verification required |
+| smoke | SMOKE-04 Tap weight field → keyboard up → drawer ≥ 8 px above keyboard | Pending | Human verification required |
+| smoke | SMOKE-05 Done dismisses keyboard → drawer returns flush; no flicker | Pending | Human verification required (iOS 26 #800125) |
+| smoke | SMOKE-06 bfcache restore (call yourself / app switch) renders flush | Pending | Human verification required |
+| smoke | SMOKE-07 Hardware-keyboard-paired iPhone does NOT lift drawer | Pending | Human verification required |
+| smoke | SMOKE-08 Landscape inset respected; portrait re-rotation preserved | Pending | Human verification required |
+| smoke | SMOKE-09 Light-mode black-translucent status-bar text legibility | Pending | Human verification required |
+| smoke | SMOKE-10 All 6 calculators smoke-tested for drawer + notch | Pending | Human verification required (PERT removed in v1.16 — re-scope to 5 calculators if SMOKE runs after v1.16 ships) |
+| release | REL-04 final clinical gate (smoke sign-off portion) | Partial | Automated gates green at v1.15.1 close; SMOKE sign-off carries forward |
+| quick_task | 260429-lyq Add CalculatorStore<T> generic class | Complete (audit manifest gap) | PLAN + SUMMARY exist; audit "missing" status is a manifest-entry artifact, not real work missing |
+| quick_task | 260429-m79 Migrate uac-uvc state singleton to CalculatorStore | Complete (audit manifest gap) | PLAN + SUMMARY exist; ditto |
+| quick_task | 260429-mkz Migrate gir/morphine/feeds/fortification state singletons | Complete (audit manifest gap) | PLAN + SUMMARY exist; ditto |
+| quick_task | 260429-mr1 Migrate PERT state singleton with custom merge | Complete (audit manifest gap) | PLAN + SUMMARY exist; ditto |
+| quick_task | 260429-mwe Collapse 6 calculator route shells into CalculatorPage | Complete (audit manifest gap) | PLAN + SUMMARY exist; ditto |
+| quick_task | 260430-cvl PERT Formula RecapItem fullRow drop + version bump | Complete (audit manifest gap) | PLAN + SUMMARY exist; ditto |
+
+This re-opens v1.13 D-12 (real-iPhone smoke gate). When SMOKE runs, expect SMOKE-10 to re-scope to 5 calculators (PERT removed in v1.16).
 
 ### Quick Tasks Completed
 
@@ -105,3 +128,7 @@ Stopped at: Phase 50 context gathered
 Resume file: 
 
 .planning/phases/50-wave-3-real-iphone-smoke-gate/50-CONTEXT.md
+
+## Operator Next Steps
+
+- Start the next milestone with /gsd-new-milestone
