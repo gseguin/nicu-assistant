@@ -76,4 +76,6 @@
 
 | Phase | Requirement IDs | Status |
 |-------|-----------------|--------|
-| _(populated by roadmapper)_ | | |
+| Phase 52: Code Purge + Test Suite Repair | PURGE-01, PURGE-02, PURGE-03, PURGE-04, PURGE-05, PURGE-06, TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06, TEST-07, TEST-08 | Pending |
+| Phase 53: Favorites Safety Net + Verification | SAFE-01, SAFE-02, SAFE-03 | Pending |
+| Phase 54: Documentation Cleanup + Release v1.17.0 | DOC-01, DOC-02, DOC-03, DOC-04, DOC-05, DOC-06, REL-01, REL-02, REL-03, REL-04 | Pending |

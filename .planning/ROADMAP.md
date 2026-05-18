@@ -19,6 +19,7 @@
 - v1.14 Kendamil Formulas + Desktop Full Nav - Phases 44-46 (shipped 2026-04-25)
 - v1.15 Pediatric EPI PERT Calculator - workstream archive `milestones/ws-pert-2026-04-26/` (shipped 2026-04-26; workstream-internal phases 01-05, no main-roadmap phase numbers consumed)
 - [v1.15.1 iOS Polish & Drawer Hardening](milestones/v1.15.1-ROADMAP.md) - Phases 47-49 + 51 (shipped 2026-05-17; SMOKE-01..10 deferred)
+- **v1.17 Remove PERT Calculator** - Phases 52-54 (opened 2026-05-17; active)
 
 ## Phases
 
@@ -96,6 +97,8 @@ See [milestones/v1.14-ROADMAP.md](milestones/v1.14-ROADMAP.md) for full phase de
 
 The PERT calculator (sixth clinical calculator) shipped as a self-contained workstream rather than as main-roadmap-numbered phases. Workstream-internal phase numbering 01-05 (Architecture + Identity Hue + Clinical Data; Calculator Core + Both Modes + Safety; Tests; SelectPicker Bridge Fix [3.1]; Design Polish; Release). No main-roadmap phase numbers consumed — v1.14 ended at Phase 46 and v1.15.1 picks up at Phase 47.
 
+**Note (2026-05-17):** PERT calculator scheduled for removal in v1.17 — out of clinical scope (pediatric, not neonatal). Workstream archive preserved as historical record.
+
 See [milestones/ws-pert-2026-04-26/ROADMAP.md](milestones/ws-pert-2026-04-26/ROADMAP.md) for full workstream archive.
 
 </details>
@@ -113,6 +116,52 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
 
 </details>
 
+### v1.17 Remove PERT Calculator (Phases 52-54) — ACTIVE (opened 2026-05-17)
+
+**Milestone goal:** Cleanly remove the PERT (Pediatric Enzyme Replacement Therapy) calculator from NICU Assistant. PERT is a pediatric tool, not a neonatal one — it does not belong in this product's clinical scope. Five clinical calculators remain after removal: formula, morphine-wean, GIR, feeds, UAC/UVC. Milestone label re-syncs with package version (1.16.1 → 1.17.0).
+
+**Phase numbering:** v1.15.1 closed at Phase 51; v1.17 picks up at Phase 52. (v1.16 label skipped — package version drifted to 1.16.x during v1.15.1 quick-task patches; this milestone re-aligns label with package.)
+
+- [ ] **Phase 52: Code Purge + Test Suite Repair** — Atomic removal of all PERT source + immediate test repair so the suite is green again at phase close (PURGE-01..06 + TEST-01..08, 14 reqs)
+- [ ] **Phase 53: Favorites Safety Net + Verification** — Verify (and add if missing) graceful filtering of unknown calculator IDs in `favoritesStore` so v1.15+ users with PERT favorited load cleanly; regression test (SAFE-01..03, 3 reqs)
+- [ ] **Phase 54: Documentation Cleanup + Release v1.17.0** — PROJECT.md / MILESTONES.md / Key Decisions updates, version bump, AboutSheet verification, full clinical gate, milestone archive (DOC-01..06 + REL-01..04, 10 reqs)
+
+### Phase Details
+
+#### Phase 52: Code Purge + Test Suite Repair
+**Goal:** Remove every byte of PERT source code and bring the test suite back to green in a single atomic phase, leaving the repo buildable + testable at the phase boundary.
+**Depends on:** Nothing (first phase of milestone)
+**Requirements:** PURGE-01, PURGE-02, PURGE-03, PURGE-04, PURGE-05, PURGE-06, TEST-01, TEST-02, TEST-03, TEST-04, TEST-05, TEST-06, TEST-07, TEST-08
+**Success Criteria** (what must be TRUE):
+  1. `src/lib/pert/` directory does not exist; `src/routes/pert/+page.svelte` does not exist; navigating to `/pert` in dev/preview returns the SvelteKit not-found fallback.
+  2. `CalculatorId` type union is exactly `'morphine-wean' | 'formula' | 'gir' | 'feeds' | 'uac-uvc'`; `CALCULATOR_REGISTRY` has 5 alphabetically-ordered entries; AboutSheet content map has 5 keys; `.identity-pert` no longer appears in `src/app.css` for either theme.
+  3. No source file under `src/`, `e2e/`, or `playwright.config.ts` contains the string `pert` or `PERT` outside of historical comments documenting the removal (verifiable by `git grep -i 'pert' src/ e2e/`).
+  4. `pnpm test` (vitest) exits 0 with all suites green; `pnpm exec playwright test` runs both `chromium` and `webkit-iphone` projects with zero PERT-related failures (any pre-existing unrelated failures unchanged from v1.15.1 close).
+  5. `pnpm svelte-check` reports 0 errors / 0 warnings across the post-purge codebase.
+**Plans:** TBD
+
+#### Phase 53: Favorites Safety Net + Verification
+**Goal:** Ensure a user who upgraded from v1.15+ with `'pert'` in their `localStorage` favorites array experiences zero disruption — the unknown ID is silently filtered, the app loads cleanly, no console errors, no missing-icon placeholders.
+**Depends on:** Phase 52 (the `CalculatorId` union must already exclude `'pert'` for the filter to treat it as unknown)
+**Requirements:** SAFE-01, SAFE-02, SAFE-03
+**Success Criteria** (what must be TRUE):
+  1. Loading the app with `localStorage` containing `nicu:favorites = {v:1, ids:['morphine-wean','formula','pert','gir']}` renders the bottom bar / hamburger menu / desktop nav with exactly the three valid IDs in their original order and no console errors, warnings, or missing-icon placeholders.
+  2. A vitest case (`favorites.test.ts`) explicitly asserts that `['morphine-wean', 'formula', 'pert', 'gir']` from `localStorage` resolves to `favorites.current === ['morphine-wean', 'formula', 'gir']` (PERT silently dropped, order preserved); the test fails meaningfully if the filter is removed.
+  3. A vitest case verifies the first-run defaults array does not contain `'pert'` — regression guard documenting that defaults stay the v1.13 baseline `['morphine-wean', 'formula', 'gir', 'feeds']`.
+**Plans:** TBD
+
+#### Phase 54: Documentation Cleanup + Release v1.17.0
+**Goal:** Bring all project documentation in sync with the 5-calculator reality, bump the package to 1.17.0, run the full clinical gate, and archive the milestone.
+**Depends on:** Phase 53
+**Requirements:** DOC-01, DOC-02, DOC-03, DOC-04, DOC-05, DOC-06, REL-01, REL-02, REL-03, REL-04
+**Success Criteria** (what must be TRUE):
+  1. `PROJECT.md` Validated list moves the v1.15 PERT entry to an `Invalidated / Removed` subsection (DOC-01); Context section + Architecture section + Glossary describe five calculators with no PERT references except explicit historical-record annotations (DOC-02..04); Key Decisions table updates the "Ship PERT as self-contained workstream" outcome to a final removed state (DOC-06).
+  2. `MILESTONES.md` has a v1.17 entry at the top following the standard format (phases, plans, key accomplishments, deferred items); v1.15 PERT entry annotated `[REMOVED in v1.17 — out of clinical scope]` (DOC-05).
+  3. `package.json` reports `"version": "1.17.0"` and the running app's AboutSheet displays `v1.17.0` via the existing `__APP_VERSION__` build-time constant (REL-01, REL-02).
+  4. Full clinical gate green: `pnpm svelte-check` 0/0 across all files; `pnpm test` all suites green; `pnpm exec playwright test` `chromium` + `webkit-iphone` projects green; extended axe sweeps green in both light + dark themes (count drops by the 4 retired PERT a11y sweeps) (REL-03).
+  5. STATE.md frontmatter status flipped to `complete`; v1.17 archived under `.planning/milestones/v1.17-{REQUIREMENTS,ROADMAP,phases}/` via `/gsd:complete-milestone`; `PROJECT.md` Last-updated footer reflects release date (REL-04).
+**Plans:** TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -127,3 +176,6 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
 | 44-46 | v1.14 | — | Complete | 2026-04-25 |
 | ws-pert | v1.15 | — | Complete | 2026-04-26 |
 | 47-49 + 51 | v1.15.1 | 9/9 (Phase 50 deferred) | Complete (SMOKE deferred) | 2026-05-17 |
+| 52 | v1.17 | 0/? | Not started | — |
+| 53 | v1.17 | 0/? | Not started | — |
+| 54 | v1.17 | 0/? | Not started | — |
