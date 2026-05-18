@@ -122,7 +122,26 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ### Active
 
-(none — ready to define v1.16)
+- ⏳ v1.17 — Remove the PERT calculator from NICU Assistant (scope correction: pediatric, not neonatal)
+
+## Current Milestone: v1.17 Remove PERT Calculator
+
+**Goal:** Cleanly remove the PERT (Pediatric Enzyme Replacement Therapy) calculator from NICU Assistant. PERT is a pediatric tool, not a neonatal one — it does not belong in this product's clinical scope.
+
+**Target features:**
+- Full purge of PERT module, route, tests, clinical data files, and parity fixtures (`src/lib/pert/`, `src/routes/pert/`)
+- Remove PERT from the calculator registry (`src/lib/shell/registry.ts`) and AboutSheet content (`src/lib/shared/about-content.ts`)
+- Audit favorites storage and defaults so any user with PERT favorited falls back gracefully (no broken refs, no crash on load)
+- Remove PERT identity hue (`.identity-pert`) and any references in DESIGN.md / DESIGN.json
+- Documentation cleanup — mark v1.15 PERT requirements Invalidated/Removed in MILESTONES.md, update PROJECT.md Validated list and Context
+- Release as package v1.17.0 (re-aligns milestone label with package version, which currently sits at 1.16.1)
+
+**Key context:**
+- v1.15 PERT shipped as a self-contained workstream archive (`milestones/ws-pert-2026-04-26/`) — no main-roadmap phase numbers to retire
+- Milestone label v1.16 → **v1.17** to re-sync with package version (drifted during v1.15.1 quick-task bumps)
+- Five clinical calculators remain after removal: formula, morphine-wean, GIR, feeds, UAC/UVC
+- v1.15.1 deferred SMOKE-01..10 is NOT in scope here — carries forward
+- No clinical data preserved (clinical/scope decision = no plan to return PERT to this product)
 
 ## Previously Shipped
 
@@ -217,4 +236,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-17 after v1.15.1 milestone close (iOS polish & drawer hardening; SMOKE-01..10 deferred to v1.16+)*
+*Last updated: 2026-05-17 — v1.17 (Remove PERT Calculator) milestone opened*

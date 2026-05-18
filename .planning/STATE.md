@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.15.1
-milestone_name: iOS Polish & Drawer Hardening
-status: Awaiting next milestone
-stopped_at: Phase 50 context gathered
-last_updated: "2026-05-17T05:58:48.474Z"
-last_activity: 2026-05-17 — Milestone v1.15.1 completed and archived
+milestone: v1.17
+milestone_name: Remove PERT Calculator
+status: planning
+last_updated: "2026-05-18T02:42:19.564Z"
+last_activity: 2026-05-18
 progress:
-  total_phases: 5
-  completed_phases: 3
-  total_plans: 9
-  completed_plans: 8
-  percent: 60
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -25,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-05-17)
 
 ## Current Position
 
-Phase: Milestone v1.15.1 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-05-17 — Milestone v1.15.1 completed and archived
+Status: Defining requirements
+Last activity: 2026-05-18 — Milestone v1.17 started
 
 ## Performance Metrics
 
