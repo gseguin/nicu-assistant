@@ -51,7 +51,7 @@ describe('CalculatorStore — persist + restore', () => {
     expect(restored.current.b).toBe('x');
   });
 
-  it('round-trips via vi.resetModules() + dynamic import (mirrors PERT pattern)', async () => {
+  it('round-trips via vi.resetModules() + dynamic import', async () => {
     vi.resetModules();
     const mod1 = await import('./calculator-store.svelte.js');
     const store = new mod1.CalculatorStore<Shape>({
