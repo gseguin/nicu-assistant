@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.17
 milestone_name: Remove PERT Calculator
-status: Phase 52 planned + verified; ready for execute-phase
-stopped_at: Phase 52 planning complete — 3 plans verified (VERIFICATION PASSED) and committed
-last_updated: "2026-05-23T18:30:00.000Z"
-last_activity: 2026-05-23 — Phase 52 plans verified by gsd-plan-checker (14/14 reqs, 0 blockers) and committed (639d1ba)
+status: executing
+stopped_at: Phase 52 planning complete — plan-checker PASSED, 3 plans committed (639d1ba); ready to execute
+last_updated: "2026-05-23T22:30:39.692Z"
+last_activity: 2026-05-23 -- Phase 52 execution started
 progress:
   total_phases: 3
   completed_phases: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-17)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** v1.17 Remove PERT Calculator — roadmap drafted (Phases 52-54), ready for `/gsd:plan-phase 52`
+**Current focus:** Phase 52 — code-purge-test-suite-repair
 
 ## Current Position
 
-Phase: 52 (Code Purge + Test Suite Repair) — planned + verified
-Plan: 52-01, 52-02, 52-03 (all written; VERIFICATION PASSED; awaiting execution)
-Status: Phase 52 planned + verified; ready for `/gsd:execute-phase 52`
-Last activity: 2026-05-23 — Phase 52 plans verified by gsd-plan-checker (14/14 reqs, 0 blockers) and committed (639d1ba)
+Phase: 52 (code-purge-test-suite-repair) — EXECUTING
+Plan: 1 of 3
+Status: Executing Phase 52
+Last activity: 2026-05-23 -- Phase 52 execution started
 
 ## Performance Metrics
 
