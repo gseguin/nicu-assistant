@@ -13,7 +13,7 @@ vi.mock('$app/state', () => ({ get page() { return mockPage; } }));
 beforeEach(() => {
   localStorage.clear();
   mockPage.url.pathname = '/morphine-wean';
-  // D-20 (pert workstream Phase 1): defaults are alphabetical first 4 registry entries.
+  // D-20: defaults are alphabetical first 4 registry entries.
   favorites.init(); // seeds defaults: ['feeds','formula','gir','morphine-wean']
 });
 
@@ -159,7 +159,7 @@ describe('NavShell — favorites-driven rendering (Phase 41)', () => {
   });
 
   it('T-06 stored order preserved verbatim: tabs render in the order the user stored (D-21)', async () => {
-    // D-21 (pert workstream Phase 1): recover() no longer re-sorts by registry order.
+    // D-21: recover() no longer re-sorts by registry order.
     // The stored order — including any non-alphabetical user-chosen order — is honored as-is.
     localStorage.setItem('nicu:favorites', JSON.stringify({ v: 1, ids: ['feeds', 'gir', 'formula', 'morphine-wean'] }));
     favorites.init();
@@ -188,13 +188,12 @@ describe('NavShell — desktop full-nav divergence (Phase 45)', () => {
     // Desktop nav is the FIRST nav[aria-label="Calculator navigation"]
     const desktopNav = container.querySelector('nav[aria-label="Calculator navigation"]')!;
     const tabs = desktopNav.querySelectorAll('[role="tab"]');
-    expect(tabs).toHaveLength(6);
+    expect(tabs).toHaveLength(5);
     expect(tabs[0].textContent).toMatch(/Feeds/i);
     expect(tabs[1].textContent).toMatch(/Formula/i);
     expect(tabs[2].textContent).toMatch(/GIR/i);
     expect(tabs[3].textContent).toMatch(/Morphine/i);
-    expect(tabs[4].textContent).toMatch(/PERT/i);
-    expect(tabs[5].textContent).toMatch(/UAC/i);
+    expect(tabs[4].textContent).toMatch(/UAC/i);
   });
 
   it('T-08 reduced favorites (2): desktop nav unchanged, mobile nav reflects favorites', async () => {
@@ -206,7 +205,7 @@ describe('NavShell — desktop full-nav divergence (Phase 45)', () => {
     expect(navs).toHaveLength(2);
     const desktopTabs = navs[0].querySelectorAll('[role="tab"]');
     const mobileTabs = navs[1].querySelectorAll('[role="tab"]');
-    expect(desktopTabs).toHaveLength(6); // NAV-ALL-01: registry-driven, immune to favorites
+    expect(desktopTabs).toHaveLength(5); // NAV-ALL-01: registry-driven, immune to favorites
     expect(mobileTabs).toHaveLength(2);  // NAV-ALL-02: favorites-driven, Phase 41 contract
   });
 
@@ -220,7 +219,7 @@ describe('NavShell — desktop full-nav divergence (Phase 45)', () => {
     const navs = container.querySelectorAll('nav[aria-label="Calculator navigation"]');
     const desktopTabs = navs[0].querySelectorAll('[role="tab"]');
     const mobileTabs = navs[1].querySelectorAll('[role="tab"]');
-    expect(desktopTabs).toHaveLength(6); // edge case: favorites empty, desktop still full
+    expect(desktopTabs).toHaveLength(5); // edge case: favorites empty, desktop still full
     expect(mobileTabs).toHaveLength(0);
   });
 
