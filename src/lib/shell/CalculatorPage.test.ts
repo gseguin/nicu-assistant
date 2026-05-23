@@ -42,7 +42,7 @@ function makeModule(
     href: '/stub',
     icon: Pill,
     description: 'Stub calculator for shell tests',
-    identityClass: 'identity-pert',
+    identityClass: 'identity-gir',
     title: 'Stub Calculator Title',
     subtitle: 'Stub subtitle copy',
     inputsLabel: 'Stub inputs',
@@ -67,9 +67,9 @@ beforeEach(() => {
 
 describe('CalculatorPage', () => {
   it('T-CP-01 renders the identity wrapper class from module.identityClass', () => {
-    const mod = makeModule({ identityClass: 'identity-pert' });
+    const mod = makeModule({ identityClass: 'identity-gir' });
     const { container } = render(CalculatorPage, { props: { module: mod } });
-    expect(container.querySelector('.identity-pert')).not.toBeNull();
+    expect(container.querySelector('.identity-gir')).not.toBeNull();
   });
 
   it('T-CP-02 renders module.title as <h1> and module.subtitle as a <span>', () => {
@@ -114,9 +114,9 @@ describe('CalculatorPage', () => {
   });
 
   it('T-CP-06 renders the sticky desktop aside with aria-label = module.inputsLabel', () => {
-    const mod = makeModule({ inputsLabel: 'PERT inputs' });
+    const mod = makeModule({ inputsLabel: 'GIR inputs' });
     render(CalculatorPage, { props: { module: mod } });
-    const aside = screen.getByRole('complementary', { name: 'PERT inputs' });
+    const aside = screen.getByRole('complementary', { name: 'GIR inputs' });
     expect(aside).toBeTruthy();
   });
 
