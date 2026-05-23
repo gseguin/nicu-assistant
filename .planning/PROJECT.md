@@ -6,6 +6,8 @@ A PWA that unifies clinical calculators into a single tool for NICU staff. Inclu
 
 ## Current State
 
+**In progress:** v1.17 Remove PERT Calculator — Phase 52 (Code Purge + Test Suite Repair) complete (2026-05-23). Every byte of PERT source removed: `src/lib/pert/` (14 files) and `src/routes/pert/` deleted, `pertModule` dropped from the registry (5 calculators remain), `CalculatorId` union narrowed to 5 members, `pert` about-content key and `.identity-pert` CSS removed, both PERT e2e specs deleted, and the test suite repaired (6→5 count bumps, index renumbering, scaffold-value substitutions) plus a new T-21 favorites regression test. Gates green at phase close: `pnpm build` OK (bundle −48 KB), svelte-check 0/0 across 4588 files, vitest 408/408, zero PERT references in `src/` and `e2e/`. Verification PASSED 14/14 must-haves. Next: Phase 53 (Favorites Safety Net + Verification).
+
 **Shipped:** v1.15.1 iOS Polish & Drawer Hardening (2026-04-30, package shipped under v1.16.0/1.16.1) — Three iOS bedside regressions fixed across two waves: (1) NavShell title bar respects `env(safe-area-inset-top/left/right)` so hamburger + wordmark + theme/info buttons clear the Dynamic Island / camera notch in portrait + landscape on iPhone 14 Pro+ in standalone PWA mode; (2) InputDrawer open never programmatically focuses an input/select/slider — `queueMicrotask` block removed, native `<dialog>` autofocus lands on the close button so iOS soft keyboard waits for an explicit clinician tap; (3) New `visualViewport.svelte.ts` `$state` singleton (subscribes to `resize` + `pageshow.persisted` + `visibilitychange.visible`, NOT `scroll`) exposes `--ivv-bottom` + `--ivv-max-height` CSS custom properties via `$derived ivvStyle` on `.input-drawer-sheet` — drawer anchors above iOS soft keyboard with ≥ 8 px clearance and shrinks to fit `visualViewport.height − 16px` when keyboard is up. Test scaffolding (Wave-0): jsdom `window.visualViewport` polyfill in `src/test-setup.ts` with throw-on-regression self-test; reusable `simulateKeyboardOpen/Down/_reset` helpers in `src/lib/test/visual-viewport-mock.ts`; new `webkit-iphone` Playwright project using `devices['iPhone 14 Pro']` runs alongside `chromium`. Zero per-calculator divergence — single source of truth across all six calculators. Gates: svelte-check 0/0 across 4571+ files, vitest 454/454, Playwright chromium + webkit-iphone green, extended axe 16/16 in both themes. **Real-iPhone smoke gate (SMOKE-01..10) deferred** — closes the v1.13 D-12 deferral when run; carries forward into v1.16+ as deferred item.
 
 ## Core Value
@@ -236,4 +238,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-17 — v1.17 (Remove PERT Calculator) milestone opened*
+*Last updated: 2026-05-23 — Phase 52 (Code Purge + Test Suite Repair) complete; PERT source fully removed, suite green at 408/408*
