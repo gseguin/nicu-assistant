@@ -38,9 +38,9 @@ export interface CalculatorEntry {
 // Generic in state shape; never collected into a heterogeneous array.
 // Each slice exports one of these from `src/lib/{slice}/calculator.ts`.
 export interface CalculatorModule<TState> extends CalculatorEntry {
-  title: string; // e.g. "Pediatric EPI PERT Calculator"
-  subtitle?: string; // e.g. "Capsule dosing · oral & tube-feed modes"
-  inputsLabel: string; // e.g. "PERT inputs" — drawer title + aria-label
+  title: string; // e.g. "Glucose Infusion Rate"
+  subtitle?: string; // e.g. "mg/kg/min · helper"
+  inputsLabel: string; // e.g. "GIR inputs" — drawer title + aria-label
   state: CalculatorStore<TState>;
   Calculator: Component;
   Inputs: Component;

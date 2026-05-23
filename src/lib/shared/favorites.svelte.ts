@@ -54,7 +54,7 @@ function recover(raw: string | null): CalculatorId[] {
 		.filter((id): id is string => typeof id === 'string' && valid.has(id))
 		.slice(0, FAVORITES_MAX);
 	if (filtered.length === 0) return defaultIds();
-	// D-21 (Phase pert-01): preserve user's stored order verbatim. Only filter+cap remain.
+	// D-21: preserve user's stored order verbatim. Only filter+cap remain.
 	return filtered as CalculatorId[];
 }
 
