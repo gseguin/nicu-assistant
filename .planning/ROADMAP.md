@@ -138,9 +138,9 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
   3. No source file under `src/`, `e2e/`, or `playwright.config.ts` contains the string `pert` or `PERT` outside of historical comments documenting the removal (verifiable by `git grep -i 'pert' src/ e2e/`).
   4. `pnpm test` (vitest) exits 0 with all suites green; `pnpm exec playwright test` runs both `chromium` and `webkit-iphone` projects with zero PERT-related failures (any pre-existing unrelated failures unchanged from v1.15.1 close).
   5. `pnpm svelte-check` reports 0 errors / 0 warnings across the post-purge codebase.
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 - [x] 52-01-PLAN.md — Source purge: delete src/lib/pert/, src/routes/pert/, e2e/pert*.spec.ts, registry edit, NavShell.test.ts surgery (PURGE-01, 02, 03, 06; TEST-01, 08)
-- [ ] 52-02-PLAN.md — Source-side integration: CalculatorId union, about-content.ts, app.css identity-pert, shell-layer comment generalization (PURGE-03, 04, 05, 06)
+- [x] 52-02-PLAN.md — Source-side integration: CalculatorId union, about-content.ts, app.css identity-pert, shell-layer comment generalization (PURGE-03, 04, 05, 06)
 - [ ] 52-03-PLAN.md — Test-file surgery: registry.test.ts, HamburgerMenu.test.ts, CalculatorPage.test.ts, calculator-store.test.ts, favorites.test.ts +T-21, desktop-full-nav.spec.ts, drawer-no-autofocus.spec.ts (TEST-02..08)
 
 #### Phase 53: Favorites Safety Net + Verification
@@ -179,6 +179,6 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
 | 44-46 | v1.14 | — | Complete | 2026-04-25 |
 | ws-pert | v1.15 | — | Complete | 2026-04-26 |
 | 47-49 + 51 | v1.15.1 | 9/9 (Phase 50 deferred) | Complete (SMOKE deferred) | 2026-05-17 |
-| 52 | v1.17 | 1/3 | In Progress|  |
+| 52 | v1.17 | 2/3 | In Progress|  |
 | 53 | v1.17 | 0/? | Not started | — |
 | 54 | v1.17 | 0/? | Not started | — |
