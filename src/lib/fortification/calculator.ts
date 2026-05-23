@@ -10,7 +10,7 @@
 // (not from types.ts) — this slice is the only one with that quirk.
 //
 // NB 2: getFormulaById lives in fortification-config.js (not config.js as in
-// the PERT slice) — distinct module path.
+// other calculator slices) — distinct module path.
 //
 // NB 3: subtitle is intentionally omitted — the existing route header has
 // only an <h1> with no secondary span.

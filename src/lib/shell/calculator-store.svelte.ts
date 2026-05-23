@@ -4,7 +4,7 @@
 // CRITICAL: No localStorage calls outside functions — init/persist/reset only.
 // SSR safety: every localStorage access is guarded by `typeof localStorage === 'undefined'`.
 // Consolidated replacement for the per-slice state singletons under
-// src/lib/{pert,feeds,gir,morphine,fortification,uac-uvc}/state.svelte.ts —
+// src/lib/{feeds,gir,morphine,fortification,uac-uvc}/state.svelte.ts —
 // commits 2–5 of this deepening will migrate each slice to instantiate
 // CalculatorStore<T> from its own state.svelte.ts.
 
@@ -34,7 +34,7 @@ export class CalculatorStore<T> {
     // Eager init: child $effects mounted before the route's onMount can fire
     // persist() with default values and clobber the restored state. Running
     // here means .current already reflects localStorage by the time any
-    // component reads it. Mirrors src/lib/pert/state.svelte.ts.
+    // component reads it. Mirrors the per-slice state.svelte.ts pattern.
     this.init();
   }
 
@@ -65,8 +65,8 @@ export class CalculatorStore<T> {
         // Silent: private browsing mode or storage quota exceeded.
       }
     }
-    // stamp() runs even if setItem threw — matches the existing PERT pattern
-    // where stamp is outside the try/catch.
+    // stamp() runs even if setItem threw — stamp is intentionally outside
+    // the try/catch so the edit timestamp updates even on storage failure.
     this.lastEdited.stamp();
   }
 
