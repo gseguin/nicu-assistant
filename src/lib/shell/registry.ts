@@ -14,7 +14,6 @@ import { feedsModule } from '$lib/feeds/calculator.js';
 import { fortificationModule } from '$lib/fortification/calculator.js';
 import { girModule } from '$lib/gir/calculator.js';
 import { morphineModule } from '$lib/morphine/calculator.js';
-import { pertModule } from '$lib/pert/calculator.js';
 import { uacUvcModule } from '$lib/uac-uvc/calculator.js';
 
 // Same alphabetical-by-id order as before — D-19 invariant guarded by
@@ -24,7 +23,6 @@ export const CALCULATOR_REGISTRY: readonly CalculatorEntry[] = [
   fortificationModule,
   girModule,
   morphineModule,
-  pertModule,
   uacUvcModule
 ];
 

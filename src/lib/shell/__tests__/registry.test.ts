@@ -7,7 +7,7 @@ import { CALCULATOR_REGISTRY, type CalculatorEntry } from '$lib/shell/registry';
 describe('CALCULATOR_REGISTRY', () => {
   it('contains the expected calculator ids', () => {
     const ids = CALCULATOR_REGISTRY.map((e) => e.id).sort();
-    expect(ids).toEqual(['feeds', 'formula', 'gir', 'morphine-wean', 'pert', 'uac-uvc']);
+    expect(ids).toEqual(['feeds', 'formula', 'gir', 'morphine-wean', 'uac-uvc']);
   });
 
   it('is ordered alphabetically by id (D-19 invariant — guards future inserts)', () => {
@@ -43,19 +43,11 @@ describe('CALCULATOR_REGISTRY', () => {
     expect(CALCULATOR_REGISTRY[3].identityClass).toBe('identity-morphine');
   });
 
-  it('includes PERT calculator as fifth entry', () => {
-    expect(CALCULATOR_REGISTRY[4].id).toBe('pert');
-    expect(CALCULATOR_REGISTRY[4].label).toBe('PERT');
-    expect(CALCULATOR_REGISTRY[4].href).toBe('/pert');
-    expect(CALCULATOR_REGISTRY[4].description).toBe('Pediatric EPI PERT calculator');
-    expect(CALCULATOR_REGISTRY[4].identityClass).toBe('identity-pert');
-  });
-
-  it('includes UAC/UVC calculator as sixth entry', () => {
-    expect(CALCULATOR_REGISTRY[5].id).toBe('uac-uvc');
-    expect(CALCULATOR_REGISTRY[5].label).toBe('UAC/UVC');
-    expect(CALCULATOR_REGISTRY[5].href).toBe('/uac-uvc');
-    expect(CALCULATOR_REGISTRY[5].identityClass).toBe('identity-uac');
+  it('includes UAC/UVC calculator as fifth entry', () => {
+    expect(CALCULATOR_REGISTRY[4].id).toBe('uac-uvc');
+    expect(CALCULATOR_REGISTRY[4].label).toBe('UAC/UVC');
+    expect(CALCULATOR_REGISTRY[4].href).toBe('/uac-uvc');
+    expect(CALCULATOR_REGISTRY[4].identityClass).toBe('identity-uac');
   });
 
   it('all entries have required fields', () => {
