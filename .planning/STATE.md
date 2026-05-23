@@ -2,9 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.17
 milestone_name: Remove PERT Calculator
-status: planning
-last_updated: "2026-05-17T00:00:00.000Z"
-last_activity: 2026-05-17
+status: Roadmap drafted; awaiting plan-phase
+stopped_at: v1.17 roadmap drafted (3 phases, 26 requirements mapped 100%)
+last_updated: "2026-05-23T17:46:02.871Z"
+last_activity: 2026-05-17 — Roadmap for v1.17 created (3 phases, 26 requirements mapped 100%)
 progress:
   total_phases: 3
   completed_phases: 0
@@ -110,9 +111,9 @@ Items acknowledged and deferred at v1.15.1 milestone close (2026-05-17) — carr
 
 ## Session Continuity
 
-Last session: 2026-05-17T00:00:00.000Z
+Last session: 2026-05-23T17:46:02.846Z
 Stopped at: v1.17 roadmap drafted (3 phases, 26 requirements mapped 100%)
-Resume file: .planning/ROADMAP.md (v1.17 section under `### v1.17 Remove PERT Calculator (Phases 52-54)`)
+Resume file: None
 
 ## Operator Next Steps
 
