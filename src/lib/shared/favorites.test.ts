@@ -116,7 +116,7 @@ describe('favorites store', () => {
 		favorites.init();
 		favorites.toggle('gir');
 		// toggle() still re-sorts the in-memory array by registry order (FAV-06 / D-07);
-		// post-D-19 alphabetization that's: feeds, formula, gir, morphine-wean, pert, uac-uvc.
+		// post-D-19 alphabetization that's: feeds, formula, gir, morphine-wean, uac-uvc.
 		expect([...favorites.current]).toEqual(['formula', 'gir', 'morphine-wean']);
 	});
 
@@ -202,5 +202,25 @@ describe('T-20 — module-scope default (D-07 regression guard)', () => {
 		// Do NOT call init()
 		// D-20: alphabetical first 4 (post-D-19 registry alphabetization).
 		expect([...freshFavorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
+	});
+});
+
+describe('T-21 — unknown-calculator-id forward compatibility regression', () => {
+	it('T-21: unknown id (e.g. a removed calculator) is silently filtered, preserving order of valid ids', async () => {
+		/*
+		 * D-11 (Phase 52): regression guard for users whose stored favorites included a
+		 * calculator id that was later removed from the registry. The recover() filter MUST
+		 * drop the unknown id without error and MUST preserve the order of the surviving
+		 * valid ids. Uses a generic literal so this test stays feature-agnostic across
+		 * future removals.
+		 */
+		localStorage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({ v: 1, ids: ['morphine-wean', 'formula', 'unknown-calculator-id', 'gir'] })
+		);
+		vi.resetModules();
+		const { favorites } = await import('./favorites.svelte.js');
+		favorites.init();
+		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir']);
 	});
 });
