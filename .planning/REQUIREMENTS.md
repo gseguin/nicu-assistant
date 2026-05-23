@@ -36,9 +36,9 @@
 
 ### Favorites Safety Net (SAFE)
 
-- [ ] **SAFE-01**: A user whose `localStorage` contained `'pert'` in their favorites array (from v1.15+) loads the app cleanly after the upgrade — `favoritesStore` filters the unknown ID out silently; bottom-bar / hamburger menu / desktop nav render with only valid IDs; no crash, no console error, no missing-icon placeholder
-- [ ] **SAFE-02**: Unit test covers the upgrade path — load `['morphine-wean', 'formula', 'pert', 'gir']` from `localStorage` and assert the resulting favorites array is `['morphine-wean', 'formula', 'gir']` (PERT silently dropped, order preserved)
-- [ ] **SAFE-03**: First-run defaults verified — `favoritesStore` first-run default does not include `'pert'` (it does not currently; this is a regression guard, not a change)
+- [x] **SAFE-01**: A user whose `localStorage` contained `'pert'` in their favorites array (from v1.15+) loads the app cleanly after the upgrade — `favoritesStore` filters the unknown ID out silently; bottom-bar / hamburger menu / desktop nav render with only valid IDs; no crash, no console error, no missing-icon placeholder
+- [x] **SAFE-02**: Unit test covers the upgrade path — load `['morphine-wean', 'formula', 'pert', 'gir']` from `localStorage` and assert the resulting favorites array is `['morphine-wean', 'formula', 'gir']` (PERT silently dropped, order preserved)
+- [x] **SAFE-03**: First-run defaults verified — `favoritesStore` first-run default does not include `'pert'` (it does not currently; this is a regression guard, not a change)
 
 ### Documentation Cleanup (DOC)
 

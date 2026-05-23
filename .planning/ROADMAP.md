@@ -181,5 +181,5 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
 | ws-pert | v1.15 | — | Complete | 2026-04-26 |
 | 47-49 + 51 | v1.15.1 | 9/9 (Phase 50 deferred) | Complete (SMOKE deferred) | 2026-05-17 |
 | 52 | v1.17 | 3/3 | Complete    | 2026-05-23 |
-| 53 | v1.17 | 1/1 | Complete   | 2026-05-23 |
+| 53 | v1.17 | 1/1 | Complete    | 2026-05-23 |
 | 54 | v1.17 | 0/? | Not started | — |
