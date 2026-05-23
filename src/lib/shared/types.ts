@@ -4,7 +4,7 @@ export interface SelectOption {
   group?: string;
 }
 
-export type CalculatorId = 'morphine-wean' | 'formula' | 'gir' | 'feeds' | 'uac-uvc' | 'pert';
+export type CalculatorId = 'morphine-wean' | 'formula' | 'gir' | 'feeds' | 'uac-uvc';
 
 export interface NumericInputRange {
   min: number;
