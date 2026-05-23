@@ -16,23 +16,23 @@
 
 ### PERT Source Removal (PURGE)
 
-- [ ] **PURGE-01**: `src/lib/pert/` directory deleted in full — `PertCalculator.svelte`, `PertInputs.svelte`, `calculations.ts`, `config.ts`, `state.svelte.ts`, `types.ts`, `calculator.ts`, `pert-config.json`, `pert-parity.fixtures.json`, and all co-located `*.test.ts` files
-- [ ] **PURGE-02**: `src/routes/pert/+page.svelte` deleted (route disappears from the app entirely; navigating to `/pert` returns the SvelteKit not-found fallback)
-- [ ] **PURGE-03**: `src/lib/shell/registry.ts` no longer imports `pertModule`; the `CALCULATOR_REGISTRY` array contains 5 entries (`feeds`, `formula`, `gir`, `morphine-wean`, `uac-uvc`) in alphabetical order
-- [ ] **PURGE-04**: `src/lib/shared/types.ts` `CalculatorId` union no longer includes `'pert'` (`'morphine-wean' | 'formula' | 'gir' | 'feeds' | 'uac-uvc'`)
-- [ ] **PURGE-05**: `src/lib/shared/about-content.ts` no longer contains the `pert:` block — the AboutSheet content map covers exactly the 5 remaining calculators
-- [ ] **PURGE-06**: `src/app.css` no longer declares `.identity-pert` (both light and dark variants removed) — no orphan CSS rule for a class no element will ever apply
+- [x] **PURGE-01**: `src/lib/pert/` directory deleted in full — `PertCalculator.svelte`, `PertInputs.svelte`, `calculations.ts`, `config.ts`, `state.svelte.ts`, `types.ts`, `calculator.ts`, `pert-config.json`, `pert-parity.fixtures.json`, and all co-located `*.test.ts` files
+- [x] **PURGE-02**: `src/routes/pert/+page.svelte` deleted (route disappears from the app entirely; navigating to `/pert` returns the SvelteKit not-found fallback)
+- [x] **PURGE-03**: `src/lib/shell/registry.ts` no longer imports `pertModule`; the `CALCULATOR_REGISTRY` array contains 5 entries (`feeds`, `formula`, `gir`, `morphine-wean`, `uac-uvc`) in alphabetical order
+- [x] **PURGE-04**: `src/lib/shared/types.ts` `CalculatorId` union no longer includes `'pert'` (`'morphine-wean' | 'formula' | 'gir' | 'feeds' | 'uac-uvc'`)
+- [x] **PURGE-05**: `src/lib/shared/about-content.ts` no longer contains the `pert:` block — the AboutSheet content map covers exactly the 5 remaining calculators
+- [x] **PURGE-06**: `src/app.css` no longer declares `.identity-pert` (both light and dark variants removed) — no orphan CSS rule for a class no element will ever apply
 
 ### Test Cleanup (TEST)
 
-- [ ] **TEST-01**: `e2e/pert.spec.ts` and `e2e/pert-a11y.spec.ts` deleted
-- [ ] **TEST-02**: `e2e/drawer-no-autofocus.spec.ts` route iteration array updated — `/pert` removed; spec iterates the 5 remaining calculator routes
-- [ ] **TEST-03**: `src/lib/shell/__tests__/registry.test.ts` updated — `'PERT calculator as fifth entry'` test deleted; the alphabetical-IDs assertion reads `['feeds', 'formula', 'gir', 'morphine-wean', 'uac-uvc']`; total registry length expected = 5
-- [ ] **TEST-04**: `src/lib/shell/HamburgerMenu.test.ts` updated — assertions referencing `/PERT/i` link removed; comment block about pert-workstream registry alphabetization updated to reflect 5 entries; default-favorites comment updated
-- [ ] **TEST-05**: `src/lib/shell/CalculatorPage.test.ts` updated — test scaffolding that builds a synthetic `identity-pert` module replaced with a generic identity class that still exists (e.g., `identity-gir` or a neutral test class); no test references `identity-pert`
-- [ ] **TEST-06**: `src/lib/shared/favorites.test.ts` updated — comment about post-D-19 alphabetization listing `pert` updated; any test fixture that includes `'pert'` in a stored-favorites array updated or repurposed to assert graceful filtering of unknown IDs (see SAFE-01)
-- [ ] **TEST-07**: Vitest `pnpm test` reports 0 failing tests after all PURGE + TEST changes (count drops by however many tests lived in `src/lib/pert/*.test.ts`; remaining suite is fully green)
-- [ ] **TEST-08**: Playwright `pnpm exec playwright test` runs both `chromium` and `webkit-iphone` projects with no PERT-specific failures (any pre-existing unrelated failures unchanged)
+- [x] **TEST-01**: `e2e/pert.spec.ts` and `e2e/pert-a11y.spec.ts` deleted
+- [x] **TEST-02**: `e2e/drawer-no-autofocus.spec.ts` route iteration array updated — `/pert` removed; spec iterates the 5 remaining calculator routes
+- [x] **TEST-03**: `src/lib/shell/__tests__/registry.test.ts` updated — `'PERT calculator as fifth entry'` test deleted; the alphabetical-IDs assertion reads `['feeds', 'formula', 'gir', 'morphine-wean', 'uac-uvc']`; total registry length expected = 5
+- [x] **TEST-04**: `src/lib/shell/HamburgerMenu.test.ts` updated — assertions referencing `/PERT/i` link removed; comment block about pert-workstream registry alphabetization updated to reflect 5 entries; default-favorites comment updated
+- [x] **TEST-05**: `src/lib/shell/CalculatorPage.test.ts` updated — test scaffolding that builds a synthetic `identity-pert` module replaced with a generic identity class that still exists (e.g., `identity-gir` or a neutral test class); no test references `identity-pert`
+- [x] **TEST-06**: `src/lib/shared/favorites.test.ts` updated — comment about post-D-19 alphabetization listing `pert` updated; any test fixture that includes `'pert'` in a stored-favorites array updated or repurposed to assert graceful filtering of unknown IDs (see SAFE-01)
+- [x] **TEST-07**: Vitest `pnpm test` reports 0 failing tests after all PURGE + TEST changes (count drops by however many tests lived in `src/lib/pert/*.test.ts`; remaining suite is fully green)
+- [x] **TEST-08**: Playwright `pnpm exec playwright test` runs both `chromium` and `webkit-iphone` projects with no PERT-specific failures (any pre-existing unrelated failures unchanged)
 
 ### Favorites Safety Net (SAFE)
 
