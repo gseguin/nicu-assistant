@@ -123,7 +123,7 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
 **Phase numbering:** v1.15.1 closed at Phase 51; v1.17 picks up at Phase 52. (v1.16 label skipped — package version drifted to 1.16.x during v1.15.1 quick-task patches; this milestone re-aligns label with package.)
 
 - [x] **Phase 52: Code Purge + Test Suite Repair** — Atomic removal of all PERT source + immediate test repair so the suite is green again at phase close (PURGE-01..06 + TEST-01..08, 14 reqs) (completed 2026-05-23)
-- [ ] **Phase 53: Favorites Safety Net + Verification** — Verify (and add if missing) graceful filtering of unknown calculator IDs in `favoritesStore` so v1.15+ users with PERT favorited load cleanly; regression test (SAFE-01..03, 3 reqs)
+- [x] **Phase 53: Favorites Safety Net + Verification** — Verify (and add if missing) graceful filtering of unknown calculator IDs in `favoritesStore` so v1.15+ users with PERT favorited load cleanly; regression test (SAFE-01..03, 3 reqs) (completed 2026-05-23)
 - [ ] **Phase 54: Documentation Cleanup + Release v1.17.0** — PROJECT.md / MILESTONES.md / Key Decisions updates, version bump, AboutSheet verification, full clinical gate, milestone archive (DOC-01..06 + REL-01..04, 10 reqs)
 
 ### Phase Details
@@ -151,8 +151,8 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
   1. Loading the app with `localStorage` containing `nicu:favorites = {v:1, ids:['morphine-wean','formula','pert','gir']}` renders the bottom bar / hamburger menu / desktop nav with exactly the three valid IDs in their original order and no console errors, warnings, or missing-icon placeholders.
   2. A vitest case (`favorites.test.ts`) explicitly asserts that `['morphine-wean', 'formula', 'pert', 'gir']` from `localStorage` resolves to `favorites.current === ['morphine-wean', 'formula', 'gir']` (PERT silently dropped, order preserved); the test fails meaningfully if the filter is removed.
   3. A vitest case verifies the first-run defaults array does not contain `'pert'` — regression guard documenting that defaults stay the v1.13 baseline `['morphine-wean', 'formula', 'gir', 'feeds']`.
-**Plans:** 1 plan
-- [ ] 53-01-PLAN.md — SAFE-02 + SAFE-03 regression tests + full suite verification (SAFE-01, SAFE-02, SAFE-03)
+**Plans:** 1/1 plans complete
+- [x] 53-01-PLAN.md — SAFE-02 + SAFE-03 regression tests + full suite verification (SAFE-01, SAFE-02, SAFE-03)
 
 #### Phase 54: Documentation Cleanup + Release v1.17.0
 **Goal:** Bring all project documentation in sync with the 5-calculator reality, bump the package to 1.17.0, run the full clinical gate, and archive the milestone.
@@ -181,5 +181,5 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
 | ws-pert | v1.15 | — | Complete | 2026-04-26 |
 | 47-49 + 51 | v1.15.1 | 9/9 (Phase 50 deferred) | Complete (SMOKE deferred) | 2026-05-17 |
 | 52 | v1.17 | 3/3 | Complete    | 2026-05-23 |
-| 53 | v1.17 | 0/1 | Not started | — |
+| 53 | v1.17 | 1/1 | Complete   | 2026-05-23 |
 | 54 | v1.17 | 0/? | Not started | — |
