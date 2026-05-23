@@ -224,3 +224,53 @@ describe('T-21 — unknown-calculator-id forward compatibility regression', () =
 		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir']);
 	});
 });
+
+describe('SAFE-02 — pert upgrade path regression (v1.15+ users)', () => {
+	it('SAFE-02: stored favorites containing pert silently drops it, preserving valid-id order', async () => {
+		/*
+		 * D-04 (53-CONTEXT): 'pert' literal is intentional — this test exercises the real
+		 * historical upgrade scenario for v1.15 users who had 'pert' favorited before
+		 * v1.17 removed the PERT calculator from the registry. recover() step 4 filter
+		 * (valid.has(id)) MUST silently drop 'pert' without error.
+		 *
+		 * D-19 grep gate note: the D-19 grep gate already fires non-zero due to CLAUDE.md /
+		 * PRODUCT.md hits; this 'pert' literal does not change the gate state.
+		 *
+		 * Meaningful failure: if recover() step 4 filter is removed, received value would be
+		 * ['morphine-wean', 'formula', 'pert', 'gir'] — a clear, legible failure.
+		 *
+		 * D-21: expected order is ['morphine-wean','formula','gir'] (stored order minus 'pert'),
+		 * NOT alphabetical — recover() preserves stored insertion order verbatim.
+		 */
+		localStorage.setItem(
+			STORAGE_KEY,
+			JSON.stringify({ v: 1, ids: ['morphine-wean', 'formula', 'pert', 'gir'] })
+		);
+		vi.resetModules();
+		const { favorites } = await import('./favorites.svelte.js');
+		favorites.init();
+		expect([...favorites.current]).toEqual(['morphine-wean', 'formula', 'gir']);
+	});
+});
+
+describe('SAFE-03 — first-run defaults never contain pert (regression guard)', () => {
+	it('SAFE-03: first-run defaults are the v1.13 four-calculator baseline with no pert', async () => {
+		/*
+		 * D-05 (53-CONTEXT): SAFE-03 asserts the defaultIds() baseline — not.toContain('pert')
+		 * plus the full registry-derived default array.
+		 *
+		 * D-19: the expected order is alphabetical ['feeds','formula','gir','morphine-wean'].
+		 * The "v1.13 baseline" wording in the ROADMAP refers to the same 4 calculator IDs, not
+		 * their ordering — the actual ordering is alphabetical per D-19 registry alphabetization
+		 * (post-v1.13 change; conceptual baseline = same 4 calculators, no pert; live ordering
+		 * is alphabetical). T-01, T-20, and multiple other tests already assert this exact array.
+		 */
+		localStorage.clear();
+		vi.resetModules();
+		// No localStorage.setItem — this is a first-run scenario (no stored state)
+		const { favorites } = await import('./favorites.svelte.js');
+		favorites.init();
+		expect(favorites.current).not.toContain('pert');
+		expect([...favorites.current]).toEqual(['feeds', 'formula', 'gir', 'morphine-wean']);
+	});
+});
