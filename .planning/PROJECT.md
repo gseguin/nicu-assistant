@@ -240,4 +240,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-23 — Phases 52–53 complete; PERT source fully removed + favorites upgrade-safety regression locked, suite green at 410/410*
+*Last updated: 2026-05-23 — v1.17.0 released; PERT calculator fully removed, documentation synced to 5-calculator reality, clinical gate green (svelte-check 0/0, vitest 410/410)*
