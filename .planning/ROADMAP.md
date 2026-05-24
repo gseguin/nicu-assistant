@@ -124,7 +124,7 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
 
 - [x] **Phase 52: Code Purge + Test Suite Repair** — Atomic removal of all PERT source + immediate test repair so the suite is green again at phase close (PURGE-01..06 + TEST-01..08, 14 reqs) (completed 2026-05-23)
 - [x] **Phase 53: Favorites Safety Net + Verification** — Verify (and add if missing) graceful filtering of unknown calculator IDs in `favoritesStore` so v1.15+ users with PERT favorited load cleanly; regression test (SAFE-01..03, 3 reqs) (completed 2026-05-23)
-- [ ] **Phase 54: Documentation Cleanup + Release v1.17.0** — PROJECT.md / MILESTONES.md / Key Decisions updates, version bump, AboutSheet verification, full clinical gate, milestone archive (DOC-01..06 + REL-01..04, 10 reqs)
+- [x] **Phase 54: Documentation Cleanup + Release v1.17.0** — PROJECT.md / MILESTONES.md / Key Decisions updates, version bump, AboutSheet verification, full clinical gate, milestone archive (DOC-01..06 + REL-01..04, 10 reqs) (completed 2026-05-24)
 
 ### Phase Details
 
@@ -164,9 +164,9 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
   3. `package.json` reports `"version": "1.17.0"` and the running app's AboutSheet displays `v1.17.0` via the existing `__APP_VERSION__` build-time constant (REL-01, REL-02).
   4. Full clinical gate green: `pnpm svelte-check` 0/0 across all files; `pnpm test` all suites green; `pnpm exec playwright test` `chromium` + `webkit-iphone` projects green; extended axe sweeps green in both light + dark themes (count drops by the 4 retired PERT a11y sweeps) (REL-03).
   5. STATE.md frontmatter status flipped to `complete`; v1.17 archived under `.planning/milestones/v1.17-{REQUIREMENTS,ROADMAP,phases}/` via `/gsd:complete-milestone`; `PROJECT.md` Last-updated footer reflects release date (REL-04).
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 - [x] 54-01-PLAN.md — DOC-01..06 edits (PROJECT.md + MILESTONES.md) + REL-01 version bump to 1.17.0
-- [ ] 54-02-PLAN.md — REL-02/03 clinical gate verification + REL-04 STATE.md/footer groundwork
+- [x] 54-02-PLAN.md — REL-02/03 clinical gate verification + REL-04 STATE.md/footer groundwork
 
 ## Progress
 
@@ -184,4 +184,4 @@ See [milestones/v1.15.1-ROADMAP.md](milestones/v1.15.1-ROADMAP.md) for full phas
 | 47-49 + 51 | v1.15.1 | 9/9 (Phase 50 deferred) | Complete (SMOKE deferred) | 2026-05-17 |
 | 52 | v1.17 | 3/3 | Complete    | 2026-05-23 |
 | 53 | v1.17 | 1/1 | Complete    | 2026-05-23 |
-| 54 | v1.17 | 1/2 | In Progress|  |
+| 54 | v1.17 | 2/2 | Complete   | 2026-05-24 |
