@@ -1,5 +1,23 @@
 # Milestones
 
+## v1.17 Remove PERT Calculator (Shipped: 2026-05-23)
+
+**Phases completed:** 3 phases (52, 53, 54), 6 plans total (Phase 52: 3 plans, Phase 53: 1 plan, Phase 54: 2 plans)
+
+**Known deferred items at close:** 11 (SMOKE-01..10 + REL-04 smoke-sign-off portion) — see STATE.md Deferred Items. SMOKE-10 re-scoped to 5 calculators when eventually run (PERT removed).
+
+**Notes:**
+- v1.16 milestone label intentionally skipped — package version drifted to 1.16.x during v1.15.1 quick-task patches before milestone close. v1.17 re-aligns the milestone label with the package version (1.16.1 → 1.17.0).
+- v1.15 PERT Calculator (shipped as self-contained workstream `ws-pert-2026-04-26`) removed in this milestone — out of clinical scope (pediatric, not neonatal). See PROJECT.md Invalidated / Removed. Workstream archive preserved as historical record.
+
+**Key accomplishments:**
+
+- Atomic PERT purge across Phases 52–53: deleted `src/lib/pert/` (14 files, 2166 LOC, 56 vitest tests), `src/routes/pert/+page.svelte`, `e2e/pert.spec.ts`, and `e2e/pert-a11y.spec.ts` (32 Playwright tests); removed `pertModule` from `CALCULATOR_REGISTRY` (5 alphabetical entries remain); narrowed `CalculatorId` union to `'morphine-wean' | 'formula' | 'gir' | 'feeds' | 'uac-uvc'`; deleted `pert:` from `about-content.ts` and `.identity-pert` from `app.css` (both themes).
+- Test suite repaired to green immediately after purge: registry.test.ts, HamburgerMenu.test.ts, CalculatorPage.test.ts, calculator-store.test.ts, favorites.test.ts, drawer-no-autofocus.spec.ts, desktop-full-nav.spec.ts all updated for 5-calculator world; T-21 regression sentinel added; vitest dropped from 454 to 410/410 (44 PERT-owned tests retired); svelte-check 0/0 throughout.
+- Favorites upgrade-safety regression locked (Phase 53, SAFE-01..03): existing `recover()` filter proven to silently drop `'pert'` from stored favorites for v1.15+ upgraders (SAFE-02 asserts order-preserved drop); SAFE-03 guards first-run defaults `['feeds','formula','gir','morphine-wean']` contain no `'pert'`.
+
+---
+
 ## v1.15.1 iOS Polish & Drawer Hardening (Shipped: 2026-05-17)
 
 **Phases completed:** 4 phases, 9 plans, 13 tasks
