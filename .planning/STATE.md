@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.17
 milestone_name: Remove PERT Calculator
-status: milestone_complete
-stopped_at: Milestone complete (Phase 54 was final phase)
-last_updated: 2026-05-24T01:03:45.442Z
-last_activity: 2026-05-24 -- Phase 54 execution started
+status: Awaiting next milestone
+stopped_at: Phase 54 complete — v1.17.0 released
+last_updated: "2026-05-24T01:21:46.036Z"
+last_activity: 2026-05-24 — Milestone v1.17 completed and archived
 progress:
   total_phases: 3
   completed_phases: 3
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-05-17)
 
 ## Current Position
 
-Phase: 54
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-05-24
+Phase: Milestone v1.17 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-05-24 — Milestone v1.17 completed and archived
 
 ## Performance Metrics
 
@@ -98,6 +98,16 @@ Items acknowledged and deferred at v1.15.1 milestone close (2026-05-17) — carr
 | smoke | SMOKE-10 All 6 calculators smoke-tested for drawer + notch | Pending | Re-scope to 5 calculators when run after v1.17 ships (PERT removed) |
 | release | REL-04 (v1.15.1) final clinical gate (smoke sign-off portion) | Partial | Automated gates green at v1.15.1 close; SMOKE sign-off carries forward |
 
+Items acknowledged and deferred at v1.17 milestone close (2026-05-24):
+
+| Category | Item | Status | Reason |
+|----------|------|--------|--------|
+| uat | Phase 53 SAFE-01 browser-level clean-load check (53-HUMAN-UAT.md) | Pending | Auto-approved at close; SAFE-02 unit proof passed (the hard gate). Visual confirmation pairs with the deferred smoke checklist. |
+| uat | Phase 54 Playwright live no-regression run (54-HUMAN-UAT.md) | Pending — CI | Browser binaries unavailable locally (D-02); svelte-check 0/0 + vitest 410/410 passed. Live matrix deferred to CI. |
+| verification | Phase 53 VERIFICATION status human_needed | Pending | Same as the 53 UAT item — browser-level visual confirmation only. |
+| verification | Phase 54 VERIFICATION status human_needed | Pending — CI | Same as the 54 UAT item — Playwright live run on CI. |
+| quick_task | 6 v1.15.1-era CalculatorStore refactor manifest entries (260429-lyq/m79/mkz/mr1/mwe, 260430-cvl) | Stale metadata | Work complete and shipped (commits 45d86cf..a96e037); manifest `missing` status is audit metadata only, acknowledged at v1.15.1 close and re-acknowledged here. |
+
 ### Quick Tasks Completed
 
 | # | Description | Date | Commit | Directory |
@@ -117,4 +127,4 @@ Resume file: .planning/phases/54-documentation-cleanup-release-v1-17-0/54-CONTEX
 
 ## Operator Next Steps
 
-- Run `/gsd:complete-milestone` to archive v1.17 to `.planning/milestones/v1.17-{REQUIREMENTS,ROADMAP,phases}/`.
+- Start the next milestone with /gsd-new-milestone

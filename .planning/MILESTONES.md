@@ -1,12 +1,13 @@
 # Milestones
 
-## v1.17 Remove PERT Calculator (Shipped: 2026-05-23)
+## v1.17 Remove PERT Calculator (Shipped: 2026-05-24)
 
-**Phases completed:** 3 phases (52, 53, 54), 6 plans total (Phase 52: 3 plans, Phase 53: 1 plan, Phase 54: 2 plans)
+**Phases completed:** 3 phases (52, 53, 54), 6 plans, 19 tasks
 
-**Known deferred items at close:** 11 (SMOKE-01..10 + REL-04 smoke-sign-off portion) — see STATE.md Deferred Items. SMOKE-10 re-scoped to 5 calculators when eventually run (PERT removed).
+**Known deferred items at close:** 11 v1.15.1 carry-forwards (SMOKE-01..10 + REL-04 smoke-sign-off) + 4 v1.17 items (Phase 53/54 HUMAN-UAT browser/CI checks: SAFE-01 visual + Playwright-live) + 6 stale v1.15.1 quick-task manifest entries (work complete) — see STATE.md Deferred Items. SMOKE-10 re-scoped to 5 calculators when eventually run (PERT removed).
 
 **Notes:**
+
 - v1.16 milestone label intentionally skipped — package version drifted to 1.16.x during v1.15.1 quick-task patches before milestone close. v1.17 re-aligns the milestone label with the package version (1.16.1 → 1.17.0).
 - v1.15 PERT Calculator (shipped as self-contained workstream `ws-pert-2026-04-26`) removed in this milestone — out of clinical scope (pediatric, not neonatal). See PROJECT.md Invalidated / Removed. Workstream archive preserved as historical record.
 
@@ -25,6 +26,7 @@
 **Known deferred items at close:** 11 (SMOKE-01..10 + REL-04 smoke-sign-off portion) + 6 quick-task manifest audit gaps (work complete; see STATE.md Deferred Items)
 
 **Notes:**
+
 - Package version was bumped from 1.15.0 → 1.15.1 → 1.16.0 → 1.16.1 via quick tasks *before* milestone close (commit `2060393` for 1.15.1; `d4a0f29` for 1.16.0; `5fba1e7` for 1.16.1). v1.15.1 shipped under package v1.16.x.
 - Real-iPhone smoke gate (SMOKE-01..10) re-opens v1.13 D-12 deferral; carries forward.
 
