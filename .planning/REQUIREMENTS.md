@@ -42,19 +42,19 @@
 
 ### Documentation Cleanup (DOC)
 
-- [ ] **DOC-01**: `.planning/PROJECT.md` Validated list — the v1.15 PERT entry (line referencing "Pediatric EPI PERT Calculator (sixth clinical calculator) shipped as self-contained workstream") moved to a new `### Invalidated / Removed` subsection under Requirements, with reason `v1.17 — out of clinical scope (pediatric, not neonatal)`
-- [ ] **DOC-02**: `.planning/PROJECT.md` Context section — six-calculators description updated to five; PERT bullet removed; calculator count corrected in any sentence that says "all six calculators" or similar
-- [ ] **DOC-03**: `.planning/PROJECT.md` Architecture section — the `<CalculatorPage>` shell description listing `/pert` in its route enumeration updated to list the 5 remaining routes
-- [ ] **DOC-04**: `.planning/PROJECT.md` Glossary / acronyms — PERT acronym entry removed (or marked historical with note that the calculator was removed in v1.17)
-- [ ] **DOC-05**: `.planning/MILESTONES.md` — new entry added for v1.17 at the top following the standard format (phases, plans, key accomplishments, deferred items); the v1.15 PERT entry left as historical record but annotated `[REMOVED in v1.17 — out of clinical scope]`
-- [ ] **DOC-06**: `.planning/PROJECT.md` Key Decisions table — the `"Ship PERT as self-contained workstream"` row's `Outcome` column updated from `"⚠️ Revisit — v1.15 PERT later removed in v1.16 (out of clinical scope)"` to a final `"❌ Removed in v1.17 — out of clinical scope (pediatric, not neonatal)"` (the historical decision row stays for traceability)
+- [x] **DOC-01**: `.planning/PROJECT.md` Validated list — the v1.15 PERT entry (line referencing "Pediatric EPI PERT Calculator (sixth clinical calculator) shipped as self-contained workstream") moved to a new `### Invalidated / Removed` subsection under Requirements, with reason `v1.17 — out of clinical scope (pediatric, not neonatal)`
+- [x] **DOC-02**: `.planning/PROJECT.md` Context section — six-calculators description updated to five; PERT bullet removed; calculator count corrected in any sentence that says "all six calculators" or similar
+- [x] **DOC-03**: `.planning/PROJECT.md` Architecture section — the `<CalculatorPage>` shell description listing `/pert` in its route enumeration updated to list the 5 remaining routes
+- [x] **DOC-04**: `.planning/PROJECT.md` Glossary / acronyms — PERT acronym entry removed (or marked historical with note that the calculator was removed in v1.17)
+- [x] **DOC-05**: `.planning/MILESTONES.md` — new entry added for v1.17 at the top following the standard format (phases, plans, key accomplishments, deferred items); the v1.15 PERT entry left as historical record but annotated `[REMOVED in v1.17 — out of clinical scope]`
+- [x] **DOC-06**: `.planning/PROJECT.md` Key Decisions table — the `"Ship PERT as self-contained workstream"` row's `Outcome` column updated from `"⚠️ Revisit — v1.15 PERT later removed in v1.16 (out of clinical scope)"` to a final `"❌ Removed in v1.17 — out of clinical scope (pediatric, not neonatal)"` (the historical decision row stays for traceability)
 
 ### Release (REL)
 
-- [ ] **REL-01**: `package.json` version bumped to `1.17.0` (from current `1.16.1`); `pnpm-lock.yaml` regenerated if needed
-- [ ] **REL-02**: AboutSheet displays `v1.17.0` (auto via `__APP_VERSION__` build-time constant — verify, no manual edits expected)
-- [ ] **REL-03**: Full clinical gate green — `pnpm svelte-check` reports 0/0 errors across all files; `pnpm test` (vitest) all suites green; `pnpm exec playwright test` `chromium` + `webkit-iphone` projects green; extended axe sweeps green in both light + dark themes (count drops by the 4 PERT a11y sweeps, remainder unchanged)
-- [ ] **REL-04**: `.planning/PROJECT.md` Last-updated footer reflects the release date; STATE.md frontmatter status flipped to `complete`; v1.17 archived to `.planning/milestones/v1.17-{REQUIREMENTS,ROADMAP,phases}/` via `/gsd:complete-milestone`
+- [x] **REL-01**: `package.json` version bumped to `1.17.0` (from current `1.16.1`); `pnpm-lock.yaml` regenerated if needed
+- [x] **REL-02**: AboutSheet displays `v1.17.0` (auto via `__APP_VERSION__` build-time constant — verify, no manual edits expected)
+- [x] **REL-03**: Full clinical gate green — `pnpm svelte-check` reports 0/0 errors across all files; `pnpm test` (vitest) all suites green; `pnpm exec playwright test` `chromium` + `webkit-iphone` projects green; extended axe sweeps green in both light + dark themes (count drops by the 4 PERT a11y sweeps, remainder unchanged)
+- [x] **REL-04**: `.planning/PROJECT.md` Last-updated footer reflects the release date; STATE.md frontmatter status flipped to `complete`; v1.17 archived to `.planning/milestones/v1.17-{REQUIREMENTS,ROADMAP,phases}/` via `/gsd:complete-milestone`
 
 ---
 
