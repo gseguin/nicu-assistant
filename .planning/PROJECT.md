@@ -164,22 +164,21 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 ## Context
 
-**Shipped v1.15.1** under package v1.16.x. Six clinical calculators, all with the v1.13 `<HeroResult>` above-the-fold pattern + sticky `InputDrawer` for inputs + DESIGN.md / DESIGN.json contract enforced (Identity-Inside, Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong, Tabular-Numbers, Eyebrow-Above-Numeral, 11px Floor, Tonal-Depth, Flat-Card-Default). v1.15.1 hardened the iOS bedside experience: NavShell respects `env(safe-area-inset-top/left/right)` so the title bar clears the Dynamic Island; InputDrawer no longer programmatically focuses an input on open (close button gets `autofocus` instead); new `visualViewport.svelte.ts` `$state` singleton anchors the drawer above the iOS soft keyboard via `--ivv-bottom` + `--ivv-max-height` CSS custom properties. Test scaffolding added a jsdom `visualViewport` polyfill + reusable mock helper + new `webkit-iphone` Playwright project. svelte-check 0/0 across 4571+ files, vitest 454/454, Playwright `chromium` + `webkit-iphone` projects green, extended axe 16/16 in both themes. **Real-iPhone smoke gate (SMOKE-01..10) carries forward as a deferred item** — re-opens the v1.13 D-12 deferral; closure requires a clinician at the bedside.
+**Shipped v1.15.1** under package v1.16.x. Five clinical calculators, all with the v1.13 `<HeroResult>` above-the-fold pattern + sticky `InputDrawer` for inputs + DESIGN.md / DESIGN.json contract enforced (Identity-Inside, Amber-as-Semantic, OKLCH-Only, Red-Means-Wrong, Tabular-Numbers, Eyebrow-Above-Numeral, 11px Floor, Tonal-Depth, Flat-Card-Default). v1.15.1 hardened the iOS bedside experience: NavShell respects `env(safe-area-inset-top/left/right)` so the title bar clears the Dynamic Island; InputDrawer no longer programmatically focuses an input on open (close button gets `autofocus` instead); new `visualViewport.svelte.ts` `$state` singleton anchors the drawer above the iOS soft keyboard via `--ivv-bottom` + `--ivv-max-height` CSS custom properties. Test scaffolding added a jsdom `visualViewport` polyfill + reusable mock helper + new `webkit-iphone` Playwright project. svelte-check 0/0 across 4571+ files, vitest 454/454, Playwright `chromium` + `webkit-iphone` projects green, extended axe 16/16 in both themes. **Real-iPhone smoke gate (SMOKE-01..10) carries forward as a deferred item** — re-opens the v1.13 D-12 deferral; closure requires a clinician at the bedside.
 
-**Six clinical calculators:**
+**Five clinical calculators:**
 - Morphine Wean: single linear formula (`morphine-wean-calculator.xlsx` Sheet1 parity), config-driven defaults, dock magnification, summary card
 - Formula: modified/BMF modes, 40+ brands with manufacturer grouping (incl. Kendamil section as of v1.14), redesigned empty state
 - GIR: Weight/Dextrose%/Fluid-order inputs, interactive 6-bucket glucose titration, dextrose-green identity, clinical safety advisories (dextrose >12.5%, GIR >12, GIR <4), STOP-red clinical-safety carve-out on severe-neuro card
 - Feed Advance: bedside advancement (Sheet2) + full nutrition (Sheet1) modes, trophic frequency + advance cadence dropdowns, IV backfill, dual TPN dextrose lines, total kcal/kg/d hero, 9 advisory banners
 - UAC/UVC: weight-driven umbilical-catheter depth (`weight × 3 + 9` cm and half-depth UVC) with three-cue distinction so UAC cannot be confused for UVC at a glance (v1.13)
-- PERT: Pediatric Enzyme Replacement Therapy dosing (v1.15 workstream)
 
 Tech stack: SvelteKit 2.57 + Svelte 5.55 (runes) + Tailwind CSS 4 + Vite 8.0 + TypeScript 6.0 + pnpm 10.33.
 
 **Architecture:**
 - Calculator registry in `src/lib/shell/registry.ts` — add new calculators with one entry + one route
-- Shared `<CalculatorPage>` shell + `CalculatorModule` contract collapses all 6 calculator route shells (`/morphine-wean`, `/formula`, `/gir`, `/feeds`, `/uac-uvc`, `/pert`) into single-line route imports (refactor `0ec8f98`)
-- Shared `CalculatorStore<T>` generic class (`src/lib/shell/calculator-store.svelte.ts`) standardizes state-singleton pattern across all calculators (`$state` rune + sessionStorage backup + custom-merge support); all 6 calculator state singletons migrated to it
+- Shared `<CalculatorPage>` shell + `CalculatorModule` contract collapses all 5 calculator route shells (`/morphine-wean`, `/formula`, `/gir`, `/feeds`, `/uac-uvc`) into single-line route imports (refactor `0ec8f98`)
+- Shared `CalculatorStore<T>` generic class (`src/lib/shell/calculator-store.svelte.ts`) standardizes state-singleton pattern across all calculators (`$state` rune + sessionStorage backup + custom-merge support); all 5 calculator state singletons migrated to it
 - Shared components in `src/lib/shared/components/` — NumericInput, SelectPicker, DisclaimerModal, AboutSheet, HeroResult, InputDrawer, RangedNumericInput, SegmentedToggle
 - Shared global singletons (`src/lib/shared/`): `theme`, `disclaimer`, `favorites`, `pwa`, `visualViewport` (new in v1.15.1) — all initialized from `+layout.svelte:onMount`, browser-guarded for SSG
 - PWA with Workbox precaching and non-blocking update banner
