@@ -45,16 +45,16 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEAM-01 | — | Pending |
-| SEAM-02 | — | Pending |
-| SEAM-03 | — | Pending |
-| SEAM-04 | — | Pending |
-| MIG-01 | — | Pending |
-| MIG-02 | — | Pending |
-| MIG-03 | — | Pending |
-| MIG-04 | — | Pending |
-| AUTO-01 | — | Pending |
-| AUTO-02 | — | Pending |
-| REL-01 | — | Pending |
-| REL-02 | — | Pending |
-| REL-03 | — | Pending |
+| SEAM-01 | Phase 55 | Pending |
+| SEAM-02 | Phase 55 | Pending |
+| SEAM-03 | Phase 55 | Pending |
+| SEAM-04 | Phase 55 | Pending |
+| MIG-01 | Phase 56 | Pending |
+| MIG-02 | Phase 56 | Pending |
+| MIG-03 | Phase 56 | Pending |
+| MIG-04 | Phase 56 | Pending |
+| AUTO-01 | Phase 57 | Pending |
+| AUTO-02 | Phase 57 | Pending |
+| REL-01 | Phase 58 | Pending |
+| REL-02 | Phase 58 | Pending |
+| REL-03 | Phase 58 | Pending |

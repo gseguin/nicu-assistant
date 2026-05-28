@@ -2,11 +2,11 @@
 gsd_state_version: 1.0
 milestone: v1.18
 milestone_name: Persistence Seam
-status: planning
+status: roadmapped
 last_updated: "2026-05-28T17:18:41.616Z"
 last_activity: 2026-05-28
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -17,17 +17,17 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-05-17)
+See: .planning/PROJECT.md (updated 2026-05-28)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Milestone complete
+**Current focus:** v1.18 Persistence Seam — roadmap drafted (Phases 55-58), ready to plan Phase 55.
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 55 (Persistence Seam) — not started
 Plan: —
-Status: Defining requirements
-Last activity: 2026-05-28 — Milestone v1.18 started
+Status: Roadmapped — ready to plan Phase 55
+Last activity: 2026-05-28 — v1.18 roadmap created (Phases 55-58, 13 requirements mapped 100%)
 
 ## Performance Metrics
 
@@ -62,6 +62,10 @@ Last activity: 2026-05-28 — Milestone v1.18 started
 - [v1.17]: Milestone label v1.16 → v1.17 to re-sync with package version (drifted to 1.16.x during v1.15.1 quick-task patches). v1.16 label intentionally skipped, not consumed.
 - [v1.17]: Three-phase shape — Phase 52 bundles all PURGE + TEST requirements into one atomic phase because deleting the `'pert'` member from the `CalculatorId` union, dropping the registry entry, and removing `src/lib/pert/` will immediately cascade into svelte-check + vitest + Playwright failures; splitting purge from test-repair would leave the codebase non-buildable between phases. Phase 53 isolates the SAFE-01..03 defensive favorites-filtering work (favoritesStore D-21 comment suggests the filter may already exist; phase verifies + adds regression test rather than rewriting). Phase 54 groups DOC + REL as the single "ship it" wrap-up.
 - [v1.17]: No clinical data preserved — there is no plan to return PERT to this product. The workstream archive `milestones/ws-pert-2026-04-26/` stays in the repo as historical record.
+- [v1.18]: Build-order is the spine of the roadmap. SEAM-* (Phase 55) MUST land before MIG-* (Phase 56) — the four adapters cannot migrate onto a seam that does not exist, and SEAM-04's co-located test surface is the safety net that makes the behavior-preserving migrations verifiable. REL-* (Phase 58) is the final ship-it phase.
+- [v1.18]: Four genuinely-different adapters justify the seam — theme (plain value), disclaimer (versioned v1→v2 migration), favorites (validated `{v:1, ids}` array + 6-step recovery + 4-cap + order preservation), lastEdited (debounced stamp). The seam's migrate hook (SEAM-03) must be expressive enough for disclaimer v1→v2 AND favorites 6-step recovery — verified by a representative hook in the seam's own tests before any adapter migrates.
+- [v1.18]: AUTO-* (Phase 57) is split from MIG-* (Phase 56) because it is a separable concern — auto-persist touches `CalculatorStore` + the 5 calculator slices (`*Inputs.svelte`), NOT theme/disclaimer/favorites/lastEdited. Phase 57 depends on Phase 55 (the seam/CalculatorStore pattern) but is independent of Phase 56, so the two could be planned/executed in either order after the seam lands. Critical invariants to preserve: an inputs fragment mounted ALONE in the mobile `InputDrawer` must still persist on change (the original reason the `$effect` was duplicated per-fragment — see `GirInputs.svelte` "Persist on every change" comment), and the `lastEdited` 60s stamp-debounce that prevents Svelte 5 effect re-entry must be preserved (see `lastEdited.svelte.ts` reactive-loop notes).
+- [v1.18]: Behavior-preserving is the hard gate every phase — identical storage keys (`nicu_assistant_theme`, `nicu_assistant_disclaimer_v1`/`_v2`, `nicu:favorites`, per-state `_ts`), identical persisted JSON shapes, zero user-visible change. Existing `favorites.test.ts` and `calculator-store.test.ts` must stay green THROUGH the migration, not just at milestone close.
 
 ### Roadmap Evolution
 
@@ -69,15 +73,16 @@ Last activity: 2026-05-28 — Milestone v1.18 started
 - v1.14 phases 44-46 collapsed under `<details>` after v1.14 shipped 2026-04-25.
 - v1.15 PERT was a self-contained workstream archived to `milestones/ws-pert-2026-04-26/`; collapsed under `<details>` in main ROADMAP. Did NOT consume main-roadmap phase numbers.
 - v1.15.1 phases 47-51 collapsed under `<details>` after v1.15.1 shipped 2026-05-17. 44 requirements mapped across 5 phases; SMOKE-01..10 deferred.
-- v1.17 phases 52-54 added as the active section (2026-05-17). 26 requirements (PURGE-01..06, TEST-01..08, SAFE-01..03, DOC-01..06, REL-01..04) mapped 100% across 3 phases. No decimal phases anticipated — scope is bounded by the explicit removal-not-rewrite decision.
+- v1.17 phases 52-54 collapsed under `<details>` after v1.17 shipped 2026-05-24. 26 requirements mapped 100% across 3 phases.
+- v1.18 phases 55-58 added as the active section (2026-05-28). 13 requirements (SEAM-01..04, MIG-01..04, AUTO-01..02, REL-01..03) mapped 100% across 4 phases. Coarse granularity; bounded behavior-preserving refactor. Numbering continues from v1.17's last phase (54) — does NOT reset to 1. No decimal phases anticipated.
 
 ### Pending Todos
 
-- Execute Phase 52 via `/gsd:execute-phase 52` (Code Purge + Test Suite Repair). Plans verified + committed (639d1ba).
+- Plan Phase 55 (Persistence Seam) via `/gsd:plan-phase 55` — extract `PersistentValue<T>` (SEAM-01..04). This is the foundation; MIG-* (Phase 56) cannot start until the seam + its test surface exist.
 
 ### Blockers/Concerns
 
-None at the roadmap level. The deferred v1.15.1 SMOKE-01..10 (real-iPhone gate) carries forward independently and is explicitly out of scope for v1.17. When SMOKE eventually runs, SMOKE-10 should be re-scoped from 6 calculators to 5 (PERT removed).
+None at the roadmap level. The deferred v1.15.1 SMOKE-01..10 (real-iPhone gate) carries forward independently and is explicitly out of scope for v1.18 — this milestone touches no iOS-affecting surfaces (storage-layer refactor only). Architecture review candidate 2 (config pass-throughs) and candidate 4 (ML_PER_OZ clinical constant — needs clinician sign-off) are deliberately deferred / out of scope.
 
 ## Deferred Items
 
@@ -120,10 +125,10 @@ Items acknowledged and deferred at v1.17 milestone close (2026-05-24):
 
 ## Session Continuity
 
-Last session: 2026-05-24T00:56:25.000Z
-Stopped at: Phase 54 complete — v1.17.0 released
-Resume file: .planning/phases/54-documentation-cleanup-release-v1-17-0/54-CONTEXT.md
+Last session: 2026-05-28 — v1.18 roadmap created
+Stopped at: Roadmap drafted (Phases 55-58); 13 requirements mapped 100%; ROADMAP.md + REQUIREMENTS.md traceability + STATE.md written
+Resume file: .planning/ROADMAP.md (v1.18 Persistence Seam active section)
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Plan the first phase with `/gsd:plan-phase 55` (Persistence Seam — extract `PersistentValue<T>`, SEAM-01..04)
