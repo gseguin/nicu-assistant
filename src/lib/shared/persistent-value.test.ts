@@ -163,6 +163,22 @@ describe('PersistentValue — recover hook disclaimer-style (SEAM-03)', () => {
 		});
 		expect(pv.read()).toBe(false);
 	});
+
+	// WR-01: locks the documented total-recover guarantee — if recover throws, the outer
+	// try/catch in read() must fall back to defaultValue. Guards against a future refactor
+	// hoisting the recover call outside the try.
+	it('read() returns defaultValue when recover hook throws (does not propagate)', () => {
+		localStorage.setItem('k', 'anything');
+		const pv = createPersistentValue<number>({
+			key: 'k',
+			defaultValue: -1,
+			recover: () => {
+				throw new Error('boom');
+			}
+		});
+		expect(() => pv.read()).not.toThrow();
+		expect(pv.read()).toBe(-1);
+	});
 });
 
 describe('PersistentValue — recover hook favorites-style (SEAM-03)', () => {
@@ -228,6 +244,15 @@ describe('PersistentValue — raw-string codec (D-01)', () => {
 	it('rawStringCodec.serialize("dark") === "dark" (identity — no quotes added)', () => {
 		expect(rawStringCodec.serialize('dark')).toBe('dark');
 	});
+
+	// WR-03 (rawStringCodec half): empty string is a legitimate raw value, NOT key-absence, so it
+	// round-trips verbatim rather than falling back to defaultValue. Locks the divergence from the
+	// jsonCodec empty-string behavior before Phase 56 raw-string adapters (theme/lastEdited) migrate.
+	it('stored empty string round-trips as "" (not defaultValue)', () => {
+		const pv = createPersistentValue({ key: 'k', defaultValue: 'x', codec: rawStringCodec });
+		localStorage.setItem('k', '');
+		expect(pv.read()).toBe('');
+	});
 });
 
 describe('PersistentValue — JSON default codec', () => {
@@ -244,5 +269,22 @@ describe('PersistentValue — JSON default codec', () => {
 		pv.write(123);
 		expect(localStorage.getItem('num')).toBe('123');
 		expect(pv.read()).toBe(123);
+	});
+
+	// WR-02: the stored JSON literal "null" deserializes to JS null, NOT defaultValue, because
+	// the raw === null guard checks for key absence, not the string "null". Locks the documented
+	// edge so nullable adapters know to use recover() instead of the bare default codec.
+	it('read() returns null (NOT defaultValue) when stored value is the JSON literal "null"', () => {
+		const pv = createPersistentValue<number | null>({ key: 'n', defaultValue: 42 });
+		localStorage.setItem('n', 'null');
+		expect(pv.read()).toBeNull();
+	});
+
+	// WR-03 (jsonCodec half): a stored empty string is not key-absence, so JSON.parse('') runs
+	// and throws SyntaxError → caught → defaultValue.
+	it('stored empty string falls back to defaultValue (JSON.parse throws)', () => {
+		const pv = createPersistentValue({ key: 'k', defaultValue: 7 });
+		localStorage.setItem('k', '');
+		expect(pv.read()).toBe(7);
 	});
 });
