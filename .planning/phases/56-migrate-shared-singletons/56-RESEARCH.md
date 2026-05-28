@@ -679,17 +679,17 @@ export class LastEdited {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **lastEdited codec form (D-07 vs recover hook)**
+1. **lastEdited codec form (D-07 vs recover hook)** — RESOLVED: recover hook.
    - What we know: Both `{serialize:String, deserialize:Number}` codec and a `recover` hook produce byte-identical stored values. The `recover` approach handles the `if (!raw)` guard more cleanly.
    - What's unclear: D-07/D-08 explicitly recommend the codec form; D-07 says "guard non-finite via the class (not the seam)".
-   - Recommendation: Use the `recover` hook approach to avoid the `Number('') = 0` pitfall and match current behavior exactly. If executor prefers D-07's codec form exactly, they must add a class-level guard for `raw === null` or `raw === ''` before calling `pv.read()`.
+   - RESOLVED: Use the `recover` hook approach (`(raw) => !raw ? null : Number.isFinite(Number(raw)) ? Number(raw) : null`) to avoid the `Number('') === 0` pitfall and match current behavior exactly. CONTEXT D-08 lists codec-vs-recover as Claude's Discretion; the plan (56-01 Task 2) chooses the recover hook.
 
-2. **theme null-probe vs full raw read in init()**
+2. **theme null-probe vs full raw read in init()** — RESOLVED: keep the raw null-probe.
    - What we know: `pv.read()` with `rawStringCodec` returns `'light'` (defaultValue) for both "nothing stored" and "stored light". Prefers-color-scheme only matters when nothing is stored.
    - What's unclear: CONTEXT.md D-02 says "init() calls pv.read() then applies prefers-color-scheme fallback when nothing stored" — but how does init() know "nothing stored" without a raw probe?
-   - Recommendation: One allowed raw null-probe in `init()` (consistent with D-05a for favorites). D-02 may be slightly underspecified on this point.
+   - RESOLVED: Keep one allowed raw `localStorage.getItem` null-probe in `init()` (consistent with D-05a for favorites). The plan (56-01 Task 1) keeps the existing probe; this is one of the two documented allowed direct-localStorage exceptions after Phase 56.
 
 ---
 
