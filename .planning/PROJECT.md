@@ -125,31 +125,33 @@ Clinicians can switch between NICU calculation tools instantly from a single app
 
 - ✗ Pediatric EPI PERT Calculator (sixth clinical calculator) shipped as self-contained workstream (`milestones/ws-pert-2026-04-26/`, internal phase numbering 01-05, did NOT consume main-roadmap phase numbers): `CalculatorId` extended with `'pert'`, `.identity-pert` OKLCH hue, `src/lib/pert/` module with config + state + parity fixtures + tests, `/pert` route, AboutSheet entry, registry entry — v1.15 — v1.17: out of clinical scope (pediatric, not neonatal)
 
+- ✓ v1.17 Remove PERT Calculator — Phases 52–54: full purge of `src/lib/pert/` + `/pert` route + e2e specs, `pertModule` dropped from registry (5 calculators remain), `CalculatorId` narrowed to 5 members, `.identity-pert` + `pert` about-content removed, favorites upgrade-safety regression locked (`recover()` silently drops stored `'pert'`); released v1.17.0 — v1.17
+
 ### Active
 
-- ⏳ v1.17 — Remove the PERT calculator from NICU Assistant (scope correction: pediatric, not neonatal)
+- ⏳ v1.18 — Hoist the hand-rolled localStorage pattern in the shared global singletons onto one deep persistence seam (architecture deepening, candidate 1)
 
-## Current Milestone: v1.17 Remove PERT Calculator
+## Current Milestone: v1.18 Persistence Seam
 
-**Goal:** Cleanly remove the PERT (Pediatric Enzyme Replacement Therapy) calculator from NICU Assistant. PERT is a pediatric tool, not a neonatal one — it does not belong in this product's clinical scope.
+**Goal:** Hoist the hand-rolled localStorage read/write/guard pattern out of the shared global singletons onto one deep persistence seam, so storage logic lives in one tested place instead of being re-implemented across four modules.
 
 **Target features:**
-- Full purge of PERT module, route, tests, clinical data files, and parity fixtures (`src/lib/pert/`, `src/routes/pert/`)
-- Remove PERT from the calculator registry (`src/lib/shell/registry.ts`) and AboutSheet content (`src/lib/shared/about-content.ts`)
-- Audit favorites storage and defaults so any user with PERT favorited falls back gracefully (no broken refs, no crash on load)
-- Remove PERT identity hue (`.identity-pert`) and any references in DESIGN.md / DESIGN.json
-- Documentation cleanup — mark v1.15 PERT requirements Invalidated/Removed in MILESTONES.md, update PROJECT.md Validated list and Context
-- Release as package v1.17.0 (re-aligns milestone label with package version, which currently sits at 1.16.1)
+- Extract a `PersistentValue<T>` seam (or generalize the existing `CalculatorStore<T>`) — one guarded localStorage read/write with a single SSR/private-mode guard, the test surface for all persistence
+- Migrate `theme.svelte.ts`, `disclaimer.svelte.ts` (v1→v2 migration), `favorites.svelte.ts` (validated array + 6-step recovery), and `lastEdited.svelte.ts` (debounced stamp) to thin adapters over the seam
+- Fold in candidate 3: remove the copy-pasted persist-on-change `$effect` from all 5 `*Inputs.svelte` and move auto-persist behind `CalculatorStore` (preserve drawer-only-mount persistence + the `lastEdited` minute-debounce that prevents effect re-entry)
+- Behavior-preserving migration: identical storage keys, identical persisted JSON shapes, zero user-visible change; existing recovery/migration edge cases stay green
+- Release as package v1.18.0
 
 **Key context:**
-- v1.15 PERT shipped as a self-contained workstream archive (`milestones/ws-pert-2026-04-26/`) — no main-roadmap phase numbers to retire
-- Milestone label v1.16 → **v1.17** to re-sync with package version (drifted during v1.15.1 quick-task bumps)
-- Five clinical calculators remain after removal: formula, morphine-wean, GIR, feeds, UAC/UVC
-- v1.15.1 deferred SMOKE-01..10 is NOT in scope here — carries forward
-- No clinical data preserved (clinical/scope decision = no plan to return PERT to this product)
+- Scope comes directly from the architecture review (candidate 1, top recommendation); two adapters already justify the seam — theme (plain value), disclaimer (versioned migration), favorites (validated array), lastEdited (debounced stamp) are four genuinely different adapters, not a hypothetical seam
+- `CalculatorStore<T>` (`src/lib/shell/calculator-store.svelte.ts`) already hides exactly this pattern for calculator state — the four shared singletons re-implement it by hand
+- Behavior-preserving refactor — the win is locality (storage failure handled once) and leverage (one interface, four call sites + every slice), NOT new user features
+- Candidate 2 (config-load seam) and candidate 4 (ML_PER_OZ clinical constant — needs clinician sign-off) are explicitly out of scope for this milestone
+- Carried-forward v1.15.1 SMOKE-01..10 real-iPhone gate remains deferred and is NOT in scope here
 
 ## Previously Shipped
 
+- v1.17 Remove PERT Calculator — Phases 52–54 (released v1.17.0; PERT out of clinical scope)
 - v1.15.1 iOS Polish & Drawer Hardening — Phases 47–49 + 51 (shipped under v1.16.x; SMOKE-01..10 deferred)
 - v1.15 Pediatric EPI PERT Calculator (sixth calculator) — workstream `pert`, archived to `.planning/milestones/ws-pert-2026-04-26/`
 - v1.14 Kendamil Formulas + Desktop Full Nav — Phases 44–46
@@ -240,4 +242,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-24 — v1.17.0 released and milestone archived; PERT calculator fully removed, documentation synced to 5-calculator reality, clinical gate green (svelte-check 0/0, vitest 410/410)*
+*Last updated: 2026-05-28 — v1.18 Persistence Seam milestone started; hoist the hand-rolled localStorage pattern from the shared global singletons (theme/disclaimer/favorites/lastEdited) onto one deep persistence seam, fold the copy-pasted persist-on-change effect behind CalculatorStore (architecture review candidate 1, behavior-preserving)*

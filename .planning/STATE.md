@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.17
-milestone_name: Remove PERT Calculator
-status: Awaiting next milestone
-stopped_at: Phase 54 complete — v1.17.0 released
-last_updated: "2026-05-24T01:21:46.036Z"
-last_activity: 2026-05-24 — Milestone v1.17 completed and archived
+milestone: v1.18
+milestone_name: Persistence Seam
+status: planning
+last_updated: "2026-05-28T17:18:41.616Z"
+last_activity: 2026-05-28
 progress:
-  total_phases: 3
-  completed_phases: 3
-  total_plans: 6
-  completed_plans: 6
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -25,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-05-17)
 
 ## Current Position
 
-Phase: Milestone v1.17 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-05-24 — Milestone v1.17 completed and archived
+Status: Defining requirements
+Last activity: 2026-05-28 — Milestone v1.18 started
 
 ## Performance Metrics
 
