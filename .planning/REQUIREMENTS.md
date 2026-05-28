@@ -15,10 +15,10 @@
 
 ### MIGRATE — move the four adapters onto the seam
 
-- [ ] **MIG-01**: `theme.svelte.ts` reads/writes through the seam; storage key `nicu_assistant_theme` and its `get current` / `set` / `init` / `toggle` behavior (plus `.dark` class + `data-theme` sync) are unchanged.
-- [ ] **MIG-02**: `disclaimer.svelte.ts` reads/writes through the seam; the v1→v2 migration with audit-trail preservation (v1 key not deleted) and `acknowledged` / `initialized` accessors are unchanged.
-- [ ] **MIG-03**: `favorites.svelte.ts` reads/writes through the seam; key `nicu:favorites`, schema `{v:1, ids}`, the 6-step recovery pipeline, 4-cap, and stored-order preservation are unchanged.
-- [ ] **MIG-04**: `lastEdited.svelte.ts` reads/writes through the seam; per-key stamp, 60s stamp-debounce (prevents effect re-entry), and `clear` are unchanged.
+- [x] **MIG-01**: `theme.svelte.ts` reads/writes through the seam; storage key `nicu_assistant_theme` and its `get current` / `set` / `init` / `toggle` behavior (plus `.dark` class + `data-theme` sync) are unchanged.
+- [x] **MIG-02**: `disclaimer.svelte.ts` reads/writes through the seam; the v1→v2 migration with audit-trail preservation (v1 key not deleted) and `acknowledged` / `initialized` accessors are unchanged.
+- [x] **MIG-03**: `favorites.svelte.ts` reads/writes through the seam; key `nicu:favorites`, schema `{v:1, ids}`, the 6-step recovery pipeline, 4-cap, and stored-order preservation are unchanged.
+- [x] **MIG-04**: `lastEdited.svelte.ts` reads/writes through the seam; per-key stamp, 60s stamp-debounce (prevents effect re-entry), and `clear` are unchanged.
 
 ### AUTOPERSIST — candidate 3 fold-in
 
@@ -49,10 +49,10 @@
 | SEAM-02 | Phase 55 | Complete |
 | SEAM-03 | Phase 55 | Complete |
 | SEAM-04 | Phase 55 | Complete |
-| MIG-01 | Phase 56 | Pending |
-| MIG-02 | Phase 56 | Pending |
-| MIG-03 | Phase 56 | Pending |
-| MIG-04 | Phase 56 | Pending |
+| MIG-01 | Phase 56 | Complete |
+| MIG-02 | Phase 56 | Complete |
+| MIG-03 | Phase 56 | Complete |
+| MIG-04 | Phase 56 | Complete |
 | AUTO-01 | Phase 57 | Pending |
 | AUTO-02 | Phase 57 | Pending |
 | REL-01 | Phase 58 | Pending |
