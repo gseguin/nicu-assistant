@@ -152,7 +152,9 @@ See [milestones/v1.17-ROADMAP.md](milestones/v1.17-ROADMAP.md) for full phase de
   2. Reading a key whose stored value is invalid JSON (or whose access throws a security error) returns the supplied default instead of throwing — the consumer never sees an exception.
   3. The seam accepts a custom recover/migrate hook that can transform stored data on read, expressive enough to express both the disclaimer v1→v2 migration and the favorites 6-step recovery (verified by a representative hook in the seam's own tests).
   4. Co-located tests cover the SSR guard (no `localStorage`), a write that throws (quota / private mode) handled silently, parse-failure fallback to default, and the migrate hook transforming stored data — this file is the single test surface for persistence.
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 55-01-PLAN.md — Create PersistentValue<T> seam module + co-located tests (SEAM-01..04)
 
 ### Phase 56: Migrate Shared Singletons
 **Goal**: The four shared global singletons become thin adapters over the seam with byte-identical storage keys, JSON shapes, and observable behavior.
