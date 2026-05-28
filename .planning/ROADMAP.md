@@ -205,7 +205,7 @@ Plans:
 | 52 | v1.17 | 3/3 | Complete    | 2026-05-23 |
 | 53 | v1.17 | 1/1 | Complete    | 2026-05-23 |
 | 54 | v1.17 | 2/2 | Complete    | 2026-05-24 |
-| 55 | v1.18 | 1/1 | Complete   | 2026-05-28 |
+| 55 | v1.18 | 1/1 | Complete    | 2026-05-28 |
 | 56 | v1.18 | 0/? | Not started | - |
 | 57 | v1.18 | 0/? | Not started | - |
 | 58 | v1.18 | 0/? | Not started | - |

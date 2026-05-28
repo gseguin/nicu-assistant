@@ -8,10 +8,10 @@
 
 ### SEAM — the persistence module
 
-- [ ] **SEAM-01**: A `PersistentValue<T>` seam exists with one guarded `read` / `write` / `remove`, behind a single SSR/private-mode guard (`typeof localStorage === 'undefined'` + try/catch), so no consumer touches `localStorage` directly.
-- [ ] **SEAM-02**: The seam handles JSON serialize/parse, and a parse failure (invalid JSON, security error) falls back to the supplied default rather than throwing.
-- [ ] **SEAM-03**: The seam supports a custom recover/migrate hook so an adapter can transform stored data on read (covers disclaimer v1→v2 migration and favorites 6-step recovery).
-- [ ] **SEAM-04**: The seam is covered by co-located tests exercising the SSR guard, quota/private-mode write throw, parse-failure fallback, and the migrate hook — this is the single test surface for persistence.
+- [x] **SEAM-01**: A `PersistentValue<T>` seam exists with one guarded `read` / `write` / `remove`, behind a single SSR/private-mode guard (`typeof localStorage === 'undefined'` + try/catch), so no consumer touches `localStorage` directly.
+- [x] **SEAM-02**: The seam handles JSON serialize/parse, and a parse failure (invalid JSON, security error) falls back to the supplied default rather than throwing.
+- [x] **SEAM-03**: The seam supports a custom recover/migrate hook so an adapter can transform stored data on read (covers disclaimer v1→v2 migration and favorites 6-step recovery).
+- [x] **SEAM-04**: The seam is covered by co-located tests exercising the SSR guard, quota/private-mode write throw, parse-failure fallback, and the migrate hook — this is the single test surface for persistence.
 
 ### MIGRATE — move the four adapters onto the seam
 
@@ -45,10 +45,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEAM-01 | Phase 55 | Pending |
-| SEAM-02 | Phase 55 | Pending |
-| SEAM-03 | Phase 55 | Pending |
-| SEAM-04 | Phase 55 | Pending |
+| SEAM-01 | Phase 55 | Complete |
+| SEAM-02 | Phase 55 | Complete |
+| SEAM-03 | Phase 55 | Complete |
+| SEAM-04 | Phase 55 | Complete |
 | MIG-01 | Phase 56 | Pending |
 | MIG-02 | Phase 56 | Pending |
 | MIG-03 | Phase 56 | Pending |
