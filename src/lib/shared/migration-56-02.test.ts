@@ -10,10 +10,14 @@ import { LastEdited } from './lastEdited.svelte.js';
 const TEST_TS_KEY = 'test_lastEdited_ts';
 
 // ── MIG-03: favorites stored shape — covered by favorites.test.ts T-01 ───────
-// T-01 in favorites.test.ts already asserts:
+// T-01 in favorites.test.ts already asserts the parsed stored shape:
 //   expect(stored).toEqual({ v: 1, ids: ['feeds', 'formula', 'gir', 'morphine-wean'] })
-// The custom codec (serialize: (ids) => JSON.stringify({ v: SCHEMA_VERSION, ids })) is the
-// implementation guard. No separate test needed here — T-01 is the canonical assertion.
+// which directly exercises the new custom codec serialize wrapper
+// (serialize: (ids) => JSON.stringify({ v: SCHEMA_VERSION, ids })). T-01 lives in the
+// favorites suite where the vi.resetModules() + dynamic-import harness for the module-scope
+// $state singleton is already established; duplicating that harness here is redundant and
+// fragile (the static `import { LastEdited }` at the top of THIS file conflicts with
+// resetModules-per-test). T-01 is the canonical MIG-03 byte-shape guard.
 
 // ── MIG-04: lastEdited stamp byte shape ──────────────────────────────────────
 
@@ -31,6 +35,14 @@ describe('MIG-04: lastEdited — stamp byte shape and null-on-empty-string', () 
 		// Must be a numeric string like '1748443200000', not '"1748443200000"'
 		expect(typeof raw).toBe('string');
 		expect(Number.isFinite(Number(raw))).toBe(true);
+	});
+
+	it('after stamp(), stored raw === String(le.current) (byte-identical to pre-migration String(...))', () => {
+		const le = new LastEdited(TEST_TS_KEY);
+		le.stamp();
+		// Pre-migration wrote String(this.current); the migrated jsonCodec path must
+		// produce the exact same bytes — assert against the in-memory value, not just "finite".
+		expect(localStorage.getItem(TEST_TS_KEY)).toBe(String(le.current));
 	});
 
 	it('stored value does NOT have JSON quotes (not \'"1748443200000"\')', () => {

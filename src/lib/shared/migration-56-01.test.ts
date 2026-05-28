@@ -3,7 +3,7 @@
 // These are NEW tests verifying the seam is wired correctly after migration.
 // The existing DisclaimerBanner.test.ts is the primary regression gate.
 
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 const THEME_KEY = 'nicu_assistant_theme';
 const KEY_V1 = 'nicu_assistant_disclaimer_v1';
@@ -15,6 +15,9 @@ describe('MIG-01: theme — byte-identity after migration', () => {
 	beforeEach(() => {
 		localStorage.clear();
 		vi.restoreAllMocks();
+		// theme.svelte.ts holds module-scope `let _theme = $state(...)`; reset modules
+		// between tests so each gets a fresh _theme (matches favorites.test.ts convention).
+		vi.resetModules();
 		// Stub DOM so theme.set() does not throw outside a browser
 		vi.stubGlobal('document', {
 			documentElement: {
@@ -22,6 +25,11 @@ describe('MIG-01: theme — byte-identity after migration', () => {
 				setAttribute: vi.fn()
 			}
 		});
+	});
+
+	afterEach(() => {
+		// Prevent the stubbed `document` global from leaking into later describe blocks.
+		vi.unstubAllGlobals();
 	});
 
 	it('theme.set("dark") stores unquoted "dark" (not \'\"dark\"\')', async () => {
@@ -50,6 +58,11 @@ describe('MIG-02: disclaimer — v1 key preserved after init()', () => {
 	beforeEach(() => {
 		localStorage.clear();
 		vi.resetModules();
+	});
+
+	afterEach(() => {
+		vi.unstubAllGlobals();
+		vi.restoreAllMocks();
 	});
 
 	it('v1-only user: acknowledged === true after disclaimer.init()', async () => {

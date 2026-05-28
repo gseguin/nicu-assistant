@@ -42,8 +42,7 @@ export class LastEdited {
         return Number.isFinite(n) ? n : null; // handles non-numeric garbage
       }
     });
-    // Replaces: if (typeof localStorage === 'undefined') return;
-    //           try { const raw = getItem; if (raw) { n = Number(raw); current = isFinite(n) ? n : null } } catch {}
+    // Seam provides the SSR guard + try/catch; the recover hook above does the Number() coercion.
     this.current = this.#pv.read();
   }
 

@@ -69,7 +69,12 @@ const pv = createPersistentValue<CalculatorId[]>({
 	defaultValue: defaultIds(),
 	codec: {
 		serialize: (ids) => JSON.stringify({ v: SCHEMA_VERSION, ids }), // writes {v:1,ids:[...]}
-		deserialize: (raw) => JSON.parse(raw) as CalculatorId[] // never called — recover owns read
+		// recover owns the read path, so this must never run. Fail loudly if it does, so a
+		// future regression that drops the recover hook is caught immediately rather than
+		// silently bypassing the 6-step recovery pipeline with an unsound object-as-array cast.
+		deserialize: (): CalculatorId[] => {
+			throw new Error('favorites: deserialize must not run — recover owns the read path');
+		}
 	},
 	recover
 });
