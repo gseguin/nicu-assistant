@@ -166,7 +166,9 @@ Plans:
   3. Favorites still persist under key `nicu:favorites` with schema `{v:1, ids}`; the 6-step recovery, 4-cap, and stored-order preservation run through the seam — a stored `'pert'` favorite is still silently dropped with order preserved (existing `favorites.test.ts` stays green).
   4. The per-key `lastEdited` stamp still writes under its `_ts` key, the 60s stamp-debounce that prevents effect re-entry still skips writes inside the window, and `clear` still removes the key.
   5. No storage key, persisted JSON shape, or migration/recovery edge case changes — the migration is invisible to any existing user's stored data.
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 56-01-PLAN.md — Migrate theme, disclaimer, favorites, lastEdited onto PersistentValue<T> seam (MIG-01..04)
 
 ### Phase 57: Auto-Persist Behind CalculatorStore
 **Goal**: Auto-persist-on-change lives once inside `CalculatorStore`, removed from all five `*Inputs.svelte`, with drawer-only-mount persistence and the lastEdited re-entry guarantee preserved.
@@ -206,6 +208,6 @@ Plans:
 | 53 | v1.17 | 1/1 | Complete    | 2026-05-23 |
 | 54 | v1.17 | 2/2 | Complete    | 2026-05-24 |
 | 55 | v1.18 | 1/1 | Complete    | 2026-05-28 |
-| 56 | v1.18 | 0/? | Not started | - |
+| 56 | v1.18 | 0/1 | Planned | - |
 | 57 | v1.18 | 0/? | Not started | - |
 | 58 | v1.18 | 0/? | Not started | - |
