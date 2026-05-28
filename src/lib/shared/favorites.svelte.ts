@@ -2,6 +2,7 @@
 // Svelte 5 rune syntax — .svelte.ts extension required for $state to compile
 // Source pattern: theme.svelte.ts, disclaimer.svelte.ts (module-scope $state + get accessor + init())
 
+import { createPersistentValue } from './persistent-value.js';
 import { CALCULATOR_REGISTRY } from '$lib/shell/registry.js';
 import type { CalculatorId } from './types.js';
 
@@ -58,13 +59,20 @@ function recover(raw: string | null): CalculatorId[] {
 	return filtered as CalculatorId[];
 }
 
-function persist(ids: readonly CalculatorId[]): void {
-	try {
-		localStorage.setItem(STORAGE_KEY, JSON.stringify({ v: SCHEMA_VERSION, ids }));
-	} catch {
-		// Silent: private browsing mode or storage quota exceeded
-	}
-}
+// Module-scope seam instance (MIG-03 / D-05):
+// - Custom codec: serialize wraps ids in {v:SCHEMA_VERSION,ids} so pv.write(_ids) stores
+//   the same {v:1,ids:[...]} shape that the old persist() did (PITFALL-01 prevention).
+//   codec.deserialize is defined for type correctness but never called — recover owns read path.
+// - recover: the existing 6-step pipeline passed verbatim (seam's recover hook signature matches).
+const pv = createPersistentValue<CalculatorId[]>({
+	key: STORAGE_KEY,
+	defaultValue: defaultIds(),
+	codec: {
+		serialize: (ids) => JSON.stringify({ v: SCHEMA_VERSION, ids }), // writes {v:1,ids:[...]}
+		deserialize: (raw) => JSON.parse(raw) as CalculatorId[] // never called — recover owns read
+	},
+	recover
+});
 
 // D-07 latent-init fix: seed defaults at module scope so NavShell renders correct tabs on
 // first synchronous paint before onMount fires. defaultIds() calls CALCULATOR_REGISTRY which
@@ -105,21 +113,27 @@ export const favorites = {
 			_ids = registryOrder.filter((rid) => next.includes(rid)) as CalculatorId[];
 		}
 		// persist fires even on no-op cap case — harmless, keeps logic simple
-		persist(_ids);
+		pv.write(_ids); // replaces: persist(_ids)
 	},
 
 	/** Called in +layout.svelte onMount — DOM is available here */
 	init(): void {
+		// D-05a: one allowed raw null-probe to detect first-run.
+		// pv.read() cannot distinguish "nothing stored" from "stored defaults" because
+		// recover(null) returns defaultIds() — same as recover of a stale/empty store.
+		// This probe is required to know when to write-back defaults (T-01 requirement).
+		// PITFALL-07: getItem may throw again inside pv.read() if spy is active — both
+		// catches are silent, both fall back to defaultIds(). T-18 still passes.
 		let raw: string | null = null;
 		try {
 			raw = localStorage.getItem(STORAGE_KEY);
 		} catch {
 			raw = null;
 		}
-		const recovered = recover(raw);
+		const recovered = pv.read(); // seam calls recover(raw) internally
 		_ids = recovered;
 		_initialized = true;
-		// D-09: first-run seeding — if nothing stored, write defaults immediately
-		if (raw === null) persist(recovered);
+		// D-09: first-run write-back — seeds defaults into storage on first visit
+		if (raw === null) pv.write(recovered); // replaces: persist(recovered)
 	}
 };
