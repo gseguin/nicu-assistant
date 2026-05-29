@@ -192,7 +192,7 @@ Plans:
   3. The full clinical gate is green: svelte-check 0/0, vitest fully green, `pnpm build` ✓, Playwright E2E + extended axe sweeps green in both light and dark themes.
 **Plans**: 2 plans
 Plans:
-- [ ] 58-01-PLAN.md — Doc sync: PROJECT.md Validated promotion + MILESTONES.md v1.18 entry (REL-02)
+- [x] 58-01-PLAN.md — Doc sync: PROJECT.md Validated promotion + MILESTONES.md v1.18 entry (REL-02)
 - [ ] 58-02-PLAN.md — Version bump + clinical gate + HUMAN-UAT.md (REL-01, REL-03)
 
 ## Progress
@@ -215,4 +215,4 @@ Plans:
 | 55 | v1.18 | 1/1 | Complete    | 2026-05-28 |
 | 56 | v1.18 | 1/1 | Complete    | 2026-05-28 |
 | 57 | v1.18 | 1/1 | Complete    | 2026-05-29 |
-| 58 | v1.18 | 0/2 | Not started | - |
+| 58 | v1.18 | 1/2 | In Progress|  |
