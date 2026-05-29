@@ -178,7 +178,9 @@ Plans:
   1. The copy-pasted `$effect(() => { JSON.stringify(state.current); state.persist() })` is gone from all 5 `*Inputs.svelte` (gir, morphine, feeds, fortification, uac-uvc) — a grep finds zero remaining copies and `CalculatorStore` owns auto-persist.
   2. Editing an input still persists across reload for every calculator, including when the inputs fragment is mounted ALONE inside the mobile `InputDrawer` (the original reason the effect was duplicated per-fragment).
   3. The `lastEdited` 60s minute-debounce still holds: rapid effect passes during a single render do not re-stamp, and Svelte 5 effect re-entry does not occur (no unbounded recursion) — `calculator-store.test.ts` stays green and a test pins the drawer-mounted-alone persist path.
-**Plans**: TBD
+**Plans**: 1 plan
+Plans:
+- [ ] 57-01-PLAN.md — Add $effect.root auto-persist to CalculatorStore + delete 5 per-fragment effects (AUTO-01, AUTO-02)
 
 ### Phase 58: Release v1.18.0
 **Goal**: Ship v1.18.0 with docs synced and the full clinical gate green.
