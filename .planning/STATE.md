@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.18
 milestone_name: Persistence Seam
-status: milestone_complete
-stopped_at: Milestone complete (Phase 58 was final phase)
-last_updated: 2026-05-29T21:11:06.223Z
-last_activity: 2026-05-29 -- v1.18 milestone complete (Phases 55-58 shipped)
+status: Awaiting next milestone
+stopped_at: "v1.18 milestone complete (4/4 phases shipped, 13/13 IDs ✓; package.json reads 1.18.0). Awaiting user manual steps: git tag v1.18.0 + git push; CI run of Playwright + extended axe sweeps (58-HUMAN-UAT.md); optional /gsd:complete-milestone v1.18 to archive."
+last_updated: "2026-05-29T21:34:56.835Z"
+last_activity: 2026-05-29 — Milestone v1.18 completed and archived
 progress:
   total_phases: 4
   completed_phases: 4
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-05-28)
 
 ## Current Position
 
-Phase: 58
-Plan: Not started
-Status: Milestone complete
-Last activity: 2026-05-29
+Phase: Milestone v1.18 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-05-29 — Milestone v1.18 completed and archived
 
 ## Performance Metrics
 
@@ -113,6 +113,14 @@ Items acknowledged and deferred at v1.17 milestone close (2026-05-24):
 | verification | Phase 54 VERIFICATION status human_needed | Pending — CI | Same as the 54 UAT item — Playwright live run on CI. |
 | quick_task | 6 v1.15.1-era CalculatorStore refactor manifest entries (260429-lyq/m79/mkz/mr1/mwe, 260430-cvl) | Stale metadata | Work complete and shipped (commits 45d86cf..a96e037); manifest `missing` status is audit metadata only, acknowledged at v1.15.1 close and re-acknowledged here. |
 
+Items acknowledged and deferred at v1.18 milestone close (2026-05-29):
+
+| Category | Item | Status | Reason |
+|----------|------|--------|--------|
+| uat | Phase 58 Playwright E2E (chromium + webkit-iphone) run on v1.18.0 build | Pending — CI | 58-HUMAN-UAT.md captures the deferral; browser binaries unavailable locally (Phase 54 precedent). |
+| uat | Phase 58 extended axe-core sweeps (light + dark themes) on v1.18.0 build | Pending — CI | 58-HUMAN-UAT.md captures the deferral; runs alongside Playwright in CI. |
+| quick_task | 6 v1.15.1-era CalculatorStore refactor manifest entries (260429-lyq/m79/mkz/mr1/mwe, 260430-cvl) | Stale metadata | Work complete and shipped (commits 45d86cf..a96e037); manifest `missing` status is audit metadata only, re-acknowledged here as carry-forward from v1.15.1 / v1.17. |
+
 ### Quick Tasks Completed
 
 | # | Description | Date | Commit | Directory |
@@ -132,4 +140,4 @@ Resume file: None
 
 ## Operator Next Steps
 
-- Plan the first phase with `/gsd:plan-phase 55` (Persistence Seam — extract `PersistentValue<T>`, SEAM-01..04)
+- Start the next milestone with /gsd-new-milestone

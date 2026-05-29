@@ -2,14 +2,18 @@
 
 ## v1.18 Persistence Seam (Shipped: 2026-05-29)
 
-**Phases completed:** 55, 56, 57, 58
+**Phases completed:** 55, 56, 57, 58 (5 plans total; 70 commits in v1.17→v1.18 range)
+**Source changes:** 19 files in `src/`, +769 / −114 LOC (net behavior-preserving consolidation)
+**Tests:** 436 → 451 (+15 net — 26 new seam tests + edge-case guards + auto-persist tests, offset by deletion of obsolete duplication)
 
 **Known deferred items at close:**
+
 - Phase 58 Playwright E2E + extended axe sweeps — Pending CI (browser binaries unavailable locally; see 58-HUMAN-UAT.md)
 - (carried) v1.15.1 SMOKE-01..10 real-iPhone gate
 - (carried) v1.17 deferred items
 
 **Key accomplishments:**
+
 - PersistentValue<T> persistence seam: guarded read/write/remove + JSON-or-raw codec + recover hook; single test surface (26 co-located tests) covering SSR, parse-failure, write-throw, and migrate-hook expressiveness (SEAM-01..04)
 - Four shared singletons migrated onto the seam as thin behavior-preserving adapters: theme stores 'dark' unquoted (FOUC-safe); disclaimer pvV1 read-only (audit trail preserved); favorites custom codec wraps {v:1,ids}; lastEdited recover hook guards Number('')===0 → null (MIG-01..04); favorites.test.ts + calculator-store.test.ts + DisclaimerBanner.test.ts stayed green with zero edits
 - Auto-persist folded behind CalculatorStore via single $effect.root() in constructor (after init, SSR-guarded, app-lifetime cleanup discarded); 9 duplicate $effect(...persist...) blocks deleted (5 *Inputs.svelte + 4 *Calculator.svelte parents — the latter caught by code review that flagged scope gap); re-entry impossible by construction + 60s STAMP_DEBOUNCE_MS as defense-in-depth (AUTO-01..02)
