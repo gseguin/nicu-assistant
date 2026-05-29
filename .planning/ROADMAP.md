@@ -138,7 +138,7 @@ See [milestones/v1.17-ROADMAP.md](milestones/v1.17-ROADMAP.md) for full phase de
 
 - [x] **Phase 55: Persistence Seam** — Extract the `PersistentValue<T>` seam: one guarded `read`/`write`/`remove` behind a single SSR/private-mode guard, JSON serialize/parse with parse-failure fallback to default, and a custom recover/migrate hook (covers disclaimer v1→v2 + favorites 6-step recovery). Co-located tests are the single test surface for persistence: SSR guard, quota/private-mode write throw, parse-failure fallback, migrate hook. (SEAM-01..04) (completed 2026-05-28)
 - [x] **Phase 56: Migrate Shared Singletons** — Move the four genuinely-different adapters onto the seam as thin wrappers, behavior-preserving: `theme.svelte.ts` (plain value, key `nicu_assistant_theme`, `.dark` class + `data-theme` sync), `disclaimer.svelte.ts` (v1→v2 migration, v1 key NOT deleted), `favorites.svelte.ts` (key `nicu:favorites`, schema `{v:1, ids}`, 6-step recovery + 4-cap + stored-order via the seam's migrate hook), `lastEdited.svelte.ts` (per-key stamp + 60s stamp-debounce). Existing `favorites.test.ts` stays green through the migration. (MIG-01..04) (completed 2026-05-28)
-- [ ] **Phase 57: Auto-Persist Behind CalculatorStore** — Fold candidate 3: `CalculatorStore` owns auto-persist; remove the copy-pasted `$effect(() => { JSON.stringify(state.current); state.persist() })` from all 5 `*Inputs.svelte` (gir, morphine, feeds, fortification, uac-uvc). Preserve drawer-only-mount persistence (an inputs fragment mounted alone in the mobile `InputDrawer` still persists on change) and the `lastEdited` 60s minute-debounce / no-effect-re-entry guarantee. Existing `calculator-store.test.ts` stays green. (AUTO-01..02)
+- [x] **Phase 57: Auto-Persist Behind CalculatorStore** — Fold candidate 3: `CalculatorStore` owns auto-persist; remove the copy-pasted `$effect(() => { JSON.stringify(state.current); state.persist() })` from all 5 `*Inputs.svelte` (gir, morphine, feeds, fortification, uac-uvc). Preserve drawer-only-mount persistence (an inputs fragment mounted alone in the mobile `InputDrawer` still persists on change) and the `lastEdited` 60s minute-debounce / no-effect-re-entry guarantee. Existing `calculator-store.test.ts` stays green. (AUTO-01..02) (completed 2026-05-29)
 - [ ] **Phase 58: Release v1.18.0** — `package.json` → 1.18.0 (AboutSheet auto via `__APP_VERSION__`); PROJECT.md Validated list + REQUIREMENTS.md traceability updated at milestone close; full clinical gate green (svelte-check 0/0, vitest fully green, `pnpm build` ✓, Playwright E2E + extended axe sweeps green in both themes). (REL-01..03)
 
 ## Phase Details
@@ -180,7 +180,7 @@ Plans:
   3. The `lastEdited` 60s minute-debounce still holds: rapid effect passes during a single render do not re-stamp, and Svelte 5 effect re-entry does not occur (no unbounded recursion) — `calculator-store.test.ts` stays green and a test pins the drawer-mounted-alone persist path.
 **Plans**: 1 plan
 Plans:
-- [ ] 57-01-PLAN.md — Add $effect.root auto-persist to CalculatorStore + delete 5 per-fragment effects (AUTO-01, AUTO-02)
+- [x] 57-01-PLAN.md — Add $effect.root auto-persist to CalculatorStore + delete 5 per-fragment effects (AUTO-01, AUTO-02)
 
 ### Phase 58: Release v1.18.0
 **Goal**: Ship v1.18.0 with docs synced and the full clinical gate green.
@@ -211,5 +211,5 @@ Plans:
 | 54 | v1.17 | 2/2 | Complete    | 2026-05-24 |
 | 55 | v1.18 | 1/1 | Complete    | 2026-05-28 |
 | 56 | v1.18 | 1/1 | Complete    | 2026-05-28 |
-| 57 | v1.18 | 0/? | Not started | - |
+| 57 | v1.18 | 1/1 | Complete   | 2026-05-29 |
 | 58 | v1.18 | 0/? | Not started | - |
