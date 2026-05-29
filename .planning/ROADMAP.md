@@ -139,7 +139,7 @@ See [milestones/v1.17-ROADMAP.md](milestones/v1.17-ROADMAP.md) for full phase de
 - [x] **Phase 55: Persistence Seam** — Extract the `PersistentValue<T>` seam: one guarded `read`/`write`/`remove` behind a single SSR/private-mode guard, JSON serialize/parse with parse-failure fallback to default, and a custom recover/migrate hook (covers disclaimer v1→v2 + favorites 6-step recovery). Co-located tests are the single test surface for persistence: SSR guard, quota/private-mode write throw, parse-failure fallback, migrate hook. (SEAM-01..04) (completed 2026-05-28)
 - [x] **Phase 56: Migrate Shared Singletons** — Move the four genuinely-different adapters onto the seam as thin wrappers, behavior-preserving: `theme.svelte.ts` (plain value, key `nicu_assistant_theme`, `.dark` class + `data-theme` sync), `disclaimer.svelte.ts` (v1→v2 migration, v1 key NOT deleted), `favorites.svelte.ts` (key `nicu:favorites`, schema `{v:1, ids}`, 6-step recovery + 4-cap + stored-order via the seam's migrate hook), `lastEdited.svelte.ts` (per-key stamp + 60s stamp-debounce). Existing `favorites.test.ts` stays green through the migration. (MIG-01..04) (completed 2026-05-28)
 - [x] **Phase 57: Auto-Persist Behind CalculatorStore** — Fold candidate 3: `CalculatorStore` owns auto-persist; remove the copy-pasted `$effect(() => { JSON.stringify(state.current); state.persist() })` from all 5 `*Inputs.svelte` (gir, morphine, feeds, fortification, uac-uvc). Preserve drawer-only-mount persistence (an inputs fragment mounted alone in the mobile `InputDrawer` still persists on change) and the `lastEdited` 60s minute-debounce / no-effect-re-entry guarantee. Existing `calculator-store.test.ts` stays green. (AUTO-01..02) (completed 2026-05-29)
-- [ ] **Phase 58: Release v1.18.0** — `package.json` → 1.18.0 (AboutSheet auto via `__APP_VERSION__`); PROJECT.md Validated list + REQUIREMENTS.md traceability updated at milestone close; full clinical gate green (svelte-check 0/0, vitest fully green, `pnpm build` ✓, Playwright E2E + extended axe sweeps green in both themes). (REL-01..03)
+- [x] **Phase 58: Release v1.18.0** — `package.json` → 1.18.0 (AboutSheet auto via `__APP_VERSION__`); PROJECT.md Validated list + REQUIREMENTS.md traceability updated at milestone close; full clinical gate green (svelte-check 0/0, vitest fully green, `pnpm build` ✓, Playwright E2E + extended axe sweeps green in both themes). (REL-01..03) (completed 2026-05-29)
 
 ## Phase Details
 
@@ -193,7 +193,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 58-01-PLAN.md — Doc sync: PROJECT.md Validated promotion + MILESTONES.md v1.18 entry (REL-02)
-- [ ] 58-02-PLAN.md — Version bump + clinical gate + HUMAN-UAT.md (REL-01, REL-03)
+- [x] 58-02-PLAN.md — Version bump + clinical gate + HUMAN-UAT.md (REL-01, REL-03)
 
 ## Progress
 
@@ -215,4 +215,4 @@ Plans:
 | 55 | v1.18 | 1/1 | Complete    | 2026-05-28 |
 | 56 | v1.18 | 1/1 | Complete    | 2026-05-28 |
 | 57 | v1.18 | 1/1 | Complete    | 2026-05-29 |
-| 58 | v1.18 | 1/2 | In Progress|  |
+| 58 | v1.18 | 2/2 | Complete   | 2026-05-29 |
