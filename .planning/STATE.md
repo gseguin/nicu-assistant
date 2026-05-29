@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.18
 milestone_name: Persistence Seam
-status: executing
-stopped_at: Phase 57 planned (57-01, plan-checker PASS)
-last_updated: "2026-05-29T20:15:49.925Z"
+status: ready_to_plan
+stopped_at: Phase 57 complete (1/1) — ready to discuss Phase 58
+last_updated: 2026-05-29T20:35:13.393Z
 last_activity: 2026-05-29 -- Phase 57 execution started
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 3
-  completed_plans: 2
+  completed_plans: 3
   percent: 50
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-28)
 
 **Core value:** Clinicians can switch between NICU calculation tools instantly from a single app without losing context.
-**Current focus:** Phase 57 — auto-persist-behind-calculatorstore
+**Current focus:** Phase 58 — release v1.18.0
 
 ## Current Position
 
-Phase: 57 (auto-persist-behind-calculatorstore) — EXECUTING
-Plan: 1 of 1
-Status: Executing Phase 57
-Last activity: 2026-05-29 -- Phase 57 execution started
+Phase: 58
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-05-29
 
 ## Performance Metrics
 

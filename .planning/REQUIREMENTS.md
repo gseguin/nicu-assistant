@@ -22,8 +22,8 @@
 
 ### AUTOPERSIST — candidate 3 fold-in
 
-- [ ] **AUTO-01**: `CalculatorStore` owns auto-persist; the copy-pasted `$effect(() => { JSON.stringify(state.current); state.persist() })` is removed from all 5 `*Inputs.svelte`.
-- [ ] **AUTO-02**: An inputs fragment mounted alone in the mobile `InputDrawer` still persists on change, and the `lastEdited` minute-debounce + no-effect-re-entry guarantee are preserved.
+- [x] **AUTO-01**: `CalculatorStore` owns auto-persist; the copy-pasted `$effect(() => { JSON.stringify(state.current); state.persist() })` is removed from all 5 `*Inputs.svelte`.
+- [x] **AUTO-02**: An inputs fragment mounted alone in the mobile `InputDrawer` still persists on change, and the `lastEdited` minute-debounce + no-effect-re-entry guarantee are preserved.
 
 ### REL — release
 
@@ -53,8 +53,8 @@
 | MIG-02 | Phase 56 | Complete |
 | MIG-03 | Phase 56 | Complete |
 | MIG-04 | Phase 56 | Complete |
-| AUTO-01 | Phase 57 | Pending |
-| AUTO-02 | Phase 57 | Pending |
+| AUTO-01 | Phase 57 | Complete |
+| AUTO-02 | Phase 57 | Complete |
 | REL-01 | Phase 58 | Pending |
 | REL-02 | Phase 58 | Pending |
 | REL-03 | Phase 58 | Pending |
