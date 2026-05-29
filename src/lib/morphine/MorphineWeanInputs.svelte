@@ -16,13 +16,6 @@
 
 	const inputs = config.inputs as MorphineInputRanges;
 
-	// Persist on every change — duplicates the calculator's effect so the inputs work
-	// independently if mounted in isolation (drawer-only rendering on mobile).
-	$effect(() => {
-		JSON.stringify(morphineState.current);
-		morphineState.persist();
-	});
-
 	let hasValues = $derived(
 		morphineState.current.weightKg !== null ||
 			morphineState.current.maxDoseMgKgDose !== null ||

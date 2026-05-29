@@ -23,12 +23,6 @@
 
 	const inputs = config.inputs as UacUvcInputRanges;
 
-	// Persist on every change — duplicates the calculator's effect so the inputs
-	// work independently if mounted in isolation (drawer-only rendering on mobile).
-	$effect(() => {
-		JSON.stringify(uacUvcState.current);
-		uacUvcState.persist();
-	});
 </script>
 
 <section class="card flex flex-col gap-4">

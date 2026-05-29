@@ -19,13 +19,6 @@
 
 	const inputs = config.inputs as GirInputRanges;
 
-	// Persist on every change — duplicates the calculator's effect so the inputs
-	// work independently if mounted in isolation (drawer-only rendering on mobile).
-	$effect(() => {
-		JSON.stringify(girState.current);
-		girState.persist();
-	});
-
 	let showDexAdvisory = $derived(
 		girState.current.dextrosePct != null && girState.current.dextrosePct > 12.5
 	);
