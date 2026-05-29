@@ -194,8 +194,10 @@ describe('CalculatorStore — auto-persist (D-05)', () => {
       storageKey: KEY,
       defaults: makeDefaults
     });
+    // Flush the initial benign-write effect BEFORE installing the spy so it
+    // mechanically excludes the construction-time write (not just coincidentally).
+    await tick();
     const spy = vi.spyOn(Storage.prototype, 'setItem');
-    // spy installed after construction to exclude the initial benign write (D-02)
 
     store.current.a = 99;
     await tick(); // flush the scheduled inner $effect
@@ -203,11 +205,17 @@ describe('CalculatorStore — auto-persist (D-05)', () => {
     expect(spy).toHaveBeenCalledWith(KEY, JSON.stringify({ a: 99, b: 'x' }));
   });
 
-  it('(b) auto-persist fires without any component mounted — proves drawer-only-mount path', async () => {
+  it('(b) auto-persist works on a class-only instance (no component context required)', async () => {
+    // This proves the drawer-only-mount invariant: the $effect.root() inside the
+    // CalculatorStore constructor fires on .current mutation regardless of which
+    // component (or no component at all) is currently mounted. The module-scope
+    // singleton in state.svelte.ts runs its constructor at import time — before
+    // either the route shell or the drawer-only Inputs fragment is mounted.
     const store = new CalculatorStore<Shape>({
       storageKey: KEY,
       defaults: makeDefaults
     });
+    await tick();
     const spy = vi.spyOn(Storage.prototype, 'setItem');
 
     store.current.b = 'drawer';
@@ -218,24 +226,43 @@ describe('CalculatorStore — auto-persist (D-05)', () => {
     expect(JSON.parse(lastCall?.[1] as string).b).toBe('drawer');
   });
 
-  it('(c) 60s debounce: rapid mutations do not re-stamp lastEdited within the window', async () => {
-    const store = new CalculatorStore<Shape>({
-      storageKey: KEY,
-      defaults: makeDefaults
-    });
-    await tick(); // let initial benign-write effect fire
+  it('(c) 60s debounce: in-window mutations preserve stamp; beyond-window mutation refreshes it', async () => {
+    // Use fake timers so we can deterministically cross the STAMP_DEBOUNCE_MS
+    // (60_000 ms) window — Date.now() advances with vi.setSystemTime + advanceTimersByTime.
+    const t0 = 1_700_000_000_000;
+    vi.useFakeTimers();
+    try {
+      vi.setSystemTime(t0);
 
-    store.current.a = 10;
-    await tick();
-    const stamp1 = store.lastEdited.current;
-    expect(typeof stamp1).toBe('number');
+      const store = new CalculatorStore<Shape>({
+        storageKey: KEY,
+        defaults: makeDefaults
+      });
+      await tick(); // flush initial-fire stamp at t0
 
-    // Immediate second mutation — within the 60s STAMP_DEBOUNCE_MS window
-    store.current.a = 11;
-    await tick();
-    const stamp2 = store.lastEdited.current;
+      // First mutation at t0 + 1s — still within the 60s window since construction
+      vi.setSystemTime(t0 + 1_000);
+      store.current.a = 10;
+      await tick();
+      const stamp1 = store.lastEdited.current;
+      expect(typeof stamp1).toBe('number');
 
-    // stamp2 should equal stamp1: debounce suppressed the re-stamp
-    expect(stamp2).toBe(stamp1);
+      // Second mutation at t0 + 2s — also inside the window
+      vi.setSystemTime(t0 + 2_000);
+      store.current.a = 11;
+      await tick();
+      const stamp2 = store.lastEdited.current;
+      expect(stamp2).toBe(stamp1); // debounce suppressed re-stamp
+
+      // Cross the 60s window — STAMP_DEBOUNCE_MS = 60_000
+      vi.setSystemTime(t0 + 61_000);
+      store.current.a = 12;
+      await tick();
+      const stamp3 = store.lastEdited.current;
+      expect(stamp3).not.toBe(stamp1); // debounce released — new stamp captured
+      expect(stamp3).toBe(t0 + 61_000);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

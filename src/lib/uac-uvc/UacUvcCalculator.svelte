@@ -10,13 +10,6 @@
 
 	let result = $derived(calculateUacUvc(uacUvcState.current));
 	let pulseKey = $derived(uacUvcState.current.weightKg?.toFixed(2) ?? '');
-
-	// Persist on change. Kept here so the calculator also persists when mounted
-	// without the inputs fragment — defensive.
-	$effect(() => {
-		JSON.stringify(uacUvcState.current);
-		uacUvcState.persist();
-	});
 </script>
 
 <div class="space-y-6">

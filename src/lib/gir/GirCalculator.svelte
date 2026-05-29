@@ -35,13 +35,6 @@
 	function handleSelectBucket(bucketId: string) {
 		girState.current.selectedBucketId = bucketId;
 	}
-
-	// Persist on change. Kept here so the calculator also persists when mounted
-	// without the inputs fragment — defensive.
-	$effect(() => {
-		JSON.stringify(girState.current);
-		girState.persist();
-	});
 </script>
 
 <div class="space-y-6">

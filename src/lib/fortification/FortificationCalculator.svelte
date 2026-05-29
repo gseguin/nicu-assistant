@@ -47,13 +47,6 @@
 		if (n === 0) return '0.0';
 		return n.toFixed(1);
 	}
-
-	// Persist on any state change (mirror morphine). Kept here so the calculator
-	// also persists when mounted without the inputs fragment — defensive.
-	$effect(() => {
-		JSON.stringify(fortificationState.current);
-		fortificationState.persist();
-	});
 </script>
 
 <div class="space-y-6">
