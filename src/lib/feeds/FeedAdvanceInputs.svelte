@@ -30,13 +30,6 @@
 	import SegmentedToggle from '$lib/shared/components/SegmentedToggle.svelte';
 	import type { SelectOption } from '$lib/shared/types.js';
 
-	// Persist on every change — duplicates the calculator's effect so the inputs
-	// work independently if mounted in isolation (drawer-only rendering on mobile).
-	$effect(() => {
-		JSON.stringify(feedsState.current);
-		feedsState.persist();
-	});
-
 	// SelectPicker option arrays
 	let frequencySelectOptions: SelectOption[] = $derived(
 		frequencyOptions.map((f) => ({ value: f.id, label: f.label }))

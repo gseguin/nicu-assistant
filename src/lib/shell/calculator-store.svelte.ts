@@ -36,6 +36,17 @@ export class CalculatorStore<T> {
     // here means .current already reflects localStorage by the time any
     // component reads it. Mirrors the per-slice state.svelte.ts pattern.
     this.init();
+    // Auto-persist: fires on every mutation of this.current.
+    // $effect.root() required because CalculatorStore is a class, not a component.
+    // SSR guard: skip on server (no localStorage, would create a phantom root effect).
+    if (typeof localStorage !== 'undefined') {
+      $effect.root(() => {
+        $effect(() => {
+          JSON.stringify(this.current);
+          this.persist();
+        });
+      });
+    }
   }
 
   /** Reads localStorage to restore state across sessions. Safe to call repeatedly. */
