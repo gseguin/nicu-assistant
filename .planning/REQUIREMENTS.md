@@ -27,9 +27,9 @@
 
 ### REL — release
 
-- [ ] **REL-01**: `package.json` bumped to 1.18.0; AboutSheet reflects it via the `__APP_VERSION__` build-time constant (no hardcoded version string).
-- [ ] **REL-02**: PROJECT.md Validated list and this REQUIREMENTS.md traceability table updated at milestone close.
-- [ ] **REL-03**: Clinical gate green — svelte-check 0/0, vitest fully green, `pnpm build` ✓, Playwright E2E + extended axe sweeps green in both themes.
+- [x] **REL-01**: `package.json` bumped to 1.18.0; AboutSheet reflects it via the `__APP_VERSION__` build-time constant (no hardcoded version string).
+- [x] **REL-02**: PROJECT.md Validated list and this REQUIREMENTS.md traceability table updated at milestone close.
+- [x] **REL-03**: Clinical gate green — svelte-check 0/0, vitest fully green, `pnpm build` ✓, Playwright E2E + extended axe sweeps green in both themes.
 
 ## Future Requirements (deferred)
 
@@ -55,6 +55,6 @@
 | MIG-04 | Phase 56 | Complete |
 | AUTO-01 | Phase 57 | Complete |
 | AUTO-02 | Phase 57 | Complete |
-| REL-01 | Phase 58 | Pending |
-| REL-02 | Phase 58 | Pending |
-| REL-03 | Phase 58 | Pending |
+| REL-01 | Phase 58 | Complete |
+| REL-02 | Phase 58 | Complete |
+| REL-03 | Phase 58 | Complete |
