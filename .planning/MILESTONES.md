@@ -1,5 +1,26 @@
 # Milestones
 
+## v1.18 Persistence Seam (Shipped: 2026-05-29)
+
+**Phases completed:** 55, 56, 57, 58
+
+**Known deferred items at close:**
+- Phase 58 Playwright E2E + extended axe sweeps — Pending CI (browser binaries unavailable locally; see 58-HUMAN-UAT.md)
+- (carried) v1.15.1 SMOKE-01..10 real-iPhone gate
+- (carried) v1.17 deferred items
+
+**Key accomplishments:**
+- PersistentValue<T> persistence seam: guarded read/write/remove + JSON-or-raw codec + recover hook; single test surface (26 co-located tests) covering SSR, parse-failure, write-throw, and migrate-hook expressiveness (SEAM-01..04)
+- Four shared singletons migrated onto the seam as thin behavior-preserving adapters: theme stores 'dark' unquoted (FOUC-safe); disclaimer pvV1 read-only (audit trail preserved); favorites custom codec wraps {v:1,ids}; lastEdited recover hook guards Number('')===0 → null (MIG-01..04); favorites.test.ts + calculator-store.test.ts + DisclaimerBanner.test.ts stayed green with zero edits
+- Auto-persist folded behind CalculatorStore via single $effect.root() in constructor (after init, SSR-guarded, app-lifetime cleanup discarded); 9 duplicate $effect(...persist...) blocks deleted (5 *Inputs.svelte + 4 *Calculator.svelte parents — the latter caught by code review that flagged scope gap); re-entry impossible by construction + 60s STAMP_DEBOUNCE_MS as defense-in-depth (AUTO-01..02)
+- Released v1.18.0: package.json 1.17.0 → 1.18.0; AboutSheet reflects via __APP_VERSION__ build-time constant; clinical gate green (svelte-check 0/0 across 4592 files, vitest 451+/451+, pnpm build OK); Playwright + extended axe sweeps deferred to CI (REL-01..03)
+
+**Notes:**
+
+- Architecture review candidate 1 (storage seam) shipped end-to-end. Behavior-preserving milestone — zero user-visible change; identical storage keys and persisted byte shapes throughout. Direct localStorage callers in non-test src/ at close: persistent-value.ts (the seam), calculator-store.svelte.ts (one tenant of the same pattern; future migration candidate), plus two intentional null-probes (theme.init prefers-color-scheme fallback + favorites.init first-run write-back).
+
+---
+
 ## v1.17 Remove PERT Calculator (Shipped: 2026-05-24)
 
 **Phases completed:** 3 phases (52, 53, 54), 6 plans, 19 tasks
