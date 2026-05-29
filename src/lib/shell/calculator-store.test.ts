@@ -6,6 +6,7 @@
 // reset, lastEdited integration, and SSR safety.
 
 import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
+import { tick } from 'svelte';
 import { CalculatorStore } from './calculator-store.svelte.js';
 
 type Shape = { a: number; b: string };
@@ -184,5 +185,57 @@ describe('CalculatorStore — SSR safety', () => {
     }).not.toThrow();
     expect(() => store!.init()).not.toThrow();
     expect(store!.current).toEqual({ a: 1, b: 'x' });
+  });
+});
+
+describe('CalculatorStore — auto-persist (D-05)', () => {
+  it('(a) mutating .current triggers auto-persist without calling persist() directly', async () => {
+    const store = new CalculatorStore<Shape>({
+      storageKey: KEY,
+      defaults: makeDefaults
+    });
+    const spy = vi.spyOn(Storage.prototype, 'setItem');
+    // spy installed after construction to exclude the initial benign write (D-02)
+
+    store.current.a = 99;
+    await tick(); // flush the scheduled inner $effect
+
+    expect(spy).toHaveBeenCalledWith(KEY, JSON.stringify({ a: 99, b: 'x' }));
+  });
+
+  it('(b) auto-persist fires without any component mounted — proves drawer-only-mount path', async () => {
+    const store = new CalculatorStore<Shape>({
+      storageKey: KEY,
+      defaults: makeDefaults
+    });
+    const spy = vi.spyOn(Storage.prototype, 'setItem');
+
+    store.current.b = 'drawer';
+    await tick();
+
+    const lastCall = spy.mock.calls.at(-1);
+    expect(lastCall?.[0]).toBe(KEY);
+    expect(JSON.parse(lastCall?.[1] as string).b).toBe('drawer');
+  });
+
+  it('(c) 60s debounce: rapid mutations do not re-stamp lastEdited within the window', async () => {
+    const store = new CalculatorStore<Shape>({
+      storageKey: KEY,
+      defaults: makeDefaults
+    });
+    await tick(); // let initial benign-write effect fire
+
+    store.current.a = 10;
+    await tick();
+    const stamp1 = store.lastEdited.current;
+    expect(typeof stamp1).toBe('number');
+
+    // Immediate second mutation — within the 60s STAMP_DEBOUNCE_MS window
+    store.current.a = 11;
+    await tick();
+    const stamp2 = store.lastEdited.current;
+
+    // stamp2 should equal stamp1: debounce suppressed the re-stamp
+    expect(stamp2).toBe(stamp1);
   });
 });
